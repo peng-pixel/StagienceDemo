@@ -26,6 +26,8 @@
         .project-tab.active { border-bottom-color: #7c3aed !important; color: #7c3aed; }
         .project-tab-content { display: none; }
         .project-tab-content.active { display: block; }
+        .status-folder:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .status-folder.active { border-color: #3b82f6 !important; background: #eff6ff !important; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -418,6 +420,49 @@
                         </div>
                     </div>
 
+                    <!-- Status Folder Boxes -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 8px;">
+                        <div id="folder-all" onclick="filterProjectsByStatus('all')" class="status-folder active" style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="font-size: 32px;">📁</div>
+                                <div style="font-weight: 700; font-size: 18px;">All Projects</div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: bold; color: #3b82f6;">3</div>
+                        </div>
+
+                        <div id="folder-active" onclick="filterProjectsByStatus('active')" class="status-folder" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="font-size: 32px;">🟢</div>
+                                <div style="font-weight: 700; font-size: 18px;">Active</div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: bold; color: #16a34a;">1</div>
+                        </div>
+
+                        <div id="folder-scheduled" onclick="filterProjectsByStatus('scheduled')" class="status-folder" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="font-size: 32px;">📅</div>
+                                <div style="font-weight: 700; font-size: 18px;">Scheduled</div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: bold; color: #2563eb;">1</div>
+                        </div>
+
+                        <div id="folder-pending" onclick="filterProjectsByStatus('pending')" class="status-folder" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="font-size: 32px;">⏳</div>
+                                <div style="font-weight: 700; font-size: 18px;">Pending</div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: bold; color: #2563eb;">1</div>
+                        </div>
+
+                        <div id="folder-completed" onclick="filterProjectsByStatus('completed')" class="status-folder" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="font-size: 32px;">✅</div>
+                                <div style="font-weight: 700; font-size: 18px;">Completed</div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: bold; color: #6b7280;">0</div>
+                        </div>
+                    </div>
+
                     <!-- Import Projects Card -->
                     <div class="stat-card" style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 2px solid #e9d5ff; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showProjectImport()">
                         <div style="display: flex; align-items: start; justify-content: space-between;">
@@ -442,45 +487,8 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div onclick="showProjectDetail('Sunset Blvd Luxury Condo', 'Active')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                                <div>
-                                    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Sunset Blvd Luxury Condo</h3>
-                                    <p style="color: #6b7280; font-size: 14px;">1234 Sunset Blvd</p>
-                                </div>
-                                <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dcfce7; color: #166534;">
-                                    Active
-                                </span>
-                            </div>
-                            <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-12</div>
-                        </div>
-
-                        <div onclick="showProjectDetail('Maple St Family Home', 'Scheduled')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                                <div>
-                                    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Maple St Family Home</h3>
-                                    <p style="color: #6b7280; font-size: 14px;">567 Maple Street</p>
-                                </div>
-                                <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dbeafe; color: #1e40af;">
-                                    Scheduled
-                                </span>
-                            </div>
-                            <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-15</div>
-                        </div>
-
-                        <div onclick="showProjectDetail('Oak Ave Consultation', 'Pending')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start;">
-                                <div>
-                                    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Oak Ave Consultation</h3>
-                                    <p style="color: #6b7280; font-size: 14px;">890 Oak Avenue</p>
-                                </div>
-                                <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #dbeafe; color: #1e40af;">
-                                    Pending
-                                </span>
-                            </div>
-                            <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-18</div>
-                        </div>
+                    <div id="projects-list" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Projects will be dynamically inserted here -->
                     </div>
                 </div>
             </main>
@@ -1551,6 +1559,88 @@
         let currentWizardStep = 1;
         let currentProjectImportStep = 1;
         let currentInventoryImportStep = 1;
+        let currentProjectFilter = 'all';
+
+        // Project data
+        const projects = [
+            {
+                name: 'Sunset Blvd Luxury Condo',
+                address: '1234 Sunset Blvd',
+                status: 'Active',
+                statusLower: 'active',
+                installDate: '2026-01-12',
+                statusBg: '#dcfce7',
+                statusColor: '#166534'
+            },
+            {
+                name: 'Maple St Family Home',
+                address: '567 Maple Street',
+                status: 'Scheduled',
+                statusLower: 'scheduled',
+                installDate: '2026-01-15',
+                statusBg: '#dbeafe',
+                statusColor: '#1e40af'
+            },
+            {
+                name: 'Oak Ave Consultation',
+                address: '890 Oak Avenue',
+                status: 'Pending',
+                statusLower: 'pending',
+                installDate: '2026-01-18',
+                statusBg: '#dbeafe',
+                statusColor: '#1e40af'
+            }
+        ];
+
+        function renderProjects() {
+            const projectsList = document.getElementById('projects-list');
+            const filteredProjects = currentProjectFilter === 'all' 
+                ? projects 
+                : projects.filter(p => p.statusLower === currentProjectFilter);
+            
+            projectsList.innerHTML = filteredProjects.map(project => `
+                <div onclick="showProjectDetail('${project.name}', '${project.status}')" 
+                     style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" 
+                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" 
+                     onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                        <div>
+                            <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
+                            <p style="color: #6b7280; font-size: 14px;">${project.address}</p>
+                        </div>
+                        <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: ${project.statusBg}; color: ${project.statusColor};">
+                            ${project.status}
+                        </span>
+                    </div>
+                    <div style="font-size: 14px; color: #6b7280;">Install: ${project.installDate}</div>
+                </div>
+            `).join('');
+        }
+
+        function filterProjectsByStatus(status) {
+            currentProjectFilter = status;
+            
+            // Remove active class from all folders
+            document.querySelectorAll('.status-folder').forEach(folder => {
+                folder.classList.remove('active');
+                folder.style.borderColor = '#e5e7eb';
+                folder.style.background = 'white';
+            });
+            
+            // Add active class to selected folder
+            const selectedFolder = document.getElementById('folder-' + status);
+            selectedFolder.classList.add('active');
+            selectedFolder.style.borderColor = '#3b82f6';
+            selectedFolder.style.background = '#eff6ff';
+            
+            // Re-render projects
+            renderProjects();
+        }
+
+        // Initialize projects on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProjects();
+        });
 
         // Show page function
         function showPage(page) {

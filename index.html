@@ -762,7 +762,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="font-size: 28px; font-weight: bold;">Inventory</h2>
                         <div style="display: flex; gap: 12px;">
-                            <button style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <button onclick="showInventoryFilter()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                 <span>🔍</span>
                                 <span>Filter</span>
                             </button>
@@ -1445,6 +1445,106 @@
         </div>
     </div>
 
+    <!-- Inventory Filter Modal -->
+    <div id="inventory-filter-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Filter Inventory</h2>
+                <button onclick="hideInventoryFilter()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <!-- Status Filter -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Status</label>
+                    <div style="display: flex; flex-wrap: gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-status-in" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">In (Available)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-status-out" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Out (On Project)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-status-hold" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">On Hold</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Location Filter -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Location</label>
+                    <select id="filter-location" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer;">
+                        <option value="all">All Locations</option>
+                        <option value="warehouse-a">Warehouse A</option>
+                        <option value="warehouse-b">Warehouse B</option>
+                        <option value="storage-unit">Storage Unit</option>
+                        <option value="on-site">On Site</option>
+                    </select>
+                </div>
+
+                <!-- Category/Type Filter -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Category</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-seating" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Seating</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-tables" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Tables</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-lighting" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Lighting</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-decor" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Decor</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-art" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Art</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                            <input type="checkbox" id="filter-cat-rugs" checked style="width: 18px; height: 18px; cursor: pointer;">
+                            <span style="font-weight: 600;">Rugs</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Search by Name -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Search by Name</label>
+                    <input type="text" id="filter-search" placeholder="e.g., Sofa, Lamp, Table..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <!-- Active Filters Display -->
+                <div id="active-filters" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 14px;">
+                    <div style="font-weight: 700; font-size: 14px; color: #166534; margin-bottom: 8px;">Active Filters:</div>
+                    <div id="active-filters-list" style="font-size: 14px; color: #166534;"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="clearAllFilters()" style="padding: 10px 20px; border: 1px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer; background: white;">
+                    Clear All
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="hideInventoryFilter()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button onclick="applyInventoryFilters()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Sample inventory data
         const inventoryData = [
@@ -1742,6 +1842,93 @@
             // Highlight selected
             element.style.borderColor = '#9333ea';
             element.style.background = '#faf5ff';
+        }
+
+        // Inventory Filter functions
+        function showInventoryFilter() {
+            document.getElementById('inventory-filter-modal').classList.add('active');
+        }
+
+        function hideInventoryFilter() {
+            document.getElementById('inventory-filter-modal').classList.remove('active');
+        }
+
+        function applyInventoryFilters() {
+            // Get filter values
+            const statusIn = document.getElementById('filter-status-in').checked;
+            const statusOut = document.getElementById('filter-status-out').checked;
+            const statusHold = document.getElementById('filter-status-hold').checked;
+            const location = document.getElementById('filter-location').value;
+            const searchText = document.getElementById('filter-search').value.toLowerCase();
+            
+            // Get category filters
+            const categories = {
+                seating: document.getElementById('filter-cat-seating').checked,
+                tables: document.getElementById('filter-cat-tables').checked,
+                lighting: document.getElementById('filter-cat-lighting').checked,
+                decor: document.getElementById('filter-cat-decor').checked,
+                art: document.getElementById('filter-cat-art').checked,
+                rugs: document.getElementById('filter-cat-rugs').checked
+            };
+
+            // Build active filters list
+            let activeFilters = [];
+            if (!statusIn || !statusOut || !statusHold) {
+                let statuses = [];
+                if (statusIn) statuses.push('Available');
+                if (statusOut) statuses.push('On Project');
+                if (statusHold) statuses.push('On Hold');
+                if (statuses.length > 0) {
+                    activeFilters.push('Status: ' + statuses.join(', '));
+                }
+            }
+            if (location !== 'all') {
+                activeFilters.push('Location: ' + document.getElementById('filter-location').options[document.getElementById('filter-location').selectedIndex].text);
+            }
+            
+            const selectedCategories = Object.keys(categories).filter(cat => categories[cat]);
+            if (selectedCategories.length > 0 && selectedCategories.length < 6) {
+                activeFilters.push('Categories: ' + selectedCategories.length + ' selected');
+            }
+            
+            if (searchText) {
+                activeFilters.push('Search: "' + searchText + '"');
+            }
+
+            // Show active filters
+            if (activeFilters.length > 0) {
+                document.getElementById('active-filters').style.display = 'block';
+                document.getElementById('active-filters-list').textContent = activeFilters.join(' • ');
+            } else {
+                document.getElementById('active-filters').style.display = 'none';
+            }
+
+            // For demo purposes, just show a message
+            // In real app, this would filter the inventory grid
+            console.log('Filters applied:', {statusIn, statusOut, statusHold, location, searchText, categories});
+            
+            // Hide modal
+            hideInventoryFilter();
+        }
+
+        function clearAllFilters() {
+            // Reset all checkboxes to checked
+            document.getElementById('filter-status-in').checked = true;
+            document.getElementById('filter-status-out').checked = true;
+            document.getElementById('filter-status-hold').checked = true;
+            document.getElementById('filter-cat-seating').checked = true;
+            document.getElementById('filter-cat-tables').checked = true;
+            document.getElementById('filter-cat-lighting').checked = true;
+            document.getElementById('filter-cat-decor').checked = true;
+            document.getElementById('filter-cat-art').checked = true;
+            document.getElementById('filter-cat-rugs').checked = true;
+            
+            // Reset dropdowns and search
+            document.getElementById('filter-location').value = 'all';
+            document.getElementById('filter-search').value = '';
+            
+            // Hide active filters
+            document.getElementById('active-filters').style.display = 'none';
         }
     </script>
 

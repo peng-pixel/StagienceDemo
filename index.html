@@ -344,6 +344,57 @@
                             <div style="font-size: 14px; color: #6b7280;">Items On Hold</div>
                         </div>
                     </div>
+
+                    <!-- Import Data Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-top: 12px;">
+                        <!-- Import Projects Card -->
+                        <div class="stat-card" style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 2px solid #e9d5ff; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showProjectImport()">
+                            <div style="display: flex; align-items: start; justify-content: space-between;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                        <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(147,51,234,0.15);">
+                                            📥
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #581c87;">Import Your Projects</div>
+                                            <div style="font-size: 13px; color: #7c3aed; margin-top: 2px;">Get started in minutes</div>
+                                        </div>
+                                    </div>
+                                    <p style="color: #6b21a8; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
+                                        Bring your existing projects from Google Sheets, Excel, or CSV files. We'll help you map your data and get everything organized.
+                                    </p>
+                                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #7c3aed;">
+                                        Start Import
+                                        <span style="font-size: 16px;">→</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Import Inventory Card -->
+                        <div class="stat-card" style="background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); border: 2px solid #99f6e4; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showInventoryImport()">
+                            <div style="display: flex; align-items: start; justify-content: space-between;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                        <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(20,184,166,0.15);">
+                                            📦
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 18px; font-weight: 700; color: #134e4a;">Import Your Inventory</div>
+                                            <div style="font-size: 13px; color: #14b8a6; margin-top: 2px;">Migrate your catalog easily</div>
+                                        </div>
+                                    </div>
+                                    <p style="color: #115e59; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
+                                        Upload your inventory from spreadsheets or import photos from Google Drive or Dropbox. Keep all your items organized in one place.
+                                    </p>
+                                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #14b8a6;">
+                                        Start Import
+                                        <span style="font-size: 16px;">→</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>
@@ -679,6 +730,328 @@
         </div>
     </div>
 
+    <!-- Project Import Modal -->
+    <div id="project-import-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4" style="overflow-y: auto;">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-8" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Import Projects - Step <span id="project-import-step-num">1</span> of 3</h2>
+                <button onclick="hideProjectImport()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+
+            <div class="mb-6 flex gap-2">
+                <div id="project-progress-1" class="flex-1 h-2 rounded-full bg-purple-600"></div>
+                <div id="project-progress-2" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="project-progress-3" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+            </div>
+
+            <div id="project-import-step-1" class="wizard-step active">
+                <h3 class="text-lg font-semibold mb-4">Choose Your Data Source</h3>
+                <div class="space-y-3">
+                    <div onclick="selectProjectSource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📊</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Google Sheets</div>
+                                <div style="color: #6b7280; font-size: 14px;">Import from your Google Sheets spreadsheet</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectProjectSource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📁</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Excel / CSV File</div>
+                                <div style="color: #6b7280; font-size: 14px;">Upload an Excel or CSV file from your computer</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectProjectSource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">☁️</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Google Drive</div>
+                                <div style="color: #6b7280; font-size: 14px;">Import project files from Google Drive</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="project-import-step-2" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Map Your Fields</h3>
+                <p style="color: #6b7280; margin-bottom: 20px;">Match your spreadsheet columns to Stagience fields</p>
+                <div class="space-y-3">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Project Name</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Project Name</option>
+                                <option>Address</option>
+                                <option>Status</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Address</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Address</option>
+                                <option>Project Name</option>
+                                <option>Status</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Status</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Status</option>
+                                <option>Project Name</option>
+                                <option>Address</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="project-import-step-3" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Preview & Confirm</h3>
+                <p style="color: #6b7280; margin-bottom: 20px;">Review your data before importing</p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f9fafb;">
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">PROJECT NAME</th>
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ADDRESS</th>
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Downtown Loft Staging</td>
+                                <td style="padding: 12px;">123 Main St</td>
+                                <td style="padding: 12px;">Active</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Suburban Home Consult</td>
+                                <td style="padding: 12px;">456 Oak Ave</td>
+                                <td style="padding: 12px;">Pending</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Luxury Condo Install</td>
+                                <td style="padding: 12px;">789 Park Blvd</td>
+                                <td style="padding: 12px;">Scheduled</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: #dcfce7; border: 1px solid #86efac; border-radius: 12px; padding: 16px; margin-top: 20px;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 4px;">✓ Ready to import</div>
+                    <div style="color: #166534; font-size: 14px;">3 projects will be imported into Stagience</div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="hideProjectImport()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                    Cancel
+                </button>
+                <div class="flex gap-3">
+                    <button id="project-import-back" onclick="projectImportPrev()" style="display:none;" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                        Back
+                    </button>
+                    <button id="project-import-next" onclick="projectImportNext()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                        Next
+                    </button>
+                    <button id="project-import-save" onclick="hideProjectImport()" style="display:none;" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        Import Projects
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Import Modal -->
+    <div id="inventory-import-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4" style="overflow-y: auto;">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-8" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Import Inventory - Step <span id="inventory-import-step-num">1</span> of 3</h2>
+                <button onclick="hideInventoryImport()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+
+            <div class="mb-6 flex gap-2">
+                <div id="inventory-progress-1" class="flex-1 h-2 rounded-full bg-purple-600"></div>
+                <div id="inventory-progress-2" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="inventory-progress-3" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+            </div>
+
+            <div id="inventory-import-step-1" class="wizard-step active">
+                <h3 class="text-lg font-semibold mb-4">Choose Your Data Source</h3>
+                <div class="space-y-3">
+                    <div onclick="selectInventorySource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📊</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Google Sheets</div>
+                                <div style="color: #6b7280; font-size: 14px;">Import from your Google Sheets inventory</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectInventorySource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📁</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Excel / CSV File</div>
+                                <div style="color: #6b7280; font-size: 14px;">Upload an Excel or CSV file from your computer</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectInventorySource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📦</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Dropbox</div>
+                                <div style="color: #6b7280; font-size: 14px;">Import inventory photos and data from Dropbox</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div onclick="selectInventorySource(this)" class="p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50" style="transition: all 0.2s;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">☁️</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 16px;">Google Drive</div>
+                                <div style="color: #6b7280; font-size: 14px;">Import inventory photos from Google Drive</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="inventory-import-step-2" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Map Your Fields</h3>
+                <p style="color: #6b7280; margin-bottom: 20px;">Match your spreadsheet columns to Stagience fields</p>
+                <div class="space-y-3">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Item Name</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Item Name</option>
+                                <option>Category</option>
+                                <option>Location</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Category</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Category</option>
+                                <option>Item Name</option>
+                                <option>Location</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; background: #f9fafb; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">YOUR COLUMN</div>
+                            <div style="font-weight: 600;">Location</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">STAGIENCE FIELD</div>
+                            <select style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                                <option>Location</option>
+                                <option>Item Name</option>
+                                <option>Category</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="inventory-import-step-3" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Preview & Confirm</h3>
+                <p style="color: #6b7280; margin-bottom: 20px;">Review your inventory before importing</p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f9fafb;">
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ITEM NAME</th>
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">CATEGORY</th>
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">LOCATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Modern Grey Sofa</td>
+                                <td style="padding: 12px;">Seating</td>
+                                <td style="padding: 12px;">Warehouse A</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Oak Coffee Table</td>
+                                <td style="padding: 12px;">Tables</td>
+                                <td style="padding: 12px;">Warehouse A</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px;">Gold Floor Lamp</td>
+                                <td style="padding: 12px;">Lighting</td>
+                                <td style="padding: 12px;">Warehouse B</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="background: #dcfce7; border: 1px solid #86efac; border-radius: 12px; padding: 16px; margin-top: 20px;">
+                    <div style="font-weight: 700; color: #166534; margin-bottom: 4px;">✓ Ready to import</div>
+                    <div style="color: #166534; font-size: 14px;">147 inventory items will be imported into Stagience</div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <button onclick="hideInventoryImport()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                    Cancel
+                </button>
+                <div class="flex gap-3">
+                    <button id="inventory-import-back" onclick="inventoryImportPrev()" style="display:none;" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                        Back
+                    </button>
+                    <button id="inventory-import-next" onclick="inventoryImportNext()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                        Next
+                    </button>
+                    <button id="inventory-import-save" onclick="hideInventoryImport()" style="display:none;" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        Import Inventory
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Sample inventory data
         const inventoryData = [
@@ -689,6 +1062,8 @@
         ];
 
         let currentWizardStep = 1;
+        let currentProjectImportStep = 1;
+        let currentInventoryImportStep = 1;
 
         // Show page function
         function showPage(page) {
@@ -795,6 +1170,124 @@
 
         // Initialize
         renderInventory();
+
+        // Project Import functions
+        function showProjectImport() {
+            document.getElementById('project-import-modal').classList.add('active');
+            currentProjectImportStep = 1;
+            updateProjectImportStep();
+        }
+
+        function hideProjectImport() {
+            document.getElementById('project-import-modal').classList.remove('active');
+            currentProjectImportStep = 1;
+            updateProjectImportStep();
+        }
+
+        function projectImportNext() {
+            if (currentProjectImportStep < 3) {
+                currentProjectImportStep++;
+                updateProjectImportStep();
+            }
+        }
+
+        function projectImportPrev() {
+            if (currentProjectImportStep > 1) {
+                currentProjectImportStep--;
+                updateProjectImportStep();
+            }
+        }
+
+        function updateProjectImportStep() {
+            document.getElementById('project-import-step-num').textContent = currentProjectImportStep;
+            
+            // Hide all steps
+            document.querySelectorAll('#project-import-modal .wizard-step').forEach(s => s.classList.remove('active'));
+            
+            // Show current step
+            document.getElementById('project-import-step-' + currentProjectImportStep).classList.add('active');
+            
+            // Update progress bars
+            for (let i = 1; i <= 3; i++) {
+                const bar = document.getElementById('project-progress-' + i);
+                bar.className = i <= currentProjectImportStep ? 'flex-1 h-2 rounded-full bg-purple-600' : 'flex-1 h-2 rounded-full bg-gray-200';
+            }
+            
+            // Update buttons
+            document.getElementById('project-import-back').style.display = currentProjectImportStep > 1 ? 'block' : 'none';
+            document.getElementById('project-import-next').style.display = currentProjectImportStep < 3 ? 'block' : 'none';
+            document.getElementById('project-import-save').style.display = currentProjectImportStep === 3 ? 'block' : 'none';
+        }
+
+        function selectProjectSource(element) {
+            // Remove selection from all
+            document.querySelectorAll('#project-import-step-1 .p-4').forEach(el => {
+                el.style.borderColor = '#e5e7eb';
+                el.style.background = 'white';
+            });
+            // Highlight selected
+            element.style.borderColor = '#9333ea';
+            element.style.background = '#faf5ff';
+        }
+
+        // Inventory Import functions
+        function showInventoryImport() {
+            document.getElementById('inventory-import-modal').classList.add('active');
+            currentInventoryImportStep = 1;
+            updateInventoryImportStep();
+        }
+
+        function hideInventoryImport() {
+            document.getElementById('inventory-import-modal').classList.remove('active');
+            currentInventoryImportStep = 1;
+            updateInventoryImportStep();
+        }
+
+        function inventoryImportNext() {
+            if (currentInventoryImportStep < 3) {
+                currentInventoryImportStep++;
+                updateInventoryImportStep();
+            }
+        }
+
+        function inventoryImportPrev() {
+            if (currentInventoryImportStep > 1) {
+                currentInventoryImportStep--;
+                updateInventoryImportStep();
+            }
+        }
+
+        function updateInventoryImportStep() {
+            document.getElementById('inventory-import-step-num').textContent = currentInventoryImportStep;
+            
+            // Hide all steps
+            document.querySelectorAll('#inventory-import-modal .wizard-step').forEach(s => s.classList.remove('active'));
+            
+            // Show current step
+            document.getElementById('inventory-import-step-' + currentInventoryImportStep).classList.add('active');
+            
+            // Update progress bars
+            for (let i = 1; i <= 3; i++) {
+                const bar = document.getElementById('inventory-progress-' + i);
+                bar.className = i <= currentInventoryImportStep ? 'flex-1 h-2 rounded-full bg-purple-600' : 'flex-1 h-2 rounded-full bg-gray-200';
+            }
+            
+            // Update buttons
+            document.getElementById('inventory-import-back').style.display = currentInventoryImportStep > 1 ? 'block' : 'none';
+            document.getElementById('inventory-import-next').style.display = currentInventoryImportStep < 3 ? 'block' : 'none';
+            document.getElementById('inventory-import-save').style.display = currentInventoryImportStep === 3 ? 'block' : 'none';
+        }
+
+        function selectInventorySource(element) {
+            // Remove selection from all
+            document.querySelectorAll('#inventory-import-step-1 .p-4').forEach(el => {
+                el.style.borderColor = '#e5e7eb';
+                el.style.background = 'white';
+            });
+            // Highlight selected
+            element.style.borderColor = '#9333ea';
+            element.style.background = '#faf5ff';
+        }
     </script>
 
 </body>

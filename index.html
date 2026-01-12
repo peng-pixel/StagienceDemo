@@ -92,7 +92,7 @@
             <!-- Features Section -->
             <section style="max-width: 1120px; margin: 0 auto; padding: 60px 20px;">
                 <div style="text-align: center; max-width: 640px; margin: 0 auto 48px;">
-                    <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; margin: 0 0 14px; letter-spacing: -0.3px;">Everything you need to run a modern staging business</h2>
+                    <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: clamp(28px, 3.5vw, 42px); font-weight: 600; margin: 0 0 14px; letter-spacing: -0.3px;">Everything you need to run a modern home staging business</h2>
                     <p style="color: #6b7280; font-size: 16px; margin: 0;">Five core tools that work together to keep your projects organized and your clients impressed.</p>
                 </div>
                 
@@ -225,7 +225,7 @@
                         Stagience helps you deliver a premium client experience while keeping your team organized behind the scenes. Start with your next project and feel the difference immediately.
                     </p>
                     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                        <button onclick="showPage('dashboard')" style="padding: 14px 24px; border-radius: 999px; border: none; background: white; color: #1f2937; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Request a demo</button>
+                        <button onclick="showPage('demo')" style="padding: 14px 24px; border-radius: 999px; border: none; background: white; color: #1f2937; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Request a demo</button>
                     </div>
                 </div>
             </section>
@@ -250,7 +250,7 @@
             <div style="width: 100%; max-width: 680px; background: rgba(255,255,255,.82); border: 1px solid rgba(31,41,55,.10); border-radius: 24px; box-shadow: 0 18px 50px rgba(17, 24, 39, 0.12); padding: 48px 40px; text-align: center;">
                 <div onclick="showPage('landing')" style="font-weight: 700; font-size: 26px; margin-bottom: 20px; cursor: pointer;">Stagience</div>
                 <div id="waitlist-form">
-                    <h1 style="font-size: 32px; font-weight: 600; margin: 0 0 14px;">Join the Waitlist</h1>
+                    <h1 style="font-size: 32px; font-weight: 600; margin: 0 0 14px;">Join Waitlist</h1>
                     <p style="color: #6b7280; margin-bottom: 32px;">Be the first to experience intelligent staging management.</p>
                     <form onsubmit="submitWaitlist(event)" style="text-align: left;">
                         <div style="margin-bottom: 16px;">
@@ -268,6 +268,49 @@
                     <div style="font-size: 64px; margin-bottom: 16px;">✨</div>
                     <h2 style="font-size: 28px; font-weight: 600; margin-bottom: 12px;">You're on the list!</h2>
                     <p style="color: #6b7280; margin-bottom: 24px;">We'll reach out when Stagience is ready for you.</p>
+                    <button onclick="showPage('landing')" class="gradient-accent" style="padding: 14px 28px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">Back to Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Demo Page -->
+    <div id="demo-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative;">
+            <button onclick="showPage('landing')" style="position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,.8); border: 1px solid rgba(31,41,55,.10); border-radius: 12px; width: 40px; height: 40px; font-size: 20px; cursor: pointer;">←</button>
+            <div style="width: 100%; max-width: 680px; background: rgba(255,255,255,.82); border: 1px solid rgba(31,41,55,.10); border-radius: 24px; box-shadow: 0 18px 50px rgba(17, 24, 39, 0.12); padding: 48px 40px; text-align: center;">
+                <div onclick="showPage('landing')" style="font-weight: 700; font-size: 26px; margin-bottom: 20px; cursor: pointer;">Stagience</div>
+                <div id="demo-form">
+                    <h1 style="font-size: 32px; font-weight: 600; margin: 0 0 14px;">Request a Demo</h1>
+                    <p style="color: #6b7280; margin-bottom: 32px;">See how Stagience can transform your staging business.</p>
+                    <form onsubmit="submitDemo(event)" style="text-align: left;">
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Name *</label>
+                            <input type="text" id="demo-name" required placeholder="Your name" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px;" />
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Email *</label>
+                            <input type="email" id="demo-email" required placeholder="you@example.com" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px;" />
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Company Name *</label>
+                            <input type="text" id="demo-company" required placeholder="Your staging company" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px;" />
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Phone Number</label>
+                            <input type="tel" id="demo-phone" placeholder="(555) 123-4567" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px;" />
+                        </div>
+                        <div style="margin-bottom: 24px;">
+                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Tell us about your business</label>
+                            <textarea id="demo-message" placeholder="Number of projects per month, team size, current tools you use..." style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px; min-height: 100px; font-family: inherit;"></textarea>
+                        </div>
+                        <button type="submit" class="gradient-accent" style="width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer;">Request Demo</button>
+                    </form>
+                </div>
+                <div id="demo-success" style="display: none;">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+                    <h2 style="font-size: 28px; font-weight: 600; margin-bottom: 12px;">Demo Request Received!</h2>
+                    <p style="color: #6b7280; margin-bottom: 24px;">We'll be in touch within 24 hours to schedule your personalized demo.</p>
                     <button onclick="showPage('landing')" class="gradient-accent" style="padding: 14px 28px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">Back to Home</button>
                 </div>
             </div>
@@ -344,57 +387,6 @@
                             <div style="font-size: 14px; color: #6b7280;">Items On Hold</div>
                         </div>
                     </div>
-
-                    <!-- Import Data Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; margin-top: 12px;">
-                        <!-- Import Projects Card -->
-                        <div class="stat-card" style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 2px solid #e9d5ff; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showProjectImport()">
-                            <div style="display: flex; align-items: start; justify-content: space-between;">
-                                <div style="flex: 1;">
-                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                        <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(147,51,234,0.15);">
-                                            📥
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 18px; font-weight: 700; color: #581c87;">Import Your Projects</div>
-                                            <div style="font-size: 13px; color: #7c3aed; margin-top: 2px;">Get started in minutes</div>
-                                        </div>
-                                    </div>
-                                    <p style="color: #6b21a8; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
-                                        Bring your existing projects from Google Sheets, Excel, CSV, Google Drive, or Dropbox. We'll help you map your data and get everything organized.
-                                    </p>
-                                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #7c3aed;">
-                                        Start Import
-                                        <span style="font-size: 16px;">→</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Import Inventory Card -->
-                        <div class="stat-card" style="background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); border: 2px solid #99f6e4; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showInventoryImport()">
-                            <div style="display: flex; align-items: start; justify-content: space-between;">
-                                <div style="flex: 1;">
-                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                        <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(20,184,166,0.15);">
-                                            📦
-                                        </div>
-                                        <div>
-                                            <div style="font-size: 18px; font-weight: 700; color: #134e4a;">Import Your Inventory</div>
-                                            <div style="font-size: 13px; color: #14b8a6; margin-top: 2px;">Migrate your catalog easily</div>
-                                        </div>
-                                    </div>
-                                    <p style="color: #115e59; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
-                                        Upload your inventory from Google Sheets, Excel, CSV, or import photos and files from Google Drive or Dropbox. Keep all your items organized in one place.
-                                    </p>
-                                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #14b8a6;">
-                                        Start Import
-                                        <span style="font-size: 16px;">→</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </main>
         </div>
@@ -426,6 +418,31 @@
                         <h2 style="font-size: 28px; font-weight: bold;">Projects</h2>
                         <button class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Create a New Folder</button>
                     </div>
+
+                    <!-- Import Projects Card -->
+                    <div class="stat-card" style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 2px solid #e9d5ff; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showProjectImport()">
+                        <div style="display: flex; align-items: start; justify-content: space-between;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                    <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(147,51,234,0.15);">
+                                        📥
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 18px; font-weight: 700; color: #581c87;">Import Your Projects</div>
+                                        <div style="font-size: 13px; color: #7c3aed; margin-top: 2px;">Get started in minutes</div>
+                                    </div>
+                                </div>
+                                <p style="color: #6b21a8; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
+                                    Bring your existing projects from Google Sheets, Excel, CSV, Google Drive, or Dropbox. We'll help you map your data and get everything organized.
+                                </p>
+                                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #7c3aed;">
+                                    Start Import
+                                    <span style="font-size: 16px;">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb;">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
@@ -507,6 +524,31 @@
                             <button onclick="showWizard()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add Item</button>
                         </div>
                     </div>
+
+                    <!-- Import Inventory Card -->
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); border: 2px solid #99f6e4; cursor: pointer; border-radius: 16px; padding: 24px;" onclick="showInventoryImport()">
+                        <div style="display: flex; align-items: start; justify-content: space-between;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                    <div style="width: 48px; height: 48px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 8px rgba(20,184,166,0.15);">
+                                        📦
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 18px; font-weight: 700; color: #134e4a;">Import Your Inventory</div>
+                                        <div style="font-size: 13px; color: #14b8a6; margin-top: 2px;">Migrate your catalog easily</div>
+                                    </div>
+                                </div>
+                                <p style="color: #115e59; margin: 0 0 16px; font-size: 14px; line-height: 1.5;">
+                                    Upload your inventory from Google Sheets, Excel, CSV, or import photos and files from Google Drive or Dropbox. Keep all your items organized in one place.
+                                </p>
+                                <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: #14b8a6;">
+                                    Start Import
+                                    <span style="font-size: 16px;">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;" id="inventory-grid"></div>
                 </div>
             </main>
@@ -1087,6 +1129,12 @@
             e.preventDefault();
             document.getElementById('waitlist-form').style.display = 'none';
             document.getElementById('waitlist-success').style.display = 'block';
+        }
+
+        function submitDemo(e) {
+            e.preventDefault();
+            document.getElementById('demo-form').style.display = 'none';
+            document.getElementById('demo-success').style.display = 'block';
         }
 
         // Render inventory

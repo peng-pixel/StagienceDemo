@@ -45,7 +45,6 @@
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <button onclick="showPage('waitlist')" style="padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.12s;">Join Waitlist</button>
-                        <button onclick="showPage('calendar')" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">View Calendar</button>
                         <button onclick="showPage('dashboard')" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Get Started</button>
                     </div>
                 </div>
@@ -77,19 +76,6 @@
                     <div style="background: rgba(255,255,255,.72); border: 1px solid rgba(31,41,55,.10); border-radius: 16px; box-shadow: 0 18px 50px rgba(17, 24, 39, 0.12); overflow: hidden;">
                         <div style="aspect-ratio: 4 / 3; background: #e5e7eb; position: relative;">
                             <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" alt="Beautifully staged living room" style="width: 100%; height: 100%; object-fit: cover; filter: saturate(1.02) contrast(1.02);" />
-                        </div>
-                        <div style="padding: 16px 16px 18px;">
-                            <p style="font-size: 14px; font-weight: 600; margin: 0 0 12px;">Live Demo Stats</p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                <div style="padding: 12px; border-radius: 14px; border: 1px solid rgba(31,41,55,.10); background: rgba(245,241,233,.75);">
-                                    <div style="font-size: 12px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Active Projects</div>
-                                    <div style="font-size: 14px; font-weight: 650; margin-top: 6px;">12</div>
-                                </div>
-                                <div style="padding: 12px; border-radius: 14px; border: 1px solid rgba(31,41,55,.10); background: rgba(245,241,233,.75);">
-                                    <div style="font-size: 12px; color: #6b7280; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">Items Tracked</div>
-                                    <div style="font-size: 14px; font-weight: 650; margin-top: 6px;">487</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -418,6 +404,7 @@
                         <p style="color: #6b7280; font-size: 16px;">January 2026</p>
                     </div>
                     <div style="display: flex; gap: 12px; align-items: center;">
+                        <button class="gradient-accent" onclick="showAddEvent()" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">+ Add Event</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">← Prev</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Today</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Next →</button>
@@ -573,6 +560,56 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="add-event-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Add New Event</h2>
+                <button onclick="hideAddEvent()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Event Type</label>
+                    <select id="event-type" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="consultation">Consultation</option>
+                        <option value="install">Install</option>
+                        <option value="photoshoot">Photo Shoot</option>
+                        <option value="pickup">Pickup</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Project</label>
+                    <select id="event-project" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="Sunset Blvd">Sunset Blvd Luxury Condo</option>
+                        <option value="Maple St">Maple St Family Home</option>
+                        <option value="Oak Ave">Oak Ave Consultation</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Date</label>
+                    <input type="date" id="event-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;" value="2026-01-20">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Time</label>
+                    <input type="time" id="event-time" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;" value="09:00">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-8">
+                <button onclick="hideAddEvent()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                    Cancel
+                </button>
+                <button onclick="saveEvent()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    Add Event
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1951,6 +1988,42 @@
         document.addEventListener('DOMContentLoaded', function() {
             renderProjects();
         });
+
+        // Calendar Add Event functions
+        function showAddEvent() {
+            document.getElementById('add-event-modal').classList.add('active');
+        }
+
+        function hideAddEvent() {
+            document.getElementById('add-event-modal').classList.remove('active');
+        }
+
+        function saveEvent() {
+            const eventType = document.getElementById('event-type').value;
+            const project = document.getElementById('event-project').value;
+            const date = document.getElementById('event-date').value;
+            const time = document.getElementById('event-time').value;
+
+            // Get event type details
+            const eventTypes = {
+                consultation: { color: '#dbeafe', textColor: '#1e40af', label: 'Consult' },
+                install: { color: '#dcfce7', textColor: '#166534', label: 'Install' },
+                photoshoot: { color: '#fef3c7', textColor: '#92400e', label: 'Photos' },
+                pickup: { color: '#f3e8ff', textColor: '#6b21a8', label: 'Pickup' }
+            };
+
+            const eventInfo = eventTypes[eventType];
+            const timeFormatted = new Date('2000-01-01 ' + time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+
+            // Parse the date to find which day of month
+            const eventDate = new Date(date);
+            const day = eventDate.getDate();
+
+            // Show success message
+            alert(`Event Added!\n\nType: ${eventInfo.label}\nProject: ${project}\nDate: ${date}\nTime: ${timeFormatted}\n\nIn a live app, this would appear on the calendar on day ${day}.`);
+
+            hideAddEvent();
+        }
 
         // Show page function
         function showPage(page) {

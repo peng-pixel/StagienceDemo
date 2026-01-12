@@ -45,6 +45,7 @@
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <button onclick="showPage('waitlist')" style="padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.12s;">Join Waitlist</button>
+                        <button onclick="showPage('calendar')" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">View Calendar</button>
                         <button onclick="showPage('dashboard')" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Get Started</button>
                     </div>
                 </div>
@@ -335,6 +336,7 @@
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
@@ -381,6 +383,193 @@
                             <div style="font-size: 24px; font-weight: bold;">1</div>
                             <div style="font-size: 14px; color: #6b7280;">Items On Hold</div>
                         </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Calendar Page -->
+    <div id="calendar-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10);">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
+                    <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
+                            <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
+                        <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
+                        <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+                <!-- Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                    <div>
+                        <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Schedule</h2>
+                        <p style="color: #6b7280; font-size: 16px;">January 2026</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">← Prev</button>
+                        <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Today</button>
+                        <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Next →</button>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div style="display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 4px; background: #dbeafe;"></div>
+                        <span style="font-size: 14px; font-weight: 600;">Consultation</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 4px; background: #dcfce7;"></div>
+                        <span style="font-size: 14px; font-weight: 600;">Install</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 4px; background: #fef3c7;"></div>
+                        <span style="font-size: 14px; font-weight: 600;">Photo Shoot</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 4px; background: #f3e8ff;"></div>
+                        <span style="font-size: 14px; font-weight: 600;">Pickup</span>
+                    </div>
+                </div>
+
+                <!-- Calendar Grid -->
+                <div style="background: white; border-radius: 16px; border: 1px solid #e5e7eb; padding: 20px; box-shadow: 0 4px 12px rgba(17,24,39,0.06);">
+                    <!-- Day Headers -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 2px;">
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">SUN</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">MON</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">TUE</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">WED</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">THU</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">FRI</div>
+                        <div style="padding: 12px; text-align: center; font-weight: 700; font-size: 14px; color: #6b7280;">SAT</div>
+                    </div>
+
+                    <!-- Calendar Days -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;">
+                        <!-- Week 1 -->
+                        <div style="min-height: 120px; background: #f9fafb; padding: 8px; border-radius: 8px;"><span style="font-size: 14px; color: #9ca3af;">29</span></div>
+                        <div style="min-height: 120px; background: #f9fafb; padding: 8px; border-radius: 8px;"><span style="font-size: 14px; color: #9ca3af;">30</span></div>
+                        <div style="min-height: 120px; background: #f9fafb; padding: 8px; border-radius: 8px;"><span style="font-size: 14px; color: #9ca3af;">31</span></div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">1</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">2</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">3</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">4</div>
+                        </div>
+
+                        <!-- Week 2 -->
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">5</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">6</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">7</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">8</div>
+                            <div style="background: #dbeafe; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1e40af; margin-bottom: 4px;">10am Consult<br>Sunset Blvd</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">9</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">10</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">11</div>
+                        </div>
+
+                        <!-- Week 3 -->
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #3b82f6;">12</div>
+                            <div style="background: #dcfce7; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #166534; margin-bottom: 4px;">9am Install<br>Sunset Blvd</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">13</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">14</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">15</div>
+                            <div style="background: #dcfce7; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #166534; margin-bottom: 4px;">9am Install<br>Maple St</div>
+                            <div style="background: #fef3c7; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #92400e;">10am Photos<br>Sunset Blvd</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">16</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">17</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">18</div>
+                            <div style="background: #dbeafe; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #1e40af;">2pm Consult<br>Oak Ave</div>
+                        </div>
+
+                        <!-- Week 4 -->
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">19</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">20</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">21</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">22</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">23</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">24</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">25</div>
+                        </div>
+
+                        <!-- Week 5 -->
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">26</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">27</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">28</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">29</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">30</div>
+                        </div>
+                        <div style="min-height: 120px; background: white; padding: 8px; border-radius: 8px;">
+                            <div style="font-size: 14px; font-weight: 600; margin-bottom: 6px;">31</div>
+                        </div>
+                        <div style="min-height: 120px; background: #f9fafb; padding: 8px; border-radius: 8px;"><span style="font-size: 14px; color: #9ca3af;">1</span></div>
                     </div>
                 </div>
             </main>

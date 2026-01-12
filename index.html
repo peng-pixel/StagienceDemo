@@ -23,6 +23,9 @@
         .page.active { display: block; }
         .modal { display: none; }
         .modal.active { display: flex; }
+        .project-tab.active { border-bottom-color: #7c3aed !important; color: #7c3aed; }
+        .project-tab-content { display: none; }
+        .project-tab-content.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -416,7 +419,13 @@
                 <div style="display: flex; flex-direction: column; gap: 24px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="font-size: 28px; font-weight: bold;">Projects</h2>
-                        <button class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Create a New Folder</button>
+                        <div style="display: flex; gap: 12px;">
+                            <button style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <span>🔍</span>
+                                <span>Search</span>
+                            </button>
+                            <button class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Create a New Folder</button>
+                        </div>
                     </div>
 
                     <!-- Import Projects Card -->
@@ -444,7 +453,7 @@
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb;">
+                        <div onclick="showProjectDetail('Sunset Blvd Luxury Condo', 'Active')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
                                 <div>
                                     <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Sunset Blvd Luxury Condo</h3>
@@ -457,7 +466,7 @@
                             <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-12</div>
                         </div>
 
-                        <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb;">
+                        <div onclick="showProjectDetail('Maple St Family Home', 'Scheduled')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
                                 <div>
                                     <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Maple St Family Home</h3>
@@ -470,7 +479,7 @@
                             <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-15</div>
                         </div>
 
-                        <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb;">
+                        <div onclick="showProjectDetail('Oak Ave Consultation', 'Pending')" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
                             <div style="display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start;">
                                 <div>
                                     <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">Oak Ave Consultation</h3>
@@ -481,6 +490,246 @@
                                 </span>
                             </div>
                             <div style="font-size: 14px; color: #6b7280;">Install: 2026-01-18</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Project Detail Page -->
+    <div id="project-detail-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10);">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
+                    <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
+                            <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
+                        <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
+                <!-- Header with Back Button -->
+                <div style="margin-bottom: 24px;">
+                    <button onclick="showPage('projects')" style="display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; margin-bottom: 16px;">
+                        <span>←</span>
+                        <span>Back to Projects</span>
+                    </button>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="font-size: 28px; font-weight: bold;" id="project-detail-title">Project Name</h2>
+                            <p style="color: #6b7280; font-size: 16px;" id="project-detail-address">Address</p>
+                        </div>
+                        <span id="project-detail-status" style="padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 700;">Status</span>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div style="border-bottom: 2px solid #e5e7eb; margin-bottom: 32px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="switchProjectTab('schedule')" id="tab-schedule" class="project-tab active" style="padding: 12px 20px; border: none; background: transparent; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                            📅 Schedule & Notes
+                        </button>
+                        <button onclick="switchProjectTab('documents')" id="tab-documents" class="project-tab" style="padding: 12px 20px; border: none; background: transparent; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                            📄 Documents
+                        </button>
+                        <button onclick="switchProjectTab('photos')" id="tab-photos" class="project-tab" style="padding: 12px 20px; border: none; background: transparent; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                            📸 Photos
+                        </button>
+                        <button onclick="switchProjectTab('files')" id="tab-files" class="project-tab" style="padding: 12px 20px; border: none; background: transparent; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;">
+                            📁 Files
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Schedule & Notes Tab Content -->
+                <div id="content-schedule" class="project-tab-content active">
+                    <!-- Timeline Section -->
+                    <div style="margin-bottom: 32px;">
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Project Timeline</h3>
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="display: flex; gap: 16px; align-items: start;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">✓</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Initial Consultation</div>
+                                    <div style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">January 8, 2026 • 2:00 PM</div>
+                                    <div style="background: #f9fafb; padding: 14px; border-radius: 10px; border: 1px solid #e5e7eb;">
+                                        <div style="font-size: 14px; color: #374151; line-height: 1.6;">Met with client, discussed modern minimalist aesthetic. Client prefers neutral tones with warm accents. Budget approved: $4,500.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 16px; align-items: start;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">📅</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Installation Day</div>
+                                    <div style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">January 12, 2026 • 9:00 AM - 3:00 PM</div>
+                                    <div style="background: #f9fafb; padding: 14px; border-radius: 10px; border: 1px solid #e5e7eb;">
+                                        <div style="font-size: 14px; color: #374151; line-height: 1.6;">
+                                            <strong>Team:</strong> Sarah, Mike<br>
+                                            <strong>Items Reserved:</strong> Ivory Boucle Sofa, Black Marble Coffee Table, Gold Leaf Floor Lamp<br>
+                                            <strong>Building Access Code:</strong> #4521<br>
+                                            <strong>Contact:</strong> Building Manager - (555) 789-0123
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 16px; align-items: start;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">📸</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Photo Shoot</div>
+                                    <div style="color: #6b7280; font-size: 14px; margin-bottom: 10px;">January 15, 2026 • 10:00 AM</div>
+                                    <div style="background: #f9fafb; padding: 14px; border-radius: 10px; border: 1px solid #e5e7eb;">
+                                        <div style="font-size: 14px; color: #374151; line-height: 1.6;">
+                                            <strong>Photographer:</strong> Lisa Chen - (555) 234-5678<br>
+                                            <strong>Focus Areas:</strong> Living room, kitchen, master bedroom<br>
+                                            <strong>Shot List:</strong> Wide angles, detail shots, lifestyle images
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 16px; align-items: start;">
+                                <div style="width: 48px; height: 48px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">📦</div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Pickup Scheduled</div>
+                                    <div style="color: #6b7280; font-size: 14px;">February 15, 2026 • 10:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes Section -->
+                    <div>
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Project Notes</h3>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                            <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 18px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <div style="font-weight: 700; font-size: 15px;">Client Preferences</div>
+                                    <div style="font-size: 13px; color: #6b7280;">Jan 8</div>
+                                </div>
+                                <div style="font-size: 14px; color: #78350f; line-height: 1.6;">
+                                    Client loves clean lines, dislikes clutter. Allergic to flowers - use greenery only. Prefers warm white lighting over cool tones. No red accents.
+                                </div>
+                            </div>
+
+                            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 18px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <div style="font-weight: 700; font-size: 15px;">Special Requirements</div>
+                                    <div style="font-size: 13px; color: #6b7280;">Jan 10</div>
+                                </div>
+                                <div style="font-size: 14px; color: #075985; line-height: 1.6;">
+                                    Building requires certificate of insurance before move-in. Elevator reserved 9am-12pm on install day. Use service entrance on west side.
+                                </div>
+                            </div>
+
+                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 18px;">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <div style="font-weight: 700; font-size: 15px;">Follow-up Items</div>
+                                    <div style="font-size: 13px; color: #6b7280;">Jan 11</div>
+                                </div>
+                                <div style="font-size: 14px; color: #166534; line-height: 1.6;">
+                                    Need to confirm final artwork selection with client by Jan 13. Remember to bring extra throw pillows as backup options.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <textarea placeholder="Add a new note..." style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 100px; font-family: inherit;"></textarea>
+                            <button class="gradient-accent" style="margin-top: 12px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents Tab Content -->
+                <div id="content-documents" class="project-tab-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">📄</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Consultation Report.pdf</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 8, 2026</div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">💰</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Invoice_4523.pdf</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 10, 2026</div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">✍️</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Contract_Signed.pdf</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 9, 2026</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">➕</div>
+                            <div style="font-weight: 600; color: #6b7280;">Upload Document</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photos Tab Content -->
+                <div id="content-photos" class="project-tab-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🏠</div>
+                            <div style="padding: 12px;">
+                                <div style="font-weight: 600; font-size: 14px;">Living Room - Before</div>
+                                <div style="font-size: 12px; color: #6b7280;">Jan 8, 2026</div>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🛋️</div>
+                            <div style="padding: 12px;">
+                                <div style="font-weight: 600; font-size: 14px;">Living Room - After</div>
+                                <div style="font-size: 12px; color: #6b7280;">Jan 12, 2026</div>
+                            </div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🍳</div>
+                            <div style="padding: 12px;">
+                                <div style="font-weight: 600; font-size: 14px;">Kitchen - After</div>
+                                <div style="font-size: 12px; color: #6b7280;">Jan 12, 2026</div>
+                            </div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 12px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 48px; margin-bottom: 8px;">📸</div>
+                                <div style="font-weight: 600; color: #6b7280;">Upload Photos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Files Tab Content -->
+                <div id="content-files" class="project-tab-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">📐</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Floor_Plan.pdf</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 8, 2026</div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">🎨</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Mood_Board.jpg</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 9, 2026</div>
+                        </div>
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">📋</div>
+                            <div style="font-weight: 600; margin-bottom: 4px;">Item_Checklist.xlsx</div>
+                            <div style="font-size: 13px; color: #6b7280;">Jan 10, 2026</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">➕</div>
+                            <div style="font-weight: 600; color: #6b7280;">Upload File</div>
                         </div>
                     </div>
                 </div>
@@ -768,6 +1017,98 @@
                 <button onclick="hideEdit()" class="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700">
                     Save Changes
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Schedule & Notes Modal -->
+    <div id="project-schedule-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full p-8" style="max-height: 90vh; overflow-y: auto;">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" id="schedule-project-name">Project Schedule & Notes</h2>
+                <button onclick="hideProjectSchedule()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+            </div>
+
+            <!-- Timeline Section -->
+            <div style="margin-bottom: 32px;">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Project Timeline</h3>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">✓</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; margin-bottom: 4px;">Initial Consultation</div>
+                            <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">January 8, 2026 • 2:00 PM</div>
+                            <div style="background: #f9fafb; padding: 12px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                <div style="font-size: 13px; color: #6b7280;">Met with client, discussed modern minimalist aesthetic. Client prefers neutral tones with warm accents.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">📅</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; margin-bottom: 4px;">Installation Day</div>
+                            <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">January 12, 2026 • 9:00 AM - 3:00 PM</div>
+                            <div style="background: #f9fafb; padding: 12px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                <div style="font-size: 13px; color: #6b7280;">Team: Sarah, Mike. Items reserved: Ivory sofa, marble coffee table, gold lamp. Access code: #4521</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">📸</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; margin-bottom: 4px;">Photo Shoot</div>
+                            <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">January 15, 2026 • 10:00 AM</div>
+                            <div style="background: #f9fafb; padding: 12px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                <div style="font-size: 13px; color: #6b7280;">Photographer: Lisa Chen (555-0123). Focus on living room, kitchen, master bedroom.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; align-items: start;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">📦</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; margin-bottom: 4px;">Pickup Scheduled</div>
+                            <div style="color: #6b7280; font-size: 14px;">February 15, 2026 • 10:00 AM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div style="margin-bottom: 32px;">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Project Notes</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="font-weight: 700; font-size: 14px;">Client Preferences</div>
+                            <div style="font-size: 12px; color: #6b7280;">Jan 8</div>
+                        </div>
+                        <div style="font-size: 14px; color: #78350f; line-height: 1.5;">
+                            Client loves clean lines, dislikes clutter. Allergic to flowers - use greenery only. Prefers warm white lighting over cool tones.
+                        </div>
+                    </div>
+
+                    <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="font-weight: 700; font-size: 14px;">Special Requirements</div>
+                            <div style="font-size: 12px; color: #6b7280;">Jan 10</div>
+                        </div>
+                        <div style="font-size: 14px; color: #075985; line-height: 1.5;">
+                            Building requires certificate of insurance before move-in. Elevator reserved 9am-12pm on install day. Use service entrance.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <textarea placeholder="Add a new note..." style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 80px; font-family: inherit;"></textarea>
+                    <button class="gradient-accent" style="margin-top: 12px; padding: 10px 20px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button onclick="hideProjectSchedule()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
             </div>
         </div>
     </div>
@@ -1135,6 +1476,62 @@
             e.preventDefault();
             document.getElementById('demo-form').style.display = 'none';
             document.getElementById('demo-success').style.display = 'block';
+        }
+
+        // Project Schedule & Notes functions
+        function showProjectSchedule(projectName) {
+            document.getElementById('schedule-project-name').textContent = projectName + ' - Schedule & Notes';
+            document.getElementById('project-schedule-modal').classList.add('active');
+        }
+
+        function hideProjectSchedule() {
+            document.getElementById('project-schedule-modal').classList.remove('active');
+        }
+
+        // Project Detail View functions
+        function showProjectDetail(projectName, status) {
+            // Update project details
+            document.getElementById('project-detail-title').textContent = projectName;
+            
+            // Set address based on project
+            const addresses = {
+                'Sunset Blvd Luxury Condo': '1234 Sunset Blvd',
+                'Maple St Family Home': '567 Maple Street',
+                'Oak Ave Consultation': '890 Oak Avenue'
+            };
+            document.getElementById('project-detail-address').textContent = addresses[projectName] || '';
+            
+            // Set status badge
+            const statusBadge = document.getElementById('project-detail-status');
+            statusBadge.textContent = status;
+            
+            // Set status colors
+            if (status === 'Active') {
+                statusBadge.style.background = '#dcfce7';
+                statusBadge.style.color = '#166534';
+            } else if (status === 'Scheduled') {
+                statusBadge.style.background = '#dbeafe';
+                statusBadge.style.color = '#1e40af';
+            } else if (status === 'Pending') {
+                statusBadge.style.background = '#dbeafe';
+                statusBadge.style.color = '#1e40af';
+            }
+            
+            // Show project detail page
+            showPage('project-detail');
+            
+            // Reset to Schedule & Notes tab
+            switchProjectTab('schedule');
+        }
+
+        function switchProjectTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.project-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.project-tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab
+            document.getElementById('tab-' + tabName).classList.add('active');
+            document.getElementById('content-' + tabName).classList.add('active');
         }
 
         // Render inventory

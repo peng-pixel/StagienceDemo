@@ -867,98 +867,216 @@
     <div id="wizard-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4" style="overflow-y: auto;">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-8" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Add New Item - Step <span id="wizard-step-num">1</span> of 3</h2>
-                <button onclick="hideWizard()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 11</h2>
+                <button onclick="cancelWizard()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
             </div>
 
-            <div class="mb-6 flex gap-2">
+            <!-- Progress Bar -->
+            <div class="mb-6 flex gap-1">
                 <div id="progress-1" class="flex-1 h-2 rounded-full bg-purple-600"></div>
                 <div id="progress-2" class="flex-1 h-2 rounded-full bg-gray-200"></div>
                 <div id="progress-3" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-4" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-5" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-6" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-7" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-8" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-9" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-10" class="flex-1 h-2 rounded-full bg-gray-200"></div>
+                <div id="progress-11" class="flex-1 h-2 rounded-full bg-gray-200"></div>
             </div>
 
+            <!-- Step 1: Item Type -->
             <div id="wizard-step-1" class="wizard-step active">
-                <h3 class="text-lg font-semibold mb-4">Basic Information</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Item Name</label>
-                        <input type="text" class="w-full px-4 py-2 rounded-lg border" placeholder="e.g., Modern Sofa">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Category</label>
-                        <select class="w-full px-4 py-2 rounded-lg border">
-                            <option>Select category...</option>
-                            <option>Furniture</option>
-                            <option>Decor</option>
-                            <option>Lighting</option>
-                            <option>Art</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Description</label>
-                        <textarea class="w-full px-4 py-2 rounded-lg border" rows="3" placeholder="Describe the item..."></textarea>
-                    </div>
+                <h3 class="text-lg font-semibold mb-4">What type of item is this?</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="selectItemType(this, 'Seating')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">🛋️ Seating</div>
+                        <div class="text-sm text-gray-500">Sofas, chairs, benches</div>
+                    </button>
+                    <button onclick="selectItemType(this, 'Tables')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">🪑 Tables</div>
+                        <div class="text-sm text-gray-500">Coffee, dining, side</div>
+                    </button>
+                    <button onclick="selectItemType(this, 'Lighting')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">💡 Lighting</div>
+                        <div class="text-sm text-gray-500">Lamps, fixtures</div>
+                    </button>
+                    <button onclick="selectItemType(this, 'Decor')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">🎨 Decor</div>
+                        <div class="text-sm text-gray-500">Vases, sculptures</div>
+                    </button>
+                    <button onclick="selectItemType(this, 'Art')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">🖼️ Art</div>
+                        <div class="text-sm text-gray-500">Paintings, prints</div>
+                    </button>
+                    <button onclick="selectItemType(this, 'Rugs')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">🔲 Rugs</div>
+                        <div class="text-sm text-gray-500">Area rugs, runners</div>
+                    </button>
                 </div>
             </div>
 
+            <!-- Step 2: Color -->
             <div id="wizard-step-2" class="wizard-step">
-                <h3 class="text-lg font-semibold mb-4">Location & Details</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Storage Location</label>
-                        <select class="w-full px-4 py-2 rounded-lg border">
-                            <option>Select location...</option>
-                            <option>Warehouse A</option>
-                            <option>Warehouse B</option>
-                            <option>Storage Unit 1</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Purchase Value</label>
-                        <input type="text" class="w-full px-4 py-2 rounded-lg border" placeholder="$0.00">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Condition</label>
-                        <select class="w-full px-4 py-2 rounded-lg border">
-                            <option>Excellent</option>
-                            <option>Good</option>
-                            <option>Fair</option>
-                            <option>Needs Repair</option>
-                        </select>
-                    </div>
+                <h3 class="text-lg font-semibold mb-4">What color is this item?</h3>
+                <input type="text" id="item-color" placeholder="e.g., Navy Blue, Charcoal Gray, Ivory..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button onclick="document.getElementById('item-color').value='White'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">White</button>
+                    <button onclick="document.getElementById('item-color').value='Black'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Black</button>
+                    <button onclick="document.getElementById('item-color').value='Gray'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Gray</button>
+                    <button onclick="document.getElementById('item-color').value='Beige'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Beige</button>
+                    <button onclick="document.getElementById('item-color').value='Navy'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Navy</button>
+                    <button onclick="document.getElementById('item-color').value='Brown'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Brown</button>
                 </div>
             </div>
 
+            <!-- Step 3: Fabric -->
             <div id="wizard-step-3" class="wizard-step">
-                <h3 class="text-lg font-semibold mb-4">Photos & Final Details</h3>
-                <div class="space-y-4">
+                <h3 class="text-lg font-semibold mb-4">What material or fabric?</h3>
+                <input type="text" id="item-fabric" placeholder="e.g., Velvet, Linen, Wood, Metal, Leather..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button onclick="document.getElementById('item-fabric').value='Velvet'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Velvet</button>
+                    <button onclick="document.getElementById('item-fabric').value='Linen'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Linen</button>
+                    <button onclick="document.getElementById('item-fabric').value='Leather'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Leather</button>
+                    <button onclick="document.getElementById('item-fabric').value='Wood'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Wood</button>
+                    <button onclick="document.getElementById('item-fabric').value='Metal'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Metal</button>
+                    <button onclick="document.getElementById('item-fabric').value='Glass'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Glass</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Measurements -->
+            <div id="wizard-step-4" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">What are the measurements?</h3>
+                <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <label class="block text-sm font-medium mb-2">Upload Photos</label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                            <div class="text-4xl mb-2">📸</div>
-                            <p class="text-gray-600">Click to upload or drag and drop</p>
-                            <p class="text-sm text-gray-500 mt-1">PNG, JPG up to 10MB</p>
-                        </div>
+                        <label class="block text-sm font-semibold mb-2">Width (inches)</label>
+                        <input type="number" id="item-width" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Tags (optional)</label>
-                        <input type="text" class="w-full px-4 py-2 rounded-lg border" placeholder="Add tags separated by commas">
+                        <label class="block text-sm font-semibold mb-2">Depth (inches)</label>
+                        <input type="number" id="item-depth" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Height (inches)</label>
+                        <input type="number" id="item-height" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
                     </div>
                 </div>
             </div>
 
+            <!-- Step 5: Condition -->
+            <div id="wizard-step-5" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">What condition is it in?</h3>
+                <div class="space-y-3">
+                    <button onclick="selectCondition(this, 'New')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">✨ New</div>
+                        <div class="text-sm text-gray-500">Brand new, never used</div>
+                    </button>
+                    <button onclick="selectCondition(this, 'Excellent')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">⭐ Excellent</div>
+                        <div class="text-sm text-gray-500">Like new, minimal wear</div>
+                    </button>
+                    <button onclick="selectCondition(this, 'Good')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">👍 Good</div>
+                        <div class="text-sm text-gray-500">Minor wear, fully functional</div>
+                    </button>
+                    <button onclick="selectCondition(this, 'Fair')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 text-left transition-all">
+                        <div class="font-semibold">⚠️ Fair</div>
+                        <div class="text-sm text-gray-500">Noticeable wear, still usable</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 6: Status -->
+            <div id="wizard-step-6" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">What's the current status?</h3>
+                <div class="space-y-3">
+                    <button onclick="selectStatus(this, 'IN')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 text-left transition-all">
+                        <div class="font-semibold">✅ IN - Available</div>
+                        <div class="text-sm text-gray-500">Ready to be used on projects</div>
+                    </button>
+                    <button onclick="selectStatus(this, 'OUT')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 text-left transition-all">
+                        <div class="font-semibold">📦 OUT - On Project</div>
+                        <div class="text-sm text-gray-500">Currently being used</div>
+                    </button>
+                    <button onclick="selectStatus(this, 'HOLD')" class="w-full p-4 border-2 border-gray-200 rounded-lg hover:border-yellow-500 hover:bg-yellow-50 text-left transition-all">
+                        <div class="font-semibold">⏸️ HOLD - Reserved</div>
+                        <div class="text-sm text-gray-500">Reserved for upcoming project</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 7: Location -->
+            <div id="wizard-step-7" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Where is this item located?</h3>
+                <select id="item-location" class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
+                    <option value="">Select location...</option>
+                    <option value="Warehouse A">Warehouse A</option>
+                    <option value="Warehouse B">Warehouse B</option>
+                    <option value="Storage Unit">Storage Unit</option>
+                    <option value="On Site - Sunset Blvd">On Site - Sunset Blvd</option>
+                    <option value="On Site - Maple St">On Site - Maple St</option>
+                    <option value="On Site - Oak Ave">On Site - Oak Ave</option>
+                </select>
+            </div>
+
+            <!-- Step 8: Purchase Date -->
+            <div id="wizard-step-8" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">When was this purchased?</h3>
+                <input type="date" id="item-purchase-date" class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
+            </div>
+
+            <!-- Step 9: Purchased Where -->
+            <div id="wizard-step-9" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Where was this purchased?</h3>
+                <input type="text" id="item-purchased-where" placeholder="e.g., West Elm, IKEA, HomeGoods, Amazon..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button onclick="document.getElementById('item-purchased-where').value='West Elm'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">West Elm</button>
+                    <button onclick="document.getElementById('item-purchased-where').value='IKEA'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">IKEA</button>
+                    <button onclick="document.getElementById('item-purchased-where').value='HomeGoods'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">HomeGoods</button>
+                    <button onclick="document.getElementById('item-purchased-where').value='Amazon'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Amazon</button>
+                    <button onclick="document.getElementById('item-purchased-where').value='Wayfair'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Wayfair</button>
+                </div>
+            </div>
+
+            <!-- Step 10: Item Cost -->
+            <div id="wizard-step-10" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">What was the purchase cost?</h3>
+                <div class="relative">
+                    <span class="absolute left-3 top-3 text-gray-500 text-lg">$</span>
+                    <input type="number" id="item-cost" placeholder="0.00" step="0.01" class="w-full p-3 pl-8 border-2 border-gray-200 rounded-lg text-base">
+                </div>
+            </div>
+
+            <!-- Step 11: Photo Upload -->
+            <div id="wizard-step-11" class="wizard-step">
+                <h3 class="text-lg font-semibold mb-4">Add a photo</h3>
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <div class="text-6xl mb-4">📷</div>
+                    <div class="font-semibold mb-2">Upload or take a photo</div>
+                    <div class="text-sm text-gray-500 mb-4">JPG, PNG, or HEIC up to 10MB</div>
+                    <button class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Choose File</button>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
             <div class="flex justify-between mt-8">
-                <button onclick="hideWizard()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
-                    Cancel
-                </button>
-                <div class="flex gap-3">
-                    <button id="wizard-back" onclick="wizardPrev()" style="display:none;" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
-                        Back
+                <div class="flex gap-2">
+                    <button onclick="cancelWizard()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Cancel
                     </button>
-                    <button id="wizard-next" onclick="wizardNext()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
-                        Next
+                    <button id="wizard-undo" onclick="wizardPrev()" style="display:none;" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        ← Undo
                     </button>
-                    <button id="wizard-save" onclick="hideWizard()" style="display:none;" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                </div>
+                <div class="flex gap-2">
+                    <button id="wizard-skip" onclick="wizardNext()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                        Skip
+                    </button>
+                    <button id="wizard-next" onclick="wizardNext()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700" style="display:none;">
+                        Next →
+                    </button>
+                    <button id="wizard-save" onclick="saveInventoryItem()" style="display:none;" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
                         Save Item
                     </button>
                 </div>
@@ -1744,9 +1862,19 @@
         }
 
         // Wizard functions
+        let wizardData = {
+            itemType: '', color: '', fabric: '', width: '', depth: '', height: '',
+            condition: '', status: '', location: '', purchaseDate: '', purchasedWhere: '', cost: ''
+        };
+
         function showWizard() {
             document.getElementById('wizard-modal').classList.add('active');
             currentWizardStep = 1;
+            // Reset wizard data
+            wizardData = {
+                itemType: '', color: '', fabric: '', width: '', depth: '', height: '',
+                condition: '', status: '', location: '', purchaseDate: '', purchasedWhere: '', cost: ''
+            };
             updateWizardStep();
         }
 
@@ -1754,8 +1882,14 @@
             document.getElementById('wizard-modal').classList.remove('active');
         }
 
+        function cancelWizard() {
+            if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                hideWizard();
+            }
+        }
+
         function wizardNext() {
-            if (currentWizardStep < 3) {
+            if (currentWizardStep < 11) {
                 currentWizardStep++;
                 updateWizardStep();
             }
@@ -1778,15 +1912,90 @@
             document.getElementById('wizard-step-' + currentWizardStep).classList.add('active');
             
             // Update progress bars
-            for (let i = 1; i <= 3; i++) {
+            for (let i = 1; i <= 11; i++) {
                 const bar = document.getElementById('progress-' + i);
-                bar.className = i <= currentWizardStep ? 'flex-1 h-2 rounded-full bg-purple-600' : 'flex-1 h-2 rounded-full bg-gray-200';
+                if (bar) {
+                    bar.className = i <= currentWizardStep ? 'flex-1 h-2 rounded-full bg-purple-600' : 'flex-1 h-2 rounded-full bg-gray-200';
+                }
             }
             
             // Update buttons
-            document.getElementById('wizard-back').style.display = currentWizardStep > 1 ? 'block' : 'none';
-            document.getElementById('wizard-next').style.display = currentWizardStep < 3 ? 'block' : 'none';
-            document.getElementById('wizard-save').style.display = currentWizardStep === 3 ? 'block' : 'none';
+            document.getElementById('wizard-undo').style.display = currentWizardStep > 1 ? 'block' : 'none';
+            document.getElementById('wizard-skip').style.display = currentWizardStep < 11 ? 'block' : 'none';
+            document.getElementById('wizard-next').style.display = 'none'; // Always hide Next, use Skip instead
+            document.getElementById('wizard-save').style.display = currentWizardStep === 11 ? 'block' : 'none';
+        }
+
+        // Selection functions for button-based steps
+        function selectItemType(button, type) {
+            wizardData.itemType = type;
+            // Remove selection from all buttons in this step
+            document.querySelectorAll('#wizard-step-1 button').forEach(b => {
+                b.style.borderColor = '#e5e7eb';
+                b.style.background = 'white';
+            });
+            // Highlight selected
+            button.style.borderColor = '#9333ea';
+            button.style.background = '#faf5ff';
+            // Auto-advance
+            setTimeout(() => wizardNext(), 300);
+        }
+
+        function selectCondition(button, condition) {
+            wizardData.condition = condition;
+            // Remove selection from all buttons in this step
+            document.querySelectorAll('#wizard-step-5 button').forEach(b => {
+                b.style.borderColor = '#e5e7eb';
+                b.style.background = 'white';
+            });
+            // Highlight selected
+            button.style.borderColor = '#9333ea';
+            button.style.background = '#faf5ff';
+            // Auto-advance
+            setTimeout(() => wizardNext(), 300);
+        }
+
+        function selectStatus(button, status) {
+            wizardData.status = status;
+            // Remove selection from all buttons in this step
+            document.querySelectorAll('#wizard-step-6 button').forEach(b => {
+                b.style.borderColor = '#e5e7eb';
+                b.style.background = 'white';
+            });
+            // Highlight selected based on status type
+            if (status === 'IN') {
+                button.style.borderColor = '#16a34a';
+                button.style.background = '#f0fdf4';
+            } else if (status === 'OUT') {
+                button.style.borderColor = '#2563eb';
+                button.style.background = '#eff6ff';
+            } else if (status === 'HOLD') {
+                button.style.borderColor = '#eab308';
+                button.style.background = '#fefce8';
+            }
+            // Auto-advance
+            setTimeout(() => wizardNext(), 300);
+        }
+
+        function saveInventoryItem() {
+            // Collect all data
+            wizardData.color = document.getElementById('item-color').value;
+            wizardData.fabric = document.getElementById('item-fabric').value;
+            wizardData.width = document.getElementById('item-width').value;
+            wizardData.depth = document.getElementById('item-depth').value;
+            wizardData.height = document.getElementById('item-height').value;
+            wizardData.location = document.getElementById('item-location').value;
+            wizardData.purchaseDate = document.getElementById('item-purchase-date').value;
+            wizardData.purchasedWhere = document.getElementById('item-purchased-where').value;
+            wizardData.cost = document.getElementById('item-cost').value;
+
+            console.log('Saving inventory item:', wizardData);
+            
+            // For demo purposes, just close the modal
+            alert('Item saved successfully!');
+            hideWizard();
+            
+            // In real app, would add item to inventory here
         }
 
         // Edit functions

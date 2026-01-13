@@ -635,6 +635,14 @@
                         <div style="min-height: 120px; background: #f9fafb; padding: 8px; border-radius: 8px;"><span style="font-size: 14px; color: #9ca3af;">1</span></div>
                     </div>
                 </div>
+
+                <!-- Upcoming Events List -->
+                <div style="margin-top: 32px;">
+                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">Upcoming Events</h3>
+                    <div id="upcoming-events-list" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- Events will be rendered here -->
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -1460,14 +1468,14 @@
     </div>
 
     <!-- Add Event Modal -->
-    <div id="add-event-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-8">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Add Calendar Event</h2>
-                <button onclick="hideAddEvent()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+    <div id="add-event-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Add Calendar Event</h2>
+                <button onclick="hideAddEvent()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
             </div>
 
-            <form style="display: flex; flex-direction: column; gap: 20px;">
+            <form id="add-event-form" onsubmit="saveCalendarEvent(event)" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Event Type -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 10px; font-size: 15px;">Event Type</label>
@@ -1517,11 +1525,11 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="hideAddEvent()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+                    <button type="button" onclick="hideAddEvent()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
                     </button>
-                    <button type="button" onclick="saveEvent()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    <button type="submit" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Add Event
                     </button>
                 </div>
@@ -2160,42 +2168,79 @@
         // Initialize projects on page load
         document.addEventListener('DOMContentLoaded', function() {
             renderProjects();
+            renderInventory();
+            renderCalendar();
         });
 
         // Calendar Add Event functions
+        let currentEventType = '';
+        
         function showAddEvent() {
-            document.getElementById('add-event-modal').classList.add('active');
+            const modal = document.getElementById('add-event-modal');
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+            document.getElementById('add-event-form').reset();
+            currentEventType = '';
         }
 
         function hideAddEvent() {
-            document.getElementById('add-event-modal').classList.remove('active');
+            const modal = document.getElementById('add-event-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+        
+        function selectEventType(button, type) {
+            currentEventType = type;
+            // Remove selection from all buttons
+            document.querySelectorAll('.event-type-btn').forEach(btn => {
+                btn.style.borderColor = '#e5e7eb';
+                btn.style.background = 'white';
+            });
+            // Highlight selected button
+            const colors = {
+                'consultation': { border: '#dbeafe', bg: '#dbeafe' },
+                'install': { border: '#dcfce7', bg: '#dcfce7' },
+                'photos': { border: '#fef3c7', bg: '#fef3c7' },
+                'pickup': { border: '#f3e8ff', bg: '#f3e8ff' }
+            };
+            button.style.borderColor = colors[type].border;
+            button.style.background = colors[type].bg;
         }
 
-        function saveEvent() {
-            const eventType = document.getElementById('event-type').value;
+        function saveCalendarEvent(e) {
+            e.preventDefault();
+            
+            if (!currentEventType) {
+                alert('Please select an event type');
+                return;
+            }
+            
             const project = document.getElementById('event-project').value;
             const date = document.getElementById('event-date').value;
             const time = document.getElementById('event-time').value;
-
-            // Get event type details
-            const eventTypes = {
-                consultation: { color: '#dbeafe', textColor: '#1e40af', label: 'Consult' },
-                install: { color: '#dcfce7', textColor: '#166534', label: 'Install' },
-                photoshoot: { color: '#fef3c7', textColor: '#92400e', label: 'Photos' },
-                pickup: { color: '#f3e8ff', textColor: '#6b21a8', label: 'Pickup' }
+            const notes = document.getElementById('event-notes').value;
+            
+            if (!date) {
+                alert('Please select a date');
+                return;
+            }
+            
+            const newEvent = {
+                id: Date.now(),
+                type: currentEventType,
+                project: project,
+                date: date,
+                time: time,
+                notes: notes
             };
-
-            const eventInfo = eventTypes[eventType];
-            const timeFormatted = new Date('2000-01-01 ' + time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-
-            // Parse the date to find which day of month
-            const eventDate = new Date(date);
-            const day = eventDate.getDate();
-
-            // Show success message
-            alert(`Event Added!\n\nType: ${eventInfo.label}\nProject: ${project}\nDate: ${date}\nTime: ${timeFormatted}\n\nIn a live app, this would appear on the calendar on day ${day}.`);
-
+            
+            const currentEvents = getStoredEvents();
+            currentEvents.push(newEvent);
+            saveStoredEvents(currentEvents);
+            
+            alert('✅ Event added to calendar!');
             hideAddEvent();
+            renderCalendar();
         }
 
         // Show page function
@@ -2225,65 +2270,6 @@
         // Add Event functions
         let selectedEventType = 'consultation';
 
-        function showAddEvent() {
-            document.getElementById('add-event-modal').classList.add('active');
-        }
-
-        function hideAddEvent() {
-            document.getElementById('add-event-modal').classList.remove('active');
-        }
-
-        function selectEventType(button, type) {
-            selectedEventType = type;
-            
-            // Reset all buttons
-            document.querySelectorAll('.event-type-btn').forEach(btn => {
-                btn.style.borderColor = '#e5e7eb';
-                btn.style.background = 'white';
-                btn.style.color = '#374151';
-            });
-            
-            // Highlight selected button with appropriate color
-            if (type === 'consultation') {
-                button.style.borderColor = '#dbeafe';
-                button.style.background = '#dbeafe';
-                button.style.color = '#1e40af';
-            } else if (type === 'install') {
-                button.style.borderColor = '#dcfce7';
-                button.style.background = '#dcfce7';
-                button.style.color = '#166534';
-            } else if (type === 'photos') {
-                button.style.borderColor = '#fef3c7';
-                button.style.background = '#fef3c7';
-                button.style.color = '#92400e';
-            } else if (type === 'pickup') {
-                button.style.borderColor = '#f3e8ff';
-                button.style.background = '#f3e8ff';
-                button.style.color = '#7c3aed';
-            }
-        }
-
-        function saveEvent() {
-            const project = document.getElementById('event-project').value;
-            const date = document.getElementById('event-date').value;
-            const time = document.getElementById('event-time').value;
-            const notes = document.getElementById('event-notes').value;
-
-            if (!project || !date || !time) {
-                alert('Please fill in all required fields (Project, Date, and Time)');
-                return;
-            }
-
-            // For demo purposes, just show success message
-            alert('Event added successfully! (In the full app, this would add the event to your calendar)');
-            hideAddEvent();
-            
-            // Reset form
-            document.getElementById('event-project').value = '';
-            document.getElementById('event-date').value = '';
-            document.getElementById('event-time').value = '';
-            document.getElementById('event-notes').value = '';
-        }
 
         // Project Schedule & Notes functions
         function showProjectSchedule(projectName) {
@@ -3160,6 +3146,120 @@
         }
         
         console.log('✅ Inventory localStorage ready');
+        
+        // ===== CALENDAR LOCALSTORAGE =====
+        function getStoredEvents() {
+            const stored = localStorage.getItem('stagience_events');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            // Return default events
+            const defaults = [
+                {
+                    id: Date.now() + 1,
+                    type: 'consultation',
+                    project: 'Sunset Blvd Luxury Condo',
+                    date: '2026-01-15',
+                    time: '10:00',
+                    notes: 'Initial walkthrough'
+                },
+                {
+                    id: Date.now() + 2,
+                    type: 'install',
+                    project: 'Maple St Family Home',
+                    date: '2026-01-20',
+                    time: '09:00',
+                    notes: 'Full staging install'
+                }
+            ];
+            localStorage.setItem('stagience_events', JSON.stringify(defaults));
+            return defaults;
+        }
+        
+        function saveStoredEvents(eventsArray) {
+            localStorage.setItem('stagience_events', JSON.stringify(eventsArray));
+        }
+        
+        function renderCalendar() {
+            const events = getStoredEvents();
+            const listContainer = document.getElementById('upcoming-events-list');
+            
+            if (!listContainer) return; // Not on calendar page
+            
+            if (events.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #6b7280;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">📅</div>
+                        <p style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">No events yet</p>
+                        <p style="font-size: 14px;">Click "+ Add Event" to schedule your first event</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort events by date
+            const sortedEvents = events.sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            listContainer.innerHTML = sortedEvents.map(event => {
+                // Format date
+                const eventDate = new Date(event.date);
+                const dateFormatted = eventDate.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                
+                // Format time
+                const timeFormatted = event.time ? new Date('2000-01-01 ' + event.time).toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit', 
+                    hour12: true 
+                }) : '';
+                
+                // Event type colors and icons
+                const eventTypes = {
+                    'consultation': { bg: '#dbeafe', color: '#1e40af', icon: '📅', label: 'Consultation' },
+                    'install': { bg: '#dcfce7', color: '#166534', icon: '🏠', label: 'Install' },
+                    'photos': { bg: '#fef3c7', color: '#92400e', icon: '📸', label: 'Photo Shoot' },
+                    'pickup': { bg: '#f3e8ff', color: '#7c3aed', icon: '📦', label: 'Pickup' }
+                };
+                
+                const typeInfo = eventTypes[event.type] || eventTypes['consultation'];
+                
+                return `
+                    <div style="background: white; border-radius: 12px; padding: 16px; border: 1px solid #e5e7eb; display: flex; gap: 16px; align-items: start;">
+                        <div style="font-size: 32px;">${typeInfo.icon}</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${typeInfo.bg}; color: ${typeInfo.color};">
+                                    ${typeInfo.label}
+                                </span>
+                                <span style="font-size: 14px; color: #6b7280; font-weight: 600;">
+                                    ${dateFormatted}${timeFormatted ? ' • ' + timeFormatted : ''}
+                                </span>
+                            </div>
+                            <h4 style="font-weight: 600; font-size: 16px; margin-bottom: 4px;">${event.project || 'No project assigned'}</h4>
+                            ${event.notes ? `<p style="font-size: 14px; color: #6b7280;">${event.notes}</p>` : ''}
+                        </div>
+                        <button onclick="deleteCalendarEvent(${event.id})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete event">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function deleteCalendarEvent(eventId) {
+            if (!confirm('Delete this event?')) return;
+            
+            const events = getStoredEvents();
+            const filtered = events.filter(e => e.id !== eventId);
+            saveStoredEvents(filtered);
+            
+            alert('✅ Event deleted!');
+            renderCalendar();
+        }
+        
+        console.log('✅ Calendar localStorage ready');
     </script>
 
 </body>

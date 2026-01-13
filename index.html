@@ -28,6 +28,8 @@
         .project-tab-content.active { display: block; }
         .status-folder:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
         .status-folder.active { border-color: #3b82f6 !important; background: #eff6ff !important; }
+        .wizard-step { display: none; }
+        .wizard-step.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -716,7 +718,7 @@
                                 <span>🔍</span>
                                 <span>Search</span>
                             </button>
-                            <button onclick="showAddProject()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add New Project</button>
+                            <button onclick="showSimpleAddProject()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add New Project</button>
                         </div>
                     </div>
 
@@ -1167,9 +1169,9 @@
     </div>
 
     <!-- Inventory Wizard Modal -->
-    <div id="wizard-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4" style="overflow-y: auto;">
-        <div class="bg-white rounded-2xl max-w-2xl w-full p-8" style="margin: 20px auto; max-height: 90vh; overflow-y: auto;">
-            <div class="flex justify-between items-center mb-6">
+    <div id="wizard-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
+        <div style="background: white; border-radius: 24px; max-width: 800px; width: 100%; padding: 32px; margin: 20px auto; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 11</h2>
                 <button onclick="cancelWizard()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
             </div>
@@ -1372,14 +1374,11 @@
                         ← Undo
                     </button>
                 </div>
-                <div class="flex gap-2">
-                    <button id="wizard-skip" onclick="wizardNext()" class="px-4 py-2 border rounded-lg hover:bg-gray-50">
-                        Skip
-                    </button>
-                    <button id="wizard-next" onclick="wizardNext()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700" style="display:none;">
+                <div style="display: flex; gap: 8px;">
+                    <button id="wizard-next" onclick="wizardNext()" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Next →
                     </button>
-                    <button id="wizard-save" onclick="saveInventoryItem()" style="display:none;" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                    <button id="wizard-save" onclick="saveInventoryItem()" style="display: none; background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Save Item
                     </button>
                 </div>
@@ -1602,72 +1601,6 @@
 
             <div class="flex justify-end">
                 <button onclick="hideProjectSchedule()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add New Project Modal -->
-    <div id="add-project-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
-        <div style="background: white; border-radius: 24px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative;">
-            <div style="padding: 32px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h2 style="font-size: 24px; font-weight: bold;">Add New Project</h2>
-                    <button onclick="hideAddProject()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
-                </div>
-                
-                <form id="add-project-form" onsubmit="saveNewProject(event)">
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Project Name *</label>
-                        <input type="text" id="new-project-name" required placeholder="e.g., Downtown Luxury Condo" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Property Address *</label>
-                        <input type="text" id="new-project-address" required placeholder="123 Main Street, City, State" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div>
-                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Status *</label>
-                            <select id="new-project-status" required style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;">
-                                <option value="pending">Pending</option>
-                                <option value="scheduled">Scheduled</option>
-                                <option value="active">Active</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Install Date</label>
-                            <input type="date" id="new-project-date" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Client Name</label>
-                        <input type="text" id="new-project-client-name" placeholder="John Smith" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-                        <div>
-                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Client Email</label>
-                            <input type="email" id="new-project-client-email" placeholder="client@example.com" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Client Phone</label>
-                            <input type="tel" id="new-project-client-phone" placeholder="(555) 123-4567" style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px;" />
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 24px;">
-                        <label style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px;">Notes</label>
-                        <textarea id="new-project-notes" placeholder="Add any notes about this project..." style="width: 100%; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 15px; min-height: 80px; resize: vertical;"></textarea>
-                    </div>
-                    
-                    <div style="display: flex; gap: 12px;">
-                        <button type="button" onclick="hideAddProject()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
-                        <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer;">Add Project</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -2105,414 +2038,87 @@
     </div>
 
     <script>
-        // ===== INTERACTIVE DEMO WITH LOCALSTORAGE =====
-        // This allows users to actually test the app with their own data
-        
-        // Initialize user session
-        let currentUser = localStorage.getItem('stagience_demo_user') || null;
-        
-        // Data management functions
-        function initializeData() {
-            if (!localStorage.getItem('stagience_projects')) {
-                // Initialize with sample data if first time
-                const sampleProjects = [
-                    {
-                        id: Date.now() + 1,
-                        name: 'Sunset Blvd Luxury Condo',
-                        address: '1234 Sunset Blvd',
-                        status: 'Active',
-                        statusLower: 'active',
-                        installDate: '2026-01-12',
-                        clientName: 'Sarah Johnson',
-                        clientEmail: 'sarah@example.com',
-                        clientPhone: '(555) 123-4567',
-                        notes: 'Client prefers modern minimalist style. Focus on neutral tones.',
-                        statusBg: '#dcfce7',
-                        statusColor: '#166534',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: Date.now() + 2,
-                        name: 'Maple St Family Home',
-                        address: '567 Maple Street',
-                        status: 'Scheduled',
-                        statusLower: 'scheduled',
-                        installDate: '2026-01-15',
-                        clientName: 'Mike Chen',
-                        clientEmail: 'mike@example.com',
-                        clientPhone: '(555) 234-5678',
-                        notes: 'Large family home, needs warm inviting feel.',
-                        statusBg: '#dbeafe',
-                        statusColor: '#1e40af',
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: Date.now() + 3,
-                        name: 'Oak Ave Consultation',
-                        address: '890 Oak Avenue',
-                        status: 'Pending',
-                        statusLower: 'pending',
-                        installDate: '2026-01-18',
-                        clientName: 'Emily Rodriguez',
-                        clientEmail: 'emily@example.com',
-                        clientPhone: '(555) 345-6789',
-                        notes: 'Initial consultation scheduled. Client interested in full staging package.',
-                        statusBg: '#fef3c7',
-                        statusColor: '#92400e',
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-                localStorage.setItem('stagience_projects', JSON.stringify(sampleProjects));
-            }
-            
-            if (!localStorage.getItem('stagience_inventory')) {
-                // Initialize with sample inventory
-                const sampleInventory = [
-                    { 
-                        id: Date.now() + 1, 
-                        name: 'Ivory Boucle Sofa', 
-                        itemType: 'Seating',
-                        category: 'Seating', 
-                        color: 'Ivory',
-                        fabric: 'Boucle',
-                        dimensions: {width: 84, depth: 36, height: 32},
-                        condition: 'Excellent',
-                        location: 'Warehouse A', 
-                        status: 'IN',
-                        purchaseDate: '2025-06-15',
-                        purchasedFrom: 'West Elm',
-                        cost: 1299.00,
-                        photoUrl: null,
-                        createdAt: new Date().toISOString()
-                    },
-                    { 
-                        id: Date.now() + 2, 
-                        name: 'Black Marble Coffee Table', 
-                        itemType: 'Tables',
-                        category: 'Tables', 
-                        color: 'Black',
-                        fabric: 'Marble/Metal',
-                        dimensions: {width: 48, depth: 24, height: 18},
-                        condition: 'New',
-                        location: 'Sunset Blvd Project', 
-                        status: 'OUT',
-                        purchaseDate: '2025-08-20',
-                        purchasedFrom: 'HomeSense',
-                        cost: 450.00,
-                        photoUrl: null,
-                        createdAt: new Date().toISOString()
-                    },
-                    { 
-                        id: Date.now() + 3, 
-                        name: 'Gold Leaf Floor Lamp', 
-                        itemType: 'Lighting',
-                        category: 'Lighting', 
-                        color: 'Gold',
-                        fabric: 'Metal/Glass',
-                        dimensions: {width: 12, depth: 12, height: 68},
-                        condition: 'Good',
-                        location: 'Warehouse B', 
-                        status: 'HOLD',
-                        purchaseDate: '2025-05-10',
-                        purchasedFrom: 'IKEA',
-                        cost: 189.00,
-                        photoUrl: null,
-                        createdAt: new Date().toISOString()
-                    },
-                    { 
-                        id: Date.now() + 4, 
-                        name: 'Navy Velvet Armchair', 
-                        itemType: 'Seating',
-                        category: 'Seating', 
-                        color: 'Navy',
-                        fabric: 'Velvet',
-                        dimensions: {width: 32, depth: 34, height: 36},
-                        condition: 'Excellent',
-                        location: 'Warehouse A', 
-                        status: 'IN',
-                        purchaseDate: '2025-07-22',
-                        purchasedFrom: 'West Elm',
-                        cost: 899.00,
-                        photoUrl: null,
-                        createdAt: new Date().toISOString()
-                    }
-                ];
-                localStorage.setItem('stagience_inventory', JSON.stringify(sampleInventory));
-            }
-            
-            if (!localStorage.getItem('stagience_events')) {
-                localStorage.setItem('stagience_events', JSON.stringify([]));
-            }
-        }
-        
-        // Get data from localStorage
-        function getProjects() {
-            return JSON.parse(localStorage.getItem('stagience_projects') || '[]');
-        }
-        
-        function getInventory() {
-            return JSON.parse(localStorage.getItem('stagience_inventory') || '[]');
-        }
-        
-        function getEvents() {
-            return JSON.parse(localStorage.getItem('stagience_events') || '[]');
-        }
-        
-        // Save data to localStorage
-        function saveProjects(projects) {
-            localStorage.setItem('stagience_projects', JSON.stringify(projects));
-            updateDashboardStats();
-        }
-        
-        function saveInventory(inventory) {
-            localStorage.setItem('stagience_inventory', JSON.stringify(inventory));
-            updateDashboardStats();
-        }
-        
-        function saveEvents(events) {
-            localStorage.setItem('stagience_events', JSON.stringify(events));
-        }
-        
-        // CRUD operations for Projects
-        function addProject(projectData) {
-            const projects = getProjects();
-            const newProject = {
-                id: Date.now(),
-                ...projectData,
-                createdAt: new Date().toISOString()
-            };
-            projects.push(newProject);
-            saveProjects(projects);
-            return newProject;
-        }
-        
-        function updateProject(id, updates) {
-            const projects = getProjects();
-            const index = projects.findIndex(p => p.id === id);
-            if (index !== -1) {
-                projects[index] = { ...projects[index], ...updates };
-                saveProjects(projects);
-                return projects[index];
-            }
-            return null;
-        }
-        
-        function deleteProject(id) {
-            let projects = getProjects();
-            projects = projects.filter(p => p.id !== id);
-            saveProjects(projects);
-        }
-        
-        // CRUD operations for Inventory
-        function addInventoryItem(itemData) {
-            const inventory = getInventory();
-            const newItem = {
-                id: Date.now(),
-                ...itemData,
-                createdAt: new Date().toISOString()
-            };
-            inventory.push(newItem);
-            saveInventory(inventory);
-            return newItem;
-        }
-        
-        function updateInventoryItem(id, updates) {
-            const inventory = getInventory();
-            const index = inventory.findIndex(i => i.id === id);
-            if (index !== -1) {
-                inventory[index] = { ...inventory[index], ...updates };
-                saveInventory(inventory);
-                return inventory[index];
-            }
-            return null;
-        }
-        
-        function deleteInventoryItem(id) {
-            let inventory = getInventory();
-            inventory = inventory.filter(i => i.id !== id);
-            saveInventory(inventory);
-        }
-        
-        // CRUD operations for Events
-        function addEvent(eventData) {
-            const events = getEvents();
-            const newEvent = {
-                id: Date.now(),
-                ...eventData,
-                createdAt: new Date().toISOString()
-            };
-            events.push(newEvent);
-            saveEvents(events);
-            return newEvent;
-        }
-        
-        function deleteEvent(id) {
-            let events = getEvents();
-            events = events.filter(e => e.id !== id);
-            saveEvents(events);
-        }
-        
-        // Dashboard stats calculation
-        function updateDashboardStats() {
-            const projects = getProjects();
-            const inventory = getInventory();
-            
-            // Count projects by status
-            const activeCount = projects.filter(p => p.statusLower === 'active').length;
-            const pendingCount = projects.filter(p => p.statusLower === 'pending').length;
-            const scheduledCount = projects.filter(p => p.statusLower === 'scheduled').length;
-            const completedCount = projects.filter(p => p.statusLower === 'completed').length;
-            
-            // Count inventory by status
-            const availableCount = inventory.filter(i => i.status === 'IN').length;
-            const outCount = inventory.filter(i => i.status === 'OUT').length;
-            const holdCount = inventory.filter(i => i.status === 'HOLD').length;
-            
-            // Update dashboard if we're on that page
-            const stats = document.querySelectorAll('.stat-card');
-            if (stats.length > 0) {
-                stats[0].querySelector('.stat-value').textContent = activeCount;
-                stats[1].querySelector('.stat-value').textContent = pendingCount;
-                stats[2].querySelector('.stat-value').textContent = scheduledCount + ' consults';
-                stats[3].querySelector('.stat-value').textContent = completedCount;
-                stats[4].querySelector('.stat-value').textContent = availableCount;
-                stats[5].querySelector('.stat-value').textContent = outCount;
-                stats[6].querySelector('.stat-value').textContent = holdCount;
-            }
-        }
-        
-        // Initialize on page load
-        initializeData();
-
-        // Sample inventory data (keeping for backward compatibility with existing code)
-        const inventoryData = getInventory();
+        // Sample inventory data
+        const inventoryData = [
+            { id: 1, name: 'Ivory Boucle Sofa', category: 'Seating', location: 'Warehouse A', status: 'IN', color: 'Ivory', emoji: '📦' },
+            { id: 2, name: 'Black Marble Coffee Table', category: 'Tables', location: 'Sunset Blvd Project', status: 'OUT', color: 'Black', emoji: '📦' },
+            { id: 3, name: 'Gold Leaf Floor Lamp', category: 'Lighting', location: 'Warehouse B', status: 'HOLD', color: 'Gold', emoji: '📦' },
+            { id: 4, name: 'Navy Velvet Armchair', category: 'Seating', location: 'Warehouse A', status: 'IN', color: 'Navy', emoji: '📦' },
+        ];
 
         let currentWizardStep = 1;
         let currentProjectImportStep = 1;
         let currentInventoryImportStep = 1;
         let currentProjectFilter = 'all';
-        
-        // Wizard data storage
-        let wizardData = {};
 
-        // Project data (now loaded from localStorage)
-        let projects = getProjects();
+        // Project data (will be loaded from localStorage)
+        let projects = [
+            {
+                name: 'Sunset Blvd Luxury Condo',
+                address: '1234 Sunset Blvd',
+                status: 'Active',
+                statusLower: 'active',
+                installDate: '2026-01-12',
+                statusBg: '#dcfce7',
+                statusColor: '#166534'
+            },
+            {
+                name: 'Maple St Family Home',
+                address: '567 Maple Street',
+                status: 'Scheduled',
+                statusLower: 'scheduled',
+                installDate: '2026-01-15',
+                statusBg: '#dbeafe',
+                statusColor: '#1e40af'
+            },
+            {
+                name: 'Oak Ave Consultation',
+                address: '890 Oak Avenue',
+                status: 'Pending',
+                statusLower: 'pending',
+                installDate: '2026-01-18',
+                statusBg: '#dbeafe',
+                statusColor: '#1e40af'
+            }
+        ];
 
         function renderProjects() {
-            projects = getProjects(); // Reload from localStorage
+            // Reload projects from localStorage if available
+            if (typeof getStoredProjects === 'function') {
+                projects = getStoredProjects();
+            }
+            
             const projectsList = document.getElementById('projects-list');
             const filteredProjects = currentProjectFilter === 'all' 
                 ? projects 
                 : projects.filter(p => p.statusLower === currentProjectFilter);
             
-            if (filteredProjects.length === 0) {
-                projectsList.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
-                        <div style="font-size: 48px; margin-bottom: 16px;">📂</div>
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No projects found</h3>
-                        <p style="font-size: 14px;">Add your first project to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
             projectsList.innerHTML = filteredProjects.map(project => `
-                <div onclick="showProjectDetail(${project.id})" 
-                     style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" 
+                <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; transition: all 0.3s; position: relative;" 
                      onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" 
                      onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                        <div>
-                            <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
-                            <p style="color: #6b7280; font-size: 14px;">${project.address}</p>
-                        </div>
-                        <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: ${project.statusBg}; color: ${project.statusColor};">
-                            ${project.status}
-                        </span>
+                    <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;">
+                        <button onclick="editProject(${project.id}); event.stopPropagation();" 
+                                style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;"
+                                title="Edit project">✎</button>
+                        <button onclick="deleteProject(${project.id}); event.stopPropagation();" 
+                                style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; line-height: 1; padding: 0;"
+                                title="Delete project">×</button>
                     </div>
-                    <div style="font-size: 14px; color: #6b7280;">Install: ${project.installDate}</div>
+                    <div onclick="showProjectDetail('${project.name}', '${project.status}')" style="cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-right: 70px;">
+                            <div>
+                                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
+                                <p style="color: #6b7280; font-size: 14px;">${project.address}</p>
+                            </div>
+                            <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: ${project.statusBg}; color: ${project.statusColor};">
+                                ${project.status}
+                            </span>
+                        </div>
+                        <div style="font-size: 14px; color: #6b7280;">Install: ${project.installDate}</div>
+                    </div>
                 </div>
             `).join('');
-            
-            // Update folder counts
-            updateFolderCounts();
-        }
-        
-        // Update folder counts dynamically
-        function updateFolderCounts() {
-            const projects = getProjects();
-            const allCount = projects.length;
-            const activeCount = projects.filter(p => p.statusLower === 'active').length;
-            const scheduledCount = projects.filter(p => p.statusLower === 'scheduled').length;
-            const pendingCount = projects.filter(p => p.statusLower === 'pending').length;
-            const completedCount = projects.filter(p => p.statusLower === 'completed').length;
-            
-            // Update folder displays
-            const folderAll = document.getElementById('folder-all');
-            const folderActive = document.getElementById('folder-active');
-            const folderScheduled = document.getElementById('folder-scheduled');
-            const folderPending = document.getElementById('folder-pending');
-            const folderCompleted = document.getElementById('folder-completed');
-            
-            if (folderAll) folderAll.querySelector('div:last-child').textContent = allCount;
-            if (folderActive) folderActive.querySelector('div:last-child').textContent = activeCount;
-            if (folderScheduled) folderScheduled.querySelector('div:last-child').textContent = scheduledCount;
-            if (folderPending) folderPending.querySelector('div:last-child').textContent = pendingCount;
-            if (folderCompleted) folderCompleted.querySelector('div:last-child').textContent = completedCount;
-        }
-        
-        // Add Project Modal functions
-        function showAddProject() {
-            document.getElementById('add-project-modal').classList.add('active');
-        }
-        
-        function hideAddProject() {
-            document.getElementById('add-project-modal').classList.remove('active');
-            document.getElementById('add-project-form').reset();
-        }
-        
-        function saveNewProject(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('new-project-name').value;
-            const address = document.getElementById('new-project-address').value;
-            const statusLower = document.getElementById('new-project-status').value;
-            const installDate = document.getElementById('new-project-date').value || new Date().toISOString().split('T')[0];
-            const clientName = document.getElementById('new-project-client-name').value;
-            const clientEmail = document.getElementById('new-project-client-email').value;
-            const clientPhone = document.getElementById('new-project-client-phone').value;
-            const notes = document.getElementById('new-project-notes').value;
-            
-            // Status display mapping
-            const statusMap = {
-                'pending': { label: 'Pending', bg: '#fef3c7', color: '#92400e' },
-                'scheduled': { label: 'Scheduled', bg: '#dbeafe', color: '#1e40af' },
-                'active': { label: 'Active', bg: '#dcfce7', color: '#166534' },
-                'completed': { label: 'Completed', bg: '#e5e7eb', color: '#374151' }
-            };
-            
-            const statusInfo = statusMap[statusLower];
-            
-            const newProject = {
-                name,
-                address,
-                status: statusInfo.label,
-                statusLower,
-                installDate,
-                clientName,
-                clientEmail,
-                clientPhone,
-                notes,
-                statusBg: statusInfo.bg,
-                statusColor: statusInfo.color
-            };
-            
-            addProject(newProject);
-            hideAddProject();
-            renderProjects();
-            
-            // Show success message
-            alert(`✅ Project "${name}" added successfully!`);
         }
 
         function filterProjectsByStatus(status) {
@@ -2538,9 +2144,6 @@
         // Initialize projects on page load
         document.addEventListener('DOMContentLoaded', function() {
             renderProjects();
-            renderInventory();
-            updateDashboardStats();
-            updateFolderCounts();
         });
 
         // Calendar Add Event functions
@@ -2655,20 +2258,8 @@
                 return;
             }
 
-            // Save event to localStorage
-            const eventData = {
-                type: selectedEventType,
-                project,
-                date,
-                time,
-                notes,
-                dateTime: new Date(date + ' ' + time).toISOString()
-            };
-            
-            addEvent(eventData);
-            
-            // Show success message
-            alert(`✅ Event added successfully! (${date} at ${time})`);
+            // For demo purposes, just show success message
+            alert('Event added successfully! (In the full app, this would add the event to your calendar)');
             hideAddEvent();
             
             // Reset form
@@ -2689,27 +2280,33 @@
         }
 
         // Project Detail View functions
-        function showProjectDetail(projectId) {
-            const projects = getProjects();
-            const project = projects.find(p => p.id === projectId);
-            
-            if (!project) {
-                alert('Project not found');
-                return;
-            }
-            
+        function showProjectDetail(projectName, status) {
             // Update project details
-            document.getElementById('project-detail-title').textContent = project.name;
-            document.getElementById('project-detail-address').textContent = project.address;
+            document.getElementById('project-detail-title').textContent = projectName;
+            
+            // Set address based on project
+            const addresses = {
+                'Sunset Blvd Luxury Condo': '1234 Sunset Blvd',
+                'Maple St Family Home': '567 Maple Street',
+                'Oak Ave Consultation': '890 Oak Avenue'
+            };
+            document.getElementById('project-detail-address').textContent = addresses[projectName] || '';
             
             // Set status badge
             const statusBadge = document.getElementById('project-detail-status');
-            statusBadge.textContent = project.status;
-            statusBadge.style.background = project.statusBg;
-            statusBadge.style.color = project.statusColor;
+            statusBadge.textContent = status;
             
-            // Store current project ID for future operations
-            window.currentProjectId = projectId;
+            // Set status colors
+            if (status === 'Active') {
+                statusBadge.style.background = '#dcfce7';
+                statusBadge.style.color = '#166534';
+            } else if (status === 'Scheduled') {
+                statusBadge.style.background = '#dbeafe';
+                statusBadge.style.color = '#1e40af';
+            } else if (status === 'Pending') {
+                statusBadge.style.background = '#dbeafe';
+                statusBadge.style.color = '#1e40af';
+            }
             
             // Show project detail page
             showPage('project-detail');
@@ -2730,7 +2327,14 @@
 
         // Render inventory
         function renderInventory() {
-            const inventory = getInventory();
+            // Reload inventory from localStorage if available
+            let inventory = [];
+            if (typeof getStoredInventory === 'function') {
+                inventory = getStoredInventory();
+            } else {
+                inventory = inventoryData;
+            }
+            
             const grid = document.getElementById('inventory-grid');
             
             if (inventory.length === 0) {
@@ -2738,14 +2342,14 @@
                     <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📦</div>
                         <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No inventory items yet</h3>
-                        <p style="font-size: 14px;">Add your first item to get started!</p>
+                        <p style="font-size: 14px;">Add your first item using the wizard!</p>
                     </div>
                 `;
                 return;
             }
             
             grid.innerHTML = inventory.map(item => {
-                // Generate emoji based on item type
+                // Map item type to emoji
                 const emojiMap = {
                     'Seating': '🛋️',
                     'Tables': '🪑',
@@ -2754,10 +2358,18 @@
                     'Art': '🖼️',
                     'Rugs': '🔲'
                 };
-                const emoji = emojiMap[item.itemType] || '📦';
+                const emoji = emojiMap[item.itemType] || item.emoji || '📦';
                 
                 return `
-                <div onclick="showEdit(${item.id})" style="background: white; border-radius: 16px; padding: 20px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;" class="inventory-card">
+                <div style="background: white; border-radius: 16px; padding: 20px; border: 1px solid #e5e7eb; position: relative; transition: all 0.3s;" class="inventory-card">
+                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+                        <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" 
+                                style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;"
+                                title="Edit item">✎</button>
+                        <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" 
+                                style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;"
+                                title="Delete item">×</button>
+                    </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
                         <div style="font-size: 32px;">${emoji}</div>
                         <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${
@@ -2769,7 +2381,7 @@
                         </span>
                     </div>
                     <h3 style="font-weight: bold; margin-bottom: 4px;">${item.name}</h3>
-                    <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">${item.category} • ${item.color}</p>
+                    <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">${item.category || item.itemType} • ${item.color}</p>
                     <div style="display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9fafb; border-radius: 8px; font-size: 13px; font-weight: 600;">
                         <span>📍</span>
                         <span>${item.location}</span>
@@ -2779,8 +2391,22 @@
         }
 
         // Wizard functions
+        let wizardData = {
+            itemType: '', color: '', fabric: '', width: '', depth: '', height: '',
+            condition: '', status: '', location: '', purchaseDate: '', purchasedWhere: '', cost: ''
+        };
+
         function showWizard() {
-            document.getElementById('wizard-modal').classList.add('active');
+            console.log('showWizard called!');
+            const modal = document.getElementById('wizard-modal');
+            console.log('Modal element:', modal);
+            if (!modal) {
+                alert('ERROR: wizard-modal element not found!');
+                return;
+            }
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+            console.log('Modal display set to:', modal.style.display);
             currentWizardStep = 1;
             // Reset wizard data
             wizardData = {
@@ -2788,10 +2414,13 @@
                 condition: '', status: '', location: '', purchaseDate: '', purchasedWhere: '', cost: ''
             };
             updateWizardStep();
+            console.log('Wizard initialized');
         }
 
         function hideWizard() {
-            document.getElementById('wizard-modal').classList.remove('active');
+            const modal = document.getElementById('wizard-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
         }
 
         function cancelWizard() {
@@ -2833,8 +2462,7 @@
             
             // Update buttons
             document.getElementById('wizard-undo').style.display = currentWizardStep > 1 ? 'block' : 'none';
-            document.getElementById('wizard-skip').style.display = currentWizardStep < 11 ? 'block' : 'none';
-            document.getElementById('wizard-next').style.display = 'none'; // Always hide Next, use Skip instead
+            document.getElementById('wizard-next').style.display = currentWizardStep < 11 ? 'block' : 'none';
             document.getElementById('wizard-save').style.display = currentWizardStep === 11 ? 'block' : 'none';
         }
 
@@ -2893,42 +2521,51 @@
             // Collect all data
             wizardData.color = document.getElementById('item-color').value;
             wizardData.fabric = document.getElementById('item-fabric').value;
-            const width = document.getElementById('item-width').value;
-            const depth = document.getElementById('item-depth').value;
-            const height = document.getElementById('item-height').value;
-            wizardData.dimensions = {
-                width: parseInt(width) || 0,
-                depth: parseInt(depth) || 0,
-                height: parseInt(height) || 0
-            };
+            wizardData.width = document.getElementById('item-width').value;
+            wizardData.depth = document.getElementById('item-depth').value;
+            wizardData.height = document.getElementById('item-height').value;
             wizardData.location = document.getElementById('item-location').value;
             wizardData.purchaseDate = document.getElementById('item-purchase-date').value;
             wizardData.purchasedFrom = document.getElementById('item-purchased-where').value;
-            wizardData.cost = parseFloat(document.getElementById('item-cost').value) || 0;
+            wizardData.cost = document.getElementById('item-cost').value;
 
-            // Create descriptive name if not provided
-            if (!wizardData.name) {
-                wizardData.name = `${wizardData.color || ''} ${wizardData.fabric || ''} ${wizardData.itemType || 'Item'}`.trim();
-            }
-            
-            // Add missing required fields
-            wizardData.category = wizardData.itemType;
-            wizardData.photoUrl = wizardData.photoUrl || null;
-            
             console.log('Saving inventory item:', wizardData);
             
+            // Create descriptive name
+            const itemName = `${wizardData.color || ''} ${wizardData.fabric || ''} ${wizardData.itemType || 'Item'}`.trim();
+            
+            // Create new inventory item
+            const newItem = {
+                id: Date.now(),
+                name: itemName,
+                itemType: wizardData.itemType,
+                category: wizardData.itemType,
+                color: wizardData.color,
+                fabric: wizardData.fabric,
+                dimensions: {
+                    width: wizardData.width,
+                    depth: wizardData.depth,
+                    height: wizardData.height
+                },
+                condition: wizardData.condition,
+                status: wizardData.status,
+                location: wizardData.location,
+                purchaseDate: wizardData.purchaseDate,
+                purchasedFrom: wizardData.purchasedFrom,
+                cost: parseFloat(wizardData.cost) || 0
+            };
+            
             // Save to localStorage
-            const newItem = addInventoryItem(wizardData);
+            const currentInventory = getStoredInventory();
+            currentInventory.push(newItem);
+            saveStoredInventory(currentInventory);
             
-            // Show success message
-            alert(`✅ Item "${newItem.name}" added successfully!`);
-            
-            // Close modal and reset wizard
+            alert('✅ Item "' + itemName + '" added successfully!');
             hideWizard();
+            renderInventory();
             
             // Reset wizard data
             wizardData = {};
-            currentWizardStep = 1;
         }
 
         // Edit functions
@@ -3156,6 +2793,272 @@
             // Hide active filters
             document.getElementById('active-filters').style.display = 'none';
         }
+        
+        // Edit project function
+        function editProject(projectId) {
+            const currentProjects = getStoredProjects();
+            const project = currentProjects.find(p => p.id === projectId);
+            
+            if (!project) {
+                alert('Project not found');
+                return;
+            }
+            
+            // Prompt for new values with current values as defaults
+            const name = prompt('Project name:', project.name);
+            if (name === null) return; // User cancelled
+            
+            const address = prompt('Project address:', project.address);
+            if (address === null) return;
+            
+            const statusOptions = ['Pending', 'Scheduled', 'Active', 'Completed'];
+            const statusChoice = prompt(`Status (${statusOptions.join(', ')}):`, project.status);
+            if (statusChoice === null) return;
+            
+            const installDate = prompt('Install date (YYYY-MM-DD):', project.installDate);
+            if (installDate === null) return;
+            
+            // Determine status colors
+            const statusMap = {
+                'Pending': { bg: '#fef3c7', color: '#92400e' },
+                'Scheduled': { bg: '#dbeafe', color: '#1e40af' },
+                'Active': { bg: '#dcfce7', color: '#166534' },
+                'Completed': { bg: '#e5e7eb', color: '#374151' }
+            };
+            
+            const statusInfo = statusMap[statusChoice] || statusMap['Pending'];
+            
+            // Update the project
+            project.name = name || project.name;
+            project.address = address || project.address;
+            project.status = statusChoice || project.status;
+            project.statusLower = (statusChoice || project.status).toLowerCase();
+            project.installDate = installDate || project.installDate;
+            project.statusBg = statusInfo.bg;
+            project.statusColor = statusInfo.color;
+            
+            // Save back to localStorage
+            saveStoredProjects(currentProjects);
+            
+            alert('✅ Project updated!');
+            renderProjects();
+        }
+        
+        // Delete project function
+        function deleteProject(projectId) {
+            if (!confirm('Are you sure you want to delete this project?')) {
+                return;
+            }
+            
+            const currentProjects = getStoredProjects();
+            const filtered = currentProjects.filter(p => p.id !== projectId);
+            saveStoredProjects(filtered);
+            
+            alert('✅ Project deleted!');
+            renderProjects();
+        }
+        
+        // Simple add project function for testing
+        function showSimpleAddProject() {
+            const name = prompt('Enter project name:');
+            if (!name) return;
+            
+            const address = prompt('Enter project address:');
+            if (!address) return;
+            
+            const newProject = {
+                id: Date.now(),
+                name: name,
+                address: address,
+                status: 'Pending',
+                statusLower: 'pending',
+                installDate: new Date().toISOString().split('T')[0],
+                statusBg: '#fef3c7',
+                statusColor: '#92400e'
+            };
+            
+            const currentProjects = getStoredProjects();
+            currentProjects.push(newProject);
+            saveStoredProjects(currentProjects);
+            
+            alert('✅ Project "' + name + '" added!');
+            renderProjects();
+        }
+        
+        // ===== SIMPLE LOCALSTORAGE FOR TESTING =====
+        // Initialize sample data if not exists
+        if (!localStorage.getItem('stagience_test_message')) {
+            localStorage.setItem('stagience_test_message', 'LocalStorage is working!');
+            console.log('✅ LocalStorage initialized successfully');
+        }
+        
+        // Simple project management with localStorage
+        function getStoredProjects() {
+            const stored = localStorage.getItem('stagience_projects');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            // Return default projects if none stored - save them first time
+            const defaults = [
+                {
+                    id: Date.now() + 1,
+                    name: 'Sunset Blvd Luxury Condo',
+                    address: '1234 Sunset Blvd',
+                    status: 'Active',
+                    statusLower: 'active',
+                    installDate: '2026-01-12',
+                    statusBg: '#dcfce7',
+                    statusColor: '#166534'
+                },
+                {
+                    id: Date.now() + 2,
+                    name: 'Maple St Family Home',
+                    address: '567 Maple Street',
+                    status: 'Scheduled',
+                    statusLower: 'scheduled',
+                    installDate: '2026-01-15',
+                    statusBg: '#dbeafe',
+                    statusColor: '#1e40af'
+                },
+                {
+                    id: Date.now() + 3,
+                    name: 'Oak Ave Consultation',
+                    address: '890 Oak Avenue',
+                    status: 'Pending',
+                    statusLower: 'pending',
+                    installDate: '2026-01-18',
+                    statusBg: '#fef3c7',
+                    statusColor: '#92400e'
+                }
+            ];
+            localStorage.setItem('stagience_projects', JSON.stringify(defaults));
+            return defaults;
+        }
+        
+        function saveStoredProjects(projectsArray) {
+            localStorage.setItem('stagience_projects', JSON.stringify(projectsArray));
+        }
+        
+        console.log('✅ Project localStorage ready');
+        
+        // ===== INVENTORY LOCALSTORAGE =====
+        function getStoredInventory() {
+            const stored = localStorage.getItem('stagience_inventory');
+            if (stored) {
+                return JSON.parse(stored);
+            }
+            // Return default inventory if none stored - save them first time
+            const defaults = [
+                { 
+                    id: Date.now() + 1, 
+                    name: 'Ivory Boucle Sofa', 
+                    itemType: 'Seating',
+                    category: 'Seating', 
+                    color: 'Ivory',
+                    fabric: 'Boucle',
+                    location: 'Warehouse A', 
+                    status: 'IN',
+                    emoji: '🛋️'
+                },
+                { 
+                    id: Date.now() + 2, 
+                    name: 'Black Marble Coffee Table', 
+                    itemType: 'Tables',
+                    category: 'Tables', 
+                    color: 'Black',
+                    fabric: 'Marble',
+                    location: 'Sunset Blvd Project', 
+                    status: 'OUT',
+                    emoji: '🪑'
+                },
+                { 
+                    id: Date.now() + 3, 
+                    name: 'Gold Leaf Floor Lamp', 
+                    itemType: 'Lighting',
+                    category: 'Lighting', 
+                    color: 'Gold',
+                    fabric: 'Metal',
+                    location: 'Warehouse B', 
+                    status: 'HOLD',
+                    emoji: '💡'
+                },
+                { 
+                    id: Date.now() + 4, 
+                    name: 'Navy Velvet Armchair', 
+                    itemType: 'Seating',
+                    category: 'Seating', 
+                    color: 'Navy',
+                    fabric: 'Velvet',
+                    location: 'Warehouse A', 
+                    status: 'IN',
+                    emoji: '🛋️'
+                }
+            ];
+            localStorage.setItem('stagience_inventory', JSON.stringify(defaults));
+            return defaults;
+        }
+        
+        function saveStoredInventory(inventoryArray) {
+            localStorage.setItem('stagience_inventory', JSON.stringify(inventoryArray));
+        }
+        
+        function editInventoryItem(itemId) {
+            const currentInventory = getStoredInventory();
+            const item = currentInventory.find(i => i.id === itemId);
+            
+            if (!item) {
+                alert('Item not found');
+                return;
+            }
+            
+            // Show current values and allow editing
+            alert('Editing: ' + item.name);
+            
+            // Edit Status
+            const statusOptions = ['IN', 'OUT', 'HOLD'];
+            const newStatus = prompt(`Status (${statusOptions.join(', ')}):`, item.status);
+            if (newStatus && statusOptions.includes(newStatus.toUpperCase())) {
+                item.status = newStatus.toUpperCase();
+            }
+            
+            // Edit Location - THIS IS KEY FOR YOUR DEMO
+            const newLocation = prompt('Location (e.g., Warehouse A, Project Name, Client Home):', item.location);
+            if (newLocation !== null && newLocation !== '') {
+                item.location = newLocation;
+            }
+            
+            // Edit Color
+            const newColor = prompt('Color:', item.color);
+            if (newColor !== null && newColor !== '') {
+                item.color = newColor;
+            }
+            
+            // Update the item name to reflect color changes
+            if (item.color && item.fabric && item.itemType) {
+                item.name = `${item.color} ${item.fabric} ${item.itemType}`.trim();
+            }
+            
+            // Save back to localStorage
+            saveStoredInventory(currentInventory);
+            
+            alert('✅ Item updated!');
+            renderInventory();
+        }
+        
+        function deleteInventoryItem(itemId) {
+            if (!confirm('Are you sure you want to delete this item?')) {
+                return;
+            }
+            
+            const currentInventory = getStoredInventory();
+            const filtered = currentInventory.filter(i => i.id !== itemId);
+            saveStoredInventory(filtered);
+            
+            alert('✅ Item deleted!');
+            renderInventory();
+        }
+        
+        console.log('✅ Inventory localStorage ready');
     </script>
 
 </body>

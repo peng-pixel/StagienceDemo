@@ -2021,8 +2021,9 @@
     </div>
 
     <!-- Edit Inventory Item Modal -->
+    <!-- Edit Inventory Item Modal - UPDATED WITH ALL FIELDS -->
     <div id="edit-item-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
-        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
+        <div style="background: white; border-radius: 24px; max-width: 700px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <h2 style="font-size: 24px; font-weight: bold;">Edit Item</h2>
                 <button onclick="hideEditItem()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
@@ -2031,36 +2032,129 @@
             <form id="edit-item-form" onsubmit="saveEditedItem(event)" style="display: flex; flex-direction: column; gap: 20px;">
                 <input type="hidden" id="edit-item-id">
                 
+                <!-- Item Name -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Item Name</label>
                     <input type="text" id="edit-item-name" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Color</label>
-                    <input type="text" id="edit-item-color" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                <!-- Two Column Layout -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <!-- Item Type/Category -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Category</label>
+                        <select id="edit-item-type" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <option value="Seating">🛋️ Seating</option>
+                            <option value="Tables">🪑 Tables</option>
+                            <option value="Lighting">💡 Lighting</option>
+                            <option value="Decor">🎨 Decor</option>
+                            <option value="Art">🖼️ Art</option>
+                            <option value="Rugs">🔲 Rugs</option>
+                        </select>
+                    </div>
+
+                    <!-- Color -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Color</label>
+                        <input type="text" id="edit-item-color" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    </div>
                 </div>
 
+                <!-- Description/Fabric -->
                 <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description</label>
-                    <input type="text" id="edit-item-fabric" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description / Fabric</label>
+                    <input type="text" id="edit-item-fabric" placeholder="e.g., Velvet, Linen, Modern style..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
+                <!-- ID/Code Number -->
                 <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Status</label>
-                    <select id="edit-item-status" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                        <option value="IN">IN</option>
-                        <option value="OUT">OUT</option>
-                        <option value="HOLD">HOLD</option>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">ID/Code Number</label>
+                    <input type="text" id="edit-item-code" placeholder="e.g., INV-001, SKU-12345" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: monospace;">
+                </div>
+
+                <!-- Dimensions -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Dimensions (inches)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                        <div>
+                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Width</label>
+                            <input type="number" id="edit-item-width" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Depth</label>
+                            <input type="number" id="edit-item-depth" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Height</label>
+                            <input type="number" id="edit-item-height" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Two Column Layout -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <!-- Condition -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Condition</label>
+                        <select id="edit-item-condition" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <option value="New">✨ New</option>
+                            <option value="Excellent">⭐ Excellent</option>
+                            <option value="Good">👍 Good</option>
+                            <option value="Fair">⚠️ Fair</option>
+                        </select>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Status</label>
+                        <select id="edit-item-status" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <option value="IN">✅ IN - Available</option>
+                            <option value="OUT">📦 OUT - On Project</option>
+                            <option value="HOLD">⏸️ HOLD - Reserved</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Location</label>
+                    <select id="edit-item-location" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select location...</option>
+                        <option value="Warehouse A">Warehouse A</option>
+                        <option value="Warehouse B">Warehouse B</option>
+                        <option value="Storage Unit">Storage Unit</option>
+                        <option value="On Site - Sunset Blvd">On Site - Sunset Blvd</option>
+                        <option value="On Site - Maple St">On Site - Maple St</option>
+                        <option value="On Site - Oak Ave">On Site - Oak Ave</option>
                     </select>
                 </div>
 
-                <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Location</label>
-                    <input type="text" id="edit-item-location" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                <!-- Two Column Layout -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <!-- Purchase Date -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Purchase Date</label>
+                        <input type="date" id="edit-item-purchase-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    </div>
+
+                    <!-- Cost -->
+                    <div>
+                        <label style="display: block; font-weight: 700; margin-bottom: 8px;">Cost</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 12px; top: 12px; color: #6b7280; font-weight: 600;">$</span>
+                            <input type="number" id="edit-item-cost" step="0.01" placeholder="0.00" style="width: 100%; padding: 12px 12px 12px 28px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                    </div>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+                <!-- Purchased From -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Purchased From</label>
+                    <input type="text" id="edit-item-purchased-from" placeholder="e.g., West Elm, IKEA, HomeSense..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
                     <button type="button" onclick="hideEditItem()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
                     </button>
@@ -3240,13 +3334,25 @@
                 return;
             }
             
-            // Populate the edit modal
+            // Populate ALL fields in the edit modal
             document.getElementById('edit-item-id').value = item.id;
             document.getElementById('edit-item-name').value = item.name || '';
+            document.getElementById('edit-item-type').value = item.itemType || item.category || 'Seating';
             document.getElementById('edit-item-color').value = item.color || '';
             document.getElementById('edit-item-fabric').value = item.fabric || '';
+            document.getElementById('edit-item-code').value = item.code || '';
+            
+            // Dimensions
+            document.getElementById('edit-item-width').value = item.dimensions?.width || '';
+            document.getElementById('edit-item-depth').value = item.dimensions?.depth || '';
+            document.getElementById('edit-item-height').value = item.dimensions?.height || '';
+            
+            document.getElementById('edit-item-condition').value = item.condition || 'Good';
             document.getElementById('edit-item-status').value = item.status || 'IN';
             document.getElementById('edit-item-location').value = item.location || '';
+            document.getElementById('edit-item-purchase-date').value = item.purchaseDate || '';
+            document.getElementById('edit-item-cost').value = item.cost || '';
+            document.getElementById('edit-item-purchased-from').value = item.purchasedFrom || '';
             
             // Show the modal
             const modal = document.getElementById('edit-item-modal');
@@ -3272,17 +3378,36 @@
                 return;
             }
             
-            // Update fields
+            // Update ALL fields
             item.name = document.getElementById('edit-item-name').value;
+            item.itemType = document.getElementById('edit-item-type').value;
+            item.category = document.getElementById('edit-item-type').value; // Keep both for compatibility
             item.color = document.getElementById('edit-item-color').value;
             item.fabric = document.getElementById('edit-item-fabric').value;
+            item.code = document.getElementById('edit-item-code').value;
+            
+            // Update dimensions
+            const width = document.getElementById('edit-item-width').value;
+            const depth = document.getElementById('edit-item-depth').value;
+            const height = document.getElementById('edit-item-height').value;
+            
+            item.dimensions = {
+                width: width || '',
+                depth: depth || '',
+                height: height || ''
+            };
+            
+            item.condition = document.getElementById('edit-item-condition').value;
             item.status = document.getElementById('edit-item-status').value;
             item.location = document.getElementById('edit-item-location').value;
+            item.purchaseDate = document.getElementById('edit-item-purchase-date').value;
+            item.cost = parseFloat(document.getElementById('edit-item-cost').value) || 0;
+            item.purchasedFrom = document.getElementById('edit-item-purchased-from').value;
             
             // Save back to localStorage
             saveStoredInventory(currentInventory);
             
-            alert('✅ Item updated!');
+            alert('✅ Item updated successfully!');
             hideEditItem();
             renderInventory();
         }

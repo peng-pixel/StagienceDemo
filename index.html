@@ -2457,81 +2457,126 @@
             
             // Apply filters
             inventory = inventory.filter(item => {
-                // Status filter
                 if (!inventoryFilters.statuses.includes(item.status)) return false;
-                
-                // Category filter
                 const itemCategory = item.itemType || item.category;
                 if (itemCategory && !inventoryFilters.categories.includes(itemCategory)) return false;
-                
-                // Location filter (not implemented in detail for now - would need to normalize location names)
-                
-                // Search filter
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
-                
                 return true;
             });
             
             const grid = document.getElementById('inventory-grid');
+            const list = document.getElementById('inventory-list');
             
             if (inventory.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #6b7280;">
+                const emptyMessage = `
+                    <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📦</div>
                         <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3>
                         <p style="font-size: 14px;">Try adjusting your filter settings</p>
                     </div>
                 `;
+                grid.innerHTML = emptyMessage;
+                list.innerHTML = emptyMessage;
                 return;
             }
             
+            if (currentInventoryView === 'grid') {
+                renderGridView(inventory, grid);
+            } else {
+                renderListView(inventory, list);
+            }
+        }
+        
+        function renderGridView(inventory, grid) {
             grid.innerHTML = inventory.map(item => {
-                // Map item type to emoji
                 const emojiMap = {
-                    'Seating': '🛋️',
-                    'Tables': '🪑',
-                    'Lighting': '💡',
-                    'Decor': '🎨',
-                    'Art': '🖼️',
-                    'Rugs': '🔲'
+                    'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
+                    'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
                 };
                 const emoji = emojiMap[item.itemType] || item.emoji || '📦';
                 
                 return `
                 <div style="background: white; border-radius: 16px; padding: 20px; border: 1px solid #e5e7eb; position: relative; transition: all 0.3s;" class="inventory-card" id="item-${item.id}">
                     <div style="position: absolute; top: 8px; left: 8px;">
-                        <input type="checkbox" 
-                               class="item-checkbox" 
-                               data-item-id="${item.id}"
-                               onchange="updateBulkSelection()"
-                               style="width: 18px; height: 18px; cursor: pointer;">
+                        <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;">
                     </div>
                     <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
-                        <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" 
-                                style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;"
-                                title="Edit item">✎</button>
-                        <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" 
-                                style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;"
-                                title="Delete item">×</button>
+                        <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
+                        <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
                     </div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-left: 26px;">
                         <div style="font-size: 32px;">${emoji}</div>
-                        <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${
-                            item.status === 'IN' ? '#dcfce7' : item.status === 'OUT' ? '#dbeafe' : '#fef3c7'
-                        }; color: ${
-                            item.status === 'IN' ? '#166534' : item.status === 'OUT' ? '#1e40af' : '#92400e'
-                        };">
-                            ${item.status}
-                        </span>
+                        <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${item.status === 'IN' ? '#dcfce7' : item.status === 'OUT' ? '#dbeafe' : '#fef3c7'}; color: ${item.status === 'IN' ? '#166534' : item.status === 'OUT' ? '#1e40af' : '#92400e'};">${item.status}</span>
                     </div>
                     <h3 style="font-weight: bold; margin-bottom: 4px;">${item.name}</h3>
                     <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">${item.category || item.itemType} • ${item.color}</p>
                     <div style="display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9fafb; border-radius: 8px; font-size: 13px; font-weight: 600;">
-                        <span>📍</span>
-                        <span>${item.location}</span>
+                        <span>📍</span><span>${item.location}</span>
                     </div>
                 </div>
             `}).join('');
+        }
+        
+        function renderListView(inventory, list) {
+            const emojiMap = {
+                'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
+                'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
+            };
+            
+            list.innerHTML = `
+                <div style="background: white; border-radius: 16px; border: 1px solid #e5e7eb; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+                                <th style="padding: 16px; text-align: left; width: 40px;"><input type="checkbox" onchange="selectAllVisibleItems()" style="width: 18px; height: 18px; cursor: pointer;"></th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ITEM</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">CATEGORY</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">COLOR</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">STATUS</th>
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">LOCATION</th>
+                                ${inventory.some(i => i.code) ? '<th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ID/CODE</th>' : ''}
+                                ${inventory.some(i => i.dimensions) ? '<th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">DIMENSIONS</th>' : ''}
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${inventory.map(item => {
+                                const emoji = emojiMap[item.itemType] || item.emoji || '📦';
+                                const dimensions = item.dimensions ? `${item.dimensions.width || '-'}" W × ${item.dimensions.depth || '-'}" D × ${item.dimensions.height || '-'}" H` : '-';
+                                
+                                return `
+                                    <tr style="border-bottom: 1px solid #e5e7eb; transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'" class="inventory-card">
+                                        <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;"></td>
+                                        <td style="padding: 16px;">
+                                            <div style="display: flex; align-items: center; gap: 12px;">
+                                                <span style="font-size: 24px;">${emoji}</span>
+                                                <div>
+                                                    <div style="font-weight: 600; font-size: 14px;">${item.name}</div>
+                                                    ${item.fabric ? `<div style="font-size: 12px; color: #6b7280;">${item.fabric}</div>` : ''}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 16px; font-size: 14px;">${item.itemType || item.category}</td>
+                                        <td style="padding: 16px; font-size: 14px;">${item.color || '-'}</td>
+                                        <td style="padding: 16px;">
+                                            <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${item.status === 'IN' ? '#dcfce7' : item.status === 'OUT' ? '#dbeafe' : '#fef3c7'}; color: ${item.status === 'IN' ? '#166534' : item.status === 'OUT' ? '#1e40af' : '#92400e'}; display: inline-block;">${item.status}</span>
+                                        </td>
+                                        <td style="padding: 16px; font-size: 14px;">${item.location}</td>
+                                        ${inventory.some(i => i.code) ? `<td style="padding: 16px; font-size: 14px; font-family: monospace;">${item.code || '-'}</td>` : ''}
+                                        ${inventory.some(i => i.dimensions) ? `<td style="padding: 16px; font-size: 12px; color: #6b7280;">${dimensions}</td>` : ''}
+                                        <td style="padding: 16px;">
+                                            <div style="display: flex; gap: 6px;">
+                                                <button onclick="editInventoryItem(${item.id})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
+                                                <button onclick="deleteInventoryItem(${item.id})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
         }
 
         // Wizard functions

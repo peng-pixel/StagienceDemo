@@ -906,7 +906,7 @@
 
                         <div style="margin-top: 20px;">
                             <textarea placeholder="Add a new note..." style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 100px; font-family: inherit;"></textarea>
-                            <button class="gradient-accent" style="margin-top: 12px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
+                            <button onclick="alert('Note added! (In the full app, notes would save to the project)')" class="gradient-accent" style="margin-top: 12px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
                         </div>
                     </div>
                 </div>
@@ -1201,29 +1201,13 @@
             <!-- Step 2: Color -->
             <div id="wizard-step-2" class="wizard-step">
                 <h3 class="text-lg font-semibold mb-4">What color is this item?</h3>
-                <input type="text" id="item-color" placeholder="e.g., Navy Blue, Charcoal Gray, Ivory..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <button onclick="document.getElementById('item-color').value='White'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">White</button>
-                    <button onclick="document.getElementById('item-color').value='Black'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Black</button>
-                    <button onclick="document.getElementById('item-color').value='Gray'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Gray</button>
-                    <button onclick="document.getElementById('item-color').value='Beige'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Beige</button>
-                    <button onclick="document.getElementById('item-color').value='Navy'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Navy</button>
-                    <button onclick="document.getElementById('item-color').value='Brown'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Brown</button>
-                </div>
+                <input type="text" id="item-color" placeholder="e.g., Navy Blue, Charcoal Gray, Ivory..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
             </div>
 
-            <!-- Step 3: Fabric -->
+            <!-- Step 3: Description -->
             <div id="wizard-step-3" class="wizard-step">
-                <h3 class="text-lg font-semibold mb-4">What material or fabric?</h3>
-                <input type="text" id="item-fabric" placeholder="e.g., Velvet, Linen, Wood, Metal, Leather..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base">
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <button onclick="document.getElementById('item-fabric').value='Velvet'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Velvet</button>
-                    <button onclick="document.getElementById('item-fabric').value='Linen'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Linen</button>
-                    <button onclick="document.getElementById('item-fabric').value='Leather'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Leather</button>
-                    <button onclick="document.getElementById('item-fabric').value='Wood'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Wood</button>
-                    <button onclick="document.getElementById('item-fabric').value='Metal'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Metal</button>
-                    <button onclick="document.getElementById('item-fabric').value='Glass'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Glass</button>
-                </div>
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Description</h3>
+                <input type="text" id="item-fabric" placeholder="e.g., Velvet sofa, Modern dining table, Abstract painting..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
             </div>
 
             <!-- Step 4: Measurements -->
@@ -1914,7 +1898,7 @@
     </div>
 
     <!-- Inventory Filter Modal -->
-    <div id="inventory-filter-modal" class="modal fixed inset-0 bg-black/50 items-center justify-center z-50 p-4">
+    <div id="inventory-filter-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
         <div class="bg-white rounded-2xl max-w-xl w-full p-8">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold">Filter Inventory</h2>
@@ -2002,14 +1986,66 @@
                     Clear All
                 </button>
                 <div class="flex gap-3">
-                    <button onclick="hideInventoryFilter()" class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                    <button onclick="hideInventoryFilter()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
                     </button>
-                    <button onclick="applyInventoryFilters()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
+                    <button onclick="applyInventoryFilters()" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Apply Filters
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Edit Inventory Item Modal -->
+    <div id="edit-item-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Edit Item</h2>
+                <button onclick="hideEditItem()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+
+            <form id="edit-item-form" onsubmit="saveEditedItem(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="hidden" id="edit-item-id">
+                
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Item Name</label>
+                    <input type="text" id="edit-item-name" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Color</label>
+                    <input type="text" id="edit-item-color" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description</label>
+                    <input type="text" id="edit-item-fabric" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Status</label>
+                    <select id="edit-item-status" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="IN">IN</option>
+                        <option value="OUT">OUT</option>
+                        <option value="HOLD">HOLD</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Location</label>
+                    <input type="text" id="edit-item-location" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+                    <button type="button" onclick="hideEditItem()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -2279,6 +2315,82 @@
             document.getElementById('content-' + tabName).classList.add('active');
         }
 
+        // Inventory filter state
+        let inventoryFilters = {
+            statuses: ['IN', 'OUT', 'HOLD'],
+            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
+            location: 'all',
+            search: ''
+        };
+        
+        function applyInventoryFilters() {
+            console.log('🔍 Applying filters...');
+            
+            // Get selected statuses
+            const statuses = [];
+            if (document.getElementById('filter-status-in').checked) statuses.push('IN');
+            if (document.getElementById('filter-status-out').checked) statuses.push('OUT');
+            if (document.getElementById('filter-status-hold').checked) statuses.push('HOLD');
+            
+            console.log('Selected statuses:', statuses);
+            
+            // Get selected categories
+            const categories = [];
+            if (document.getElementById('filter-cat-seating').checked) categories.push('Seating');
+            if (document.getElementById('filter-cat-tables').checked) categories.push('Tables');
+            if (document.getElementById('filter-cat-lighting').checked) categories.push('Lighting');
+            if (document.getElementById('filter-cat-decor').checked) categories.push('Decor');
+            if (document.getElementById('filter-cat-art').checked) categories.push('Art');
+            if (document.getElementById('filter-cat-rugs').checked) categories.push('Rugs');
+            
+            console.log('Selected categories:', categories);
+            
+            // Get location and search
+            const location = document.getElementById('filter-location').value;
+            const search = document.getElementById('filter-search').value.toLowerCase();
+            
+            // Update filter state
+            inventoryFilters = { statuses, categories, location, search };
+            
+            console.log('Filter state updated:', inventoryFilters);
+            
+            // Re-render inventory with filters
+            renderInventory();
+            
+            console.log('✅ Filters applied and inventory re-rendered');
+            
+            // Close modal
+            hideInventoryFilter();
+        }
+        
+        function clearAllFilters() {
+            // Reset all checkboxes
+            document.getElementById('filter-status-in').checked = true;
+            document.getElementById('filter-status-out').checked = true;
+            document.getElementById('filter-status-hold').checked = true;
+            document.getElementById('filter-cat-seating').checked = true;
+            document.getElementById('filter-cat-tables').checked = true;
+            document.getElementById('filter-cat-lighting').checked = true;
+            document.getElementById('filter-cat-decor').checked = true;
+            document.getElementById('filter-cat-art').checked = true;
+            document.getElementById('filter-cat-rugs').checked = true;
+            
+            // Reset dropdowns and search
+            document.getElementById('filter-location').value = 'all';
+            document.getElementById('filter-search').value = '';
+            
+            // Reset filter state
+            inventoryFilters = {
+                statuses: ['IN', 'OUT', 'HOLD'],
+                categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
+                location: 'all',
+                search: ''
+            };
+            
+            // Re-render
+            renderInventory();
+        }
+
         // Render inventory
         function renderInventory() {
             // Reload inventory from localStorage if available
@@ -2289,14 +2401,31 @@
                 inventory = inventoryData;
             }
             
+            // Apply filters
+            inventory = inventory.filter(item => {
+                // Status filter
+                if (!inventoryFilters.statuses.includes(item.status)) return false;
+                
+                // Category filter
+                const itemCategory = item.itemType || item.category;
+                if (itemCategory && !inventoryFilters.categories.includes(itemCategory)) return false;
+                
+                // Location filter (not implemented in detail for now - would need to normalize location names)
+                
+                // Search filter
+                if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
+                
+                return true;
+            });
+            
             const grid = document.getElementById('inventory-grid');
             
             if (inventory.length === 0) {
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📦</div>
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No inventory items yet</h3>
-                        <p style="font-size: 14px;">Add your first item using the wizard!</p>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3>
+                        <p style="font-size: 14px;">Try adjusting your filter settings</p>
                     </div>
                 `;
                 return;
@@ -2670,90 +2799,17 @@
 
         // Inventory Filter functions
         function showInventoryFilter() {
-            document.getElementById('inventory-filter-modal').classList.add('active');
+            const modal = document.getElementById('inventory-filter-modal');
+            modal.classList.add('active');
+            modal.style.display = 'flex';
         }
 
         function hideInventoryFilter() {
-            document.getElementById('inventory-filter-modal').classList.remove('active');
+            const modal = document.getElementById('inventory-filter-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
         }
 
-        function applyInventoryFilters() {
-            // Get filter values
-            const statusIn = document.getElementById('filter-status-in').checked;
-            const statusOut = document.getElementById('filter-status-out').checked;
-            const statusHold = document.getElementById('filter-status-hold').checked;
-            const location = document.getElementById('filter-location').value;
-            const searchText = document.getElementById('filter-search').value.toLowerCase();
-            
-            // Get category filters
-            const categories = {
-                seating: document.getElementById('filter-cat-seating').checked,
-                tables: document.getElementById('filter-cat-tables').checked,
-                lighting: document.getElementById('filter-cat-lighting').checked,
-                decor: document.getElementById('filter-cat-decor').checked,
-                art: document.getElementById('filter-cat-art').checked,
-                rugs: document.getElementById('filter-cat-rugs').checked
-            };
-
-            // Build active filters list
-            let activeFilters = [];
-            if (!statusIn || !statusOut || !statusHold) {
-                let statuses = [];
-                if (statusIn) statuses.push('Available');
-                if (statusOut) statuses.push('On Project');
-                if (statusHold) statuses.push('On Hold');
-                if (statuses.length > 0) {
-                    activeFilters.push('Status: ' + statuses.join(', '));
-                }
-            }
-            if (location !== 'all') {
-                activeFilters.push('Location: ' + document.getElementById('filter-location').options[document.getElementById('filter-location').selectedIndex].text);
-            }
-            
-            const selectedCategories = Object.keys(categories).filter(cat => categories[cat]);
-            if (selectedCategories.length > 0 && selectedCategories.length < 6) {
-                activeFilters.push('Categories: ' + selectedCategories.length + ' selected');
-            }
-            
-            if (searchText) {
-                activeFilters.push('Search: "' + searchText + '"');
-            }
-
-            // Show active filters
-            if (activeFilters.length > 0) {
-                document.getElementById('active-filters').style.display = 'block';
-                document.getElementById('active-filters-list').textContent = activeFilters.join(' • ');
-            } else {
-                document.getElementById('active-filters').style.display = 'none';
-            }
-
-            // For demo purposes, just show a message
-            // In real app, this would filter the inventory grid
-            console.log('Filters applied:', {statusIn, statusOut, statusHold, location, searchText, categories});
-            
-            // Hide modal
-            hideInventoryFilter();
-        }
-
-        function clearAllFilters() {
-            // Reset all checkboxes to checked
-            document.getElementById('filter-status-in').checked = true;
-            document.getElementById('filter-status-out').checked = true;
-            document.getElementById('filter-status-hold').checked = true;
-            document.getElementById('filter-cat-seating').checked = true;
-            document.getElementById('filter-cat-tables').checked = true;
-            document.getElementById('filter-cat-lighting').checked = true;
-            document.getElementById('filter-cat-decor').checked = true;
-            document.getElementById('filter-cat-art').checked = true;
-            document.getElementById('filter-cat-rugs').checked = true;
-            
-            // Reset dropdowns and search
-            document.getElementById('filter-location').value = 'all';
-            document.getElementById('filter-search').value = '';
-            
-            // Hide active filters
-            document.getElementById('active-filters').style.display = 'none';
-        }
         
         // Edit project function
         function editProject(projectId) {
@@ -3050,37 +3106,50 @@
                 return;
             }
             
-            // Show current values and allow editing
-            alert('Editing: ' + item.name);
+            // Populate the edit modal
+            document.getElementById('edit-item-id').value = item.id;
+            document.getElementById('edit-item-name').value = item.name || '';
+            document.getElementById('edit-item-color').value = item.color || '';
+            document.getElementById('edit-item-fabric').value = item.fabric || '';
+            document.getElementById('edit-item-status').value = item.status || 'IN';
+            document.getElementById('edit-item-location').value = item.location || '';
             
-            // Edit Status
-            const statusOptions = ['IN', 'OUT', 'HOLD'];
-            const newStatus = prompt(`Status (${statusOptions.join(', ')}):`, item.status);
-            if (newStatus && statusOptions.includes(newStatus.toUpperCase())) {
-                item.status = newStatus.toUpperCase();
+            // Show the modal
+            const modal = document.getElementById('edit-item-modal');
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+        
+        function hideEditItem() {
+            const modal = document.getElementById('edit-item-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+        
+        function saveEditedItem(e) {
+            e.preventDefault();
+            
+            const itemId = parseInt(document.getElementById('edit-item-id').value);
+            const currentInventory = getStoredInventory();
+            const item = currentInventory.find(i => i.id === itemId);
+            
+            if (!item) {
+                alert('Item not found');
+                return;
             }
             
-            // Edit Location - THIS IS KEY FOR YOUR DEMO
-            const newLocation = prompt('Location (e.g., Warehouse A, Project Name, Client Home):', item.location);
-            if (newLocation !== null && newLocation !== '') {
-                item.location = newLocation;
-            }
-            
-            // Edit Color
-            const newColor = prompt('Color:', item.color);
-            if (newColor !== null && newColor !== '') {
-                item.color = newColor;
-            }
-            
-            // Update the item name to reflect color changes
-            if (item.color && item.fabric && item.itemType) {
-                item.name = `${item.color} ${item.fabric} ${item.itemType}`.trim();
-            }
+            // Update fields
+            item.name = document.getElementById('edit-item-name').value;
+            item.color = document.getElementById('edit-item-color').value;
+            item.fabric = document.getElementById('edit-item-fabric').value;
+            item.status = document.getElementById('edit-item-status').value;
+            item.location = document.getElementById('edit-item-location').value;
             
             // Save back to localStorage
             saveStoredInventory(currentInventory);
             
             alert('✅ Item updated!');
+            hideEditItem();
             renderInventory();
         }
         

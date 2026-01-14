@@ -1022,6 +1022,18 @@
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="font-size: 28px; font-weight: bold;">Inventory</h2>
                         <div style="display: flex; gap: 12px;">
+                            <!-- View Toggle -->
+                            <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
+                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                    <span>📦</span>
+                                    <span>Grid</span>
+                                </button>
+                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                    <span>📋</span>
+                                    <span>List</span>
+                                </button>
+                            </div>
+                            
                             <button onclick="selectAllVisibleItems()" style="padding: 12px 20px; border: 1px solid #3b82f6; border-radius: 12px; background: white; color: #1e40af; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                 <span>☑️</span>
                                 <span>Select All</span>
@@ -1078,7 +1090,11 @@
                         </div>
                     </div>
 
+                    <!-- Grid View -->
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;" id="inventory-grid"></div>
+                    
+                    <!-- List View -->
+                    <div style="display: none;" id="inventory-list"></div>
                 </div>
             </main>
         </div>
@@ -1148,7 +1164,7 @@
     <div id="wizard-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
         <div style="background: white; border-radius: 24px; max-width: 800px; width: 100%; padding: 32px; margin: 20px auto; max-height: 90vh; overflow-y: auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 11</h2>
+                <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 12</h2>
                 <button onclick="cancelWizard()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
             </div>
 
@@ -1210,8 +1226,15 @@
                 <input type="text" id="item-fabric" placeholder="e.g., Velvet sofa, Modern dining table, Abstract painting..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
             </div>
 
-            <!-- Step 4: Measurements -->
+            <!-- Step 4: ID/Code Number -->
             <div id="wizard-step-4" class="wizard-step">
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">ID/Code Number (Optional)</h3>
+                <input type="text" id="item-code" placeholder="e.g., INV-001, SKU-12345..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Add a unique identifier or code for tracking</p>
+            </div>
+
+            <!-- Step 5: Measurements -->
+            <div id="wizard-step-5" class="wizard-step">
                 <h3 class="text-lg font-semibold mb-4">What are the measurements?</h3>
                 <div class="grid grid-cols-3 gap-3">
                     <div>
@@ -2391,6 +2414,37 @@
             renderInventory();
         }
 
+        // Inventory view state
+        let currentInventoryView = 'grid'; // 'grid' or 'list'
+        
+        function switchInventoryView(view) {
+            currentInventoryView = view;
+            
+            // Update button styles
+            const gridBtn = document.getElementById('grid-view-btn');
+            const listBtn = document.getElementById('list-view-btn');
+            
+            if (view === 'grid') {
+                gridBtn.style.background = '#eff6ff';
+                gridBtn.style.color = '#1e40af';
+                listBtn.style.background = 'white';
+                listBtn.style.color = '#6b7280';
+                
+                document.getElementById('inventory-grid').style.display = 'grid';
+                document.getElementById('inventory-list').style.display = 'none';
+            } else {
+                listBtn.style.background = '#eff6ff';
+                listBtn.style.color = '#1e40af';
+                gridBtn.style.background = 'white';
+                gridBtn.style.color = '#6b7280';
+                
+                document.getElementById('inventory-grid').style.display = 'none';
+                document.getElementById('inventory-list').style.display = 'block';
+            }
+            
+            renderInventory();
+        }
+        
         // Render inventory
         function renderInventory() {
             // Reload inventory from localStorage if available
@@ -2608,9 +2662,13 @@
         }
 
         function saveInventoryItem() {
+            console.log('📦 saveInventoryItem called');
+            console.log('Current wizardData:', wizardData);
+            
             // Collect all data
             wizardData.color = document.getElementById('item-color').value;
             wizardData.fabric = document.getElementById('item-fabric').value;
+            wizardData.code = document.getElementById('item-code')?.value || '';  // New code field
             wizardData.width = document.getElementById('item-width').value;
             wizardData.depth = document.getElementById('item-depth').value;
             wizardData.height = document.getElementById('item-height').value;
@@ -2619,10 +2677,17 @@
             wizardData.purchasedFrom = document.getElementById('item-purchased-where').value;
             wizardData.cost = document.getElementById('item-cost').value;
 
-            console.log('Saving inventory item:', wizardData);
+            console.log('Collected wizard data:', wizardData);
+            
+            if (!wizardData.itemType) {
+                alert('⚠️ Error: Item type is missing. Please select an item type in Step 1.');
+                return;
+            }
             
             // Create descriptive name
             const itemName = `${wizardData.color || ''} ${wizardData.fabric || ''} ${wizardData.itemType || 'Item'}`.trim();
+            
+            console.log('Creating item with name:', itemName);
             
             // Create new inventory item
             const newItem = {
@@ -2632,6 +2697,7 @@
                 category: wizardData.itemType,
                 color: wizardData.color,
                 fabric: wizardData.fabric,
+                code: wizardData.code,  // New code field
                 dimensions: {
                     width: wizardData.width,
                     depth: wizardData.depth,
@@ -2645,10 +2711,20 @@
                 cost: parseFloat(wizardData.cost) || 0
             };
             
+            console.log('New item to save:', newItem);
+            
             // Save to localStorage
-            const currentInventory = getStoredInventory();
-            currentInventory.push(newItem);
-            saveStoredInventory(currentInventory);
+            try {
+                const currentInventory = getStoredInventory();
+                console.log('Current inventory count:', currentInventory.length);
+                currentInventory.push(newItem);
+                saveStoredInventory(currentInventory);
+                console.log('✅ Item saved! New inventory count:', currentInventory.length);
+            } catch (error) {
+                console.error('❌ Error saving to localStorage:', error);
+                alert('Error saving item: ' + error.message);
+                return;
+            }
             
             alert('✅ Item "' + itemName + '" added successfully!');
             hideWizard();

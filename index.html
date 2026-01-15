@@ -3015,6 +3015,20 @@
         // Inventory Filter functions
         function showInventoryFilter() {
             const modal = document.getElementById('inventory-filter-modal');
+            const currentInventory = getStoredInventory();
+            const uniqueLocations = [...new Set(currentInventory.map(item => item.location))].filter(loc => loc && loc.trim() !== '').sort();
+            const locationSelect = document.getElementById('filter-location');
+            const currentSelection = locationSelect.value;
+            locationSelect.innerHTML = '<option value="all">All Locations</option>';
+            uniqueLocations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+            if (currentSelection && uniqueLocations.includes(currentSelection)) {
+                locationSelect.value = currentSelection;
+            }
             modal.classList.add('active');
             modal.style.display = 'flex';
         }

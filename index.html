@@ -1053,6 +1053,9 @@
                                 <span id="selected-count">0</span> items selected
                             </div>
                             <div style="display: flex; gap: 12px;">
+                                <button onclick="showBulkUpdate()" style="padding: 10px 18px; border: 1px solid #3b82f6; border-radius: 8px; background: #3b82f6; color: white; font-weight: 600; cursor: pointer;">
+                                    🔄 Bulk Update
+                                </button>
                                 <button onclick="bulkUpdateLocation()" style="padding: 10px 18px; border: 1px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer;">
                                     📍 Update Location
                                 </button>
@@ -2160,6 +2163,82 @@
                     </button>
                     <button type="submit" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bulk Update Modal -->
+    <div id="bulk-update-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Bulk Update Items</h2>
+                <button onclick="hideBulkUpdate()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+
+            <div style="background: #eff6ff; padding: 16px; border-radius: 12px; margin-bottom: 24px; border-left: 4px solid #3b82f6;">
+                <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">
+                    <span id="bulk-update-count">0</span> items selected
+                </div>
+                <div style="font-size: 14px; color: #1e40af;">
+                    Update multiple fields at once
+                </div>
+            </div>
+
+            <form id="bulk-update-form" onsubmit="applyBulkUpdate(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <!-- Location Update -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <input type="checkbox" id="bulk-update-location-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="bulk-update-location-checkbox" style="font-weight: 700; cursor: pointer;">Update Location</label>
+                    </div>
+                    <select id="bulk-update-location" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb;">
+                        <option value="">Select location...</option>
+                        <option value="Warehouse A">Warehouse A</option>
+                        <option value="Warehouse B">Warehouse B</option>
+                        <option value="Storage Unit">Storage Unit</option>
+                        <option value="On Site - Sunset Blvd">On Site - Sunset Blvd</option>
+                        <option value="On Site - Maple St">On Site - Maple St</option>
+                        <option value="On Site - Oak Ave">On Site - Oak Ave</option>
+                    </select>
+                </div>
+
+                <!-- Status Update -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <input type="checkbox" id="bulk-update-status-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="bulk-update-status-checkbox" style="font-weight: 700; cursor: pointer;">Update Status</label>
+                    </div>
+                    <select id="bulk-update-status" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb;">
+                        <option value="IN">✅ IN - Available</option>
+                        <option value="OUT">📦 OUT - On Project</option>
+                        <option value="HOLD">⏸️ HOLD - Reserved</option>
+                    </select>
+                </div>
+
+                <!-- Condition Update -->
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <input type="checkbox" id="bulk-update-condition-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="bulk-update-condition-checkbox" style="font-weight: 700; cursor: pointer;">Update Condition</label>
+                    </div>
+                    <select id="bulk-update-condition" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb;">
+                        <option value="New">✨ New</option>
+                        <option value="Excellent">⭐ Excellent</option>
+                        <option value="Good">👍 Good</option>
+                        <option value="Fair">⚠️ Fair</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
+                    <button type="button" onclick="hideBulkUpdate()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" style="background: #3b82f6; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Update Items
                     </button>
                 </div>
             </form>
@@ -3554,6 +3633,130 @@
         }
         
         console.log('✅ Calendar localStorage ready');
+        
+        // Bulk Update Modal Functions
+        function showBulkUpdate() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select items first');
+                return;
+            }
+            
+            document.getElementById('bulk-update-count').textContent = checkboxes.length;
+            
+            const modal = document.getElementById('bulk-update-modal');
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+        }
+        
+        function hideBulkUpdate() {
+            const modal = document.getElementById('bulk-update-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+            
+            // Reset form
+            document.getElementById('bulk-update-form').reset();
+            document.querySelectorAll('#bulk-update-modal input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#bulk-update-modal select').forEach(sel => {
+                sel.disabled = true;
+                sel.style.background = '#f9fafb';
+            });
+        }
+        
+        // Enable/disable fields based on checkboxes
+        document.addEventListener('DOMContentLoaded', function() {
+            // Location checkbox
+            const locationCheckbox = document.getElementById('bulk-update-location-checkbox');
+            const locationSelect = document.getElementById('bulk-update-location');
+            if (locationCheckbox) {
+                locationCheckbox.addEventListener('change', function() {
+                    locationSelect.disabled = !this.checked;
+                    locationSelect.style.background = this.checked ? 'white' : '#f9fafb';
+                });
+            }
+            
+            // Status checkbox
+            const statusCheckbox = document.getElementById('bulk-update-status-checkbox');
+            const statusSelect = document.getElementById('bulk-update-status');
+            if (statusCheckbox) {
+                statusCheckbox.addEventListener('change', function() {
+                    statusSelect.disabled = !this.checked;
+                    statusSelect.style.background = this.checked ? 'white' : '#f9fafb';
+                });
+            }
+            
+            // Condition checkbox
+            const conditionCheckbox = document.getElementById('bulk-update-condition-checkbox');
+            const conditionSelect = document.getElementById('bulk-update-condition');
+            if (conditionCheckbox) {
+                conditionCheckbox.addEventListener('change', function() {
+                    conditionSelect.disabled = !this.checked;
+                    conditionSelect.style.background = this.checked ? 'white' : '#f9fafb';
+                });
+            }
+        });
+        
+        function applyBulkUpdate(e) {
+            e.preventDefault();
+            
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('No items selected');
+                return;
+            }
+            
+            // Check which fields to update
+            const updateLocation = document.getElementById('bulk-update-location-checkbox').checked;
+            const updateStatus = document.getElementById('bulk-update-status-checkbox').checked;
+            const updateCondition = document.getElementById('bulk-update-condition-checkbox').checked;
+            
+            if (!updateLocation && !updateStatus && !updateCondition) {
+                alert('Please select at least one field to update');
+                return;
+            }
+            
+            // Get values
+            const newLocation = document.getElementById('bulk-update-location').value;
+            const newStatus = document.getElementById('bulk-update-status').value;
+            const newCondition = document.getElementById('bulk-update-condition').value;
+            
+            // Validate
+            if (updateLocation && !newLocation) {
+                alert('Please select a location');
+                return;
+            }
+            
+            // Update items
+            const currentInventory = getStoredInventory();
+            const selectedIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.itemId));
+            
+            let updatedFields = [];
+            
+            selectedIds.forEach(id => {
+                const item = currentInventory.find(i => i.id === id);
+                if (item) {
+                    if (updateLocation) {
+                        item.location = newLocation;
+                        if (!updatedFields.includes('Location')) updatedFields.push('Location');
+                    }
+                    if (updateStatus) {
+                        item.status = newStatus;
+                        if (!updatedFields.includes('Status')) updatedFields.push('Status');
+                    }
+                    if (updateCondition) {
+                        item.condition = newCondition;
+                        if (!updatedFields.includes('Condition')) updatedFields.push('Condition');
+                    }
+                }
+            });
+            
+            saveStoredInventory(currentInventory);
+            clearSelection();
+            hideBulkUpdate();
+            
+            alert(`✅ Updated ${selectedIds.length} items!\n\nFields updated: ${updatedFields.join(', ')}`);
+            renderInventory();
+        }
     </script>
 
 </body>

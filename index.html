@@ -2445,7 +2445,10 @@
             currentEvents.push(newEvent);
             saveStoredEvents(currentEvents);
             
-            alert('✅ Event added to calendar!');
+            // SYNC: Also add to project timeline
+            syncCalendarEventToTimeline(newEvent);
+            
+            alert('✅ Event added to calendar and project timeline!');
             hideAddEvent();
             renderCalendar();
         }
@@ -3648,10 +3651,16 @@
             if (!confirm('Delete this event?')) return;
             
             const events = getStoredEvents();
+            const eventToDelete = events.find(e => e.id === eventId);
             const filtered = events.filter(e => e.id !== eventId);
             saveStoredEvents(filtered);
             
-            alert('✅ Event deleted!');
+            // SYNC: Also remove from project timeline
+            if (eventToDelete) {
+                removeCalendarEventFromTimeline(eventToDelete);
+            }
+            
+            alert('✅ Event deleted from calendar and project timeline!');
             renderCalendar();
         }
         
@@ -3865,6 +3874,8 @@
                 completed: document.getElementById('event-completed').checked
             };
             
+            const isEditing = !!eventId;
+            
             if (eventId) {
                 // Edit existing
                 const index = timeline.findIndex(e => e.id === parseInt(eventId));
@@ -3884,10 +3895,14 @@
             });
             
             saveProjectTimeline(projectId, timeline);
+            
+            // SYNC: Also add/update in calendar
+            syncTimelineEventToCalendar(eventData, projectId, isEditing);
+            
             hideTimelineEventModal();
             renderProjectTimeline(projectId);
             
-            alert('✅ Timeline event saved!');
+            alert('✅ Timeline event saved and synced to calendar!');
         }
         
         // Delete timeline event
@@ -3895,12 +3910,19 @@
             if (!confirm('Delete this timeline event?')) return;
             
             const timeline = getProjectTimeline(currentProjectId);
+            const eventToDelete = timeline.find(e => e.id === eventId);
             const updatedTimeline = timeline.filter(e => e.id !== eventId);
             
             saveProjectTimeline(currentProjectId, updatedTimeline);
+            
+            // SYNC: Also remove from calendar
+            if (eventToDelete) {
+                removeTimelineEventFromCalendar(eventToDelete);
+            }
+            
             renderProjectTimeline(currentProjectId);
             
-            alert('✅ Timeline event deleted!');
+            alert('✅ Timeline event deleted and removed from calendar!');
         }
         
         // Render project timeline
@@ -3963,6 +3985,142 @@
         if (document.getElementById('project-timeline-container')) {
             renderProjectTimeline(1);
         }
+        
+        // ========================================
+        // CALENDAR <-> TIMELINE SYNC FUNCTIONS
+        // ========================================
+        
+        // Helper: Get project ID from project name
+        function getProjectIdFromName(projectName) {
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            const project = projects.find(p => p.name === projectName);
+            return project ? project.id : null;
+        }
+        
+        // Helper: Get project name from project ID
+        function getProjectNameFromId(projectId) {
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            const project = projects.find(p => p.id === projectId);
+            return project ? project.name : null;
+        }
+        
+        // Helper: Convert calendar event type to timeline icon
+        function calendarTypeToIcon(type) {
+            const iconMap = {
+                'consultation': '📝',
+                'install': '🔧',
+                'photoshoot': '📸',
+                'pickup': '📦'
+            };
+            return iconMap[type] || '📅';
+        }
+        
+        // Helper: Convert timeline icon to calendar type
+        function iconToCalendarType(icon) {
+            const typeMap = {
+                '📝': 'consultation',
+                '🔧': 'install',
+                '📸': 'photoshoot',
+                '📦': 'pickup',
+                '✓': 'consultation',
+                '📅': 'consultation',
+                '💰': 'consultation',
+                '📞': 'consultation'
+            };
+            return typeMap[icon] || 'consultation';
+        }
+        
+        // SYNC: Calendar event → Timeline
+        function syncCalendarEventToTimeline(calendarEvent) {
+            const projectId = getProjectIdFromName(calendarEvent.project);
+            if (!projectId) return; // Project not found
+            
+            const timeline = getProjectTimeline(projectId);
+            
+            // Check if this event already exists in timeline (avoid duplicates)
+            const existingIndex = timeline.findIndex(e => e.calendarEventId === calendarEvent.id);
+            
+            const timelineEvent = {
+                id: existingIndex >= 0 ? timeline[existingIndex].id : Date.now() + Math.random(),
+                title: calendarEvent.type.charAt(0).toUpperCase() + calendarEvent.type.slice(1),
+                date: calendarEvent.date,
+                time: calendarEvent.time || '',
+                icon: calendarTypeToIcon(calendarEvent.type),
+                iconColor: getIconColor(calendarTypeToIcon(calendarEvent.type)),
+                description: calendarEvent.notes || '',
+                completed: false,
+                calendarEventId: calendarEvent.id // Link back to calendar event
+            };
+            
+            if (existingIndex >= 0) {
+                // Update existing
+                timeline[existingIndex] = timelineEvent;
+            } else {
+                // Add new
+                timeline.push(timelineEvent);
+            }
+            
+            // Sort by date
+            timeline.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + (a.time || '00:00'));
+                const dateB = new Date(b.date + ' ' + (b.time || '00:00'));
+                return dateA - dateB;
+            });
+            
+            saveProjectTimeline(projectId, timeline);
+        }
+        
+        // SYNC: Remove calendar event from timeline
+        function removeCalendarEventFromTimeline(calendarEvent) {
+            const projectId = getProjectIdFromName(calendarEvent.project);
+            if (!projectId) return;
+            
+            const timeline = getProjectTimeline(projectId);
+            const updatedTimeline = timeline.filter(e => e.calendarEventId !== calendarEvent.id);
+            
+            saveProjectTimeline(projectId, updatedTimeline);
+        }
+        
+        // SYNC: Timeline event → Calendar
+        function syncTimelineEventToCalendar(timelineEvent, projectId, isEditing) {
+            const projectName = getProjectNameFromId(projectId);
+            if (!projectName) return;
+            
+            const calendarEvents = getStoredEvents();
+            
+            // Check if this timeline event already has a linked calendar event
+            const existingIndex = calendarEvents.findIndex(e => e.timelineEventId === timelineEvent.id);
+            
+            const calendarEvent = {
+                id: existingIndex >= 0 ? calendarEvents[existingIndex].id : Date.now() + Math.random(),
+                type: iconToCalendarType(timelineEvent.icon),
+                project: projectName,
+                date: timelineEvent.date,
+                time: timelineEvent.time || '',
+                notes: timelineEvent.description || '',
+                timelineEventId: timelineEvent.id // Link back to timeline event
+            };
+            
+            if (existingIndex >= 0) {
+                // Update existing
+                calendarEvents[existingIndex] = calendarEvent;
+            } else {
+                // Add new
+                calendarEvents.push(calendarEvent);
+            }
+            
+            saveStoredEvents(calendarEvents);
+        }
+        
+        // SYNC: Remove timeline event from calendar
+        function removeTimelineEventFromCalendar(timelineEvent) {
+            const calendarEvents = getStoredEvents();
+            const updatedEvents = calendarEvents.filter(e => e.timelineEventId !== timelineEvent.id);
+            
+            saveStoredEvents(updatedEvents);
+        }
+        
+        console.log('✅ Calendar <-> Timeline sync enabled');
     </script>
 
 </body>

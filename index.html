@@ -4085,9 +4085,20 @@
         // ========================================
         
         // Helper: Get project ID from project name
-        function getProjectIdFromName(projectName) {
+        function getProjectIdFromName(projectNameOrCode) {
+            // Map short codes to full project names
+            const projectCodeMap = {
+                'sunset': 'Sunset Blvd Luxury Condo',
+                'maple': 'Maple St Family Home',
+                'oak': 'Oak Ave Consultation'
+            };
+            
+            // If it's a short code, convert to full name
+            const projectName = projectCodeMap[projectNameOrCode] || projectNameOrCode;
+            
             const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
             const project = projects.find(p => p.name === projectName);
+            console.log('Looking for project:', projectName, 'Found:', project ? project.id : 'NOT FOUND');
             return project ? project.id : null;
         }
         
@@ -4126,10 +4137,16 @@
         
         // SYNC: Calendar event → Timeline
         function syncCalendarEventToTimeline(calendarEvent) {
+            console.log('Syncing calendar event to timeline:', calendarEvent);
             const projectId = getProjectIdFromName(calendarEvent.project);
-            if (!projectId) return; // Project not found
+            console.log('Found project ID:', projectId);
+            if (!projectId) {
+                console.error('Could not find project ID for project:', calendarEvent.project);
+                return; // Project not found
+            }
             
             const timeline = getProjectTimeline(projectId);
+            console.log('Current timeline for project:', timeline);
             
             // Check if this event already exists in timeline (avoid duplicates)
             const existingIndex = timeline.findIndex(e => e.calendarEventId === calendarEvent.id);
@@ -4146,12 +4163,16 @@
                 calendarEventId: calendarEvent.id // Link back to calendar event
             };
             
+            console.log('Timeline event to save:', timelineEvent);
+            
             if (existingIndex >= 0) {
                 // Update existing
                 timeline[existingIndex] = timelineEvent;
+                console.log('Updated existing timeline event');
             } else {
                 // Add new
                 timeline.push(timelineEvent);
+                console.log('Added new timeline event');
             }
             
             // Sort by date
@@ -4162,6 +4183,13 @@
             });
             
             saveProjectTimeline(projectId, timeline);
+            console.log('Timeline saved, total events:', timeline.length);
+            
+            // Refresh timeline if currently viewing this project
+            if (document.getElementById('project-timeline-container') && currentProjectId === projectId) {
+                console.log('Refreshing timeline display for current project');
+                renderProjectTimeline(projectId);
+            }
         }
         
         // SYNC: Remove calendar event from timeline

@@ -47,7 +47,7 @@
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <button onclick="showPage('waitlist')" style="padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.12s;">Join Waitlist</button>
-                        <button onclick="showPage('signin')" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Get Started</button>
+                        <button onclick="localStorage.setItem('redirectAfterLogin', 'dashboard'); showPage('signin');" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Get Started</button>
                     </div>
                 </div>
             </nav>
@@ -70,7 +70,7 @@
                         </p>
                         
                         <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0;">
-                            <button onclick="showPage('signin')" class="gradient-accent" style="padding: 12px 18px; border-radius: 999px; border: none; color: white; font-weight: 600; cursor: pointer;">Get Started</button>
+                            <button onclick="localStorage.setItem('redirectAfterLogin', 'dashboard'); showPage('signin');" class="gradient-accent" style="padding: 12px 18px; border-radius: 999px; border: none; color: white; font-weight: 600; cursor: pointer;">Get Started</button>
                             <button onclick="showPage('waitlist')" style="padding: 12px 18px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; cursor: pointer;">Join Waitlist</button>
                         </div>
                     </div>
@@ -229,7 +229,7 @@
                 <div style="max-width: 1120px; margin: 0 auto; padding: 28px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                     <div style="color: #6b7280; font-size: 14px;">© 2026 Stagience. All rights reserved.</div>
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; font-weight: 500; color: #6b7280;">
-                        <a href="#" onclick="showPage('signin'); return false;" style="text-decoration: none; color: inherit;">Inventory</a>
+                        <a href="#" onclick="localStorage.setItem('redirectAfterLogin', 'inventory'); showPage('signin'); return false;" style="text-decoration: none; color: inherit;">Inventory</a>
                         <a href="#" onclick="window.scrollTo(0,0); return false;" style="text-decoration: none; color: inherit;">Back to top</a>
                     </div>
                 </div>
@@ -331,9 +331,9 @@
                         <input type="password" placeholder="••••••••" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 15px;" />
                     </div>
                     
-                    <button onclick="showPage('dashboard'); return false;" class="gradient-accent" style="width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; margin-bottom: 16px;">Sign In</button>
+                    <button onclick="const redirectTo = localStorage.getItem('redirectAfterLogin') || 'dashboard'; localStorage.removeItem('redirectAfterLogin'); showPage(redirectTo); return false;" class="gradient-accent" style="width: 100%; padding: 16px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; margin-bottom: 16px;">Sign In</button>
                     
-                    <button onclick="showPage('dashboard'); return false;" style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-bottom: 16px;">View Demo Without Signing In</button>
+                    <button onclick="const redirectTo = localStorage.getItem('redirectAfterLogin') || 'dashboard'; localStorage.removeItem('redirectAfterLogin'); showPage(redirectTo); return false;" style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-bottom: 16px;">View Demo Without Signing In</button>
                 </form>
                 
                 <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb;">

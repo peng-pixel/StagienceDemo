@@ -662,6 +662,7 @@
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
@@ -758,7 +759,7 @@
     </div>
 
     <!-- Project Detail Page -->
-    <div id="project-detail-page" class="page">
+    <div id="project-detail-page" class="page" data-project-id="">
         <div class="marketing-bg" style="min-height: 100vh;">
             <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10);">
                 <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
@@ -770,6 +771,7 @@
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
@@ -967,6 +969,7 @@
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
@@ -1073,6 +1076,7 @@
                     </div>
                     <div style="display: flex; gap: 12px;">
                         <button onclick="showPage('dashboard')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Dashboard</button>
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
@@ -2216,23 +2220,23 @@
                 
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Event Title</label>
-                    <input type="text" id="event-title" required placeholder="e.g., Initial Consultation" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <input type="text" id="timeline-event-title" required placeholder="e.g., Initial Consultation" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                     <div>
                         <label style="display: block; font-weight: 700; margin-bottom: 8px;">Date</label>
-                        <input type="date" id="event-date" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <input type="date" id="timeline-event-date" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
                     <div>
                         <label style="display: block; font-weight: 700; margin-bottom: 8px;">Time (optional)</label>
-                        <input type="time" id="event-time" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <input type="time" id="timeline-event-time" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
                 </div>
 
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Icon</label>
-                    <select id="event-icon" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <select id="timeline-event-icon" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="✓">✓ Completed</option>
                         <option value="📅">📅 Scheduled</option>
                         <option value="📸">📸 Photo Shoot</option>
@@ -2246,12 +2250,12 @@
 
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description (optional)</label>
-                    <textarea id="event-description" rows="4" placeholder="Event details, notes, contacts..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: inherit; resize: vertical;"></textarea>
+                    <textarea id="timeline-event-description" rows="4" placeholder="Event details, notes, contacts..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: inherit; resize: vertical;"></textarea>
                 </div>
 
                 <div>
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="event-completed" style="width: 18px; height: 18px; cursor: pointer;">
+                        <input type="checkbox" id="timeline-event-completed" style="width: 18px; height: 18px; cursor: pointer;">
                         <span style="font-weight: 600;">Mark as completed</span>
                     </label>
                 </div>
@@ -2336,7 +2340,7 @@
                                 style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; line-height: 1; padding: 0;"
                                 title="Delete project">×</button>
                     </div>
-                    <div onclick="showProjectDetail('${project.name}', '${project.status}')" style="cursor: pointer;">
+                    <div onclick="showProjectDetail('${project.name}', '${project.status}', ${project.id})" style="cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-right: 70px;">
                             <div>
                                 <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
@@ -2458,6 +2462,12 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(page + '-page').classList.add('active');
             window.scrollTo(0, 0);
+            
+            // Render calendar when switching to calendar page
+            if (page === 'calendar') {
+                console.log('Switching to calendar page, rendering events...');
+                renderCalendar();
+            }
         }
 
         // Waitlist form submission
@@ -2492,7 +2502,7 @@
         }
 
         // Project Detail View functions
-        function showProjectDetail(projectName, status) {
+        function showProjectDetail(projectName, status, projectId) {
             // Update project details
             document.getElementById('project-detail-title').textContent = projectName;
             
@@ -2520,11 +2530,33 @@
                 statusBadge.style.color = '#1e40af';
             }
             
+            // IMPORTANT: Set the project ID so timeline knows which project this is
+            const projectDetailPage = document.getElementById('project-detail-page');
+            if (projectId) {
+                projectDetailPage.setAttribute('data-project-id', projectId);
+                console.log('Set project ID to:', projectId);
+            } else {
+                // Fallback: find project ID by name
+                const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+                const project = projects.find(p => p.name === projectName);
+                if (project) {
+                    projectDetailPage.setAttribute('data-project-id', project.id);
+                    console.log('Found project ID by name:', project.id);
+                }
+            }
+            
             // Show project detail page
             showPage('project-detail');
             
             // Reset to Schedule & Notes tab
             switchProjectTab('schedule');
+            
+            // Re-render timeline for this specific project
+            const currentProjectId = projectDetailPage.getAttribute('data-project-id');
+            if (currentProjectId && document.getElementById('project-timeline-container')) {
+                console.log('Rendering timeline for project:', currentProjectId);
+                renderProjectTimeline(parseInt(currentProjectId));
+            }
         }
 
         function switchProjectTab(tabName) {
@@ -3841,12 +3873,12 @@
                 document.getElementById('timeline-modal-title').textContent = 'Edit Timeline Event';
                 document.getElementById('event-id').value = event.id;
                 document.getElementById('event-project-id').value = currentProjectId;
-                document.getElementById('event-title').value = event.title;
-                document.getElementById('event-date').value = event.date;
-                document.getElementById('event-time').value = event.time || '';
-                document.getElementById('event-icon').value = event.icon;
-                document.getElementById('event-description').value = event.description || '';
-                document.getElementById('event-completed').checked = event.completed || false;
+                document.getElementById('timeline-event-title').value = event.title;
+                document.getElementById('timeline-event-date').value = event.date;
+                document.getElementById('timeline-event-time').value = event.time || '';
+                document.getElementById('timeline-event-icon').value = event.icon;
+                document.getElementById('timeline-event-description').value = event.description || '';
+                document.getElementById('timeline-event-completed').checked = event.completed || false;
                 
                 const modal = document.getElementById('timeline-event-modal');
                 modal.classList.add('active');
@@ -3865,14 +3897,17 @@
             
             const eventData = {
                 id: eventId ? parseInt(eventId) : Date.now(),
-                title: document.getElementById('event-title').value,
-                date: document.getElementById('event-date').value,
-                time: document.getElementById('event-time').value || '',
-                icon: document.getElementById('event-icon').value,
-                iconColor: getIconColor(document.getElementById('event-icon').value),
-                description: document.getElementById('event-description').value,
-                completed: document.getElementById('event-completed').checked
+                title: document.getElementById('timeline-event-title').value,
+                date: document.getElementById('timeline-event-date').value,
+                time: document.getElementById('timeline-event-time').value || '',
+                icon: document.getElementById('timeline-event-icon').value,
+                iconColor: getIconColor(document.getElementById('timeline-event-icon').value),
+                description: document.getElementById('timeline-event-description').value,
+                completed: document.getElementById('timeline-event-completed').checked
             };
+            
+            console.log('Saving timeline event:', eventData);
+            console.log('Date value:', eventData.date);
             
             const isEditing = !!eventId;
             
@@ -3931,6 +3966,9 @@
             const timeline = getProjectTimeline(projectId);
             const container = document.getElementById('project-timeline-container');
             
+            console.log('Rendering timeline for project', projectId);
+            console.log('Timeline events:', timeline);
+            
             if (!container) return; // Timeline not on this page
             
             if (timeline.length === 0) {
@@ -3939,9 +3977,45 @@
             }
             
             container.innerHTML = timeline.map(event => {
-                const dateObj = new Date(event.date + (event.time ? ' ' + event.time : ''));
-                const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-                const formattedTime = event.time ? dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+                console.log('Rendering event:', event.title, 'Date:', event.date, 'Time:', event.time);
+                
+                // Simpler, more robust date parsing
+                let formattedDate = 'No date';
+                let formattedTime = '';
+                
+                if (event.date) {
+                    console.log('Event has date:', event.date, 'Type:', typeof event.date);
+                    try {
+                        // Create date object from the date string
+                        // Date input gives us YYYY-MM-DD format which Date constructor handles well
+                        const dateObj = new Date(event.date + 'T00:00:00'); // Always add time to avoid timezone issues
+                        console.log('Created date object:', dateObj, 'Valid?', !isNaN(dateObj.getTime()));
+                        
+                        // Check if date is valid
+                        if (!isNaN(dateObj.getTime())) {
+                            formattedDate = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                            console.log('Formatted date:', formattedDate);
+                        } else {
+                            // Fallback: just display the raw date string
+                            formattedDate = event.date;
+                            console.log('Date invalid, using raw:', formattedDate);
+                        }
+                        
+                        // Handle time separately if it exists
+                        if (event.time) {
+                            const timeObj = new Date(event.date + 'T' + event.time);
+                            if (!isNaN(timeObj.getTime())) {
+                                formattedTime = timeObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                            }
+                        }
+                    } catch (e) {
+                        console.error('Date parsing error:', e, event);
+                        // If parsing fails, display raw date
+                        formattedDate = event.date || 'No date';
+                    }
+                } else {
+                    console.log('Event has NO date');
+                }
                 
                 return `
                     <div style="display: flex; gap: 16px; align-items: start;">
@@ -3980,10 +4054,30 @@
         }
         
         // Initialize timeline when project page loads
-        // This should be called when switching to project detail view
-        // For demo purposes, render timeline for project 1
+        // Get the project ID from the page's data attribute
         if (document.getElementById('project-timeline-container')) {
-            renderProjectTimeline(1);
+            // Get project ID from the page
+            const projectDetailPage = document.getElementById('project-detail-page');
+            const storedProjectId = projectDetailPage.getAttribute('data-project-id');
+            
+            if (storedProjectId) {
+                // Use the stored project ID
+                renderProjectTimeline(parseInt(storedProjectId));
+            } else {
+                // Fallback: use first project
+                const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+                if (projects.length === 0) {
+                    getStoredProjects(); // Initialize defaults
+                    const updatedProjects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+                    if (updatedProjects.length > 0) {
+                        projectDetailPage.setAttribute('data-project-id', updatedProjects[0].id);
+                        renderProjectTimeline(updatedProjects[0].id);
+                    }
+                } else {
+                    projectDetailPage.setAttribute('data-project-id', projects[0].id);
+                    renderProjectTimeline(projects[0].id);
+                }
+            }
         }
         
         // ========================================
@@ -4083,8 +4177,13 @@
         
         // SYNC: Timeline event → Calendar
         function syncTimelineEventToCalendar(timelineEvent, projectId, isEditing) {
+            console.log('Syncing timeline event to calendar:', timelineEvent, 'Project ID:', projectId);
             const projectName = getProjectNameFromId(projectId);
-            if (!projectName) return;
+            console.log('Project name:', projectName);
+            if (!projectName) {
+                console.error('Could not find project name for ID:', projectId);
+                return;
+            }
             
             const calendarEvents = getStoredEvents();
             
@@ -4101,15 +4200,26 @@
                 timelineEventId: timelineEvent.id // Link back to timeline event
             };
             
+            console.log('Calendar event to save:', calendarEvent);
+            
             if (existingIndex >= 0) {
                 // Update existing
                 calendarEvents[existingIndex] = calendarEvent;
+                console.log('Updated existing calendar event');
             } else {
                 // Add new
                 calendarEvents.push(calendarEvent);
+                console.log('Added new calendar event');
             }
             
             saveStoredEvents(calendarEvents);
+            console.log('Calendar events saved, total:', calendarEvents.length);
+            
+            // Refresh calendar if on calendar page
+            if (document.getElementById('upcoming-events-list')) {
+                renderCalendar();
+                console.log('Calendar refreshed after sync');
+            }
         }
         
         // SYNC: Remove timeline event from calendar

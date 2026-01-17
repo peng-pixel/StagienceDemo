@@ -1355,7 +1355,7 @@
                 <!-- Event Type -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 10px; font-size: 15px;">Event Type</label>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px;">
                         <button type="button" onclick="selectEventType(this, 'consultation')" class="event-type-btn event-type-option" data-type="consultation" style="padding: 12px; border: 2px solid #dbeafe; background: #dbeafe; border-radius: 10px; font-weight: 600; color: #1e40af; cursor: pointer; transition: all 0.2s;">
                             📅 Consultation
                         </button>
@@ -1368,6 +1368,13 @@
                         <button type="button" onclick="selectEventType(this, 'pickup')" class="event-type-btn event-type-option" data-type="pickup" style="padding: 12px; border: 2px solid #e5e7eb; background: white; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
                             📦 Pickup
                         </button>
+                        <button type="button" onclick="selectEventType(this, 'custom')" class="event-type-btn event-type-option" data-type="custom" style="padding: 12px; border: 2px solid #e5e7eb; background: white; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; grid-column: span 2;">
+                            ✏️ Custom
+                        </button>
+                    </div>
+                    <!-- Custom event type input (hidden by default) -->
+                    <div id="custom-event-type-input" style="display: none;">
+                        <input type="text" id="custom-event-type-text" placeholder="Enter custom event type..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
                 </div>
 
@@ -2362,20 +2369,34 @@
         
         function selectEventType(button, type) {
             currentEventType = type;
+            
+            // Show/hide custom input based on selection
+            const customInput = document.getElementById('custom-event-type-input');
+            if (type === 'custom') {
+                customInput.style.display = 'block';
+            } else {
+                customInput.style.display = 'none';
+            }
+            
             // Remove selection from all buttons
             document.querySelectorAll('.event-type-btn').forEach(btn => {
                 btn.style.borderColor = '#e5e7eb';
                 btn.style.background = 'white';
             });
+            
             // Highlight selected button
             const colors = {
                 'consultation': { border: '#dbeafe', bg: '#dbeafe' },
                 'install': { border: '#dcfce7', bg: '#dcfce7' },
                 'photos': { border: '#fef3c7', bg: '#fef3c7' },
-                'pickup': { border: '#f3e8ff', bg: '#f3e8ff' }
+                'pickup': { border: '#f3e8ff', bg: '#f3e8ff' },
+                'custom': { border: '#e0e7ff', bg: '#e0e7ff' }
             };
-            button.style.borderColor = colors[type].border;
-            button.style.background = colors[type].bg;
+            
+            if (colors[type]) {
+                button.style.borderColor = colors[type].border;
+                button.style.background = colors[type].bg;
+            }
         }
 
         function saveCalendarEvent(e) {
@@ -2384,6 +2405,17 @@
             if (!currentEventType) {
                 alert('Please select an event type');
                 return;
+            }
+            
+            // Get the event type (use custom text if custom is selected)
+            let eventType = currentEventType;
+            if (currentEventType === 'custom') {
+                const customText = document.getElementById('custom-event-type-text').value.trim();
+                if (!customText) {
+                    alert('Please enter a custom event type');
+                    return;
+                }
+                eventType = customText.toLowerCase().replace(/\s+/g, '-'); // Convert to slug format
             }
             
             const project = document.getElementById('event-project').value;
@@ -2410,7 +2442,7 @@
                     // Update event but preserve the ID and timelineEventId link
                     currentEvents[eventIndex] = {
                         id: existingEvent.id,
-                        type: currentEventType,
+                        type: eventType,
                         project: projectFullName,
                         date: date,
                         time: time,
@@ -2432,7 +2464,7 @@
                 // CREATING new event
                 const newEvent = {
                     id: Date.now(),
-                    type: currentEventType,
+                    type: eventType,
                     project: projectFullName,
                     date: date,
                     time: time,
@@ -3732,7 +3764,17 @@
                     
                     // Build events HTML
                     const eventsHTML = dayEvents.map(event => {
-                        const typeInfo = eventTypes[event.type] || eventTypes['consultation'];
+                        let typeInfo = eventTypes[event.type];
+                        
+                        // Handle custom event types
+                        if (!typeInfo) {
+                            typeInfo = {
+                                bg: '#e0e7ff',
+                                color: '#4338ca',
+                                label: event.type.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                            };
+                        }
+                        
                         const timeStr = event.time ? new Date('2000-01-01 ' + event.time).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).replace(' ', '').toLowerCase() : '';
                         const projectShort = event.project ? event.project.split(' ')[0] + (event.project.split(' ')[1] ? ' ' + event.project.split(' ')[1] : '') : '';
                         
@@ -3771,7 +3813,16 @@
                 'pickup': { bg: '#f3e8ff', color: '#7c3aed', icon: '📦', label: 'Pickup' }
             };
             
-            const typeInfo = eventTypes[event.type] || eventTypes['consultation'];
+            // Handle custom event types
+            let typeInfo = eventTypes[event.type];
+            if (!typeInfo) {
+                typeInfo = {
+                    bg: '#e0e7ff',
+                    color: '#4338ca',
+                    icon: '✏️',
+                    label: event.type.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+                };
+            }
             const eventDate = new Date(event.date);
             const dateFormatted = eventDate.toLocaleDateString('en-US', { 
                 weekday: 'long', 
@@ -4451,6 +4502,17 @@
             saveProjectTimeline(projectId, timeline);
             console.log('Timeline saved, total events:', timeline.length);
             
+            // CRITICAL: Update the calendar event's timelineEventId to maintain bidirectional link
+            if (calendarEvent.id && timelineEvent.id) {
+                const calendarEvents = getStoredEvents();
+                const calendarIndex = calendarEvents.findIndex(e => e.id === calendarEvent.id);
+                if (calendarIndex >= 0) {
+                    calendarEvents[calendarIndex].timelineEventId = timelineEvent.id;
+                    saveStoredEvents(calendarEvents);
+                    console.log('Updated calendar event timelineEventId to:', timelineEvent.id);
+                }
+            }
+            
             // Refresh timeline if currently viewing this project
             if (document.getElementById('project-timeline-container') && currentProjectId === projectId) {
                 console.log('Refreshing timeline display for current project');
@@ -4516,6 +4578,17 @@
             
             saveStoredEvents(calendarEvents);
             console.log('Calendar events saved, total:', calendarEvents.length);
+            
+            // CRITICAL: Update the timeline event's calendarEventId to maintain bidirectional link
+            if (calendarEvent.id && timelineEvent.id) {
+                const timeline = getProjectTimeline(projectId);
+                const timelineIndex = timeline.findIndex(e => e.id === timelineEvent.id);
+                if (timelineIndex >= 0) {
+                    timeline[timelineIndex].calendarEventId = calendarEvent.id;
+                    saveProjectTimeline(projectId, timeline);
+                    console.log('Updated timeline event calendarEventId to:', calendarEvent.id);
+                }
+            }
             
             // Refresh calendar if on calendar page
             if (document.getElementById('calendar-grid')) {

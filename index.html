@@ -480,7 +480,6 @@
                         <p style="color: #6b7280; font-size: 16px;">January 2026</p>
                     </div>
                     <div style="display: flex; gap: 12px; align-items: center;">
-                        <button class="gradient-accent" onclick="showAddEvent()" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">+ Add Event</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">← Prev</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Today</button>
                         <button style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Next →</button>
@@ -3861,9 +3860,7 @@
                     </div>
                 ` : ''}
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button onclick="closeEventDetails()" style="flex: 1; padding: 12px; background: white; border: 1px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">Close</button>
-                    <button onclick="editCalendarEvent(${event.id}); closeEventDetails();" style="padding: 12px 20px; background: #3b82f6; border: none; color: white; border-radius: 10px; font-weight: 600; cursor: pointer;">Edit</button>
-                    <button onclick="deleteCalendarEvent(${event.id}); closeEventDetails();" style="padding: 12px 20px; background: #fee; border: 1px solid #fcc; color: #c00; border-radius: 10px; font-weight: 600; cursor: pointer;">Delete</button>
+                    <button onclick="closeEventDetails()" style="flex: 1; padding: 12px; background: #3b82f6; border: none; color: white; border-radius: 10px; font-weight: 600; cursor: pointer;">Close</button>
                 </div>
             `;
             

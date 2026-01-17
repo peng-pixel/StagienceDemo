@@ -3383,7 +3383,8 @@
                     status: 'Active',
                     statusLower: 'active',
                     statusBg: '#dcfce7',
-                    statusColor: '#166534'
+                    statusColor: '#166534',
+                    timeline: []
                 },
                 {
                     id: Date.now() + 2,
@@ -3392,16 +3393,8 @@
                     status: 'Scheduled',
                     statusLower: 'scheduled',
                     statusBg: '#dbeafe',
-                    statusColor: '#1e40af'
-                },
-                {
-                    id: Date.now() + 3,
-                    name: 'Oak Ave Consultation',
-                    address: '890 Oak Avenue',
-                    status: 'Pending',
-                    statusLower: 'pending',
-                    statusBg: '#fef3c7',
-                    statusColor: '#92400e'
+                    statusColor: '#1e40af',
+                    timeline: []
                 }
             ];
             localStorage.setItem('stagience_projects', JSON.stringify(defaults));
@@ -3674,25 +3667,8 @@
             if (stored) {
                 return JSON.parse(stored);
             }
-            // Return default events
-            const defaults = [
-                {
-                    id: Date.now() + 1,
-                    type: 'consultation',
-                    project: 'Sunset Blvd Luxury Condo',
-                    date: '2026-01-15',
-                    time: '10:00',
-                    notes: 'Initial walkthrough'
-                },
-                {
-                    id: Date.now() + 2,
-                    type: 'install',
-                    project: 'Maple St Family Home',
-                    date: '2026-01-20',
-                    time: '09:00',
-                    notes: 'Full staging install'
-                }
-            ];
+            // Start with empty events - no demo data
+            const defaults = [];
             localStorage.setItem('stagience_events', JSON.stringify(defaults));
             return defaults;
         }

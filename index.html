@@ -2293,7 +2293,6 @@
                 address: '1234 Sunset Blvd',
                 status: 'Active',
                 statusLower: 'active',
-                installDate: '2026-01-12',
                 statusBg: '#dcfce7',
                 statusColor: '#166534'
             },
@@ -2302,7 +2301,6 @@
                 address: '567 Maple Street',
                 status: 'Scheduled',
                 statusLower: 'scheduled',
-                installDate: '2026-01-15',
                 statusBg: '#dbeafe',
                 statusColor: '#1e40af'
             },
@@ -2311,7 +2309,6 @@
                 address: '890 Oak Avenue',
                 status: 'Pending',
                 statusLower: 'pending',
-                installDate: '2026-01-18',
                 statusBg: '#dbeafe',
                 statusColor: '#1e40af'
             }
@@ -2350,7 +2347,6 @@
                                 ${project.status}
                             </span>
                         </div>
-                        <div style="font-size: 14px; color: #6b7280;">Install: ${project.installDate}</div>
                     </div>
                 </div>
             `).join('');
@@ -3198,9 +3194,6 @@
             const statusChoice = prompt(`Status (${statusOptions.join(', ')}):`, project.status);
             if (statusChoice === null) return;
             
-            const installDate = prompt('Install date (YYYY-MM-DD):', project.installDate);
-            if (installDate === null) return;
-            
             // Determine status colors
             const statusMap = {
                 'Pending': { bg: '#fef3c7', color: '#92400e' },
@@ -3216,7 +3209,6 @@
             project.address = address || project.address;
             project.status = statusChoice || project.status;
             project.statusLower = (statusChoice || project.status).toLowerCase();
-            project.installDate = installDate || project.installDate;
             project.statusBg = statusInfo.bg;
             project.statusColor = statusInfo.color;
             
@@ -3289,7 +3281,6 @@
                     address: '1234 Sunset Blvd',
                     status: 'Active',
                     statusLower: 'active',
-                    installDate: '2026-01-12',
                     statusBg: '#dcfce7',
                     statusColor: '#166534'
                 },
@@ -3299,7 +3290,6 @@
                     address: '567 Maple Street',
                     status: 'Scheduled',
                     statusLower: 'scheduled',
-                    installDate: '2026-01-15',
                     statusBg: '#dbeafe',
                     statusColor: '#1e40af'
                 },
@@ -3309,7 +3299,6 @@
                     address: '890 Oak Avenue',
                     status: 'Pending',
                     statusLower: 'pending',
-                    installDate: '2026-01-18',
                     statusBg: '#fef3c7',
                     statusColor: '#92400e'
                 }
@@ -3912,10 +3901,14 @@
             const isEditing = !!eventId;
             
             if (eventId) {
-                // Edit existing
+                // Edit existing - preserve the calendarEventId link
                 const index = timeline.findIndex(e => e.id === parseInt(eventId));
                 if (index !== -1) {
+                    // Preserve existing calendarEventId if it exists
+                    const existingCalendarEventId = timeline[index].calendarEventId;
+                    eventData.calendarEventId = existingCalendarEventId;
                     timeline[index] = eventData;
+                    console.log('Editing existing event, preserved calendarEventId:', existingCalendarEventId);
                 }
             } else {
                 // Add new
@@ -3930,12 +3923,18 @@
             });
             
             saveProjectTimeline(projectId, timeline);
+            console.log('Timeline saved to localStorage');
             
             // SYNC: Also add/update in calendar
             syncTimelineEventToCalendar(eventData, projectId, isEditing);
             
             hideTimelineEventModal();
-            renderProjectTimeline(projectId);
+            
+            // Re-render timeline to show changes
+            console.log('Re-rendering timeline for project:', projectId);
+            setTimeout(() => {
+                renderProjectTimeline(projectId);
+            }, 100); // Small delay to ensure modal is closed
             
             alert('✅ Timeline event saved and synced to calendar!');
         }
@@ -4115,6 +4114,7 @@
                 'consultation': '📝',
                 'install': '🔧',
                 'photoshoot': '📸',
+                'photos': '📸',
                 'pickup': '📦'
             };
             return iconMap[type] || '📅';
@@ -4125,7 +4125,7 @@
             const typeMap = {
                 '📝': 'consultation',
                 '🔧': 'install',
-                '📸': 'photoshoot',
+                '📸': 'photos',
                 '📦': 'pickup',
                 '✓': 'consultation',
                 '📅': 'consultation',

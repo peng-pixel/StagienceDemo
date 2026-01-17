@@ -4406,8 +4406,16 @@
             const timeline = getProjectTimeline(projectId);
             console.log('Current timeline for project:', timeline);
             
-            // Check if this event already exists in timeline (avoid duplicates)
-            const existingIndex = timeline.findIndex(e => e.calendarEventId === calendarEvent.id);
+            // Check BOTH directions:
+            // 1. Timeline event that links TO this calendar event (via calendarEventId)
+            // 2. Timeline event that this calendar event links TO (via timelineEventId)
+            let existingIndex = timeline.findIndex(e => e.calendarEventId === calendarEvent.id);
+            
+            // If not found by calendarEventId, check if this calendar event has a timelineEventId
+            if (existingIndex === -1 && calendarEvent.timelineEventId) {
+                existingIndex = timeline.findIndex(e => e.id === calendarEvent.timelineEventId);
+                console.log('Found timeline event via timelineEventId:', existingIndex);
+            }
             
             const timelineEvent = {
                 id: existingIndex >= 0 ? timeline[existingIndex].id : Date.now() + Math.random(),
@@ -4417,7 +4425,7 @@
                 icon: calendarTypeToIcon(calendarEvent.type),
                 iconColor: getIconColor(calendarTypeToIcon(calendarEvent.type)),
                 description: calendarEvent.notes || '',
-                completed: false,
+                completed: existingIndex >= 0 ? timeline[existingIndex].completed : false, // Preserve completed state
                 calendarEventId: calendarEvent.id // Link back to calendar event
             };
             
@@ -4473,8 +4481,16 @@
             
             const calendarEvents = getStoredEvents();
             
-            // Check if this timeline event already has a linked calendar event
-            const existingIndex = calendarEvents.findIndex(e => e.timelineEventId === timelineEvent.id);
+            // Check BOTH directions:
+            // 1. Calendar event that links TO this timeline event (via timelineEventId)
+            // 2. Calendar event that this timeline event links TO (via calendarEventId)
+            let existingIndex = calendarEvents.findIndex(e => e.timelineEventId === timelineEvent.id);
+            
+            // If not found by timelineEventId, check if this timeline event has a calendarEventId
+            if (existingIndex === -1 && timelineEvent.calendarEventId) {
+                existingIndex = calendarEvents.findIndex(e => e.id === timelineEvent.calendarEventId);
+                console.log('Found calendar event via calendarEventId:', existingIndex);
+            }
             
             const calendarEvent = {
                 id: existingIndex >= 0 ? calendarEvents[existingIndex].id : Date.now() + Math.random(),

@@ -2385,23 +2385,57 @@
                 return;
             }
             
-            const newEvent = {
-                id: Date.now(),
-                type: currentEventType,
-                project: project,
-                date: date,
-                time: time,
-                notes: notes
-            };
-            
+            const modal = document.getElementById('add-event-modal');
+            const editingEventId = modal.dataset.editingEventId;
             const currentEvents = getStoredEvents();
-            currentEvents.push(newEvent);
-            saveStoredEvents(currentEvents);
             
-            // SYNC: Also add to project timeline
-            syncCalendarEventToTimeline(newEvent);
+            if (editingEventId) {
+                // EDITING existing event
+                const eventIndex = currentEvents.findIndex(e => e.id === parseInt(editingEventId));
+                if (eventIndex !== -1) {
+                    const existingEvent = currentEvents[eventIndex];
+                    
+                    // Update event but preserve the ID and timelineEventId link
+                    currentEvents[eventIndex] = {
+                        id: existingEvent.id,
+                        type: currentEventType,
+                        project: project,
+                        date: date,
+                        time: time,
+                        notes: notes,
+                        timelineEventId: existingEvent.timelineEventId // Preserve link
+                    };
+                    
+                    saveStoredEvents(currentEvents);
+                    
+                    // SYNC: Update in project timeline
+                    syncCalendarEventToTimeline(currentEvents[eventIndex]);
+                    
+                    alert('✅ Event updated in calendar and project timeline!');
+                    
+                    // Clear editing state
+                    delete modal.dataset.editingEventId;
+                }
+            } else {
+                // CREATING new event
+                const newEvent = {
+                    id: Date.now(),
+                    type: currentEventType,
+                    project: project,
+                    date: date,
+                    time: time,
+                    notes: notes
+                };
+                
+                currentEvents.push(newEvent);
+                saveStoredEvents(currentEvents);
+                
+                // SYNC: Also add to project timeline
+                syncCalendarEventToTimeline(newEvent);
+                
+                alert('✅ Event added to calendar and project timeline!');
+            }
             
-            alert('✅ Event added to calendar and project timeline!');
             hideAddEvent();
             renderCalendar();
         }
@@ -3765,7 +3799,8 @@
                 ` : ''}
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
                     <button onclick="closeEventDetails()" style="flex: 1; padding: 12px; background: white; border: 1px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">Close</button>
-                    <button onclick="deleteCalendarEvent(${event.id}); closeEventDetails();" style="padding: 12px 20px; background: #fee; border: 1px solid #fcc; color: #c00; border-radius: 10px; font-weight: 600; cursor: pointer;">Delete Event</button>
+                    <button onclick="editCalendarEvent(${event.id}); closeEventDetails();" style="padding: 12px 20px; background: #3b82f6; border: none; color: white; border-radius: 10px; font-weight: 600; cursor: pointer;">Edit</button>
+                    <button onclick="deleteCalendarEvent(${event.id}); closeEventDetails();" style="padding: 12px 20px; background: #fee; border: 1px solid #fcc; color: #c00; border-radius: 10px; font-weight: 600; cursor: pointer;">Delete</button>
                 </div>
             `;
             
@@ -3784,6 +3819,42 @@
         function closeEventDetails() {
             const modal = document.getElementById('event-details-modal');
             if (modal) modal.remove();
+        }
+        
+        function editCalendarEvent(eventId) {
+            const events = getStoredEvents();
+            const event = events.find(e => e.id === eventId);
+            
+            if (!event) {
+                alert('Event not found');
+                return;
+            }
+            
+            // Set the current event type
+            currentEventType = event.type;
+            
+            // Pre-fill the form
+            document.getElementById('event-project').value = event.project || '';
+            document.getElementById('event-date').value = event.date || '';
+            document.getElementById('event-time').value = event.time || '';
+            document.getElementById('event-notes').value = event.notes || '';
+            
+            // Highlight the selected event type
+            document.querySelectorAll('.event-type-option').forEach(option => {
+                if (option.dataset.type === event.type) {
+                    option.style.border = '3px solid #3b82f6';
+                    option.style.background = '#eff6ff';
+                } else {
+                    option.style.border = '2px solid #e5e7eb';
+                    option.style.background = 'white';
+                }
+            });
+            
+            // Store the event ID so we know we're editing
+            document.getElementById('add-event-modal').dataset.editingEventId = eventId;
+            
+            // Show the modal
+            document.getElementById('add-event-modal').style.display = 'flex';
         }
         
         function deleteCalendarEvent(eventId) {

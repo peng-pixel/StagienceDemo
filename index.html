@@ -897,34 +897,101 @@
 
                 <!-- Photos Tab Content -->
                 <div id="content-photos" class="project-tab-content">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
-                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🏠</div>
-                            <div style="padding: 12px;">
-                                <div style="font-weight: 600; font-size: 14px;">Living Room - Before</div>
-                                <div style="font-size: 12px; color: #6b7280;">Jan 8, 2026</div>
+                    <!-- Header with Create New Folder button -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 style="font-size: 18px; font-weight: 700;">Photo Folders</h3>
+                        <button onclick="alert('Create New Folder feature - coming soon!')" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                            📁 Create New Folder
+                        </button>
+                    </div>
+
+                    <!-- Photo Folders -->
+                    <div style="display: flex; flex-direction: column; gap: 32px;">
+                        
+                        <!-- Before Photos Folder -->
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 32px;">📁</div>
+                                    <div>
+                                        <div style="font-size: 18px; font-weight: 700;">Before Photos</div>
+                                        <div style="font-size: 13px; color: #6b7280;">1 photo</div>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Upload to Before Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                    📤 Upload Photos
+                                </button>
+                            </div>
+                            
+                            <!-- Photos in this folder -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🏠</div>
+                                    <div style="padding: 10px;">
+                                        <div style="font-weight: 600; font-size: 13px;">Living Room - Before</div>
+                                        <div style="font-size: 11px; color: #6b7280;">Jan 8, 2026</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
-                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🛋️</div>
-                            <div style="padding: 12px;">
-                                <div style="font-weight: 600; font-size: 14px;">Living Room - After</div>
-                                <div style="font-size: 12px; color: #6b7280;">Jan 12, 2026</div>
+
+                        <!-- After Photos Folder -->
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 32px;">📁</div>
+                                    <div>
+                                        <div style="font-size: 18px; font-weight: 700;">After Photos</div>
+                                        <div style="font-size: 13px; color: #6b7280;">2 photos</div>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Upload to After Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                    📤 Upload Photos
+                                </button>
+                            </div>
+                            
+                            <!-- Photos in this folder -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🛋️</div>
+                                    <div style="padding: 10px;">
+                                        <div style="font-weight: 600; font-size: 13px;">Living Room - After</div>
+                                        <div style="font-size: 11px; color: #6b7280;">Jan 12, 2026</div>
+                                    </div>
+                                </div>
+                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
+                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🍳</div>
+                                    <div style="padding: 10px;">
+                                        <div style="font-weight: 600; font-size: 13px;">Kitchen - After</div>
+                                        <div style="font-size: 11px; color: #6b7280;">Jan 12, 2026</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
-                            <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 64px;">🍳</div>
-                            <div style="padding: 12px;">
-                                <div style="font-weight: 600; font-size: 14px;">Kitchen - After</div>
-                                <div style="font-size: 12px; color: #6b7280;">Jan 12, 2026</div>
+
+                        <!-- Pro Photos Folder -->
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 32px;">📁</div>
+                                    <div>
+                                        <div style="font-size: 18px; font-weight: 700;">Pro Photos</div>
+                                        <div style="font-size: 13px; color: #6b7280;">0 photos</div>
+                                    </div>
+                                </div>
+                                <button onclick="alert('Upload to Pro Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                    📤 Upload Photos
+                                </button>
                             </div>
-                        </div>
-                        <div style="background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border: 2px dashed #d1d5db; border-radius: 12px; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                            <div style="text-align: center;">
+                            
+                            <!-- Empty state for this folder -->
+                            <div style="text-align: center; padding: 40px; color: #6b7280; background: #f9fafb; border-radius: 8px; border: 2px dashed #d1d5db;">
                                 <div style="font-size: 48px; margin-bottom: 8px;">📸</div>
-                                <div style="font-weight: 600; color: #6b7280;">Upload Photos</div>
+                                <div style="font-weight: 600; margin-bottom: 4px;">No photos yet</div>
+                                <div style="font-size: 13px;">Click "Upload Photos" to add professional photos to this folder</div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -2249,7 +2316,7 @@
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description (optional)</label>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Notes (Optional)</label>
                     <textarea id="timeline-event-description" rows="4" placeholder="Event details, notes, contacts..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: inherit; resize: vertical;"></textarea>
                 </div>
 

@@ -647,41 +647,16 @@
                     <!-- Notes Section -->
                     <div>
                         <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px;">Project Notes</h3>
-                        <div style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 18px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <div style="font-weight: 700; font-size: 15px;">Client Preferences</div>
-                                    <div style="font-size: 13px; color: #6b7280;">Jan 8</div>
-                                </div>
-                                <div style="font-size: 14px; color: #78350f; line-height: 1.6;">
-                                    Client loves clean lines, dislikes clutter. Allergic to flowers - use greenery only. Prefers warm white lighting over cool tones. No red accents.
-                                </div>
-                            </div>
-
-                            <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 18px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <div style="font-weight: 700; font-size: 15px;">Special Requirements</div>
-                                    <div style="font-size: 13px; color: #6b7280;">Jan 10</div>
-                                </div>
-                                <div style="font-size: 14px; color: #075985; line-height: 1.6;">
-                                    Building requires certificate of insurance before move-in. Elevator reserved 9am-12pm on install day. Use service entrance on west side.
-                                </div>
-                            </div>
-
-                            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 18px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <div style="font-weight: 700; font-size: 15px;">Follow-up Items</div>
-                                    <div style="font-size: 13px; color: #6b7280;">Jan 11</div>
-                                </div>
-                                <div style="font-size: 14px; color: #166534; line-height: 1.6;">
-                                    Need to confirm final artwork selection with client by Jan 13. Remember to bring extra throw pillows as backup options.
-                                </div>
-                            </div>
+                        
+                        <!-- Notes list container -->
+                        <div id="project-notes-list-main" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px;">
+                            <!-- Notes will be rendered here dynamically -->
                         </div>
 
+                        <!-- Add note form -->
                         <div style="margin-top: 20px;">
-                            <textarea placeholder="Add a new note..." style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 100px; font-family: inherit;"></textarea>
-                            <button onclick="alert('Note added! (In the full app, notes would save to the project)')" class="gradient-accent" style="margin-top: 12px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
+                            <textarea id="new-note-text-main" placeholder="Add a new note..." style="width: 100%; padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 100px; font-family: inherit;"></textarea>
+                            <button onclick="addProjectNoteMain()" class="gradient-accent" style="margin-top: 12px; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
                         </div>
                     </div>
                 </div>
@@ -1412,31 +1387,16 @@
             <!-- Notes Section -->
             <div style="margin-bottom: 32px;">
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Project Notes</h3>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                            <div style="font-weight: 700; font-size: 14px;">Client Preferences</div>
-                            <div style="font-size: 12px; color: #6b7280;">Jan 8</div>
-                        </div>
-                        <div style="font-size: 14px; color: #78350f; line-height: 1.5;">
-                            Client loves clean lines, dislikes clutter. Allergic to flowers - use greenery only. Prefers warm white lighting over cool tones.
-                        </div>
-                    </div>
-
-                    <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
-                            <div style="font-weight: 700; font-size: 14px;">Special Requirements</div>
-                            <div style="font-size: 12px; color: #6b7280;">Jan 10</div>
-                        </div>
-                        <div style="font-size: 14px; color: #075985; line-height: 1.5;">
-                            Building requires certificate of insurance before move-in. Elevator reserved 9am-12pm on install day. Use service entrance.
-                        </div>
-                    </div>
+                
+                <!-- Notes list container -->
+                <div id="project-notes-list" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+                    <!-- Notes will be rendered here dynamically -->
                 </div>
 
+                <!-- Add note form -->
                 <div style="margin-top: 16px;">
-                    <textarea placeholder="Add a new note..." style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 80px; font-family: inherit;"></textarea>
-                    <button class="gradient-accent" style="margin-top: 12px; padding: 10px 20px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
+                    <textarea id="new-note-text" placeholder="Add a new note..." style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px; font-size: 14px; min-height: 80px; font-family: inherit;"></textarea>
+                    <button onclick="addProjectNote()" class="gradient-accent" style="margin-top: 12px; padding: 10px 20px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">Add Note</button>
                 </div>
             </div>
 
@@ -2543,6 +2503,275 @@
                 console.log('Rendering timeline for project:', currentProjectId);
                 renderProjectTimeline(parseInt(currentProjectId));
             }
+            
+            // Render notes for this project (both main page and modal)
+            renderProjectNotes(parseInt(currentProjectId));
+            renderProjectNotesMain(parseInt(currentProjectId));
+        }
+        
+        // ===== PROJECT NOTES FUNCTIONS =====
+        function getProjectNotes(projectId) {
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            const project = projects.find(p => p.id === projectId);
+            return project?.notes || [];
+        }
+        
+        function saveProjectNotes(projectId, notes) {
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.notes = notes;
+                localStorage.setItem('stagience_projects', JSON.stringify(projects));
+            }
+        }
+        
+        function renderProjectNotes(projectId) {
+            const notesList = document.getElementById('project-notes-list');
+            if (!notesList) return;
+            
+            const notes = getProjectNotes(projectId);
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div style="text-align: center; padding: 32px; color: #9ca3af;">No notes yet. Add your first note below!</div>';
+                return;
+            }
+            
+            // Pretty color schemes that alternate
+            const colorSchemes = [
+                { bg: '#fff7ed', border: '#fed7aa', textColor: '#78350f' },  // Orange
+                { bg: '#f0f9ff', border: '#bae6fd', textColor: '#075985' },  // Blue
+                { bg: '#f0fdf4', border: '#bbf7d0', textColor: '#166534' },  // Green
+                { bg: '#fef3c7', border: '#fde047', textColor: '#854d0e' },  // Yellow
+                { bg: '#fae8ff', border: '#e9d5ff', textColor: '#701a75' }   // Purple
+            ];
+            
+            notesList.innerHTML = notes.map((note, index) => {
+                const colors = colorSchemes[index % colorSchemes.length];
+                return `
+                    <div style="background: ${colors.bg}; border: 1px solid ${colors.border}; border-radius: 12px; padding: 16px; position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="font-size: 12px; color: #6b7280;">${note.date}</div>
+                            <div style="display: flex; gap: 4px;">
+                                <button onclick="editProjectNote(${index})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;" title="Edit note">✎</button>
+                                <button onclick="deleteProjectNote(${index})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete note">×</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: ${colors.textColor}; line-height: 1.6; white-space: pre-wrap;">${note.text}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function editProjectNote(index) {
+            const projectDetailPage = document.getElementById('project-detail-page');
+            const projectId = parseInt(projectDetailPage.getAttribute('data-project-id'));
+            if (!projectId) return;
+            
+            const notes = getProjectNotes(projectId);
+            const note = notes[index];
+            
+            // Put note text back into textarea
+            document.getElementById('new-note-text').value = note.text;
+            
+            // Delete the old note
+            notes.splice(index, 1);
+            saveProjectNotes(projectId, notes);
+            renderProjectNotes(projectId);
+            
+            // Focus textarea
+            document.getElementById('new-note-text').focus();
+        }
+        
+        function renderProjectNotesMain(projectId) {
+            const notesList = document.getElementById('project-notes-list-main');
+            if (!notesList) return;
+            
+            const notes = getProjectNotes(projectId);
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div style="text-align: center; padding: 32px; color: #9ca3af;">No notes yet. Add your first note below!</div>';
+                return;
+            }
+            
+            // Pretty color schemes that alternate
+            const colorSchemes = [
+                { bg: '#fff7ed', border: '#fed7aa', textColor: '#78350f' },  // Orange
+                { bg: '#f0f9ff', border: '#bae6fd', textColor: '#075985' },  // Blue
+                { bg: '#f0fdf4', border: '#bbf7d0', textColor: '#166534' },  // Green
+                { bg: '#fef3c7', border: '#fde047', textColor: '#854d0e' },  // Yellow
+                { bg: '#fae8ff', border: '#e9d5ff', textColor: '#701a75' }   // Purple
+            ];
+            
+            notesList.innerHTML = notes.map((note, index) => {
+                const colors = colorSchemes[index % colorSchemes.length];
+                return `
+                    <div style="background: ${colors.bg}; border: 1px solid ${colors.border}; border-radius: 12px; padding: 18px; position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                            <div style="font-size: 13px; color: #6b7280;">${note.date}</div>
+                            <div style="display: flex; gap: 4px;">
+                                <button onclick="editProjectNoteMain(${index})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;" title="Edit note">✎</button>
+                                <button onclick="deleteProjectNoteMain(${index})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete note">×</button>
+                            </div>
+                        </div>
+                        <div style="font-size: 14px; color: ${colors.textColor}; line-height: 1.6; white-space: pre-wrap;">${note.text}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function editProjectNoteMain(index) {
+            const projectId = currentProjectId;
+            if (!projectId) return;
+            
+            const notes = getProjectNotes(projectId);
+            const note = notes[index];
+            
+            // Put note text back into textarea
+            document.getElementById('new-note-text-main').value = note.text;
+            
+            // Delete the old note
+            notes.splice(index, 1);
+            saveProjectNotes(projectId, notes);
+            renderProjectNotesMain(projectId);
+            
+            // Scroll to textarea
+            document.getElementById('new-note-text-main').focus();
+        }
+        
+        function deleteProjectNoteMain(index) {
+            if (!confirm('Delete this note?')) return;
+            
+            const projectId = currentProjectId;
+            if (!projectId) return;
+            
+            const notes = getProjectNotes(projectId);
+            notes.splice(index, 1);
+            saveProjectNotes(projectId, notes);
+            renderProjectNotesMain(projectId);
+        }
+        
+        function addProjectNote() {
+            console.log('addProjectNote called');
+            const noteText = document.getElementById('new-note-text').value.trim();
+            console.log('Note text:', noteText);
+            
+            if (!noteText) {
+                alert('Please enter a note');
+                return;
+            }
+            
+            // Get current project ID
+            const projectDetailPage = document.getElementById('project-detail-page');
+            const projectId = parseInt(projectDetailPage.getAttribute('data-project-id'));
+            console.log('Project ID:', projectId);
+            
+            if (!projectId) {
+                alert('Error: Project ID not found');
+                return;
+            }
+            
+            // Get existing notes
+            const notes = getProjectNotes(projectId);
+            console.log('Existing notes:', notes);
+            
+            // Create new note with timestamp
+            const newNote = {
+                id: Date.now(),
+                text: noteText,
+                date: new Date().toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                })
+            };
+            console.log('New note:', newNote);
+            
+            // Add to beginning of array (newest first)
+            notes.unshift(newNote);
+            
+            // Save
+            saveProjectNotes(projectId, notes);
+            console.log('Notes saved');
+            
+            // Clear textarea
+            document.getElementById('new-note-text').value = '';
+            
+            // Re-render
+            renderProjectNotes(projectId);
+            console.log('Notes rendered');
+        }
+        
+        // Function for main project detail page notes
+        function addProjectNoteMain() {
+            console.log('addProjectNoteMain called');
+            const noteText = document.getElementById('new-note-text-main').value.trim();
+            console.log('Note text:', noteText);
+            
+            if (!noteText) {
+                alert('Please enter a note');
+                return;
+            }
+            
+            // Get current project ID from global variable
+            const projectId = currentProjectId;
+            console.log('Project ID:', projectId);
+            
+            if (!projectId) {
+                alert('Error: Project ID not found');
+                return;
+            }
+            
+            // Get existing notes
+            const notes = getProjectNotes(projectId);
+            
+            // Create new note with timestamp
+            const newNote = {
+                id: Date.now(),
+                text: noteText,
+                date: new Date().toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit'
+                })
+            };
+            
+            // Add to beginning of array (newest first)
+            notes.unshift(newNote);
+            
+            // Save
+            saveProjectNotes(projectId, notes);
+            console.log('Notes saved');
+            
+            // Clear textarea
+            document.getElementById('new-note-text-main').value = '';
+            
+            // Re-render
+            renderProjectNotesMain(projectId);
+            console.log('Main notes rendered');
+        }
+        
+        function deleteProjectNote(index) {
+            if (!confirm('Delete this note?')) return;
+            
+            // Get current project ID
+            const projectDetailPage = document.getElementById('project-detail-page');
+            const projectId = parseInt(projectDetailPage.getAttribute('data-project-id'));
+            
+            if (!projectId) return;
+            
+            // Get notes and remove the one at index
+            const notes = getProjectNotes(projectId);
+            notes.splice(index, 1);
+            
+            // Save
+            saveProjectNotes(projectId, notes);
+            
+            // Re-render
+            renderProjectNotes(projectId);
         }
 
         function switchProjectTab(tabName) {

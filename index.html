@@ -2950,7 +2950,7 @@
                         <tbody>
                             ${inventory.map(item => `
                                 <tr>
-                                    <td><strong>${item.name}</strong><br><span style="font-size: 12px; color: #6b7280;">${item.subcategory}</span></td>
+                                    <td><strong>${item.name}</strong>${item.subcategory ? `<br><span style="font-size: 12px; color: #6b7280;">${item.subcategory}</span>` : ''}</td>
                                     <td>${item.category}</td>
                                     <td>${item.color}</td>
                                     <td><span class="status status-${item.status.toLowerCase()}">${item.status}</span></td>
@@ -3010,6 +3010,30 @@
         }
         
         // Render inventory
+        // Populate location dropdown with projects
+        function populateLocationDropdown() {
+            const locationSelect = document.getElementById('item-location');
+            if (!locationSelect) return;
+            
+            // Get all projects
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            
+            // Build options HTML
+            let optionsHTML = `
+                <option value="">Select location...</option>
+                <option value="Warehouse A">Warehouse A</option>
+                <option value="Warehouse B">Warehouse B</option>
+                <option value="Storage Unit">Storage Unit</option>
+            `;
+            
+            // Add project locations
+            projects.forEach(project => {
+                optionsHTML += `<option value="On Site - ${project.name}">On Site - ${project.name}</option>`;
+            });
+            
+            locationSelect.innerHTML = optionsHTML;
+        }
+        
         function renderInventory() {
             // Reload inventory from localStorage if available
             let inventory = [];
@@ -3166,6 +3190,10 @@
                 itemType: '', color: '', fabric: '', width: '', depth: '', height: '',
                 condition: '', status: '', location: '', purchaseDate: '', purchasedWhere: '', cost: ''
             };
+            
+            // Populate location dropdown with current projects
+            populateLocationDropdown();
+            
             updateWizardStep();
             console.log('Wizard initialized');
         }

@@ -2902,6 +2902,8 @@
                 if (!inventoryFilters.statuses.includes(item.status)) return false;
                 const itemCategory = item.itemType || item.category;
                 if (itemCategory && !inventoryFilters.categories.includes(itemCategory)) return false;
+                // Only filter by location if a specific location is selected (not "all" or empty)
+                if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
                 return true;
             });
@@ -3034,6 +3036,30 @@
             locationSelect.innerHTML = optionsHTML;
         }
         
+        // Populate bulk update location dropdown with projects
+        function populateBulkLocationDropdown() {
+            const locationSelect = document.getElementById('bulk-update-location');
+            if (!locationSelect) return;
+            
+            // Get all projects
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            
+            // Build options HTML
+            let optionsHTML = `
+                <option value="">Select location...</option>
+                <option value="Warehouse A">Warehouse A</option>
+                <option value="Warehouse B">Warehouse B</option>
+                <option value="Storage Unit">Storage Unit</option>
+            `;
+            
+            // Add project locations
+            projects.forEach(project => {
+                optionsHTML += `<option value="On Site - ${project.name}">On Site - ${project.name}</option>`;
+            });
+            
+            locationSelect.innerHTML = optionsHTML;
+        }
+        
         function renderInventory() {
             // Reload inventory from localStorage if available
             let inventory = [];
@@ -3048,6 +3074,8 @@
                 if (!inventoryFilters.statuses.includes(item.status)) return false;
                 const itemCategory = item.itemType || item.category;
                 if (itemCategory && !inventoryFilters.categories.includes(itemCategory)) return false;
+                // Only filter by location if a specific location is selected (not "all" or empty)
+                if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
                 return true;
             });
@@ -4202,6 +4230,9 @@
             }
             
             document.getElementById('bulk-update-count').textContent = checkboxes.length;
+            
+            // Populate location dropdown with current projects
+            populateBulkLocationDropdown();
             
             const modal = document.getElementById('bulk-update-modal');
             modal.classList.add('active');

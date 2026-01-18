@@ -2085,7 +2085,7 @@
 
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Icon</label>
-                    <select id="timeline-event-icon" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <select id="timeline-event-icon" onchange="updateTimelineDetailFields()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="✓">✓ Completed</option>
                         <option value="📅">📅 Scheduled</option>
                         <option value="📸">📸 Photo Shoot</option>
@@ -2100,6 +2100,44 @@
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Notes (Optional)</label>
                     <textarea id="timeline-event-description" rows="4" placeholder="Event details, notes, contacts..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <!-- Conditional Detail Fields -->
+                <div id="consultation-details" style="display: none;">
+                    <div style="background: #f0f9ff; border: 2px solid #bae6fd; border-radius: 12px; padding: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #075985;">Consultation Details</h4>
+                        <textarea id="consultation-notes" rows="3" placeholder="e.g., Client preferences, style discussed, budget approved..." style="width: 100%; padding: 10px; border: 1px solid #bae6fd; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
+                    </div>
+                </div>
+
+                <div id="installation-details" style="display: none;">
+                    <div style="background: #f0f9ff; border: 2px solid #bae6fd; border-radius: 12px; padding: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #075985;">Installation Details</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="text" id="installation-team" placeholder="Team: e.g., Sarah, Mike" style="width: 100%; padding: 10px; border: 1px solid #bae6fd; border-radius: 8px; font-size: 14px;">
+                            <input type="text" id="installation-items" placeholder="Items Reserved: e.g., Sofa, Coffee Table, Lamp" style="width: 100%; padding: 10px; border: 1px solid #bae6fd; border-radius: 8px; font-size: 14px;">
+                            <input type="text" id="installation-access" placeholder="Building Access Code: e.g., #4521" style="width: 100%; padding: 10px; border: 1px solid #bae6fd; border-radius: 8px; font-size: 14px;">
+                            <input type="text" id="installation-contact" placeholder="Contact: e.g., Building Manager - (555) 789-0123" style="width: 100%; padding: 10px; border: 1px solid #bae6fd; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="photoshoot-details" style="display: none;">
+                    <div style="background: #fef3c7; border: 2px solid #fde047; border-radius: 12px; padding: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #854d0e;">Photo Shoot Details</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="text" id="photoshoot-photographer" placeholder="Photographer: e.g., Lisa Chen - (555) 234-5678" style="width: 100%; padding: 10px; border: 1px solid #fde047; border-radius: 8px; font-size: 14px;">
+                            <input type="text" id="photoshoot-focus" placeholder="Focus Areas: e.g., Living room, kitchen, master bedroom" style="width: 100%; padding: 10px; border: 1px solid #fde047; border-radius: 8px; font-size: 14px;">
+                            <input type="text" id="photoshoot-shotlist" placeholder="Shot List: e.g., Wide angles, detail shots, lifestyle images" style="width: 100%; padding: 10px; border: 1px solid #fde047; border-radius: 8px; font-size: 14px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pickup-details" style="display: none;">
+                    <div style="background: #fae8ff; border: 2px solid #e9d5ff; border-radius: 12px; padding: 16px;">
+                        <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #701a75;">Pickup Details</h4>
+                        <textarea id="pickup-notes" rows="2" placeholder="e.g., Contact person, special instructions..." style="width: 100%; padding: 10px; border: 1px solid #e9d5ff; border-radius: 8px; font-size: 14px; font-family: inherit;"></textarea>
+                    </div>
                 </div>
 
                 <div>
@@ -4275,6 +4313,59 @@
         }
         
         // Show add timeline event modal
+        // Show/hide detail fields based on event type
+        function updateTimelineDetailFields() {
+            const icon = document.getElementById('timeline-event-icon').value;
+            
+            // Hide all detail sections
+            document.getElementById('consultation-details').style.display = 'none';
+            document.getElementById('installation-details').style.display = 'none';
+            document.getElementById('photoshoot-details').style.display = 'none';
+            document.getElementById('pickup-details').style.display = 'none';
+            
+            // Show relevant section based on icon
+            if (icon === '📝') { // Consultation
+                document.getElementById('consultation-details').style.display = 'block';
+            } else if (icon === '🔧') { // Installation
+                document.getElementById('installation-details').style.display = 'block';
+            } else if (icon === '📸') { // Photo Shoot
+                document.getElementById('photoshoot-details').style.display = 'block';
+            } else if (icon === '📦') { // Pickup
+                document.getElementById('pickup-details').style.display = 'block';
+            }
+        }
+        
+        // Collect detail fields based on event type
+        function getEventDetails(icon) {
+            const details = {};
+            
+            if (icon === '📝') { // Consultation
+                const notes = document.getElementById('consultation-notes').value;
+                if (notes) details.consultationNotes = notes;
+            } else if (icon === '🔧') { // Installation
+                const team = document.getElementById('installation-team').value;
+                const items = document.getElementById('installation-items').value;
+                const access = document.getElementById('installation-access').value;
+                const contact = document.getElementById('installation-contact').value;
+                if (team) details.team = team;
+                if (items) details.items = items;
+                if (access) details.accessCode = access;
+                if (contact) details.contact = contact;
+            } else if (icon === '📸') { // Photo Shoot
+                const photographer = document.getElementById('photoshoot-photographer').value;
+                const focus = document.getElementById('photoshoot-focus').value;
+                const shotlist = document.getElementById('photoshoot-shotlist').value;
+                if (photographer) details.photographer = photographer;
+                if (focus) details.focusAreas = focus;
+                if (shotlist) details.shotList = shotlist;
+            } else if (icon === '📦') { // Pickup
+                const notes = document.getElementById('pickup-notes').value;
+                if (notes) details.pickupNotes = notes;
+            }
+            
+            return details;
+        }
+        
         function showAddTimelineEvent() {
             document.getElementById('timeline-modal-title').textContent = 'Add Timeline Event';
             document.getElementById('event-id').value = '';
@@ -4332,7 +4423,9 @@
                 icon: document.getElementById('timeline-event-icon').value,
                 iconColor: getIconColor(document.getElementById('timeline-event-icon').value),
                 description: document.getElementById('timeline-event-description').value,
-                completed: document.getElementById('timeline-event-completed').checked
+                completed: document.getElementById('timeline-event-completed').checked,
+                // Detail fields based on event type
+                details: getEventDetails(document.getElementById('timeline-event-icon').value)
             };
             
             console.log('Saving timeline event:', eventData);
@@ -4400,6 +4493,38 @@
         }
         
         // Render project timeline
+        // Format event details for display
+        function formatEventDetails(icon, details) {
+            if (!details || Object.keys(details).length === 0) return '';
+            
+            if (icon === '📝') { // Consultation
+                return `<div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; margin-top: 10px;">
+                    <div style="font-size: 14px; color: #075985; line-height: 1.6; white-space: pre-wrap;">${details.consultationNotes}</div>
+                </div>`;
+            } else if (icon === '🔧') { // Installation
+                let html = '<div style="background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; margin-top: 10px;">';
+                if (details.team) html += `<div style="margin-bottom: 8px;"><strong style="color: #075985;">Team:</strong> <span style="color: #374151;">${details.team}</span></div>`;
+                if (details.items) html += `<div style="margin-bottom: 8px;"><strong style="color: #075985;">Items Reserved:</strong> <span style="color: #374151;">${details.items}</span></div>`;
+                if (details.accessCode) html += `<div style="margin-bottom: 8px;"><strong style="color: #075985;">Building Access Code:</strong> <span style="color: #374151;">${details.accessCode}</span></div>`;
+                if (details.contact) html += `<div><strong style="color: #075985;">Contact:</strong> <span style="color: #374151;">${details.contact}</span></div>`;
+                html += '</div>';
+                return html;
+            } else if (icon === '📸') { // Photo Shoot
+                let html = '<div style="background: #fef3c7; border: 1px solid #fde047; border-radius: 10px; padding: 14px; margin-top: 10px;">';
+                if (details.photographer) html += `<div style="margin-bottom: 8px;"><strong style="color: #854d0e;">Photographer:</strong> <span style="color: #374151;">${details.photographer}</span></div>`;
+                if (details.focusAreas) html += `<div style="margin-bottom: 8px;"><strong style="color: #854d0e;">Focus Areas:</strong> <span style="color: #374151;">${details.focusAreas}</span></div>`;
+                if (details.shotList) html += `<div><strong style="color: #854d0e;">Shot List:</strong> <span style="color: #374151;">${details.shotList}</span></div>`;
+                html += '</div>';
+                return html;
+            } else if (icon === '📦') { // Pickup
+                return `<div style="background: #fae8ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 14px; margin-top: 10px;">
+                    <div style="font-size: 14px; color: #701a75; line-height: 1.6; white-space: pre-wrap;">${details.pickupNotes}</div>
+                </div>`;
+            }
+            
+            return '';
+        }
+        
         function renderProjectTimeline(projectId) {
             currentProjectId = projectId;
             const timeline = getProjectTimeline(projectId);
@@ -4471,6 +4596,7 @@
                                 </div>
                             </div>
                             ${event.description ? `<div style="background: #f9fafb; padding: 14px; border-radius: 10px; border: 1px solid #e5e7eb; margin-top: 10px;"><div style="font-size: 14px; color: #374151; line-height: 1.6; white-space: pre-wrap;">${event.description}</div></div>` : ''}
+                            ${event.details ? formatEventDetails(event.icon, event.details) : ''}
                         </div>
                     </div>
                 `;

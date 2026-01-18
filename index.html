@@ -2056,6 +2056,65 @@
         </div>
     </div>
 
+    <!-- Quick Bulk Location Update Modal -->
+    <div id="quick-location-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 20px; max-width: 500px; width: 100%; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-size: 22px; font-weight: bold;">Update Location</h2>
+                <button onclick="hideQuickLocationModal()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+            
+            <div style="background: #eff6ff; padding: 14px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #bfdbfe;">
+                <div style="font-weight: 600; color: #1e40af;">
+                    <span id="quick-location-count">0</span> items selected
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 700; margin-bottom: 10px;">New Location</label>
+                <select id="quick-location-select" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <option value="">Select location...</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="hideQuickLocationModal()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
+                <button onclick="applyQuickLocation()" style="background: #3b82f6; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Update Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Bulk Status Update Modal -->
+    <div id="quick-status-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 20px; max-width: 500px; width: 100%; padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-size: 22px; font-weight: bold;">Update Status</h2>
+                <button onclick="hideQuickStatusModal()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+            
+            <div style="background: #eff6ff; padding: 14px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #bfdbfe;">
+                <div style="font-weight: 600; color: #1e40af;">
+                    <span id="quick-status-count">0</span> items selected
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 700; margin-bottom: 10px;">New Status</label>
+                <select id="quick-status-select" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <option value="">Select status...</option>
+                    <option value="IN">IN (Available)</option>
+                    <option value="OUT">OUT (On Project)</option>
+                    <option value="HOLD">HOLD (Reserved)</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="hideQuickStatusModal()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
+                <button onclick="applyQuickStatus()" style="background: #3b82f6; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Update Status</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Timeline Event Modal -->
     <div id="timeline-event-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
         <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
@@ -3795,24 +3854,51 @@
                 return;
             }
             
-            const newLocation = prompt(`Update location for ${checkboxes.length} items.\n\nEnter new location (e.g., Warehouse A, Sunset Blvd Project, Storage Unit B):`);
+            document.getElementById('quick-location-count').textContent = checkboxes.length;
             
-            if (!newLocation || newLocation.trim() === '') {
+            const locationSelect = document.getElementById('quick-location-select');
+            const projects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            
+            let optionsHTML = '<option value="">Select location...</option>';
+            optionsHTML += '<option value="Warehouse A">Warehouse A</option>';
+            optionsHTML += '<option value="Warehouse B">Warehouse B</option>';
+            optionsHTML += '<option value="Storage Unit">Storage Unit</option>';
+            
+            projects.forEach(project => {
+                optionsHTML += `<option value="On Site - ${project.name}">On Site - ${project.name}</option>`;
+            });
+            
+            locationSelect.innerHTML = optionsHTML;
+            document.getElementById('quick-location-modal').style.display = 'flex';
+        }
+        
+        function hideQuickLocationModal() {
+            document.getElementById('quick-location-modal').style.display = 'none';
+            document.getElementById('quick-location-select').value = '';
+        }
+        
+        function applyQuickLocation() {
+            const newLocation = document.getElementById('quick-location-select').value;
+            
+            if (!newLocation) {
+                alert('Please select a location');
                 return;
             }
             
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
             const currentInventory = getStoredInventory();
             const selectedIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.itemId));
             
             selectedIds.forEach(id => {
                 const item = currentInventory.find(i => i.id === id);
                 if (item) {
-                    item.location = newLocation.trim();
+                    item.location = newLocation;
                 }
             });
             
             saveStoredInventory(currentInventory);
             clearSelection();
+            hideQuickLocationModal();
             alert(`✅ Updated ${selectedIds.length} items to location: ${newLocation}`);
             renderInventory();
         }
@@ -3824,31 +3910,38 @@
                 return;
             }
             
-            const newStatus = prompt(`Update status for ${checkboxes.length} items.\n\nEnter new status (IN, OUT, or HOLD):`);
+            document.getElementById('quick-status-count').textContent = checkboxes.length;
+            document.getElementById('quick-status-modal').style.display = 'flex';
+        }
+        
+        function hideQuickStatusModal() {
+            document.getElementById('quick-status-modal').style.display = 'none';
+            document.getElementById('quick-status-select').value = '';
+        }
+        
+        function applyQuickStatus() {
+            const newStatus = document.getElementById('quick-status-select').value;
             
             if (!newStatus) {
+                alert('Please select a status');
                 return;
             }
             
-            const statusUpper = newStatus.toUpperCase();
-            if (!['IN', 'OUT', 'HOLD'].includes(statusUpper)) {
-                alert('Invalid status. Please use IN, OUT, or HOLD');
-                return;
-            }
-            
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
             const currentInventory = getStoredInventory();
             const selectedIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.itemId));
             
             selectedIds.forEach(id => {
                 const item = currentInventory.find(i => i.id === id);
                 if (item) {
-                    item.status = statusUpper;
+                    item.status = newStatus;
                 }
             });
             
             saveStoredInventory(currentInventory);
             clearSelection();
-            alert(`✅ Updated ${selectedIds.length} items to status: ${statusUpper}`);
+            hideQuickStatusModal();
+            alert(`✅ Updated ${selectedIds.length} items to status: ${newStatus}`);
             renderInventory();
         }
         

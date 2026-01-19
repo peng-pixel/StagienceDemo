@@ -38,6 +38,18 @@
         
         /* MOBILE RESPONSIVE STYLES */
         @media (max-width: 768px) {
+            /* General mobile styles */
+            body { font-size: 15px; }
+            
+            /* Navigation - make all nav buttons wrap and be visible */
+            nav > div {
+                flex-wrap: wrap !important;
+            }
+            nav button {
+                font-size: 13px !important;
+                padding: 8px 12px !important;
+            }
+            
             /* Mobile Navigation */
             .mobile-menu-btn { 
                 display: block; 
@@ -62,11 +74,25 @@
                 padding: 16px;
                 gap: 8px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                z-index: 1000;
             }
             .desktop-nav.mobile-open button {
                 width: 100%;
                 text-align: left;
                 padding: 12px 16px !important;
+            }
+            
+            /* Headers with multiple actions */
+            [style*="justify-content: space-between"]:has(h2) {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+            }
+            
+            /* Button groups */
+            [style*="display: flex"][style*="gap"] > button {
+                flex: 1 1 auto;
+                min-width: 100px;
             }
             
             /* Inventory filter buttons */
@@ -84,14 +110,17 @@
             /* Search and action buttons */
             .header-actions {
                 flex-direction: column !important;
-                width: 100%;
+                width: 100% !important;
             }
             .header-actions > * {
                 width: 100% !important;
             }
             
             /* Reduce grid columns on mobile */
-            [style*="grid-template-columns"] {
+            [style*="grid-template-columns: repeat(auto"] {
+                grid-template-columns: 1fr !important;
+            }
+            [style*="grid-template-columns: 1.15fr"] {
                 grid-template-columns: 1fr !important;
             }
             
@@ -103,6 +132,63 @@
             /* Modal padding */
             .modal > div {
                 max-width: 95% !important;
+                padding: 20px !important;
+                margin: 20px !important;
+            }
+            
+            /* Tables scroll horizontally */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            /* Reduce font sizes */
+            h1 { font-size: 28px !important; }
+            h2 { font-size: 22px !important; }
+            h3 { font-size: 18px !important; }
+            
+            /* Project tabs scroll */
+            .project-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            /* Hero section on landing */
+            section [style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Testimonials */
+            [style*="grid-template-columns: repeat(auto-fit"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Padding adjustments */
+            section {
+                padding: 40px 20px !important;
+            }
+            main {
+                padding: 30px 20px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Extra small phones */
+            body { font-size: 14px; }
+            h1 { font-size: 24px !important; }
+            h2 { font-size: 20px !important; }
+            
+            .inventory-filters button {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+            
+            nav button {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+        }
                 padding: 20px !important;
             }
             
@@ -270,13 +356,83 @@
                 </div>
             </section>
 
+            <!-- Testimonials Section -->
+            <section style="max-width: 1120px; margin: 0 auto; padding: 80px 20px;">
+                <div style="text-align: center; margin-bottom: 60px;">
+                    <h2 style="font-size: 36px; font-weight: bold; margin-bottom: 16px;">Loved by Professional Stagers</h2>
+                    <p style="color: #6b7280; font-size: 18px; max-width: 600px; margin: 0 auto;">
+                        See what home stagers are saying about Stagience
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px;">
+                    <!-- Testimonial 1 -->
+                    <div style="background: white; border-radius: 20px; padding: 32px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <div style="display: flex; gap: 4px; margin-bottom: 16px; color: #fbbf24; font-size: 20px;">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                        <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                            "Stagience has completely transformed how I manage my staging business. I can track all my inventory, manage multiple projects, and stay organized—all in one place. Game changer!"
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">
+                                SM
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: #1f2937;">Sarah Martinez</div>
+                                <div style="font-size: 14px; color: #6b7280;">Luxury Staging Pro, Los Angeles</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div style="background: white; border-radius: 20px; padding: 32px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <div style="display: flex; gap: 4px; margin-bottom: 16px; color: #fbbf24; font-size: 20px;">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                        <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                            "As someone who stages 20+ homes per month, I needed something better than spreadsheets. Stagience gives me everything I need—inventory tracking, project timelines, client management. So intuitive!"
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">
+                                JC
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: #1f2937;">Jessica Chen</div>
+                                <div style="font-size: 14px; color: #6b7280;">Premier Home Staging, Seattle</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div style="background: white; border-radius: 20px; padding: 32px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                        <div style="display: flex; gap: 4px; margin-bottom: 16px; color: #fbbf24; font-size: 20px;">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                        <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                            "Finally, software built by someone who understands staging! The photo organization alone is worth it. I can keep before/after/pro photos perfectly organized for every project."
+                        </p>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">
+                                MR
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: #1f2937;">Michael Rodriguez</div>
+                                <div style="font-size: 14px; color: #6b7280;">Elite Staging Solutions, Miami</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Footer -->
             <footer style="border-top: 1px solid rgba(31,41,55,.10); background: rgba(251,250,247,.72);">
                 <div style="max-width: 1120px; margin: 0 auto; padding: 28px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                     <div style="color: #6b7280; font-size: 14px;">© 2026 Stagience. All rights reserved.</div>
                     <div style="display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; font-weight: 500; color: #6b7280;">
-                        <a href="#" onclick="localStorage.setItem('redirectAfterLogin', 'inventory'); showPage('signin'); return false;" style="text-decoration: none; color: inherit;">Inventory</a>
-                        <a href="#" onclick="window.scrollTo(0,0); return false;" style="text-decoration: none; color: inherit;">Back to top</a>
+                        <a href="#" onclick="showPage('how-it-works'); return false;" style="text-decoration: none; color: inherit;">How It Works</a>
+                        <a href="#" onclick="showPage('faq'); return false;" style="text-decoration: none; color: inherit;">FAQ</a>
+                        <a href="#" onclick="localStorage.setItem('redirectAfterLogin', 'inventory'); showPage('signin'); return false;" style="text-decoration: none; color: inherit;">Sign In</a>
                     </div>
                 </div>
             </footer>
@@ -356,6 +512,250 @@
                     <button onclick="showPage('landing')" class="gradient-accent" style="padding: 14px 28px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">Back to Home</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- How It Works Page -->
+    <div id="how-it-works-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10); z-index: 100;">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;">
+                    <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
+                            <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="showPage('waitlist')" style="padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; font-size: 14px; cursor: pointer;">Join Waitlist</button>
+                        <button onclick="showPage('signin');" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign In</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 900px; margin: 0 auto; padding: 60px 20px;">
+                <div style="text-align: center; margin-bottom: 60px;">
+                    <h1 style="font-size: 42px; font-weight: bold; margin-bottom: 16px;">How Stagience Works</h1>
+                    <p style="color: #6b7280; font-size: 18px;">Simple, powerful staging management in 4 easy steps</p>
+                </div>
+
+                <!-- Step 1 -->
+                <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 60px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold; box-shadow: 0 8px 24px rgba(176,138,90,0.3);">
+                        1
+                    </div>
+                    <div>
+                        <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px;">📦 Build Your Inventory</h3>
+                        <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Add all your staging items to your digital inventory. Upload photos, add details like color, fabric, dimensions, and ID codes. Track where each item is located—warehouse, in transit, or at a project.
+                        </p>
+                        <div style="background: #f9fafb; border-left: 4px solid rgba(176,138,90,1); padding: 16px; border-radius: 8px;">
+                            <strong>Pro tip:</strong> Use the bulk import feature or add items one-by-one with the guided wizard.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 60px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold; box-shadow: 0 8px 24px rgba(176,138,90,0.3);">
+                        2
+                    </div>
+                    <div>
+                        <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px;">🏠 Create Projects</h3>
+                        <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Set up each staging project with client details, property address, and project status. Stagience organizes projects by status—Pending, Scheduled, Active, Consult Only, or Completed—so you always know what's happening.
+                        </p>
+                        <div style="background: #f9fafb; border-left: 4px solid rgba(176,138,90,1); padding: 16px; border-radius: 8px;">
+                            <strong>Pro tip:</strong> Projects automatically group by month/year, making it easy to find past work.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 60px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold; box-shadow: 0 8px 24px rgba(176,138,90,0.3);">
+                        3
+                    </div>
+                    <div>
+                        <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px;">📅 Manage Timelines</h3>
+                        <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            Track every milestone with project timelines. Add consultation dates, installation days, pickup schedules, and more. Export timelines as PDFs to share with clients. Everything syncs with your calendar automatically.
+                        </p>
+                        <div style="background: #f9fafb; border-left: 4px solid rgba(176,138,90,1); padding: 16px; border-radius: 8px;">
+                            <strong>Pro tip:</strong> Upload documents, photos, and files to each project for easy access.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div style="display: grid; grid-template-columns: 80px 1fr; gap: 24px; margin-bottom: 60px;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 32px; font-weight: bold; box-shadow: 0 8px 24px rgba(176,138,90,0.3);">
+                        4
+                    </div>
+                    <div>
+                        <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 12px;">✨ Work Smarter</h3>
+                        <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                            With everything in one place, you'll save hours every week. Search and filter inventory instantly. Print professional reports. Organize photos by project. Use templates for common documents. Focus on staging, not admin work.
+                        </p>
+                        <div style="background: #f9fafb; border-left: 4px solid rgba(176,138,90,1); padding: 16px; border-radius: 8px;">
+                            <strong>Pro tip:</strong> The mobile-responsive design means you can update inventory from anywhere.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div style="text-align: center; margin-top: 80px; padding: 48px; background: white; border-radius: 20px; border: 1px solid #e5e7eb; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+                    <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 16px;">Ready to transform your staging business?</h3>
+                    <p style="color: #6b7280; font-size: 16px; margin-bottom: 24px;">Join the waitlist and be among the first to experience Stagience.</p>
+                    <button onclick="showPage('waitlist')" class="gradient-accent" style="padding: 16px 32px; border: none; border-radius: 999px; color: white; font-weight: 600; font-size: 16px; cursor: pointer;">Join Waitlist</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- FAQ Page -->
+    <div id="faq-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10); z-index: 100;">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;">
+                    <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
+                            <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="showPage('waitlist')" style="padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(31,41,55,.10); background: rgba(255,255,255,.65); font-weight: 600; font-size: 14px; cursor: pointer;">Join Waitlist</button>
+                        <button onclick="showPage('signin');" class="gradient-accent" style="padding: 10px 14px; border-radius: 999px; border: none; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign In</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 800px; margin: 0 auto; padding: 60px 20px;">
+                <div style="text-align: center; margin-bottom: 60px;">
+                    <h1 style="font-size: 42px; font-weight: bold; margin-bottom: 16px;">Frequently Asked Questions</h1>
+                    <p style="color: #6b7280; font-size: 18px;">Everything you need to know about Stagience</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- FAQ 1 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">What is Stagience?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▼</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6;">
+                            Stagience is an all-in-one platform designed specifically for home staging professionals. It helps you manage inventory, track projects, organize photos, maintain client timelines, and store documents—all in one beautiful, easy-to-use interface. Built by a stager, for stagers.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">How much does Stagience cost?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Pricing details will be announced closer to launch. Join the waitlist to be notified first and receive special early-adopter pricing when we launch!
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">Can I access Stagience on my phone or tablet?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Yes! Stagience is fully responsive and works beautifully on desktop, tablet, and mobile devices. Update your inventory from the warehouse, check project details on-site, or review timelines from anywhere.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">How do I track my inventory?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Add items to your digital inventory with photos, descriptions, colors, fabrics, dimensions, and ID codes. Mark items as IN (warehouse), OUT (on project), or HOLD. Search and filter instantly. Know exactly where every piece is at all times.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">Can I organize photos by project?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Absolutely! Each project has a Photos tab where you can create custom folders (Before Photos, After Photos, Pro Photos, etc.). Upload unlimited photos and organize them however you like. Perfect for keeping project documentation organized.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 6 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">What about document storage?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Each project has dedicated tabs for Documents (contracts, invoices, reports) and Files (floor plans, mood boards, checklists). Plus, upload and manage reusable templates for documents you use frequently. Everything stays organized by project.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 7 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">Can I print inventory reports?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Yes! Print professional inventory lists with photos, or export project timelines as PDFs. Perfect for sharing with team members, keeping physical records, or providing to clients.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 8 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">When will Stagience launch?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            We're putting the finishing touches on Stagience now! Join the waitlist to be notified as soon as we launch. Waitlist members will receive priority access and special launch pricing.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 9 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">Is my data secure?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Yes! Your data is stored securely with industry-standard encryption. Only you have access to your account and information. We take data privacy seriously and will never share your information with third parties.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 10 -->
+                    <div onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'; this.querySelector('.faq-icon').textContent = this.querySelector('.faq-answer').style.display === 'none' ? '▶' : '▼';" style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.3s;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 600;">Can I import my existing inventory?</h3>
+                            <span class="faq-icon" style="font-size: 20px; color: rgba(176,138,90,1);">▶</span>
+                        </div>
+                        <div class="faq-answer" style="color: #6b7280; line-height: 1.6; display: none;">
+                            Yes! We'll provide tools to help you import existing inventory from spreadsheets or other systems. Our team is also available to help with the migration process to make it as smooth as possible.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div style="text-align: center; margin-top: 80px; padding: 48px; background: white; border-radius: 20px; border: 1px solid #e5e7eb; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+                    <h3 style="font-size: 28px; font-weight: bold; margin-bottom: 16px;">Still have questions?</h3>
+                    <p style="color: #6b7280; font-size: 16px; margin-bottom: 24px;">We'd love to hear from you! Request a demo to see Stagience in action.</p>
+                    <button onclick="showPage('demo')" class="gradient-accent" style="padding: 16px 32px; border: none; border-radius: 999px; color: white; font-weight: 600; font-size: 16px; cursor: pointer;">Request Demo</button>
+                </div>
+            </main>
         </div>
     </div>
 

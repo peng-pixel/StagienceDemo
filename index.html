@@ -31,6 +31,111 @@
         .status-folder.active { border-color: #3b82f6 !important; background: #eff6ff !important; }
         .wizard-step { display: none; }
         .wizard-step.active { display: block; }
+        
+        /* Mobile Navigation */
+        .mobile-menu-btn { display: none; }
+        .desktop-nav { display: flex; }
+        
+        /* MOBILE RESPONSIVE STYLES */
+        @media (max-width: 768px) {
+            /* Mobile Navigation */
+            .mobile-menu-btn { 
+                display: block; 
+                background: none; 
+                border: none; 
+                font-size: 28px; 
+                cursor: pointer; 
+                padding: 4px;
+            }
+            .desktop-nav { 
+                display: none; 
+            }
+            .desktop-nav.mobile-open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 16px;
+                gap: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            .desktop-nav.mobile-open button {
+                width: 100%;
+                text-align: left;
+                padding: 12px 16px !important;
+            }
+            
+            /* Inventory filter buttons */
+            .inventory-filters {
+                flex-wrap: wrap !important;
+                gap: 8px !important;
+            }
+            .inventory-filters button {
+                font-size: 13px !important;
+                padding: 8px 12px !important;
+                flex: 1 1 auto;
+                min-width: 100px;
+            }
+            
+            /* Search and action buttons */
+            .header-actions {
+                flex-direction: column !important;
+                width: 100%;
+            }
+            .header-actions > * {
+                width: 100% !important;
+            }
+            
+            /* Reduce grid columns on mobile */
+            [style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Status folder boxes */
+            .status-folder {
+                padding: 12px !important;
+            }
+            
+            /* Modal padding */
+            .modal > div {
+                max-width: 95% !important;
+                padding: 20px !important;
+            }
+            
+            /* Tables scroll horizontally */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            /* Reduce font sizes */
+            h1 { font-size: 32px !important; }
+            h2 { font-size: 24px !important; }
+            h3 { font-size: 18px !important; }
+            
+            /* Project tabs scroll */
+            .project-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            /* Extra small phones */
+            body { font-size: 14px; }
+            h1 { font-size: 28px !important; }
+            h2 { font-size: 20px !important; }
+            
+            .inventory-filters button {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+        }
     </style>
 </head> 
 <body class="bg-gray-50">
@@ -686,15 +791,16 @@
     <!-- Inventory Page -->
     <div id="inventory-page" class="page">
         <div class="marketing-bg" style="min-height: 100vh;">
-            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10);">
-                <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10); z-index: 100;">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: relative;">
                     <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
                         <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
                             <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
                         </div>
                         <span>Stagience</span>
                     </div>
-                    <div style="display: flex; gap: 12px;">
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+                    <div class="desktop-nav" style="display: flex; gap: 12px;">
                         <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
@@ -705,9 +811,9 @@
 
             <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
                 <div style="display: flex; flex-direction: column; gap: 24px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <h2 style="font-size: 28px; font-weight: bold;">Inventory</h2>
-                        <div style="display: flex; gap: 12px;">
+                        <div class="header-actions" style="display: flex; gap: 12px;">
                             <!-- View Toggle -->
                             <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
                                 <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -6303,6 +6409,12 @@
         }
         
         console.log('✅ Calendar <-> Timeline sync enabled');
+        
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const nav = event.target.closest('nav').querySelector('.desktop-nav');
+            nav.classList.toggle('mobile-open');
+        }
     </script>
 
 </body>

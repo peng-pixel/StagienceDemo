@@ -4640,25 +4640,13 @@
                     }
                     // Consultation fields (📝)
                     else if (event.icon === '📝') {
-                        const attendeesField = document.getElementById('consultation-attendees');
-                        const topicsField = document.getElementById('consultation-topics');
-                        const nextStepsField = document.getElementById('consultation-next-steps');
-                        
-                        if (attendeesField) attendeesField.value = event.details.attendees || '';
-                        if (topicsField) topicsField.value = event.details.topics || '';
-                        if (nextStepsField) nextStepsField.value = event.details.nextSteps || '';
+                        const notesField = document.getElementById('consultation-notes');
+                        if (notesField) notesField.value = event.details.consultationNotes || '';
                     }
                     // Pickup fields (📦)
                     else if (event.icon === '📦') {
-                        const teamField = document.getElementById('pickup-team');
-                        const itemsField = document.getElementById('pickup-items');
-                        const contactField = document.getElementById('pickup-contact');
                         const notesField = document.getElementById('pickup-notes');
-                        
-                        if (teamField) teamField.value = event.details.team || '';
-                        if (itemsField) itemsField.value = event.details.items || '';
-                        if (contactField) contactField.value = event.details.contact || '';
-                        if (notesField) notesField.value = event.details.notes || '';
+                        if (notesField) notesField.value = event.details.pickupNotes || '';
                     }
                 }
                 

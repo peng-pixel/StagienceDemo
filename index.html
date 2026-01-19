@@ -344,6 +344,8 @@
                         <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
                     </div>
                 </div>
             </nav>
@@ -421,6 +423,7 @@
                         <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
                     </div>
                 </div>
             </nav>
@@ -528,6 +531,7 @@
                         <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
                     </div>
                 </div>
             </nav>
@@ -866,6 +870,58 @@
     </div>
 
     <!-- Templates Page -->
+    <!-- Templates Page -->
+    <div id="templates-page" class="page">
+        <div class="marketing-bg" style="min-height: 100vh;">
+            <nav style="position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(251,250,247,.72); border-bottom: 1px solid rgba(31,41,55,.10); z-index: 100;">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 64px;">
+                    <div onclick="showPage('landing')" style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); position: relative;">
+                            <div style="position: absolute; inset: 9px 10px; border-radius: 10px; background: rgba(255,255,255,.78);"></div>
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="showPage('calendar')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
+                        <button onclick="showPage('projects')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
+                        <button onclick="showPage('inventory')" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showPage('templates')" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Document Templates</h2>
+                            <p style="color: #6b7280; font-size: 16px;">Upload and manage reusable templates for your business</p>
+                        </div>
+                        <button onclick="showUploadTemplate()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                            📤 Upload Template
+                        </button>
+                    </div>
+
+                    <!-- Templates Grid -->
+                    <div id="templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                        <!-- Templates will be rendered here -->
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="templates-empty" style="display: none; text-align: center; padding: 60px 20px; background: #f9fafb; border-radius: 16px; border: 2px dashed #d1d5db;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                        <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">No templates yet</h3>
+                        <p style="color: #6b7280; margin-bottom: 24px;">Upload your first template to get started</p>
+                        <button onclick="showUploadTemplate()" class="gradient-accent" style="padding: 12px 24px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                            Upload Template
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
     <!-- Inventory Wizard Modal -->
     <div id="wizard-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
         <div style="background: white; border-radius: 24px; max-width: 800px; width: 100%; padding: 32px; margin: 20px auto; max-height: 90vh; overflow-y: auto;">
@@ -1871,6 +1927,61 @@
         </div>
     </div>
 
+    <!-- Upload Template Modal -->
+    <div id="upload-template-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Upload Template</h2>
+                <button onclick="hideUploadTemplate()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+
+            <form id="upload-template-form" onsubmit="saveTemplate(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Template Name -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Template Name *</label>
+                    <input type="text" id="template-name" required placeholder="e.g., Staging Consultation Report" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Category *</label>
+                    <select id="template-category" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select category...</option>
+                        <option value="Consultation">📝 Consultation</option>
+                        <option value="Preparation">🔧 Preparation</option>
+                        <option value="Client Communication">💬 Client Communication</option>
+                        <option value="Contracts">📄 Contracts</option>
+                        <option value="Checklists">✓ Checklists</option>
+                        <option value="Other">📁 Other</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Description (Optional)</label>
+                    <textarea id="template-description" placeholder="Brief description of what this template is for..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; min-height: 80px; font-family: inherit;"></textarea>
+                </div>
+
+                <!-- File Upload -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Upload File *</label>
+                    <input type="file" id="template-file" required accept=".pdf,.docx,.doc" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <div style="margin-top: 8px; font-size: 13px; color: #6b7280;">Accepted formats: PDF, DOCX (Max 10MB)</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
+                    <button type="button" onclick="hideUploadTemplate()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="padding: 12px 24px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+                        Upload Template
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Bulk Update Modal -->
     <div id="bulk-update-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
         <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
@@ -2194,6 +2305,185 @@
             });
         }
         
+        // ========================================
+        // TEMPLATES MANAGEMENT
+        // ========================================
+        
+        function getStoredTemplates() {
+            return JSON.parse(localStorage.getItem('stagience_templates') || '[]');
+        }
+        
+        function saveStoredTemplates(templates) {
+            localStorage.setItem('stagience_templates', JSON.stringify(templates));
+        }
+        
+        function renderTemplates() {
+            const templates = getStoredTemplates();
+            const grid = document.getElementById('templates-grid');
+            const empty = document.getElementById('templates-empty');
+            
+            if (!grid) return; // Not on templates page
+            
+            if (templates.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            empty.style.display = 'none';
+            
+            grid.innerHTML = templates.map(template => {
+                const categoryEmoji = {
+                    'Consultation': '📝',
+                    'Preparation': '🔧',
+                    'Client Communication': '💬',
+                    'Contracts': '📄',
+                    'Checklists': '✓',
+                    'Other': '📁'
+                }[template.category] || '📄';
+                
+                return `
+                    <div style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <div style="font-size: 12px; color: #6b7280; font-weight: 600; margin-bottom: 8px;">${categoryEmoji} ${template.category}</div>
+                            <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">${template.name}</h3>
+                            ${template.description ? `<p style="color: #6b7280; font-size: 14px; line-height: 1.5;">${template.description}</p>` : ''}
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: auto;">
+                            <button onclick="useTemplate(${template.id})" style="flex: 1; padding: 10px 16px; border-radius: 8px; border: 1px solid #3b82f6; background: #3b82f6; color: white; font-weight: 600; cursor: pointer;">
+                                Use Template
+                            </button>
+                            <button onclick="deleteTemplate(${template.id})" style="padding: 10px 16px; border-radius: 8px; border: 1px solid #ef4444; background: white; color: #ef4444; font-weight: 600; cursor: pointer;">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function showUploadTemplate() {
+            document.getElementById('template-name').value = '';
+            document.getElementById('template-category').value = '';
+            document.getElementById('template-description').value = '';
+            document.getElementById('template-file').value = '';
+            
+            const modal = document.getElementById('upload-template-modal');
+            modal.style.display = 'flex';
+        }
+        
+        function hideUploadTemplate() {
+            const modal = document.getElementById('upload-template-modal');
+            modal.style.display = 'none';
+        }
+        
+        async function saveTemplate(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('template-name').value;
+            const category = document.getElementById('template-category').value;
+            const description = document.getElementById('template-description').value;
+            const fileInput = document.getElementById('template-file');
+            
+            if (!fileInput.files || !fileInput.files[0]) {
+                alert('Please select a file');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            
+            // Check file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+            
+            // Read file as base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const fileData = e.target.result;
+                const fileType = file.type;
+                const fileName = file.name;
+                
+                // Store in IndexedDB
+                const fileId = `template-${Date.now()}`;
+                await saveToIndexedDB('files', fileId, {
+                    data: fileData,
+                    type: fileType,
+                    name: fileName
+                });
+                
+                // Save template metadata to localStorage
+                const templates = getStoredTemplates();
+                const template = {
+                    id: Date.now(),
+                    name,
+                    category,
+                    description,
+                    fileId,
+                    fileName,
+                    fileType,
+                    uploadedAt: new Date().toISOString()
+                };
+                
+                templates.push(template);
+                saveStoredTemplates(templates);
+                
+                alert('✅ Template uploaded successfully!');
+                hideUploadTemplate();
+                renderTemplates();
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        async function useTemplate(templateId) {
+            const templates = getStoredTemplates();
+            const template = templates.find(t => t.id === templateId);
+            
+            if (!template) {
+                alert('Template not found');
+                return;
+            }
+            
+            // Get file from IndexedDB
+            const fileData = await getFromIndexedDB('files', template.fileId);
+            
+            if (!fileData) {
+                alert('Template file not found');
+                return;
+            }
+            
+            // Download the file
+            const link = document.createElement('a');
+            link.href = fileData.data;
+            link.download = template.fileName;
+            link.click();
+            
+            alert('📥 Template downloaded! Fill it out and upload to your project when done.');
+        }
+        
+        async function deleteTemplate(templateId) {
+            if (!confirm('Are you sure you want to delete this template?')) {
+                return;
+            }
+            
+            const templates = getStoredTemplates();
+            const template = templates.find(t => t.id === templateId);
+            
+            if (template) {
+                // Delete from IndexedDB
+                await deleteFromIndexedDB('files', template.fileId);
+            }
+            
+            // Remove from localStorage
+            const updatedTemplates = templates.filter(t => t.id !== templateId);
+            saveStoredTemplates(updatedTemplates);
+            
+            renderTemplates();
+        }
+        
         // Initialize on page load
         initIndexedDB().catch(err => console.error('IndexedDB init failed:', err));
 
@@ -2470,6 +2760,11 @@
             if (page === 'calendar') {
                 console.log('Switching to calendar page, rendering events...');
                 renderCalendar();
+            }
+            
+            // Render templates when switching to templates page
+            if (page === 'templates') {
+                renderTemplates();
             }
         }
 

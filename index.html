@@ -71,26 +71,25 @@
             }
             
             /* ===== FIX #1: Projects Search Icon ===== */
-            #project-search-input {
+            #project-search {
                 padding-right: 45px !important;
                 width: 100% !important;
+                max-width: 100% !important;
             }
             
-            /* ===== FIX #2: Calendar SATURDAY Cut Off ===== */
-            .calendar-header {
-                display: grid !important;
-                grid-template-columns: repeat(7, 1fr) !important;
-                gap: 1px !important;
+            /* ===== FIX #2: Calendar SATURDAY - Direct targeting ===== */
+            /* Target the calendar day headers container */
+            div[style*="grid-template-columns: repeat(7, 1fr)"] > div[style*="padding: 12px"] {
+                font-size: 8px !important;
+                padding: 4px 2px !important;
+                letter-spacing: -0.5px !important;
+                overflow: hidden !important;
+            }
+            
+            /* Ensure calendar grid doesn't overflow */
+            div[style*="grid-template-columns: repeat(7, 1fr)"] {
                 width: 100% !important;
-            }
-            
-            .calendar-header > div {
-                font-size: 9px !important;
-                padding: 4px 0px !important;
-                text-align: center;
-                overflow: hidden;
-                white-space: nowrap;
-                letter-spacing: -0.3px;
+                gap: 1px !important;
             }
             
             /* ===== FIX #3: Project Tabs - Files Tab Scrollable ===== */
@@ -122,56 +121,47 @@
                 padding-top: 20px !important;
             }
             
-            /* ===== FIX #4: Filter Modal ===== */
-            #filter-modal {
+            /* ===== FIX #4: Inventory Filter Modal ===== */
+            #inventory-filter-modal {
                 padding: 0 !important;
-                display: flex !important;
                 align-items: flex-start !important;
-                padding-top: 10px !important;
+                padding-top: 20px !important;
             }
             
-            #filter-modal > div {
-                max-width: 94vw !important;
-                width: 94vw !important;
-                max-height: 92vh !important;
+            #inventory-filter-modal > div {
+                max-width: 95vw !important;
+                width: 95vw !important;
+                max-height: 90vh !important;
                 overflow-y: auto !important;
-                padding: 16px 14px !important;
-                margin: 0 auto !important;
+                padding: 20px 14px !important;
             }
             
             /* Filter modal title */
-            #filter-modal h2 {
+            #inventory-filter-modal h2 {
                 font-size: 20px !important;
                 margin-top: 0 !important;
-                margin-bottom: 18px !important;
             }
             
-            /* Status buttons - stack vertically on mobile */
-            #filter-modal > div > div:nth-child(2) {
-                display: flex !important;
+            /* Status filter - force vertical stacking */
+            #inventory-filter-modal div[style*="display: flex; flex-wrap: gap"] {
                 flex-direction: column !important;
+                flex-wrap: nowrap !important;
                 gap: 10px !important;
-                margin-bottom: 20px !important;
             }
             
-            #filter-modal > div > div:nth-child(2) > button {
+            #inventory-filter-modal label[style*="padding: 10px 16px"] {
                 width: 100% !important;
+                justify-content: flex-start !important;
+            }
+            
+            /* Category grid - keep 2 columns but make them smaller */
+            #inventory-filter-modal div[style*="grid-template-columns: repeat(2"] {
+                gap: 8px !important;
+            }
+            
+            #inventory-filter-modal label[style*="padding: 10px 14px"] {
                 font-size: 14px !important;
-                padding: 14px 12px !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-            }
-            
-            /* Category buttons grid */
-            #filter-modal [style*="grid-template-columns: repeat(2"] {
-                grid-template-columns: 1fr 1fr !important;
-                gap: 10px !important;
-            }
-            
-            /* Projects page - fix search icon */
-            #project-search-input {
-                padding-right: 45px !important;
+                padding: 10px 10px !important;
             }
             
             /* Projects - fix edit/delete buttons on cards */
@@ -291,10 +281,10 @@
             }
             
             /* Calendar day headers even smaller for tiny screens */
-            .calendar-header > div {
-                font-size: 8px !important;
-                padding: 3px 0px !important;
-                letter-spacing: -0.5px;
+            div[style*="grid-template-columns: repeat(7, 1fr)"] > div[style*="padding: 12px"] {
+                font-size: 7px !important;
+                padding: 3px 1px !important;
+                letter-spacing: -0.8px !important;
             }
             
             /* Project tabs smaller */
@@ -304,13 +294,8 @@
             }
             
             /* Filter modal compact */
-            #filter-modal h2 {
+            #inventory-filter-modal h2 {
                 font-size: 18px !important;
-            }
-            
-            #filter-modal button {
-                font-size: 13px !important;
-                padding: 12px 10px !important;
             }
         }
                 padding: 20px !important;

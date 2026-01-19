@@ -41,13 +41,44 @@
             /* General mobile styles */
             body { font-size: 15px; }
             
-            /* Navigation - make all nav buttons wrap and be visible */
-            nav > div {
+            /* Navigation - force all nav button containers to wrap */
+            nav > div > div[style*="display: flex"][style*="gap"] {
                 flex-wrap: wrap !important;
+                gap: 8px !important;
             }
+            
+            /* Make all nav buttons smaller and wrap */
             nav button {
-                font-size: 13px !important;
-                padding: 8px 12px !important;
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+                white-space: nowrap;
+            }
+            
+            /* Calendar - make day headers fit */
+            .calendar-header > div {
+                font-size: 11px !important;
+                padding: 8px 4px !important;
+            }
+            
+            /* Projects page - fix search icon */
+            #project-search-input {
+                padding-right: 40px !important;
+            }
+            
+            /* Projects - fix edit/delete buttons on cards */
+            .project-card > div[style*="position: absolute"] {
+                position: static !important;
+                display: flex;
+                justify-content: flex-end;
+                gap: 6px;
+                margin-bottom: 12px;
+            }
+            
+            /* Filter modal - ensure proper width */
+            #filter-modal > div {
+                max-width: 95% !important;
+                max-height: 90vh;
+                overflow-y: auto;
             }
             
             /* Mobile Navigation */
@@ -185,8 +216,14 @@
             }
             
             nav button {
-                font-size: 12px !important;
-                padding: 6px 10px !important;
+                font-size: 11px !important;
+                padding: 6px 8px !important;
+            }
+            
+            /* Calendar day headers even smaller */
+            .calendar-header > div {
+                font-size: 10px !important;
+                padding: 6px 2px !important;
             }
         }
                 padding: 20px !important;

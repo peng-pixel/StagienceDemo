@@ -80,10 +80,15 @@
             /* ===== FIX #2: Calendar SATURDAY - Direct targeting ===== */
             /* Target the calendar day headers container */
             div[style*="grid-template-columns: repeat(7, 1fr)"] > div[style*="padding: 12px"] {
-                font-size: 8px !important;
-                padding: 4px 2px !important;
-                letter-spacing: -0.5px !important;
+                font-size: 11px !important;
+                padding: 8px 2px !important;
+                letter-spacing: -0.3px !important;
                 overflow: hidden !important;
+            }
+            
+            /* Make calendar date numbers slightly smaller to match */
+            #calendar-grid > div {
+                font-size: 16px !important;
             }
             
             /* Ensure calendar grid doesn't overflow */
@@ -282,9 +287,14 @@
             
             /* Calendar day headers even smaller for tiny screens */
             div[style*="grid-template-columns: repeat(7, 1fr)"] > div[style*="padding: 12px"] {
-                font-size: 7px !important;
-                padding: 3px 1px !important;
-                letter-spacing: -0.8px !important;
+                font-size: 10px !important;
+                padding: 6px 1px !important;
+                letter-spacing: -0.4px !important;
+            }
+            
+            /* Calendar dates proportionally smaller */
+            #calendar-grid > div {
+                font-size: 15px !important;
             }
             
             /* Project tabs smaller */

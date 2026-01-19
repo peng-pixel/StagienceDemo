@@ -3698,8 +3698,10 @@
                         .date { color: #6b7280; font-size: 14px; margin-bottom: 30px; }
                         table { width: 100%; border-collapse: collapse; }
                         th { background: #f3f4f6; padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb; font-weight: 600; }
-                        td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+                        td { padding: 12px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
                         tr:hover { background: #f9fafb; }
+                        .item-photo { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
+                        .no-photo { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 32px; background: #f9fafb; border-radius: 6px; border: 1px solid #e5e7eb; }
                         .status { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
                         .status-in { background: #dcfce7; color: #166534; }
                         .status-out { background: #fee2e2; color: #991b1b; }
@@ -3715,6 +3717,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th>Photo</th>
                                 <th>Item</th>
                                 <th>Category</th>
                                 <th>Color</th>
@@ -3723,15 +3726,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${inventory.map(item => `
+                            ${inventory.map(item => {
+                                const emojiMap = {
+                                    'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
+                                    'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
+                                };
+                                const emoji = emojiMap[item.itemType] || item.emoji || '📦';
+                                
+                                return `
                                 <tr>
+                                    <td>
+                                        ${item.photo 
+                                            ? `<img src="${item.photo}" alt="${item.name}" class="item-photo">`
+                                            : `<div class="no-photo">${emoji}</div>`
+                                        }
+                                    </td>
                                     <td><strong>${item.name}</strong>${item.subcategory ? `<br><span style="font-size: 12px; color: #6b7280;">${item.subcategory}</span>` : ''}</td>
                                     <td>${item.category}</td>
                                     <td>${item.color}</td>
                                     <td><span class="status status-${item.status.toLowerCase()}">${item.status}</span></td>
                                     <td>${item.location}</td>
                                 </tr>
-                            `).join('')}
+                            `}).join('')}
                         </tbody>
                     </table>
                     <div style="margin-top: 40px; text-align: center; color: #6b7280; font-size: 12px;">
@@ -3884,20 +3900,25 @@
                 };
                 const emoji = emojiMap[item.itemType] || item.emoji || '📦';
                 
+                // Use photo if available, otherwise use emoji
+                const imageDisplay = item.photo 
+                    ? `<img src="${item.photo}" alt="${item.name}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 12px;">`
+                    : `<div style="font-size: 48px; margin-bottom: 12px; padding: 20px 0;">${emoji}</div>`;
+                
                 return `
                 <div style="background: white; border-radius: 16px; padding: 20px; border: 1px solid #e5e7eb; position: relative; transition: all 0.3s;" class="inventory-card" id="item-${item.id}">
-                    <div style="position: absolute; top: 8px; left: 8px;">
+                    <div style="position: absolute; top: 8px; left: 8px; z-index: 10;">
                         <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;">
                     </div>
-                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px; z-index: 10;">
                         <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
                         <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-left: 26px;">
-                        <div style="font-size: 32px;">${emoji}</div>
+                    ${imageDisplay}
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <h3 style="font-weight: bold; margin: 0; flex: 1;">${item.name}</h3>
                         <span style="padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; background: ${item.status === 'IN' ? '#dcfce7' : item.status === 'OUT' ? '#dbeafe' : '#fef3c7'}; color: ${item.status === 'IN' ? '#166534' : item.status === 'OUT' ? '#1e40af' : '#92400e'};">${item.status}</span>
                     </div>
-                    <h3 style="font-weight: bold; margin-bottom: 4px;">${item.name}</h3>
                     <p style="font-size: 13px; color: #6b7280; margin-bottom: 12px;">${item.category || item.itemType} • ${item.color}</p>
                     <div style="display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9fafb; border-radius: 8px; font-size: 13px; font-weight: 600;">
                         <span>📍</span><span>${item.location}</span>
@@ -3938,7 +3959,10 @@
                                         <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;"></td>
                                         <td style="padding: 16px;">
                                             <div style="display: flex; align-items: center; gap: 12px;">
-                                                <span style="font-size: 24px;">${emoji}</span>
+                                                ${item.photo 
+                                                    ? `<img src="${item.photo}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb;">`
+                                                    : `<span style="font-size: 24px;">${emoji}</span>`
+                                                }
                                                 <div>
                                                     <div style="font-weight: 600; font-size: 14px;">${item.name}</div>
                                                     ${item.fabric ? `<div style="font-size: 12px; color: #6b7280;">${item.fabric}</div>` : ''}
@@ -4690,7 +4714,13 @@
             // Show current photo if exists
             const photoPreview = document.getElementById('edit-current-photo');
             if (item.photo) {
-                photoPreview.innerHTML = `<div style="margin-top: 8px;"><img src="${item.photo}" style="max-width: 200px; border-radius: 8px; border: 1px solid #e5e7eb;"><div style="margin-top: 4px; font-size: 12px; color: #6b7280;">Current photo</div></div>`;
+                photoPreview.innerHTML = `
+                    <div style="margin-top: 8px; padding: 12px; background: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <img src="${item.photo}" style="max-width: 200px; border-radius: 8px; border: 1px solid #e5e7eb; display: block; margin-bottom: 8px;">
+                        <button type="button" onclick="deleteItemPhoto(${item.id})" style="padding: 6px 12px; background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                            🗑️ Delete Photo
+                        </button>
+                    </div>`;
             } else {
                 photoPreview.innerHTML = '';
             }
@@ -4705,6 +4735,26 @@
             const modal = document.getElementById('edit-item-modal');
             modal.classList.remove('active');
             modal.style.display = 'none';
+        }
+        
+        function deleteItemPhoto(itemId) {
+            if (!confirm('Delete this photo?')) return;
+            
+            const currentInventory = getStoredInventory();
+            const item = currentInventory.find(i => i.id === itemId);
+            
+            if (item) {
+                // Remove the photo
+                delete item.photo;
+                
+                // Save updated inventory
+                localStorage.setItem('stagience_inventory', JSON.stringify(currentInventory));
+                
+                // Update the preview
+                document.getElementById('edit-current-photo').innerHTML = '';
+                
+                alert('✅ Photo deleted');
+            }
         }
         
         function saveEditedItem(e) {

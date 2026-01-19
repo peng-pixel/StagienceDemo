@@ -4912,7 +4912,10 @@
         
         // Share Timeline as PDF (opens print-friendly view)
         function shareTimelineAsPDF() {
-            const project = projects.find(p => p.id === currentProjectId);
+            // Reload fresh data from localStorage
+            const freshProjects = JSON.parse(localStorage.getItem('stagience_projects') || '[]');
+            const project = freshProjects.find(p => p.id === currentProjectId);
+            
             if (!project) {
                 alert('No project selected');
                 return;
@@ -4931,49 +4934,8 @@
                 });
                 
                 let detailsHTML = '';
-                if (event.details) {
-                    // Installation details (🔧)
-                    if (event.icon === '🔧' && event.details.team) {
-                        detailsHTML = `
-                            <div style="margin-top: 12px; padding: 12px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 4px;">
-                                <div><strong>Team:</strong> ${event.details.team}</div>
-                                ${event.details.items ? `<div><strong>Items:</strong> ${event.details.items}</div>` : ''}
-                                ${event.details.accessCode ? `<div><strong>Access Code:</strong> ${event.details.accessCode}</div>` : ''}
-                                ${event.details.contact ? `<div><strong>Contact:</strong> ${event.details.contact}</div>` : ''}
-                            </div>
-                        `;
-                    } 
-                    // Photo shoot details (📸)
-                    else if (event.icon === '📸' && event.details.photographer) {
-                        detailsHTML = `
-                            <div style="margin-top: 12px; padding: 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 4px;">
-                                <div><strong>Photographer:</strong> ${event.details.photographer}</div>
-                                ${event.details.focusAreas ? `<div><strong>Focus Areas:</strong> ${event.details.focusAreas}</div>` : ''}
-                                ${event.details.shotList ? `<div><strong>Shot List:</strong> ${event.details.shotList}</div>` : ''}
-                            </div>
-                        `;
-                    }
-                    // Consultation details (📝)
-                    else if (event.icon === '📝' && event.details.attendees) {
-                        detailsHTML = `
-                            <div style="margin-top: 12px; padding: 12px; background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 4px;">
-                                <div><strong>Attendees:</strong> ${event.details.attendees}</div>
-                                ${event.details.topics ? `<div><strong>Topics:</strong> ${event.details.topics}</div>` : ''}
-                                ${event.details.nextSteps ? `<div><strong>Next Steps:</strong> ${event.details.nextSteps}</div>` : ''}
-                            </div>
-                        `;
-                    }
-                    // Pickup/Destaging details (📦)
-                    else if (event.icon === '📦' && event.details.team) {
-                        detailsHTML = `
-                            <div style="margin-top: 12px; padding: 12px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 4px;">
-                                <div><strong>Team:</strong> ${event.details.team}</div>
-                                ${event.details.items ? `<div><strong>Items:</strong> ${event.details.items}</div>` : ''}
-                                ${event.details.contact ? `<div><strong>Contact:</strong> ${event.details.contact}</div>` : ''}
-                                ${event.details.notes ? `<div><strong>Notes:</strong> ${event.details.notes}</div>` : ''}
-                            </div>
-                        `;
-                    }
+                if (event.details && Object.keys(event.details).length > 0) {
+                    detailsHTML = formatEventDetails(event.icon, event.details);
                 }
                 
                 eventsHTML += `

@@ -643,98 +643,16 @@
                     <!-- Header with Create New Folder button -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <h3 style="font-size: 18px; font-weight: 700;">Photo Folders</h3>
-                        <button onclick="alert('Create New Folder feature - coming soon!')" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                        <button onclick="showCreateFolder()" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
                             📁 Create New Folder
                         </button>
                     </div>
 
-                    <!-- Photo Folders -->
-                    <div style="display: flex; flex-direction: column; gap: 32px;">
-                        
-                        <!-- Before Photos Folder -->
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="font-size: 32px;">📁</div>
-                                    <div>
-                                        <div style="font-size: 18px; font-weight: 700;">Before Photos</div>
-                                        <div style="font-size: 13px; color: #6b7280;">1 photo</div>
-                                    </div>
-                                </div>
-                                <button onclick="alert('Upload to Before Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-                                    📤 Upload Photos
-                                </button>
-                            </div>
-                            
-                            <!-- Photos in this folder -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
-                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🏠</div>
-                                    <div style="padding: 10px;">
-                                        <div style="font-weight: 600; font-size: 13px;">Living Room - Before</div>
-                                        <div style="font-size: 11px; color: #6b7280;">Jan 8, 2026</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- After Photos Folder -->
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="font-size: 32px;">📁</div>
-                                    <div>
-                                        <div style="font-size: 18px; font-weight: 700;">After Photos</div>
-                                        <div style="font-size: 13px; color: #6b7280;">2 photos</div>
-                                    </div>
-                                </div>
-                                <button onclick="alert('Upload to After Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-                                    📤 Upload Photos
-                                </button>
-                            </div>
-                            
-                            <!-- Photos in this folder -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
-                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🛋️</div>
-                                    <div style="padding: 10px;">
-                                        <div style="font-weight: 600; font-size: 13px;">Living Room - After</div>
-                                        <div style="font-size: 11px; color: #6b7280;">Jan 12, 2026</div>
-                                    </div>
-                                </div>
-                                <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
-                                    <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">🍳</div>
-                                    <div style="padding: 10px;">
-                                        <div style="font-weight: 600; font-size: 13px;">Kitchen - After</div>
-                                        <div style="font-size: 11px; color: #6b7280;">Jan 12, 2026</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pro Photos Folder -->
-                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="font-size: 32px;">📁</div>
-                                    <div>
-                                        <div style="font-size: 18px; font-weight: 700;">Pro Photos</div>
-                                        <div style="font-size: 13px; color: #6b7280;">0 photos</div>
-                                    </div>
-                                </div>
-                                <button onclick="alert('Upload to Pro Photos folder')" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-                                    📤 Upload Photos
-                                </button>
-                            </div>
-                            
-                            <!-- Empty state for this folder -->
-                            <div style="text-align: center; padding: 40px; color: #6b7280; background: #f9fafb; border-radius: 8px; border: 2px dashed #d1d5db;">
-                                <div style="font-size: 48px; margin-bottom: 8px;">📸</div>
-                                <div style="font-weight: 600; margin-bottom: 4px;">No photos yet</div>
-                                <div style="font-size: 13px;">Click "Upload Photos" to add professional photos to this folder</div>
-                            </div>
-                        </div>
-
+                    <!-- Photo Folders Container (dynamically rendered) -->
+                    <div id="photo-folders-container" style="display: flex; flex-direction: column; gap: 32px;">
+                        <!-- Folders will be rendered here -->
+                    </div>
+                </div>
                     </div>
                 </div>
 
@@ -2058,6 +1976,61 @@
         </div>
     </div>
 
+    <!-- Create Photo Folder Modal -->
+    <div id="create-folder-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 500px; width: 100%; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Create New Folder</h2>
+                <button onclick="hideCreateFolder()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+
+            <form onsubmit="saveNewFolder(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Folder Name *</label>
+                    <input type="text" id="folder-name" required placeholder="e.g., Before Photos, After Photos" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
+                    <button type="button" onclick="hideCreateFolder()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="padding: 12px 24px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+                        Create Folder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Photos Modal -->
+    <div id="upload-photos-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: bold;">Upload Photos</h2>
+                <button onclick="hideUploadPhotos()" style="color: #6b7280; font-size: 32px; background: none; border: none; cursor: pointer; line-height: 1;">×</button>
+            </div>
+
+            <form id="upload-photos-form" onsubmit="savePhotos(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="hidden" id="photo-folder-id">
+                
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Select Photos *</label>
+                    <input type="file" id="photo-files" required accept="image/*" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <div style="margin-top: 8px; font-size: 13px; color: #6b7280;">You can select multiple photos at once (Max 5MB per photo)</div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
+                    <button type="button" onclick="hideUploadPhotos()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="padding: 12px 24px; border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer;">
+                        Upload Photos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Bulk Update Modal -->
     <div id="bulk-update-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
         <div style="background: white; border-radius: 24px; max-width: 600px; width: 100%; padding: 32px; max-height: 90vh; overflow-y: auto;">
@@ -2894,6 +2867,202 @@
             renderProjectFiles();
         }
         
+        // ========================================
+        // PROJECT PHOTO FOLDERS MANAGEMENT
+        // ========================================
+        
+        function getProjectPhotoFolders(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project.photoFolders) {
+                project.photoFolders = [
+                    { id: Date.now(), name: 'Before Photos', photos: [] },
+                    { id: Date.now() + 1, name: 'After Photos', photos: [] },
+                    { id: Date.now() + 2, name: 'Pro Photos', photos: [] }
+                ];
+                localStorage.setItem('stagience_projects', JSON.stringify(projects));
+            }
+            return project.photoFolders || [];
+        }
+        
+        function saveProjectPhotoFolders(projectId, folders) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                project.photoFolders = folders;
+                localStorage.setItem('stagience_projects', JSON.stringify(projects));
+            }
+        }
+        
+        function renderPhotoFolders() {
+            if (!currentProjectId) return;
+            
+            const folders = getProjectPhotoFolders(currentProjectId);
+            const container = document.getElementById('photo-folders-container');
+            
+            if (!container) return;
+            
+            container.innerHTML = folders.map(folder => {
+                const photoCount = folder.photos ? folder.photos.length : 0;
+                
+                return `
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="font-size: 32px;">📁</div>
+                                <div>
+                                    <div style="font-size: 18px; font-weight: 700;">${folder.name}</div>
+                                    <div style="font-size: 13px; color: #6b7280;">${photoCount} photo${photoCount !== 1 ? 's' : ''}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="showUploadPhotos(${folder.id})" style="padding: 8px 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                    📤 Upload Photos
+                                </button>
+                                <button onclick="deletePhotoFolder(${folder.id})" style="padding: 8px 12px; background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;" title="Delete folder">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Photos in this folder -->
+                        ${photoCount > 0 ? `
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                                ${folder.photos.map(photo => `
+                                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; position: relative;">
+                                        <img src="${photo.data}" alt="${photo.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover;">
+                                        <div style="padding: 10px;">
+                                            <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">${photo.name}</div>
+                                            <div style="font-size: 11px; color: #6b7280;">${new Date(photo.uploadedAt).toLocaleDateString()}</div>
+                                        </div>
+                                        <button onclick="deletePhoto(${folder.id}, '${photo.id}')" style="position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: 1px solid #fca5a5; color: #991b1b; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; padding: 0;">×</button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : `
+                            <div style="text-align: center; padding: 40px; color: #6b7280; background: #f9fafb; border-radius: 8px; border: 2px dashed #d1d5db;">
+                                <div style="font-size: 48px; margin-bottom: 8px;">📸</div>
+                                <div style="font-weight: 600; margin-bottom: 4px;">No photos yet</div>
+                                <div style="font-size: 13px;">Click "Upload Photos" to add photos to this folder</div>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function showCreateFolder() {
+            document.getElementById('folder-name').value = '';
+            document.getElementById('create-folder-modal').style.display = 'flex';
+        }
+        
+        function hideCreateFolder() {
+            document.getElementById('create-folder-modal').style.display = 'none';
+        }
+        
+        function saveNewFolder(e) {
+            e.preventDefault();
+            
+            const folderName = document.getElementById('folder-name').value;
+            const folders = getProjectPhotoFolders(currentProjectId);
+            
+            folders.push({
+                id: Date.now(),
+                name: folderName,
+                photos: []
+            });
+            
+            saveProjectPhotoFolders(currentProjectId, folders);
+            
+            alert('✅ Folder created!');
+            hideCreateFolder();
+            renderPhotoFolders();
+        }
+        
+        function deletePhotoFolder(folderId) {
+            if (!confirm('Delete this folder and all its photos?')) return;
+            
+            const folders = getProjectPhotoFolders(currentProjectId);
+            const updatedFolders = folders.filter(f => f.id !== folderId);
+            
+            saveProjectPhotoFolders(currentProjectId, updatedFolders);
+            renderPhotoFolders();
+        }
+        
+        function showUploadPhotos(folderId) {
+            document.getElementById('photo-folder-id').value = folderId;
+            document.getElementById('photo-files').value = '';
+            document.getElementById('upload-photos-modal').style.display = 'flex';
+        }
+        
+        function hideUploadPhotos() {
+            document.getElementById('upload-photos-modal').style.display = 'none';
+        }
+        
+        async function savePhotos(e) {
+            e.preventDefault();
+            
+            const folderId = parseInt(document.getElementById('photo-folder-id').value);
+            const fileInput = document.getElementById('photo-files');
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select photos');
+                return;
+            }
+            
+            const folders = getProjectPhotoFolders(currentProjectId);
+            const folder = folders.find(f => f.id === folderId);
+            
+            if (!folder) {
+                alert('Folder not found');
+                return;
+            }
+            
+            // Process each photo
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`Photo "${file.name}" is too large. Maximum 5MB per photo.`);
+                    continue;
+                }
+                
+                // Read file as base64
+                const fileData = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+                
+                // Add to folder
+                folder.photos.push({
+                    id: `photo-${Date.now()}-${i}`,
+                    name: file.name,
+                    data: fileData,
+                    uploadedAt: new Date().toISOString()
+                });
+            }
+            
+            saveProjectPhotoFolders(currentProjectId, folders);
+            
+            alert(`✅ ${fileInput.files.length} photo(s) uploaded!`);
+            hideUploadPhotos();
+            renderPhotoFolders();
+        }
+        
+        function deletePhoto(folderId, photoId) {
+            if (!confirm('Delete this photo?')) return;
+            
+            const folders = getProjectPhotoFolders(currentProjectId);
+            const folder = folders.find(f => f.id === folderId);
+            
+            if (folder) {
+                folder.photos = folder.photos.filter(p => p.id !== photoId);
+                saveProjectPhotoFolders(currentProjectId, folders);
+                renderPhotoFolders();
+            }
+        }
+        
         // Initialize on page load
         initIndexedDB().catch(err => console.error('IndexedDB init failed:', err));
 
@@ -2939,34 +3108,90 @@
                 ? projects 
                 : projects.filter(p => p.statusLower === currentProjectFilter);
             
-            projectsList.innerHTML = filteredProjects.map(project => `
-                <div class="project-card" 
-                     data-name="${project.name}" 
-                     data-address="${project.address}"
-                     style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; transition: all 0.3s; position: relative;" 
-                     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" 
-                     onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                    <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;">
-                        <button onclick="editProject(${project.id}); event.stopPropagation();" 
-                                style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;"
-                                title="Edit project">✎</button>
-                        <button onclick="deleteProject(${project.id}); event.stopPropagation();" 
-                                style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; line-height: 1; padding: 0;"
-                                title="Delete project">×</button>
+            if (filteredProjects.length === 0) {
+                projectsList.innerHTML = '<div style="text-align: center; padding: 60px; color: #6b7280;">No projects in this status</div>';
+                return;
+            }
+            
+            // Group projects by month/year
+            const grouped = {};
+            filteredProjects.forEach(project => {
+                // Use createdAt if available, otherwise use current date
+                const date = project.createdAt ? new Date(project.createdAt) : new Date();
+                const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                
+                if (!grouped[monthYear]) {
+                    grouped[monthYear] = [];
+                }
+                grouped[monthYear].push(project);
+            });
+            
+            // Sort groups by date (most recent first)
+            const sortedGroups = Object.entries(grouped).sort((a, b) => {
+                const dateA = new Date(a[0]);
+                const dateB = new Date(b[0]);
+                return dateB - dateA;
+            });
+            
+            // Render grouped projects
+            projectsList.innerHTML = sortedGroups.map(([monthYear, groupProjects]) => `
+                <div style="margin-bottom: 24px;">
+                    <div onclick="toggleProjectGroup('${monthYear.replace(/\s/g, '-')}')" 
+                         style="display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: #f9fafb; border-radius: 12px; cursor: pointer; margin-bottom: 12px; border: 1px solid #e5e7eb;"
+                         onmouseover="this.style.background='#f3f4f6'" 
+                         onmouseout="this.style.background='#f9fafb'">
+                        <span id="arrow-${monthYear.replace(/\s/g, '-')}" style="font-size: 20px; transition: transform 0.3s;">▼</span>
+                        <h3 style="font-size: 18px; font-weight: 700; margin: 0;">${monthYear}</h3>
+                        <span style="padding: 4px 10px; background: white; border-radius: 999px; font-size: 13px; font-weight: 600; color: #6b7280;">${groupProjects.length} project${groupProjects.length !== 1 ? 's' : ''}</span>
                     </div>
-                    <div onclick="showProjectDetail('${project.name}', '${project.status}', ${project.id})" style="cursor: pointer;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-right: 70px;">
-                            <div>
-                                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
-                                <p style="color: #6b7280; font-size: 14px;">${project.address}</p>
+                    
+                    <div id="group-${monthYear.replace(/\s/g, '-')}" style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+                        ${groupProjects.map(project => `
+                            <div class="project-card" 
+                                 data-name="${project.name}" 
+                                 data-address="${project.address}"
+                                 style="background: white; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; transition: all 0.3s; position: relative;" 
+                                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" 
+                                 onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                                <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;">
+                                    <button onclick="editProject(${project.id}); event.stopPropagation();" 
+                                            style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; line-height: 1; padding: 0;"
+                                            title="Edit project">✎</button>
+                                    <button onclick="deleteProject(${project.id}); event.stopPropagation();" 
+                                            style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; line-height: 1; padding: 0;"
+                                            title="Delete project">×</button>
+                                </div>
+                                <div onclick="showProjectDetail('${project.name}', '${project.status}', ${project.id})" style="cursor: pointer;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; padding-right: 70px;">
+                                        <div>
+                                            <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">${project.name}</h3>
+                                            <p style="color: #6b7280; font-size: 14px;">${project.address}</p>
+                                        </div>
+                                        <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: ${project.statusBg}; color: ${project.statusColor}; display: inline-flex; align-items: center; justify-content: center;">
+                                            ${project.status}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                            <span style="padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; background: ${project.statusBg}; color: ${project.statusColor}; display: inline-flex; align-items: center; justify-content: center;">
-                                ${project.status}
-                            </span>
-                        </div>
+                        `).join('')}
                     </div>
                 </div>
             `).join('');
+        }
+        
+        function toggleProjectGroup(groupId) {
+            const group = document.getElementById('group-' + groupId);
+            const arrow = document.getElementById('arrow-' + groupId);
+            
+            if (group.style.display === 'none') {
+                group.style.display = 'grid';
+                arrow.style.transform = 'rotate(0deg)';
+                arrow.textContent = '▼';
+            } else {
+                group.style.display = 'none';
+                arrow.style.transform = 'rotate(-90deg)';
+                arrow.textContent = '▶';
+            }
         }
         
         function updateProjectStatusCounts() {
@@ -3617,6 +3842,11 @@
             // Render files when switching to files tab
             if (tabName === 'files') {
                 renderProjectFiles();
+            }
+            
+            // Render photo folders when switching to photos tab
+            if (tabName === 'photos') {
+                renderPhotoFolders();
             }
         }
 
@@ -4470,7 +4700,8 @@
                 statusLower: 'pending',
                 installDate: new Date().toISOString().split('T')[0],
                 statusBg: '#fef3c7',
-                statusColor: '#92400e'
+                statusColor: '#92400e',
+                createdAt: new Date().toISOString() // Add timestamp for grouping
             };
             
             const currentProjects = getStoredProjects();
@@ -4495,6 +4726,10 @@
                 return JSON.parse(stored);
             }
             // Return default projects if none stored - save them first time
+            const now = new Date();
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 15);
+            const twoMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 2, 20);
+            
             const defaults = [
                 {
                     id: Date.now() + 1,
@@ -4504,7 +4739,8 @@
                     statusLower: 'active',
                     statusBg: '#dcfce7',
                     statusColor: '#166534',
-                    timeline: []
+                    timeline: [],
+                    createdAt: now.toISOString()
                 },
                 {
                     id: Date.now() + 2,
@@ -4514,7 +4750,8 @@
                     statusLower: 'scheduled',
                     statusBg: '#dbeafe',
                     statusColor: '#1e40af',
-                    timeline: []
+                    timeline: [],
+                    createdAt: lastMonth.toISOString()
                 }
             ];
             localStorage.setItem('stagience_projects', JSON.stringify(defaults));

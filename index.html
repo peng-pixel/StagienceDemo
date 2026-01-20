@@ -6596,7 +6596,49 @@
             
             const events = (project.timeline || []).sort((a, b) => new Date(a.date) - new Date(b.date));
             
-            // Generate print-friendly HTML
+            // Create a simple text summary for sharing
+            let shareText = `${project.name}\n${project.address}\n\nProject Timeline:\n\n`;
+            
+            events.forEach(event => {
+                const eventDate = new Date(event.date).toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                shareText += `${event.icon} ${event.title}\n${eventDate}\n`;
+                if (event.description) {
+                    shareText += `${event.description}\n`;
+                }
+                shareText += '\n';
+            });
+            
+            if (events.length === 0) {
+                shareText += 'No timeline events yet.\n';
+            }
+            
+            shareText += '\nCreated with Stagience';
+            
+            // Check if Web Share API is supported
+            if (navigator.share) {
+                navigator.share({
+                    title: `${project.name} - Timeline`,
+                    text: shareText
+                })
+                .then(() => console.log('Shared successfully'))
+                .catch((error) => {
+                    console.log('Share cancelled or failed:', error);
+                    // Fallback to print if share is cancelled
+                    fallbackToPrint(project, events);
+                });
+            } else {
+                // Fallback to print for browsers that don't support Web Share API
+                fallbackToPrint(project, events);
+            }
+        }
+        
+        // Fallback print function for browsers without Web Share API
+        function fallbackToPrint(project, events) {
             let eventsHTML = '';
             events.forEach(event => {
                 const eventDate = new Date(event.date).toLocaleDateString('en-US', { 
@@ -6626,7 +6668,7 @@
                 `;
             });
             
-            // Open in new window
+            // Open in new window for print
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <!DOCTYPE html>

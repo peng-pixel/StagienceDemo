@@ -5719,12 +5719,20 @@
             if (photoInput.files && photoInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    item.photo = e.target.result;
-                    // Save back to localStorage
-                    saveStoredInventory(currentInventory);
-                    alert('✅ Item updated successfully!');
-                    hideEditItem();
-                    renderInventory();
+                    // CRITICAL FIX: Re-fetch inventory and find item by ID to avoid reference issues
+                    const freshInventory = getStoredInventory();
+                    const targetItem = freshInventory.find(i => i.id === itemId);
+                    
+                    if (targetItem) {
+                        targetItem.photo = e.target.result;
+                        // Save the updated inventory
+                        saveStoredInventory(freshInventory);
+                        alert('✅ Item updated successfully!');
+                        hideEditItem();
+                        renderInventory();
+                    } else {
+                        alert('❌ Error: Item not found');
+                    }
                 };
                 reader.readAsDataURL(photoInput.files[0]);
             } else {

@@ -5627,6 +5627,12 @@
             document.getElementById('edit-item-cost').value = item.cost || '';
             document.getElementById('edit-item-purchased-from').value = item.purchasedFrom || '';
             
+            // CRITICAL: Clear the file input to prevent previous file from carrying over
+            const photoInput = document.getElementById('edit-item-photo');
+            if (photoInput) {
+                photoInput.value = ''; // Reset file input
+            }
+            
             // Show current photo if exists
             const photoPreview = document.getElementById('edit-current-photo');
             if (item.photo) {
@@ -5677,64 +5683,115 @@
             e.preventDefault();
             
             const itemId = parseInt(document.getElementById('edit-item-id').value);
-            const currentInventory = getStoredInventory();
-            const item = currentInventory.find(i => i.id === itemId);
+            console.log('💾 Saving item ID:', itemId);
             
-            if (!item) {
-                alert('Item not found');
-                return;
-            }
-            
-            // Update ALL fields
-            item.name = document.getElementById('edit-item-name').value;
-            item.itemType = document.getElementById('edit-item-type').value;
-            item.category = document.getElementById('edit-item-type').value; // Keep both for compatibility
-            item.color = document.getElementById('edit-item-color').value;
-            item.fabric = document.getElementById('edit-item-fabric').value;
-            item.code = document.getElementById('edit-item-code').value;
-            
-            // Update dimensions
-            const width = document.getElementById('edit-item-width').value;
-            const depth = document.getElementById('edit-item-depth').value;
-            const height = document.getElementById('edit-item-height').value;
-            
-            item.dimensions = {
-                width: width || '',
-                depth: depth || '',
-                height: height || ''
+            // Collect all the updated data from form fields
+            const updatedData = {
+                name: document.getElementById('edit-item-name').value,
+                itemType: document.getElementById('edit-item-type').value,
+                category: document.getElementById('edit-item-type').value,
+                color: document.getElementById('edit-item-color').value,
+                fabric: document.getElementById('edit-item-fabric').value,
+                code: document.getElementById('edit-item-code').value,
+                dimensions: {
+                    width: document.getElementById('edit-item-width').value || '',
+                    depth: document.getElementById('edit-item-depth').value || '',
+                    height: document.getElementById('edit-item-height').value || ''
+                },
+                condition: document.getElementById('edit-item-condition').value,
+                status: document.getElementById('edit-item-status').value,
+                location: document.getElementById('edit-item-location').value,
+                purchaseDate: document.getElementById('edit-item-purchase-date').value,
+                cost: parseFloat(document.getElementById('edit-item-cost').value) || 0,
+                purchasedFrom: document.getElementById('edit-item-purchased-from').value
             };
             
-            item.condition = document.getElementById('edit-item-condition').value;
-            item.status = document.getElementById('edit-item-status').value;
-            item.location = document.getElementById('edit-item-location').value;
-            item.purchaseDate = document.getElementById('edit-item-purchase-date').value;
-            item.cost = parseFloat(document.getElementById('edit-item-cost').value) || 0;
-            item.purchasedFrom = document.getElementById('edit-item-purchased-from').value;
+            console.log('📝 Updated data:', updatedData);
             
             // Handle photo upload
             const photoInput = document.getElementById('edit-item-photo');
             if (photoInput.files && photoInput.files[0]) {
+                console.log('📸 New photo being uploaded');
+                // User is uploading a new photo
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // CRITICAL FIX: Re-fetch inventory and find item by ID to avoid reference issues
-                    const freshInventory = getStoredInventory();
-                    const targetItem = freshInventory.find(i => i.id === itemId);
+                    // Get fresh inventory
+                    const inventory = getStoredInventory();
+                    console.log('📦 Current inventory count:', inventory.length);
+                    const itemIndex = inventory.findIndex(i => i.id === itemId);
+                    console.log('🔍 Found item at index:', itemIndex);
                     
-                    if (targetItem) {
-                        targetItem.photo = e.target.result;
-                        // Save the updated inventory
-                        saveStoredInventory(freshInventory);
-                        alert('✅ Item updated successfully!');
-                        hideEditItem();
-                        renderInventory();
-                    } else {
+                    if (itemIndex === -1) {
                         alert('❌ Error: Item not found');
+                        return;
                     }
+                    
+                    // Log what we're updating
+                    console.log('📋 Before update:', JSON.parse(JSON.stringify(inventory[itemIndex])));
+                    
+                    // CRITICAL FIX: Store the existing id BEFORE updating
+                    const existingId = inventory[itemIndex].id;
+                    
+                    // Update the item - updatedData first, then override with id and new photo
+                    inventory[itemIndex] = {
+                        ...updatedData,            // Apply all form updates FIRST
+                        id: existingId,            // Then FORCE id to original
+                        photo: e.target.result     // Then set the NEW photo
+                    };
+                    
+                    console.log('✅ After update:', JSON.parse(JSON.stringify(inventory[itemIndex])));
+                    
+                    // Save the updated inventory
+                    saveStoredInventory(inventory);
+                    console.log('💾 Saved to localStorage');
+                    
+                    // Verify it was saved
+                    const verification = getStoredInventory();
+                    const verifiedItem = verification.find(i => i.id === itemId);
+                    console.log('✔️ Verification - item after save:', JSON.parse(JSON.stringify(verifiedItem)));
+                    
+                    alert('✅ Item updated successfully!');
+                    hideEditItem();
+                    renderInventory();
                 };
                 reader.readAsDataURL(photoInput.files[0]);
             } else {
-                // No new photo, just save
-                saveStoredInventory(currentInventory);
+                console.log('📝 No new photo, just updating data');
+                // No new photo - just update the data
+                const inventory = getStoredInventory();
+                console.log('📦 Current inventory count:', inventory.length);
+                const itemIndex = inventory.findIndex(i => i.id === itemId);
+                console.log('🔍 Found item at index:', itemIndex);
+                
+                if (itemIndex === -1) {
+                    alert('❌ Error: Item not found');
+                    return;
+                }
+                
+                // Log what we're updating
+                console.log('📋 Before update:', JSON.parse(JSON.stringify(inventory[itemIndex])));
+                
+                // CRITICAL FIX: Store the existing photo BEFORE updating
+                const existingPhoto = inventory[itemIndex].photo;
+                const existingId = inventory[itemIndex].id;
+                
+                // Update the item - updatedData comes first, then we override with preserved fields
+                inventory[itemIndex] = {
+                    ...updatedData,                // Apply all form updates FIRST
+                    id: existingId,                // Then FORCE id to original
+                    photo: existingPhoto           // Then FORCE photo to original (or undefined)
+                };
+                
+                console.log('✅ After update:', JSON.parse(JSON.stringify(inventory[itemIndex])));
+                
+                saveStoredInventory(inventory);
+                console.log('💾 Saved to localStorage');
+                
+                // Verify it was saved
+                const verification = getStoredInventory();
+                const verifiedItem = verification.find(i => i.id === itemId);
+                console.log('✔️ Verification - item after save:', JSON.parse(JSON.stringify(verifiedItem)));
+                
                 alert('✅ Item updated successfully!');
                 hideEditItem();
                 renderInventory();

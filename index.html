@@ -4827,6 +4827,7 @@
                         <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;">
                     </div>
                     <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px; z-index: 10;">
+                        <button onclick="duplicateInventoryItem(${item.id}); event.stopPropagation();" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Duplicate item">⎘</button>
                         <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
                         <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
                     </div>
@@ -4895,6 +4896,7 @@
                                         ${inventory.some(i => i.dimensions) ? `<td style="padding: 16px; font-size: 12px; color: #6b7280;">${dimensions}</td>` : ''}
                                         <td style="padding: 16px;">
                                             <div style="display: flex; gap: 6px;">
+                                                <button onclick="duplicateInventoryItem(${item.id})" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Duplicate item">⎘</button>
                                                 <button onclick="editInventoryItem(${item.id})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
                                                 <button onclick="deleteInventoryItem(${item.id})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
                                             </div>
@@ -5836,6 +5838,37 @@
                 hideEditItem();
                 renderInventory();
             }
+        }
+        
+        function duplicateInventoryItem(itemId) {
+            const currentInventory = getStoredInventory();
+            const originalItem = currentInventory.find(i => i.id === itemId);
+            
+            if (!originalItem) {
+                alert('❌ Item not found');
+                return;
+            }
+            
+            // Create a duplicate with a new ID and updated name
+            const duplicateItem = {
+                ...originalItem,
+                id: Date.now(), // New unique ID
+                name: originalItem.name + ' (Copy)',
+                // Keep the photo for the duplicate
+                // Note: You could optionally remove the photo by setting photo: undefined
+            };
+            
+            // Add the duplicate to inventory
+            currentInventory.push(duplicateItem);
+            saveStoredInventory(currentInventory);
+            
+            alert('✅ Item duplicated! You can now edit it to make changes.');
+            renderInventory();
+            
+            // Optionally, auto-open the edit modal for the new duplicate
+            setTimeout(() => {
+                editInventoryItem(duplicateItem.id);
+            }, 100);
         }
         
         function deleteInventoryItem(itemId) {

@@ -2929,7 +2929,7 @@
         // IndexedDB for file/image storage
         let db;
         const DB_NAME = 'stagience-db';
-        const DB_VERSION = 1;
+        const DB_VERSION = 2; // Bumped to trigger upgrade for photos store
         
         // Initialize IndexedDB
         function initIndexedDB() {
@@ -2951,6 +2951,10 @@
                     }
                     if (!db.objectStoreNames.contains('files')) {
                         db.createObjectStore('files', { keyPath: 'id' });
+                    }
+                    if (!db.objectStoreNames.contains('photos')) {
+                        db.createObjectStore('photos', { keyPath: 'id' });
+                        console.log('✅ Created photos object store in IndexedDB');
                     }
                 };
             });
@@ -3543,15 +3547,51 @@
             return project.photoFolders || [];
         }
         
-        function saveProjectPhotoFolders(projectId, folders) {
+        async function saveProjectPhotoFolders(projectId, folders) {
             const project = projects.find(p => p.id === projectId);
             if (project) {
-                project.photoFolders = folders;
+                // Save folders with photo metadata ONLY (no base64 data)
+                const foldersMetadata = folders.map(folder => ({
+                    ...folder,
+                    photos: folder.photos.map(photo => ({
+                        id: photo.id,
+                        name: photo.name,
+                        uploadedAt: photo.uploadedAt,
+                        hasData: !!photo.data  // Flag to know if photo has data
+                    }))
+                }));
+                
+                project.photoFolders = foldersMetadata;
+                
+                // Save photo DATA to IndexedDB separately
+                for (const folder of folders) {
+                    for (const photo of folder.photos) {
+                        if (photo.data) {
+                            await saveToIndexedDB('photos', photo.id, {
+                                data: photo.data,
+                                name: photo.name,
+                                uploadedAt: photo.uploadedAt
+                            });
+                        }
+                    }
+                }
+                
                 localStorage.setItem('stagience_projects', JSON.stringify(projects));
             }
         }
         
-        function renderPhotoFolders() {
+        // Load photo data from IndexedDB when needed
+        async function loadPhotoData(photoId) {
+            try {
+                const photoData = await getFromIndexedDB('photos', photoId);
+                return photoData ? photoData.data : null;
+            } catch (error) {
+                console.error('Error loading photo data:', error);
+                return null;
+            }
+        }
+        
+        async function renderPhotoFolders() {
             console.log('🖼️ renderPhotoFolders called, currentProjectId:', currentProjectId);
             
             if (!currentProjectId) {
@@ -3574,7 +3614,23 @@
             // Force clear first to ensure re-render
             container.innerHTML = '';
             
-            container.innerHTML = folders.map(folder => {
+            // Load photo data from IndexedDB for each photo
+            const foldersWithData = await Promise.all(folders.map(async folder => {
+                const photosWithData = await Promise.all(folder.photos.map(async photo => {
+                    const photoData = await loadPhotoData(photo.id);
+                    return {
+                        ...photo,
+                        data: photoData || '' // Use loaded data or empty string
+                    };
+                }));
+                
+                return {
+                    ...folder,
+                    photos: photosWithData
+                };
+            }));
+            
+            container.innerHTML = foldersWithData.map(folder => {
                 const photoCount = folder.photos ? folder.photos.length : 0;
                 console.log(`  📂 ${folder.name}: ${photoCount} photos`);
                 
@@ -3603,7 +3659,7 @@
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
                                 ${folder.photos.map(photo => `
                                     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; position: relative;">
-                                        <img src="${photo.data}" alt="${photo.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover;">
+                                        <img src="${photo.data || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'150\'%3E%3Crect fill=\'%23f3f4f6\' width=\'200\' height=\'150\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%236b7280\'%3ELoading...%3C/text%3E%3C/svg%3E'}" alt="${photo.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover;">
                                         <div style="padding: 10px;">
                                             <div style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">${photo.name}</div>
                                             <div style="font-size: 11px; color: #6b7280;">${new Date(photo.uploadedAt).toLocaleDateString()}</div>
@@ -3743,14 +3799,14 @@
                 }
             }
             
-            console.log('💾 Saving', uploadedCount, 'photos to localStorage');
-            saveProjectPhotoFolders(currentProjectId, folders);
+            console.log('💾 Saving', uploadedCount, 'photos to IndexedDB and localStorage');
+            await saveProjectPhotoFolders(currentProjectId, folders);
             
             console.log('🚪 Hiding modal');
             hideUploadPhotos();
             
             console.log('🎨 Calling renderPhotoFolders');
-            renderPhotoFolders();
+            await renderPhotoFolders();
             
             console.log('💬 Showing alert');
             if (uploadedCount > 0 && skippedCount > 0) {
@@ -3762,7 +3818,7 @@
             }
         }
         
-        function deletePhoto(folderId, photoId) {
+        async function deletePhoto(folderId, photoId) {
             if (!confirm('Delete this photo?')) return;
             
             console.log('🗑️ deletePhoto called for:', photoId);
@@ -3774,11 +3830,19 @@
                 console.log('📂 Found folder, deleting photo');
                 folder.photos = folder.photos.filter(p => p.id !== photoId);
                 
+                // Delete photo data from IndexedDB
+                try {
+                    await deleteFromIndexedDB('photos', photoId);
+                    console.log('🗑️ Deleted photo data from IndexedDB');
+                } catch (error) {
+                    console.error('❌ Error deleting from IndexedDB:', error);
+                }
+                
                 console.log('💾 Saving to localStorage');
-                saveProjectPhotoFolders(currentProjectId, folders);
+                await saveProjectPhotoFolders(currentProjectId, folders);
                 
                 console.log('🎨 Calling renderPhotoFolders');
-                renderPhotoFolders();
+                await renderPhotoFolders();
                 
                 console.log('✅ Photo deleted, render complete');
             }
@@ -4553,7 +4617,7 @@
             renderProjectNotes(projectId);
         }
 
-        function switchProjectTab(tabName) {
+        async function switchProjectTab(tabName) {
             // Remove active class from all tabs
             document.querySelectorAll('.project-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.project-tab-content').forEach(content => content.classList.remove('active'));
@@ -4574,7 +4638,7 @@
             
             // Render photo folders when switching to photos tab
             if (tabName === 'photos') {
-                renderPhotoFolders();
+                await renderPhotoFolders();
             }
         }
 

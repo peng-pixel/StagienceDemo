@@ -2650,8 +2650,12 @@
                 
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 8px;">Select Photos *</label>
-                    <input type="file" id="photo-files" required accept="image/*" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                    <div style="margin-top: 8px; font-size: 13px; color: #6b7280;">You can select multiple photos at once (Max 5MB per photo)</div>
+                    <input type="file" id="photo-files" required accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <div style="margin-top: 8px; font-size: 13px; color: #6b7280;">
+                        <div>✅ Supported: JPG, PNG, GIF, WebP</div>
+                        <div>❌ Not supported: HEIC/HEIF (iPhone default format)</div>
+                        <div style="margin-top: 4px;">📝 Max 5MB per photo</div>
+                    </div>
                 </div>
 
                 <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
@@ -3548,15 +3552,31 @@
         }
         
         function renderPhotoFolders() {
-            if (!currentProjectId) return;
+            console.log('🖼️ renderPhotoFolders called, currentProjectId:', currentProjectId);
+            
+            if (!currentProjectId) {
+                console.warn('⚠️ currentProjectId is not set!');
+                return;
+            }
             
             const folders = getProjectPhotoFolders(currentProjectId);
+            console.log('📁 Folders:', folders);
+            
             const container = document.getElementById('photo-folders-container');
             
-            if (!container) return;
+            if (!container) {
+                console.warn('⚠️ photo-folders-container not found!');
+                return;
+            }
+            
+            console.log('✅ Rendering', folders.length, 'folders to container');
+            
+            // Force clear first to ensure re-render
+            container.innerHTML = '';
             
             container.innerHTML = folders.map(folder => {
                 const photoCount = folder.photos ? folder.photos.length : 0;
+                console.log(`  📂 ${folder.name}: ${photoCount} photos`);
                 
                 return `
                     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
@@ -3671,50 +3691,96 @@
                 return;
             }
             
+            let uploadedCount = 0;
+            let skippedCount = 0;
+            
             // Process each photo
             for (let i = 0; i < fileInput.files.length; i++) {
                 const file = fileInput.files[i];
                 
+                // Check file type - reject HEIC/HEIF (not supported in browsers)
+                if (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')) {
+                    alert(`⚠️ "${file.name}" is in HEIC format which is not supported in web browsers.\n\nPlease convert to JPG or PNG first.\n\nOn iPhone: Settings > Camera > Formats > Choose "Most Compatible" to save as JPG instead of HEIC.`);
+                    skippedCount++;
+                    continue;
+                }
+                
+                // Check if it's actually an image
+                if (!file.type.startsWith('image/')) {
+                    alert(`⚠️ "${file.name}" is not an image file. Only image files are allowed.`);
+                    skippedCount++;
+                    continue;
+                }
+                
                 // Check file size (5MB limit)
                 if (file.size > 5 * 1024 * 1024) {
-                    alert(`Photo "${file.name}" is too large. Maximum 5MB per photo.`);
+                    alert(`⚠️ "${file.name}" is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum 5MB per photo.`);
+                    skippedCount++;
                     continue;
                 }
                 
                 // Read file as base64
-                const fileData = await new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(file);
-                });
-                
-                // Add to folder
-                folder.photos.push({
-                    id: `photo-${Date.now()}-${i}`,
-                    name: file.name,
-                    data: fileData,
-                    uploadedAt: new Date().toISOString()
-                });
+                try {
+                    const fileData = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                    
+                    // Add to folder
+                    folder.photos.push({
+                        id: `photo-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
+                        name: file.name,
+                        data: fileData,
+                        uploadedAt: new Date().toISOString()
+                    });
+                    
+                    uploadedCount++;
+                } catch (error) {
+                    console.error('Error reading file:', file.name, error);
+                    skippedCount++;
+                }
             }
             
+            console.log('💾 Saving', uploadedCount, 'photos to localStorage');
             saveProjectPhotoFolders(currentProjectId, folders);
             
-            alert(`✅ ${fileInput.files.length} photo(s) uploaded!`);
+            console.log('🚪 Hiding modal');
             hideUploadPhotos();
+            
+            console.log('🎨 Calling renderPhotoFolders');
             renderPhotoFolders();
+            
+            console.log('💬 Showing alert');
+            if (uploadedCount > 0 && skippedCount > 0) {
+                alert(`✅ ${uploadedCount} photo(s) uploaded!\n⚠️ ${skippedCount} photo(s) skipped.`);
+            } else if (uploadedCount > 0) {
+                alert(`✅ ${uploadedCount} photo(s) uploaded successfully!`);
+            } else {
+                alert(`⚠️ No photos were uploaded. ${skippedCount} photo(s) skipped.`);
+            }
         }
         
         function deletePhoto(folderId, photoId) {
             if (!confirm('Delete this photo?')) return;
             
+            console.log('🗑️ deletePhoto called for:', photoId);
+            
             const folders = getProjectPhotoFolders(currentProjectId);
             const folder = folders.find(f => f.id === folderId);
             
             if (folder) {
+                console.log('📂 Found folder, deleting photo');
                 folder.photos = folder.photos.filter(p => p.id !== photoId);
+                
+                console.log('💾 Saving to localStorage');
                 saveProjectPhotoFolders(currentProjectId, folders);
+                
+                console.log('🎨 Calling renderPhotoFolders');
                 renderPhotoFolders();
+                
+                console.log('✅ Photo deleted, render complete');
             }
         }
         
@@ -4191,6 +4257,7 @@
             const projectDetailPage = document.getElementById('project-detail-page');
             if (projectId) {
                 projectDetailPage.setAttribute('data-project-id', projectId);
+                currentProjectId = projectId; // CRITICAL: Set the global variable!
                 console.log('Set project ID to:', projectId);
             } else {
                 // Fallback: find project ID by name
@@ -4198,6 +4265,7 @@
                 const project = projects.find(p => p.name === projectName);
                 if (project) {
                     projectDetailPage.setAttribute('data-project-id', project.id);
+                    currentProjectId = project.id; // CRITICAL: Set the global variable!
                     console.log('Found project ID by name:', project.id);
                 }
             }
@@ -4209,15 +4277,15 @@
             switchProjectTab('schedule');
             
             // Re-render timeline for this specific project
-            const currentProjectId = projectDetailPage.getAttribute('data-project-id');
-            if (currentProjectId && document.getElementById('project-timeline-container')) {
-                console.log('Rendering timeline for project:', currentProjectId);
-                renderProjectTimeline(parseInt(currentProjectId));
+            const projectIdForTimeline = projectDetailPage.getAttribute('data-project-id');
+            if (projectIdForTimeline && document.getElementById('project-timeline-container')) {
+                console.log('Rendering timeline for project:', projectIdForTimeline);
+                renderProjectTimeline(parseInt(projectIdForTimeline));
             }
             
             // Render notes for this project (both main page and modal)
-            renderProjectNotes(parseInt(currentProjectId));
-            renderProjectNotesMain(parseInt(currentProjectId));
+            renderProjectNotes(parseInt(projectIdForTimeline));
+            renderProjectNotesMain(parseInt(projectIdForTimeline));
         }
         
         // ===== PROJECT NOTES FUNCTIONS =====

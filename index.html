@@ -1657,7 +1657,15 @@
                     <div class="text-6xl mb-4">📷</div>
                     <div class="font-semibold mb-2">Upload or take a photo</div>
                     <div class="text-sm text-gray-500 mb-4">JPG, PNG, or HEIC up to 10MB</div>
-                    <button class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Choose File</button>
+                    
+                    <!-- Hidden file input -->
+                    <input type="file" id="wizard-item-photo" accept="image/*" style="display: none;" onchange="handleWizardPhotoUpload(this)">
+                    
+                    <!-- Button that triggers file input -->
+                    <button type="button" onclick="document.getElementById('wizard-item-photo').click()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Choose File</button>
+                    
+                    <!-- Preview area -->
+                    <div id="wizard-photo-preview" style="margin-top: 16px;"></div>
                 </div>
             </div>
 
@@ -4935,6 +4943,13 @@
             const modal = document.getElementById('wizard-modal');
             modal.classList.remove('active');
             modal.style.display = 'none';
+            
+            // Clear photo preview and file input
+            const photoPreview = document.getElementById('wizard-photo-preview');
+            if (photoPreview) photoPreview.innerHTML = '';
+            
+            const photoInput = document.getElementById('wizard-item-photo');
+            if (photoInput) photoInput.value = '';
         }
 
         function cancelWizard() {
@@ -5030,6 +5045,30 @@
             // Auto-advance
             setTimeout(() => wizardNext(), 300);
         }
+        
+        // Handle photo upload in wizard
+        function handleWizardPhotoUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Store photo in wizardData
+                    wizardData.photo = e.target.result;
+                    
+                    // Show preview
+                    const preview = document.getElementById('wizard-photo-preview');
+                    preview.innerHTML = `
+                        <div style="margin-top: 16px;">
+                            <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #e5e7eb; display: inline-block;">
+                            <div style="margin-top: 8px; color: #16a34a; font-weight: 600;">✓ Photo uploaded</div>
+                        </div>
+                    `;
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
 
         function saveInventoryItem() {
             console.log('📦 saveInventoryItem called');
@@ -5078,7 +5117,8 @@
                 location: wizardData.location,
                 purchaseDate: wizardData.purchaseDate,
                 purchasedFrom: wizardData.purchasedFrom,
-                cost: parseFloat(wizardData.cost) || 0
+                cost: parseFloat(wizardData.cost) || 0,
+                photo: wizardData.photo || undefined  // Add photo if uploaded
             };
             
             console.log('New item to save:', newItem);

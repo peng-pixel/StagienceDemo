@@ -1333,11 +1333,11 @@
                         <div class="header-actions" style="display: flex; gap: 12px;">
                             <!-- View Toggle -->
                             <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
-                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                                     <span>📦</span>
                                     <span>Grid</span>
                                 </button>
-                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                                     <span>📋</span>
                                     <span>List</span>
                                 </button>
@@ -1407,10 +1407,10 @@
                     </div>
 
                     <!-- Grid View -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;" id="inventory-grid"></div>
+                    <div style="display: none;" id="inventory-grid"></div>
                     
                     <!-- List View -->
-                    <div style="display: none;" id="inventory-list"></div>
+                    <div style="display: block;" id="inventory-list"></div>
                 </div>
             </main>
         </div>
@@ -4074,6 +4074,11 @@
                 renderCalendar();
             }
             
+            // Render inventory when switching to inventory page
+            if (page === 'inventory') {
+                renderInventory();
+            }
+            
             // Render templates when switching to templates page
             if (page === 'templates') {
                 renderTemplates();
@@ -4686,7 +4691,7 @@
         }
 
         // Inventory view state
-        let currentInventoryView = 'grid'; // 'grid' or 'list'
+        let currentInventoryView = 'list'; // 'grid' or 'list' - Default to list view
         
         function switchInventoryView(view) {
             currentInventoryView = view;
@@ -4694,6 +4699,8 @@
             // Update button styles
             const gridBtn = document.getElementById('grid-view-btn');
             const listBtn = document.getElementById('list-view-btn');
+            const gridContainer = document.getElementById('inventory-grid');
+            const listContainer = document.getElementById('inventory-list');
             
             if (view === 'grid') {
                 gridBtn.style.background = '#eff6ff';
@@ -4701,16 +4708,18 @@
                 listBtn.style.background = 'white';
                 listBtn.style.color = '#6b7280';
                 
-                document.getElementById('inventory-grid').style.display = 'grid';
-                document.getElementById('inventory-list').style.display = 'none';
+                gridContainer.style.display = 'grid';
+                gridContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+                gridContainer.style.gap = '16px';
+                listContainer.style.display = 'none';
             } else {
                 listBtn.style.background = '#eff6ff';
                 listBtn.style.color = '#1e40af';
                 gridBtn.style.background = 'white';
                 gridBtn.style.color = '#6b7280';
                 
-                document.getElementById('inventory-grid').style.display = 'none';
-                document.getElementById('inventory-list').style.display = 'block';
+                gridContainer.style.display = 'none';
+                listContainer.style.display = 'block';
             }
             
             renderInventory();

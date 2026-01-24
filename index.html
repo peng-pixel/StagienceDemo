@@ -2235,14 +2235,14 @@
     </div>
 
     <!-- Inventory Filter Modal -->
-    <div id="inventory-filter-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
-        <div class="bg-white rounded-2xl max-w-xl w-full p-8">
-            <div class="flex justify-between items-center mb-6">
+    <div id="inventory-filter-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-8" style="max-height: 85vh; overflow-y: auto; -webkit-overflow-scrolling: touch; margin: auto;">
+            <div class="flex justify-between items-center mb-6" style="position: sticky; top: 0; background: white; z-index: 10; padding-bottom: 12px; margin-bottom: 12px;">
                 <h2 class="text-2xl font-bold">Filter Inventory</h2>
-                <button onclick="hideInventoryFilter()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                <button onclick="hideInventoryFilter()" class="text-gray-500 hover:text-gray-700 text-2xl" style="cursor: pointer; background: none; border: none; font-size: 32px; line-height: 1; padding: 0; min-width: 32px; min-height: 32px;">×</button>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div style="display: flex; flex-direction: column; gap: 24px; padding-bottom: 20px;">
                 <!-- Status Filter -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Status</label>
@@ -2318,15 +2318,15 @@
                 </div>
             </div>
 
-            <div class="flex justify-between mt-8">
-                <button onclick="clearAllFilters()" style="padding: 10px 20px; border: 1px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer; background: white;">
+            <div class="flex justify-between mt-8" style="position: sticky; bottom: 0; background: white; padding-top: 16px; margin-top: 16px; border-top: 2px solid #e5e7eb; z-index: 10;">
+                <button onclick="clearAllFilters()" style="padding: 10px 20px; border: 1px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer; background: white; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
                     Clear All
                 </button>
                 <div class="flex gap-3">
-                    <button onclick="hideInventoryFilter()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;">
+                    <button onclick="hideInventoryFilter()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
                         Cancel
                     </button>
-                    <button id="apply-filters-btn" onclick="applyInventoryFilters(); return false;" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;">
+                    <button id="apply-filters-btn" onclick="applyInventoryFilters(); return false;" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;">
                         Apply Filters
                     </button>
                 </div>

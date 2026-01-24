@@ -3634,6 +3634,17 @@
                 const photoCount = folder.photos ? folder.photos.length : 0;
                 console.log(`  📂 ${folder.name}: ${photoCount} photos`);
                 
+                // Initialize page state for this folder if not set
+                if (!photoPageState[folder.id]) {
+                    photoPageState[folder.id] = 1;
+                }
+                
+                const currentPage = photoPageState[folder.id];
+                const totalPages = Math.ceil(photoCount / PHOTOS_PER_PAGE);
+                const startIndex = (currentPage - 1) * PHOTOS_PER_PAGE;
+                const endIndex = startIndex + PHOTOS_PER_PAGE;
+                const photosToShow = folder.photos.slice(startIndex, endIndex);
+                
                 return `
                     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -3656,8 +3667,8 @@
                         
                         <!-- Photos in this folder -->
                         ${photoCount > 0 ? `
-                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
-                                ${folder.photos.map(photo => `
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                                ${photosToShow.map(photo => `
                                     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; position: relative;">
                                         <img src="${photo.data || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'150\'%3E%3Crect fill=\'%23f3f4f6\' width=\'200\' height=\'150\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%236b7280\'%3ELoading...%3C/text%3E%3C/svg%3E'}" alt="${photo.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover;">
                                         <div style="padding: 10px;">
@@ -3668,6 +3679,27 @@
                                     </div>
                                 `).join('')}
                             </div>
+                            
+                            ${totalPages > 1 ? `
+                                <div style="display: flex; justify-content: center; align-items: center; gap: 8px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                                    <button onclick="changePhotoPage(${folder.id}, ${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} style="padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: ${currentPage === 1 ? '#f3f4f6' : 'white'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'}; font-weight: 600;">
+                                        ← Previous
+                                    </button>
+                                    <div style="display: flex; gap: 4px;">
+                                        ${Array.from({length: totalPages}, (_, i) => i + 1).map(pageNum => `
+                                            <button onclick="changePhotoPage(${folder.id}, ${pageNum})" style="padding: 8px 12px; border: 1px solid ${pageNum === currentPage ? '#3b82f6' : '#e5e7eb'}; border-radius: 8px; background: ${pageNum === currentPage ? '#eff6ff' : 'white'}; color: ${pageNum === currentPage ? '#1e40af' : '#6b7280'}; cursor: pointer; font-weight: ${pageNum === currentPage ? '700' : '600'};">
+                                                ${pageNum}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                    <button onclick="changePhotoPage(${folder.id}, ${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} style="padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; background: ${currentPage === totalPages ? '#f3f4f6' : 'white'}; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'}; font-weight: 600;">
+                                        Next →
+                                    </button>
+                                </div>
+                                <div style="text-align: center; margin-top: 8px; font-size: 13px; color: #6b7280;">
+                                    Showing ${startIndex + 1}-${Math.min(endIndex, photoCount)} of ${photoCount} photos
+                                </div>
+                            ` : ''}
                         ` : `
                             <div style="text-align: center; padding: 40px; color: #6b7280; background: #f9fafb; border-radius: 8px; border: 2px dashed #d1d5db;">
                                 <div style="font-size: 48px; margin-bottom: 8px;">📸</div>
@@ -3678,6 +3710,11 @@
                     </div>
                 `;
             }).join('');
+        }
+        
+        function changePhotoPage(folderId, newPage) {
+            photoPageState[folderId] = newPage;
+            renderPhotoFolders();
         }
         
         function showCreateFolder() {
@@ -6612,6 +6649,10 @@
         // ========================================
         
         let currentProjectId = 1; // This will be set when viewing a project
+        
+        // Photo pagination - 20 photos per page
+        const PHOTOS_PER_PAGE = 20;
+        const photoPageState = {}; // Track current page per folder: { folderId: pageNumber }
         
         // Get timeline for a specific project
         function getProjectTimeline(projectId) {

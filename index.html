@@ -5031,18 +5031,87 @@
         
         // Drag and drop functionality
         let draggedItemId = null;
+        let touchDragElement = null;
         
         function initializeDragAndDrop() {
             const cards = document.querySelectorAll('.inventory-card[draggable="true"]');
             
             cards.forEach(card => {
+                // Desktop drag events
                 card.addEventListener('dragstart', handleDragStart);
                 card.addEventListener('dragover', handleDragOver);
                 card.addEventListener('drop', handleDrop);
                 card.addEventListener('dragend', handleDragEnd);
                 card.addEventListener('dragenter', handleDragEnter);
                 card.addEventListener('dragleave', handleDragLeave);
+                
+                // Mobile touch events
+                card.addEventListener('touchstart', handleTouchStart, {passive: false});
+                card.addEventListener('touchmove', handleTouchMove, {passive: false});
+                card.addEventListener('touchend', handleTouchEnd);
             });
+        }
+        
+        // Touch event handlers for mobile
+        function handleTouchStart(e) {
+            touchDragElement = this;
+            draggedItemId = parseInt(this.getAttribute('data-item-id'));
+            this.style.opacity = '0.4';
+            e.preventDefault(); // Prevent scrolling while dragging
+        }
+        
+        function handleTouchMove(e) {
+            if (!touchDragElement) return;
+            
+            e.preventDefault(); // Prevent scrolling
+            const touch = e.touches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            
+            // Find if we're over another inventory card
+            const cardBelow = elementBelow?.closest('.inventory-card[draggable="true"]');
+            
+            // Reset all borders
+            document.querySelectorAll('.inventory-card').forEach(card => {
+                card.style.border = '1px solid #e5e7eb';
+            });
+            
+            // Highlight drop target
+            if (cardBelow && cardBelow !== touchDragElement) {
+                cardBelow.style.border = '2px dashed #3b82f6';
+            }
+        }
+        
+        function handleTouchEnd(e) {
+            if (!touchDragElement) return;
+            
+            const touch = e.changedTouches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const cardBelow = elementBelow?.closest('.inventory-card[draggable="true"]');
+            
+            if (cardBelow && cardBelow !== touchDragElement) {
+                const targetItemId = parseInt(cardBelow.getAttribute('data-item-id'));
+                
+                // Perform the swap
+                const inventory = getStoredInventory();
+                const draggedIndex = inventory.findIndex(i => i.id === draggedItemId);
+                const targetIndex = inventory.findIndex(i => i.id === targetItemId);
+                
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    const draggedItem = inventory.splice(draggedIndex, 1)[0];
+                    const newTargetIndex = draggedIndex < targetIndex ? targetIndex : targetIndex;
+                    inventory.splice(newTargetIndex, 0, draggedItem);
+                    saveStoredInventory(inventory);
+                    renderInventory();
+                }
+            }
+            
+            // Reset
+            touchDragElement.style.opacity = '1';
+            document.querySelectorAll('.inventory-card').forEach(card => {
+                card.style.border = '1px solid #e5e7eb';
+            });
+            touchDragElement = null;
+            draggedItemId = null;
         }
         
         function handleDragStart(e) {
@@ -5174,17 +5243,85 @@
         }
         
         // Drag and drop for list view (table rows)
+        let touchDragRow = null;
+        
         function initializeDragAndDropList() {
             const rows = document.querySelectorAll('.inventory-row[draggable="true"]');
             
             rows.forEach(row => {
+                // Desktop drag events
                 row.addEventListener('dragstart', handleDragStartList);
                 row.addEventListener('dragover', handleDragOver);
                 row.addEventListener('drop', handleDropList);
                 row.addEventListener('dragend', handleDragEndList);
                 row.addEventListener('dragenter', handleDragEnterList);
                 row.addEventListener('dragleave', handleDragLeaveList);
+                
+                // Mobile touch events
+                row.addEventListener('touchstart', handleTouchStartList, {passive: false});
+                row.addEventListener('touchmove', handleTouchMoveList, {passive: false});
+                row.addEventListener('touchend', handleTouchEndList);
             });
+        }
+        
+        // Touch handlers for list view
+        function handleTouchStartList(e) {
+            touchDragRow = this;
+            draggedItemId = parseInt(this.getAttribute('data-item-id'));
+            this.style.opacity = '0.4';
+            e.preventDefault();
+        }
+        
+        function handleTouchMoveList(e) {
+            if (!touchDragRow) return;
+            
+            e.preventDefault();
+            const touch = e.touches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const rowBelow = elementBelow?.closest('.inventory-row[draggable="true"]');
+            
+            // Reset all backgrounds
+            document.querySelectorAll('.inventory-row').forEach(row => {
+                row.style.background = '';
+            });
+            
+            // Highlight drop target
+            if (rowBelow && rowBelow !== touchDragRow) {
+                rowBelow.style.background = '#dbeafe';
+            }
+        }
+        
+        function handleTouchEndList(e) {
+            if (!touchDragRow) return;
+            
+            const touch = e.changedTouches[0];
+            const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+            const rowBelow = elementBelow?.closest('.inventory-row[draggable="true"]');
+            
+            if (rowBelow && rowBelow !== touchDragRow) {
+                const targetItemId = parseInt(rowBelow.getAttribute('data-item-id'));
+                
+                // Perform the swap
+                const inventory = getStoredInventory();
+                const draggedIndex = inventory.findIndex(i => i.id === draggedItemId);
+                const targetIndex = inventory.findIndex(i => i.id === targetItemId);
+                
+                if (draggedIndex !== -1 && targetIndex !== -1) {
+                    const draggedItem = inventory.splice(draggedIndex, 1)[0];
+                    const newTargetIndex = draggedIndex < targetIndex ? targetIndex : targetIndex;
+                    inventory.splice(newTargetIndex, 0, draggedItem);
+                    saveStoredInventory(inventory);
+                    renderInventory();
+                }
+            }
+            
+            // Reset
+            touchDragRow.style.opacity = '1';
+            document.querySelectorAll('.inventory-row').forEach(row => {
+                row.style.background = '';
+            });
+            touchDragRow = null;
+            draggedItemId = null;
         }
         
         function handleDragStartList(e) {

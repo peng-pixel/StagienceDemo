@@ -2323,10 +2323,10 @@
                     Clear All
                 </button>
                 <div class="flex gap-3">
-                    <button onclick="hideInventoryFilter()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                    <button onclick="hideInventoryFilter()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;">
                         Cancel
                     </button>
-                    <button onclick="applyInventoryFilters()" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    <button id="apply-filters-btn" onclick="applyInventoryFilters(); return false;" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; -webkit-tap-highlight-color: transparent;">
                         Apply Filters
                     </button>
                 </div>
@@ -4692,43 +4692,50 @@
         };
         
         function applyInventoryFilters() {
-            console.log('🔍 Applying filters...');
-            
-            // Get selected statuses
-            const statuses = [];
-            if (document.getElementById('filter-status-in').checked) statuses.push('IN');
-            if (document.getElementById('filter-status-out').checked) statuses.push('OUT');
-            if (document.getElementById('filter-status-hold').checked) statuses.push('HOLD');
-            
-            console.log('Selected statuses:', statuses);
-            
-            // Get selected categories
-            const categories = [];
-            if (document.getElementById('filter-cat-seating').checked) categories.push('Seating');
-            if (document.getElementById('filter-cat-tables').checked) categories.push('Tables');
-            if (document.getElementById('filter-cat-lighting').checked) categories.push('Lighting');
-            if (document.getElementById('filter-cat-decor').checked) categories.push('Decor');
-            if (document.getElementById('filter-cat-art').checked) categories.push('Art');
-            if (document.getElementById('filter-cat-rugs').checked) categories.push('Rugs');
-            
-            console.log('Selected categories:', categories);
-            
-            // Get location and search
-            const location = document.getElementById('filter-location').value;
-            const search = document.getElementById('filter-search').value.toLowerCase();
-            
-            // Update filter state
-            inventoryFilters = { statuses, categories, location, search };
-            
-            console.log('Filter state updated:', inventoryFilters);
-            
-            // Re-render inventory with filters
-            renderInventory();
-            
-            console.log('✅ Filters applied and inventory re-rendered');
-            
-            // Close modal
-            hideInventoryFilter();
+            try {
+                console.log('🔍 Applying filters...');
+                
+                // Get selected statuses
+                const statuses = [];
+                if (document.getElementById('filter-status-in').checked) statuses.push('IN');
+                if (document.getElementById('filter-status-out').checked) statuses.push('OUT');
+                if (document.getElementById('filter-status-hold').checked) statuses.push('HOLD');
+                
+                console.log('Selected statuses:', statuses);
+                
+                // Get selected categories
+                const categories = [];
+                if (document.getElementById('filter-cat-seating').checked) categories.push('Seating');
+                if (document.getElementById('filter-cat-tables').checked) categories.push('Tables');
+                if (document.getElementById('filter-cat-lighting').checked) categories.push('Lighting');
+                if (document.getElementById('filter-cat-decor').checked) categories.push('Decor');
+                if (document.getElementById('filter-cat-art').checked) categories.push('Art');
+                if (document.getElementById('filter-cat-rugs').checked) categories.push('Rugs');
+                
+                console.log('Selected categories:', categories);
+                
+                // Get location and search
+                const location = document.getElementById('filter-location').value;
+                const search = document.getElementById('filter-search').value.toLowerCase();
+                
+                // Update filter state
+                inventoryFilters = { statuses, categories, location, search };
+                
+                console.log('Filter state updated:', inventoryFilters);
+                
+                // Close modal FIRST (before rendering which might take time)
+                hideInventoryFilter();
+                
+                // Re-render inventory with filters
+                renderInventory();
+                
+                console.log('✅ Filters applied and inventory re-rendered');
+            } catch (error) {
+                console.error('❌ Error applying filters:', error);
+                // Make sure modal closes even if there's an error
+                hideInventoryFilter();
+                alert('Error applying filters. Please try again.');
+            }
         }
         
         function clearAllFilters() {

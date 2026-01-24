@@ -1361,21 +1361,21 @@
 
                     <!-- Bulk Actions Bar (hidden by default) -->
                     <div id="bulk-actions-bar" style="display: none; background: #eff6ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="font-weight: 600; color: #1e40af;">
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="font-weight: 600; color: #1e40af; text-align: center;">
                                 <span id="selected-count">0</span> items selected
                             </div>
-                            <div style="display: flex; gap: 12px;">
-                                <button onclick="showBulkUpdate()" style="padding: 10px 18px; border: 1px solid #3b82f6; border-radius: 8px; background: #3b82f6; color: white; font-weight: 600; cursor: pointer;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;">
+                                <button onclick="showBulkUpdate()" style="padding: 10px 14px; border: 1px solid #3b82f6; border-radius: 8px; background: #3b82f6; color: white; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">
                                     🔄 Bulk Update
                                 </button>
-                                <button onclick="bulkUpdateLocation()" style="padding: 10px 18px; border: 1px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer;">
+                                <button onclick="bulkUpdateLocation()" style="padding: 10px 14px; border: 1px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">
                                     📍 Update Location
                                 </button>
-                                <button onclick="bulkUpdateStatus()" style="padding: 10px 18px; border: 1px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer;">
+                                <button onclick="bulkUpdateStatus()" style="padding: 10px 14px; border: 1px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">
                                     🔄 Update Status
                                 </button>
-                                <button onclick="clearSelection()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                                <button onclick="clearSelection()" style="padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">
                                     Clear Selection
                                 </button>
                             </div>

@@ -4015,10 +4015,14 @@
             });
             
             // Add active class to selected folder
-            const selectedFolder = document.getElementById('folder-' + status);
-            selectedFolder.classList.add('active');
-            selectedFolder.style.borderColor = '#3b82f6';
-            selectedFolder.style.background = '#eff6ff';
+            // Replace spaces with dashes for ID lookup
+            const folderId = 'folder-' + status.replace(/ /g, '-');
+            const selectedFolder = document.getElementById(folderId);
+            if (selectedFolder) {
+                selectedFolder.classList.add('active');
+                selectedFolder.style.borderColor = '#3b82f6';
+                selectedFolder.style.background = '#eff6ff';
+            }
             
             // Re-render projects
             renderProjects();
@@ -5814,9 +5818,12 @@
             // Check all visible checkboxes
             const checkboxes = document.querySelectorAll('.item-checkbox');
             checkboxes.forEach(cb => {
-                // Only check if the item is currently visible (not display:none)
+                // Check if item is visible (works for both grid cards and list rows)
                 const itemCard = cb.closest('.inventory-card');
-                if (itemCard && itemCard.offsetParent !== null) {
+                const itemRow = cb.closest('.inventory-row');
+                const parentElement = itemCard || itemRow;
+                
+                if (parentElement && parentElement.offsetParent !== null) {
                     cb.checked = true;
                 }
             });

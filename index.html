@@ -7079,9 +7079,18 @@
                 shareText += `${event.icon} ${event.title}\n`;
                 shareText += `${eventDate}`;
                 
-                // Add time if present
+                // Add time if present (format as 12-hour with AM/PM)
                 if (event.time) {
-                    shareText += ` at ${event.time}`;
+                    try {
+                        const timeFormatted = new Date('2000-01-01 ' + event.time).toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit', 
+                            hour12: true 
+                        });
+                        shareText += ` at ${timeFormatted}`;
+                    } catch (e) {
+                        shareText += ` at ${event.time}`;
+                    }
                 }
                 shareText += '\n';
                 
@@ -7090,18 +7099,22 @@
                     shareText += `Notes: ${event.description}\n`;
                 }
                 
-                // Add color box details
-                if (event.guests) {
-                    shareText += `👥 Guests: ${event.guests}\n`;
-                }
-                if (event.furniture) {
-                    shareText += `🪑 Furniture: ${event.furniture}\n`;
-                }
-                if (event.delivery) {
-                    shareText += `🚚 Delivery: ${event.delivery}\n`;
-                }
-                if (event.other) {
-                    shareText += `📝 Other: ${event.other}\n`;
+                // Add detail fields based on event type
+                if (event.details) {
+                    if (event.icon === '🔧') { // Installation
+                        if (event.details.team) shareText += `Team: ${event.details.team}\n`;
+                        if (event.details.items) shareText += `Items: ${event.details.items}\n`;
+                        if (event.details.accessCode) shareText += `Access Code: ${event.details.accessCode}\n`;
+                        if (event.details.contact) shareText += `Contact: ${event.details.contact}\n`;
+                    } else if (event.icon === '📸') { // Photo Shoot
+                        if (event.details.photographer) shareText += `Photographer: ${event.details.photographer}\n`;
+                        if (event.details.focusAreas) shareText += `Focus Areas: ${event.details.focusAreas}\n`;
+                        if (event.details.shotList) shareText += `Shot List: ${event.details.shotList}\n`;
+                    } else if (event.icon === '📝') { // Consultation
+                        if (event.details.consultationNotes) shareText += `Details: ${event.details.consultationNotes}\n`;
+                    } else if (event.icon === '📦') { // Pickup
+                        if (event.details.pickupNotes) shareText += `Details: ${event.details.pickupNotes}\n`;
+                    }
                 }
                 
                 shareText += '\n';
@@ -7143,38 +7156,23 @@
                     day: 'numeric' 
                 });
                 
+                // Format time as 12-hour with AM/PM
+                let timeFormatted = '';
+                if (event.time) {
+                    try {
+                        timeFormatted = new Date('2000-01-01 ' + event.time).toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit', 
+                            hour12: true 
+                        });
+                    } catch (e) {
+                        timeFormatted = event.time;
+                    }
+                }
+                
                 let detailsHTML = '';
                 if (event.details && Object.keys(event.details).length > 0) {
                     detailsHTML = formatEventDetails(event.icon, event.details);
-                }
-                
-                // Add new color box fields (guests, furniture, delivery, other)
-                let colorBoxHTML = '';
-                if (event.guests || event.furniture || event.delivery || event.other) {
-                    colorBoxHTML = '<div style="margin-left: 36px; margin-top: 12px;">';
-                    
-                    if (event.guests) {
-                        colorBoxHTML += `<div style="background: #dbeafe; border-left: 3px solid #3b82f6; padding: 8px 12px; margin-bottom: 8px; border-radius: 4px;">
-                            <strong style="color: #1e40af;">👥 Guests:</strong> <span style="color: #1e3a8a;">${event.guests}</span>
-                        </div>`;
-                    }
-                    if (event.furniture) {
-                        colorBoxHTML += `<div style="background: #dcfce7; border-left: 3px solid #10b981; padding: 8px 12px; margin-bottom: 8px; border-radius: 4px;">
-                            <strong style="color: #047857;">🪑 Furniture:</strong> <span style="color: #065f46;">${event.furniture}</span>
-                        </div>`;
-                    }
-                    if (event.delivery) {
-                        colorBoxHTML += `<div style="background: #fef3c7; border-left: 3px solid #f59e0b; padding: 8px 12px; margin-bottom: 8px; border-radius: 4px;">
-                            <strong style="color: #b45309;">🚚 Delivery:</strong> <span style="color: #92400e;">${event.delivery}</span>
-                        </div>`;
-                    }
-                    if (event.other) {
-                        colorBoxHTML += `<div style="background: #f3e8ff; border-left: 3px solid #a855f7; padding: 8px 12px; border-radius: 4px;">
-                            <strong style="color: #7e22ce;">📝 Other:</strong> <span style="color: #6b21a8;">${event.other}</span>
-                        </div>`;
-                    }
-                    
-                    colorBoxHTML += '</div>';
                 }
                 
                 eventsHTML += `
@@ -7184,13 +7182,12 @@
                             <div>
                                 <div style="font-weight: 700; font-size: 16px;">${event.title}</div>
                                 <div style="color: #6b7280; font-size: 14px;">
-                                    ${eventDate}${event.time ? ` at ${event.time}` : ''}
+                                    ${eventDate}${timeFormatted ? ` at ${timeFormatted}` : ''}
                                 </div>
                             </div>
                         </div>
                         ${event.description ? `<div style="color: #4b5563; margin-left: 36px; margin-bottom: 12px; margin-top: 8px; line-height: 1.6;">${event.description}</div>` : ''}
                         ${detailsHTML}
-                        ${colorBoxHTML}
                     </div>
                 `;
             });

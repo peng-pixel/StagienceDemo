@@ -5013,12 +5013,12 @@
                 return `
                 <div draggable="true" data-item-id="${item.id}" style="background: white; border-radius: 16px; padding: 20px; border: 1px solid #e5e7eb; position: relative; transition: all 0.3s; cursor: move;" class="inventory-card" id="item-${item.id}">
                     <div style="position: absolute; top: 8px; left: 8px; z-index: 10;">
-                        <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;">
+                        <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer; touch-action: manipulation;">
                     </div>
                     <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px; z-index: 10;">
-                        <button onclick="duplicateInventoryItem(${item.id}); event.stopPropagation();" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Duplicate item">⎘</button>
-                        <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
-                        <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
+                        <button onclick="duplicateInventoryItem(${item.id}); event.stopPropagation();" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; touch-action: manipulation;" title="Duplicate item">⎘</button>
+                        <button onclick="editInventoryItem(${item.id}); event.stopPropagation();" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; touch-action: manipulation;" title="Edit item">✎</button>
+                        <button onclick="deleteInventoryItem(${item.id}); event.stopPropagation();" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 24px; height: 24px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0; touch-action: manipulation;" title="Delete item">×</button>
                     </div>
                     ${imageDisplay}
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -5061,6 +5061,15 @@
         
         // Touch event handlers for mobile
         function handleTouchStart(e) {
+            // Don't start drag if touching a button, checkbox, or input
+            const target = e.target;
+            if (target.tagName === 'BUTTON' || 
+                target.tagName === 'INPUT' || 
+                target.closest('button') || 
+                target.closest('input')) {
+                return; // Let the button/checkbox handle the touch
+            }
+            
             touchDragElement = this;
             draggedItemId = parseInt(this.getAttribute('data-item-id'));
             this.style.opacity = '0.4';
@@ -5209,7 +5218,7 @@
                                 
                                 return `
                                     <tr draggable="true" data-item-id="${item.id}" style="border-bottom: 1px solid #e5e7eb; transition: background 0.2s; cursor: move;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'" class="inventory-row">
-                                        <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer;"></td>
+                                        <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkSelection()" style="width: 18px; height: 18px; cursor: pointer; touch-action: manipulation;"></td>
                                         <td style="padding: 16px;">
                                             <div style="display: flex; align-items: center; gap: 12px;">
                                                 ${item.photo 
@@ -5232,9 +5241,9 @@
                                         ${inventory.some(i => i.dimensions) ? `<td style="padding: 16px; font-size: 12px; color: #6b7280;">${dimensions}</td>` : ''}
                                         <td style="padding: 16px;">
                                             <div style="display: flex; gap: 6px;">
-                                                <button onclick="duplicateInventoryItem(${item.id})" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Duplicate item">⎘</button>
-                                                <button onclick="editInventoryItem(${item.id})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0;" title="Edit item">✎</button>
-                                                <button onclick="deleteInventoryItem(${item.id})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0;" title="Delete item">×</button>
+                                                <button onclick="duplicateInventoryItem(${item.id})" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; touch-action: manipulation;" title="Duplicate item">⎘</button>
+                                                <button onclick="editInventoryItem(${item.id})" style="background: #eff6ff; border: 1px solid #93c5fd; color: #1e40af; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; touch-action: manipulation;" title="Edit item">✎</button>
+                                                <button onclick="deleteInventoryItem(${item.id})" style="background: #fee; border: 1px solid #fcc; color: #c00; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 16px; line-height: 1; padding: 0; touch-action: manipulation;" title="Delete item">×</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -5273,6 +5282,15 @@
         
         // Touch handlers for list view
         function handleTouchStartList(e) {
+            // Don't start drag if touching a button, checkbox, or input
+            const target = e.target;
+            if (target.tagName === 'BUTTON' || 
+                target.tagName === 'INPUT' || 
+                target.closest('button') || 
+                target.closest('input')) {
+                return; // Let the button/checkbox handle the touch
+            }
+            
             touchDragRow = this;
             draggedItemId = parseInt(this.getAttribute('data-item-id'));
             this.style.opacity = '0.4';

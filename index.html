@@ -6108,7 +6108,31 @@
             
             document.getElementById('edit-item-condition').value = item.condition || 'Good';
             document.getElementById('edit-item-status').value = item.status || 'IN';
-            document.getElementById('edit-item-location').value = item.location || '';
+            
+            // Handle location - add current location to dropdown if it doesn't exist
+            const locationSelect = document.getElementById('edit-item-location');
+            const currentLocation = item.location || '';
+            
+            // Check if current location exists in dropdown options
+            let locationExists = false;
+            for (let option of locationSelect.options) {
+                if (option.value === currentLocation) {
+                    locationExists = true;
+                    break;
+                }
+            }
+            
+            // If location doesn't exist in dropdown and isn't empty, add it
+            if (!locationExists && currentLocation && currentLocation !== '') {
+                const newOption = document.createElement('option');
+                newOption.value = currentLocation;
+                newOption.textContent = currentLocation;
+                locationSelect.appendChild(newOption);
+            }
+            
+            // Now set the value
+            locationSelect.value = currentLocation;
+            
             document.getElementById('edit-item-purchase-date').value = item.purchaseDate || '';
             document.getElementById('edit-item-cost').value = item.cost || '';
             document.getElementById('edit-item-purchased-from').value = item.purchasedFrom || '';

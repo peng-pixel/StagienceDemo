@@ -4785,6 +4785,7 @@
                                 <th>Color</th>
                                 <th>Status</th>
                                 <th>Location</th>
+                                <th>Room/Notes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -4808,6 +4809,7 @@
                                     <td>${item.color}</td>
                                     <td><span class="status status-${item.status.toLowerCase()}">${item.status}</span></td>
                                     <td>${item.location}</td>
+                                    <td style="font-size: 12px; color: #6b7280;">${item.room || '-'}</td>
                                 </tr>
                             `}).join('')}
                         </tbody>

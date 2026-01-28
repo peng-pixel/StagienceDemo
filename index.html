@@ -1479,7 +1479,7 @@
     <div id="wizard-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
         <div style="background: white; border-radius: 24px; max-width: 800px; width: 100%; padding: 32px; margin: 20px auto; max-height: 90vh; overflow-y: auto;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 12</h2>
+                <h2 class="text-2xl font-bold">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 11</h2>
                 <button onclick="cancelWizard()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
             </div>
 
@@ -1546,25 +1546,6 @@
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">ID/Code Number (Optional)</h3>
                 <input type="text" id="item-code" placeholder="e.g., INV-001, SKU-12345..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Add a unique identifier or code for tracking</p>
-            </div>
-
-            <!-- Step 5: Measurements -->
-            <div id="wizard-step-5" class="wizard-step">
-                <h3 class="text-lg font-semibold mb-4">What are the measurements?</h3>
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">Width (inches)</label>
-                        <input type="number" id="item-width" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">Depth (inches)</label>
-                        <input type="number" id="item-depth" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">Height (inches)</label>
-                        <input type="number" id="item-height" placeholder="0" class="w-full p-3 border-2 border-gray-200 rounded-lg">
-                    </div>
-                </div>
             </div>
 
             <!-- Step 5: Condition -->
@@ -1650,24 +1631,20 @@
                 </div>
             </div>
 
-            <!-- Step 11: Photo Upload -->
+            <!-- Step 11: Room/Notes -->
             <div id="wizard-step-11" class="wizard-step">
-                <h3 class="text-lg font-semibold mb-4">Add a photo</h3>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <div class="text-6xl mb-4">📷</div>
-                    <div class="font-semibold mb-2">Upload or take a photo</div>
-                    <div class="text-sm text-gray-500 mb-4">JPG, PNG, or HEIC up to 10MB</div>
-                    
-                    <!-- Hidden file input -->
-                    <input type="file" id="wizard-item-photo" accept="image/*" style="display: none;" onchange="handleWizardPhotoUpload(this)">
-                    
-                    <!-- Button that triggers file input -->
-                    <button type="button" onclick="document.getElementById('wizard-item-photo').click()" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Choose File</button>
-                    
-                    <!-- Preview area -->
-                    <div id="wizard-photo-preview" style="margin-top: 16px;"></div>
+                <h3 class="text-lg font-semibold mb-4">Which room is this for? (Optional)</h3>
+                <textarea id="item-room" rows="3" placeholder="e.g., Living Room, Master Bedroom, Special handling notes..." class="w-full p-3 border-2 border-gray-200 rounded-lg text-base resize-y"></textarea>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <button type="button" onclick="document.getElementById('item-room').value='Living Room'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Living Room</button>
+                    <button type="button" onclick="document.getElementById('item-room').value='Dining Room'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Dining Room</button>
+                    <button type="button" onclick="document.getElementById('item-room').value='Master Bedroom'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Master Bedroom</button>
+                    <button type="button" onclick="document.getElementById('item-room').value='Kitchen'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Kitchen</button>
+                    <button type="button" onclick="document.getElementById('item-room').value='Office'" class="px-4 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">Office</button>
                 </div>
             </div>
+
+            <!-- Step 11: Photo Upload -->
 
             <!-- Navigation Buttons -->
             <div class="flex justify-between mt-8">
@@ -2386,23 +2363,10 @@
                     <input type="text" id="edit-item-code" placeholder="e.g., INV-001, SKU-12345" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: monospace;">
                 </div>
 
-                <!-- Dimensions -->
+                <!-- Room/Notes -->
                 <div>
-                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Dimensions (inches)</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-                        <div>
-                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Width</label>
-                            <input type="number" id="edit-item-width" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Depth</label>
-                            <input type="number" id="edit-item-depth" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
-                        </div>
-                        <div>
-                            <label style="display: block; font-size: 12px; color: #6b7280; margin-bottom: 4px;">Height</label>
-                            <input type="number" id="edit-item-height" placeholder="0" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
-                        </div>
-                    </div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 8px;">Room/Notes</label>
+                    <textarea id="edit-item-room" rows="3" placeholder="e.g., Living Room, Master Bedroom, Special handling instructions..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; font-family: inherit; resize: vertical;"></textarea>
                 </div>
 
                 <!-- Two Column Layout -->
@@ -2718,18 +2682,15 @@
                     </select>
                 </div>
 
-                <!-- Condition Update -->
+                <!-- Room Update -->
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                        <input type="checkbox" id="bulk-update-condition-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-                        <label for="bulk-update-condition-checkbox" style="font-weight: 700; cursor: pointer;">Update Condition</label>
+                        <input type="checkbox" id="bulk-update-room-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="bulk-update-room-checkbox" style="font-weight: 700; cursor: pointer;">Clear Room/Notes</label>
                     </div>
-                    <select id="bulk-update-condition" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb;">
-                        <option value="New">✨ New</option>
-                        <option value="Excellent">⭐ Excellent</option>
-                        <option value="Good">👍 Good</option>
-                        <option value="Fair">⚠️ Fair</option>
-                    </select>
+                    <div style="padding: 12px; background: #fef3c7; border: 1px solid #fde047; border-radius: 10px; font-size: 13px; color: #854d0e;">
+                        ⚠️ This will clear the Room/Notes field for all selected items
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -5207,14 +5168,13 @@
                                 <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">STATUS</th>
                                 <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">LOCATION</th>
                                 ${inventory.some(i => i.code) ? '<th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ID/CODE</th>' : ''}
-                                ${inventory.some(i => i.dimensions) ? '<th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">DIMENSIONS</th>' : ''}
+                                <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ROOM/NOTES</th>
                                 <th style="padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${inventory.map(item => {
                                 const emoji = emojiMap[item.itemType] || item.emoji || '📦';
-                                const dimensions = item.dimensions ? `${item.dimensions.width || '-'}" W × ${item.dimensions.depth || '-'}" D × ${item.dimensions.height || '-'}" H` : '-';
                                 
                                 return `
                                     <tr draggable="true" data-item-id="${item.id}" style="border-bottom: 1px solid #e5e7eb; transition: background 0.2s; cursor: move;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'" class="inventory-row">
@@ -5238,7 +5198,7 @@
                                         </td>
                                         <td style="padding: 16px; font-size: 14px;">${item.location}</td>
                                         ${inventory.some(i => i.code) ? `<td style="padding: 16px; font-size: 14px; font-family: monospace;">${item.code || '-'}</td>` : ''}
-                                        ${inventory.some(i => i.dimensions) ? `<td style="padding: 16px; font-size: 12px; color: #6b7280;">${dimensions}</td>` : ''}
+                                        <td style="padding: 16px; font-size: 12px; color: #6b7280; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.room || ''}">${item.room || '-'}</td>
                                         <td style="padding: 16px;">
                                             <div style="display: flex; gap: 6px;">
                                                 <button onclick="duplicateInventoryItem(${item.id})" style="background: #f0fdf4; border: 1px solid #86efac; color: #166534; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 12px; line-height: 1; padding: 0; touch-action: manipulation;" title="Duplicate item">⎘</button>
@@ -5569,9 +5529,7 @@
             wizardData.color = document.getElementById('item-color').value;
             wizardData.fabric = document.getElementById('item-fabric').value;
             wizardData.code = document.getElementById('item-code')?.value || '';  // New code field
-            wizardData.width = document.getElementById('item-width').value;
-            wizardData.depth = document.getElementById('item-depth').value;
-            wizardData.height = document.getElementById('item-height').value;
+            wizardData.room = document.getElementById('item-room')?.value || '';  // Room/Notes field
             wizardData.location = document.getElementById('item-location').value;
             wizardData.purchaseDate = document.getElementById('item-purchase-date').value;
             wizardData.purchasedFrom = document.getElementById('item-purchased-where').value;
@@ -5597,12 +5555,8 @@
                 category: wizardData.itemType,
                 color: wizardData.color,
                 fabric: wizardData.fabric,
-                code: wizardData.code,  // New code field
-                dimensions: {
-                    width: wizardData.width,
-                    depth: wizardData.depth,
-                    height: wizardData.height
-                },
+                code: wizardData.code,
+                room: wizardData.room || '',  // Room/Notes field
                 condition: wizardData.condition,
                 status: wizardData.status,
                 location: wizardData.location,
@@ -6150,9 +6104,7 @@
             document.getElementById('edit-item-code').value = item.code || '';
             
             // Dimensions
-            document.getElementById('edit-item-width').value = item.dimensions?.width || '';
-            document.getElementById('edit-item-depth').value = item.dimensions?.depth || '';
-            document.getElementById('edit-item-height').value = item.dimensions?.height || '';
+            document.getElementById('edit-item-room').value = item.room || '';
             
             document.getElementById('edit-item-condition').value = item.condition || 'Good';
             document.getElementById('edit-item-status').value = item.status || 'IN';
@@ -6227,11 +6179,7 @@
                 color: document.getElementById('edit-item-color').value,
                 fabric: document.getElementById('edit-item-fabric').value,
                 code: document.getElementById('edit-item-code').value,
-                dimensions: {
-                    width: document.getElementById('edit-item-width').value || '',
-                    depth: document.getElementById('edit-item-depth').value || '',
-                    height: document.getElementById('edit-item-height').value || ''
-                },
+                room: document.getElementById('edit-item-room').value,
                 condition: document.getElementById('edit-item-condition').value,
                 status: document.getElementById('edit-item-status').value,
                 location: document.getElementById('edit-item-location').value,
@@ -6732,16 +6680,6 @@
                     statusSelect.style.background = this.checked ? 'white' : '#f9fafb';
                 });
             }
-            
-            // Condition checkbox
-            const conditionCheckbox = document.getElementById('bulk-update-condition-checkbox');
-            const conditionSelect = document.getElementById('bulk-update-condition');
-            if (conditionCheckbox) {
-                conditionCheckbox.addEventListener('change', function() {
-                    conditionSelect.disabled = !this.checked;
-                    conditionSelect.style.background = this.checked ? 'white' : '#f9fafb';
-                });
-            }
         });
         
         function applyBulkUpdate(e) {
@@ -6756,9 +6694,9 @@
             // Check which fields to update
             const updateLocation = document.getElementById('bulk-update-location-checkbox').checked;
             const updateStatus = document.getElementById('bulk-update-status-checkbox').checked;
-            const updateCondition = document.getElementById('bulk-update-condition-checkbox').checked;
+            const clearRoom = document.getElementById('bulk-update-room-checkbox').checked;
             
-            if (!updateLocation && !updateStatus && !updateCondition) {
+            if (!updateLocation && !updateStatus && !clearRoom) {
                 alert('Please select at least one field to update');
                 return;
             }
@@ -6766,7 +6704,6 @@
             // Get values
             const newLocation = document.getElementById('bulk-update-location').value;
             const newStatus = document.getElementById('bulk-update-status').value;
-            const newCondition = document.getElementById('bulk-update-condition').value;
             
             // Validate
             if (updateLocation && !newLocation) {
@@ -6791,9 +6728,9 @@
                         item.status = newStatus;
                         if (!updatedFields.includes('Status')) updatedFields.push('Status');
                     }
-                    if (updateCondition) {
-                        item.condition = newCondition;
-                        if (!updatedFields.includes('Condition')) updatedFields.push('Condition');
+                    if (clearRoom) {
+                        item.room = '';
+                        if (!updatedFields.includes('Room/Notes')) updatedFields.push('Room/Notes');
                     }
                 }
             });

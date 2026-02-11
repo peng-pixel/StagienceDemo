@@ -169,6 +169,74 @@
                 padding: 10px 10px !important;
             }
             
+            /* ===== NEW: Room/Notes filter input - mobile responsive ===== */
+            #filter-room {
+                font-size: 15px !important;
+                padding: 12px !important;
+            }
+            
+            /* Ensure all filter inputs are consistent on mobile */
+            #inventory-filter-modal input[type="text"],
+            #inventory-filter-modal select {
+                font-size: 15px !important;
+                padding: 12px !important;
+            }
+            
+            /* ===== NEW: Print Options Modal - mobile responsive ===== */
+            #print-options-modal {
+                padding: 0 !important;
+                align-items: flex-start !important;
+                padding-top: 20px !important;
+            }
+            
+            #print-options-modal > div {
+                max-width: 95vw !important;
+                width: 95vw !important;
+                max-height: 90vh !important;
+                overflow-y: auto !important;
+                padding: 20px 16px !important;
+                margin: auto !important;
+            }
+            
+            /* Print modal title */
+            #print-options-modal h2 {
+                font-size: 20px !important;
+            }
+            
+            /* Print format options - make them easier to tap on mobile */
+            #print-format-list, #print-format-grid {
+                padding: 14px !important;
+                -webkit-tap-highlight-color: transparent !important;
+                touch-action: manipulation !important;
+            }
+            
+            #print-format-list > div, #print-format-grid > div {
+                gap: 10px !important;
+            }
+            
+            /* Make emoji larger on mobile for better visibility */
+            #print-format-list > div > div:first-child,
+            #print-format-grid > div > div:first-child {
+                font-size: 28px !important;
+            }
+            
+            /* Print format text */
+            #print-format-list div[style*="font-weight: 700"],
+            #print-format-grid div[style*="font-weight: 700"] {
+                font-size: 15px !important;
+            }
+            
+            #print-format-list div[style*="color: #6b7280"],
+            #print-format-grid div[style*="color: #6b7280"] {
+                font-size: 13px !important;
+            }
+            
+            /* Print modal buttons */
+            #print-options-modal button {
+                padding: 12px 18px !important;
+                font-size: 14px !important;
+            }
+            
             /* Projects - fix edit/delete buttons on cards */
             .project-card > div[style*="position: absolute"] {
                 position: static !important;
@@ -1351,7 +1419,7 @@
                                 <span>🔍</span>
                                 <span>Filter</span>
                             </button>
-                            <button onclick="printInventory()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                 <span>🖨️</span>
                                 <span>Print</span>
                             </button>
@@ -2211,6 +2279,55 @@
         </div>
     </div>
 
+    <!-- Print Options Modal -->
+    <div id="print-options-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Print Inventory</h2>
+                <button onclick="hidePrintModal()" class="text-gray-500 hover:text-gray-700 text-2xl" style="cursor: pointer; background: none; border: none; font-size: 32px; line-height: 1; padding: 0;">×</button>
+            </div>
+            
+            <div style="margin-bottom: 24px;">
+                <p style="color: #6b7280; margin-bottom: 16px;">Choose how you'd like to print your inventory:</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- List View Option -->
+                    <div onclick="selectPrintFormat('list')" id="print-format-list" style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="if(!this.classList.contains('selected')) this.style.background='white'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📋</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">List View</div>
+                                <div style="color: #6b7280; font-size: 14px;">Detailed table with all item information</div>
+                            </div>
+                            <div class="radio-indicator" style="width: 20px; height: 20px; border: 2px solid #e5e7eb; border-radius: 50%;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Grid View Option -->
+                    <div onclick="selectPrintFormat('grid')" id="print-format-grid" style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="if(!this.classList.contains('selected')) this.style.background='white'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">📦</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Grid View</div>
+                                <div style="color: #6b7280; font-size: 14px;">Visual cards with photos and key details</div>
+                            </div>
+                            <div class="radio-indicator" style="width: 20px; height: 20px; border: 2px solid #e5e7eb; border-radius: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end gap-3">
+                <button onclick="hidePrintModal()" style="padding: 12px 24px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button onclick="executePrint()" style="background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); color: white; padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    Print
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Inventory Filter Modal -->
     <div id="inventory-filter-modal" class="modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; overflow-y: auto;">
         <div class="bg-white rounded-2xl max-w-xl w-full p-8" style="max-height: 85vh; overflow-y: auto; -webkit-overflow-scrolling: touch; margin: auto;">
@@ -2286,6 +2403,12 @@
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Search by Name</label>
                     <input type="text" id="filter-search" placeholder="e.g., Sofa, Lamp, Table..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <!-- Search by Room/Notes -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px; font-size: 16px;">Search by Room/Notes</label>
+                    <input type="text" id="filter-room" placeholder="e.g., Living Room, Master Bedroom..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
                 <!-- Active Filters Display -->
@@ -4649,7 +4772,8 @@
             statuses: ['IN', 'OUT', 'HOLD'],
             categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
             location: 'all',
-            search: ''
+            search: '',
+            room: ''
         };
         
         function applyInventoryFilters() {
@@ -4678,9 +4802,10 @@
                 // Get location and search
                 const location = document.getElementById('filter-location').value;
                 const search = document.getElementById('filter-search').value.toLowerCase();
+                const room = document.getElementById('filter-room').value.toLowerCase();
                 
                 // Update filter state
-                inventoryFilters = { statuses, categories, location, search };
+                inventoryFilters = { statuses, categories, location, search, room };
                 
                 console.log('Filter state updated:', inventoryFilters);
                 
@@ -4714,20 +4839,263 @@
             // Reset dropdowns and search
             document.getElementById('filter-location').value = 'all';
             document.getElementById('filter-search').value = '';
+            document.getElementById('filter-room').value = '';
             
             // Reset filter state
             inventoryFilters = {
                 statuses: ['IN', 'OUT', 'HOLD'],
                 categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
                 location: 'all',
-                search: ''
+                search: '',
+                room: ''
             };
             
             // Re-render
             renderInventory();
         }
 
-        // Print inventory function
+        // Print modal state
+        let selectedPrintFormat = 'list'; // default to list view
+        
+        function showPrintModal() {
+            const modal = document.getElementById('print-options-modal');
+            modal.classList.add('active');
+            modal.style.display = 'flex';
+            // Set default selection
+            selectPrintFormat('list');
+        }
+        
+        function hidePrintModal() {
+            const modal = document.getElementById('print-options-modal');
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+        }
+        
+        function selectPrintFormat(format) {
+            selectedPrintFormat = format;
+            
+            // Remove selected class from both
+            document.getElementById('print-format-list').classList.remove('selected');
+            document.getElementById('print-format-grid').classList.remove('selected');
+            
+            // Reset styles
+            document.getElementById('print-format-list').style.borderColor = '#e5e7eb';
+            document.getElementById('print-format-list').style.background = 'white';
+            document.getElementById('print-format-grid').style.borderColor = '#e5e7eb';
+            document.getElementById('print-format-grid').style.background = 'white';
+            
+            // Add selected class and styles to chosen format
+            const selected = document.getElementById(`print-format-${format}`);
+            selected.classList.add('selected');
+            selected.style.borderColor = '#3b82f6';
+            selected.style.background = '#eff6ff';
+            
+            // Update radio indicators
+            document.querySelectorAll('.radio-indicator').forEach(indicator => {
+                indicator.style.borderColor = '#e5e7eb';
+                indicator.style.background = 'white';
+            });
+            
+            const selectedIndicator = selected.querySelector('.radio-indicator');
+            selectedIndicator.style.borderColor = '#3b82f6';
+            selectedIndicator.style.background = '#3b82f6';
+            selectedIndicator.innerHTML = '<div style="width: 8px; height: 8px; background: white; border-radius: 50%; margin: 4px;"></div>';
+        }
+        
+        function executePrint() {
+            hidePrintModal();
+            if (selectedPrintFormat === 'grid') {
+                printInventoryGrid();
+            } else {
+                printInventory();
+            }
+        }
+        
+        // NEW: Print inventory in grid format
+        function printInventoryGrid() {
+            let inventory = getStoredInventory();
+            
+            // Apply the same filters as the display
+            inventory = inventory.filter(item => {
+                if (!inventoryFilters.statuses.includes(item.status)) return false;
+                const itemCategory = item.itemType || item.category;
+                if (itemCategory && !inventoryFilters.categories.includes(itemCategory)) return false;
+                if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
+                if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
+                if (inventoryFilters.room && item.room && !item.room.toLowerCase().includes(inventoryFilters.room)) return false;
+                return true;
+            });
+            
+            if (inventory.length === 0) {
+                alert('No items to print with current filters');
+                return;
+            }
+            
+            const emojiMap = {
+                'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
+                'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
+            };
+            
+            // Create print window content with grid layout
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Stagience Inventory - Grid View</title>
+                    <style>
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            padding: 20px; 
+                            max-width: 100%;
+                        }
+                        h1 { 
+                            color: #1f2937; 
+                            margin-bottom: 10px; 
+                            font-size: 24px;
+                        }
+                        .date { 
+                            color: #6b7280; 
+                            font-size: 12px; 
+                            margin-bottom: 20px; 
+                        }
+                        .grid-container {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 16px;
+                            margin-bottom: 20px;
+                        }
+                        .item-card {
+                            background: white;
+                            border: 1px solid #e5e7eb;
+                            border-radius: 8px;
+                            padding: 12px;
+                            page-break-inside: avoid;
+                            break-inside: avoid;
+                        }
+                        .item-photo-container {
+                            width: 100%;
+                            height: 120px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            background: #f9fafb;
+                            border-radius: 6px;
+                            margin-bottom: 10px;
+                            border: 1px solid #e5e7eb;
+                        }
+                        .item-photo {
+                            max-width: 100%;
+                            max-height: 100%;
+                            object-fit: contain;
+                            border-radius: 4px;
+                        }
+                        .emoji-photo {
+                            font-size: 48px;
+                        }
+                        .item-name {
+                            font-weight: 600;
+                            font-size: 13px;
+                            margin-bottom: 6px;
+                            color: #1f2937;
+                            line-height: 1.3;
+                        }
+                        .item-details {
+                            font-size: 11px;
+                            color: #6b7280;
+                            line-height: 1.4;
+                            margin-bottom: 8px;
+                        }
+                        .item-location {
+                            background: #f9fafb;
+                            padding: 6px 8px;
+                            border-radius: 4px;
+                            font-size: 10px;
+                            font-weight: 600;
+                            color: #374151;
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
+                            margin-bottom: 6px;
+                        }
+                        .item-room {
+                            font-size: 10px;
+                            color: #6b7280;
+                            font-style: italic;
+                            margin-top: 4px;
+                            line-height: 1.3;
+                        }
+                        .status-badge {
+                            display: inline-block;
+                            padding: 3px 8px;
+                            border-radius: 8px;
+                            font-size: 9px;
+                            font-weight: 600;
+                            margin-top: 6px;
+                        }
+                        .status-in { background: #dcfce7; color: #166534; }
+                        .status-out { background: #dbeafe; color: #1e40af; }
+                        .status-hold { background: #fef3c7; color: #92400e; }
+                        .footer {
+                            margin-top: 20px;
+                            text-align: center;
+                            color: #6b7280;
+                            font-size: 11px;
+                            padding-top: 15px;
+                            border-top: 1px solid #e5e7eb;
+                        }
+                        @media print {
+                            body { padding: 15px; }
+                            .grid-container { gap: 12px; }
+                            .item-card { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Stagience Inventory</h1>
+                    <div class="date">Printed on ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                    
+                    <div class="grid-container">
+                        ${inventory.map(item => {
+                            const emoji = emojiMap[item.itemType] || item.emoji || '📦';
+                            const imageDisplay = item.photo 
+                                ? `<img src="${item.photo}" alt="${item.name}" class="item-photo">`
+                                : `<div class="emoji-photo">${emoji}</div>`;
+                            
+                            return `
+                                <div class="item-card">
+                                    <div class="item-photo-container">
+                                        ${imageDisplay}
+                                    </div>
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-details">${item.category || item.itemType} • ${item.color}</div>
+                                    <div class="item-location">📍 ${item.location}</div>
+                                    ${item.room ? `<div class="item-room">Room: ${item.room}</div>` : ''}
+                                    <span class="status-badge status-${item.status.toLowerCase()}">${item.status}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="footer">
+                        Total Items: ${inventory.length}
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Open print window
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            // Trigger print after content loads
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        }
+
+        // UPDATED: Print inventory function (list view) with room filter
         function printInventory() {
             let inventory = getStoredInventory();
             
@@ -4739,6 +5107,8 @@
                 // Only filter by location if a specific location is selected (not "all" or empty)
                 if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
+                // Filter by room/notes if specified
+                if (inventoryFilters.room && item.room && !item.room.toLowerCase().includes(inventoryFilters.room)) return false;
                 return true;
             });
             
@@ -4936,6 +5306,8 @@
                 // Only filter by location if a specific location is selected (not "all" or empty)
                 if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
+                // Filter by room/notes if specified
+                if (inventoryFilters.room && item.room && !item.room.toLowerCase().includes(inventoryFilters.room)) return false;
                 return true;
             });
             

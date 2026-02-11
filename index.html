@@ -4932,8 +4932,8 @@
                     if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
                     // Filter by room/notes if specified
                     if (inventoryFilters.room) {
-                        const itemRoom = (item.room || '').toLowerCase();
-                        if (!itemRoom.includes(inventoryFilters.room)) return false;
+                        if (!item.room || item.room.trim() === '') return false; // Exclude items with no room data
+                        if (!item.room.toLowerCase().includes(inventoryFilters.room)) return false;
                     }
                     return true;
                 });
@@ -5130,8 +5130,8 @@
                     if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
                     // Filter by room/notes if specified
                     if (inventoryFilters.room) {
-                        const itemRoom = (item.room || '').toLowerCase();
-                        if (!itemRoom.includes(inventoryFilters.room)) return false;
+                        if (!item.room || item.room.trim() === '') return false; // Exclude items with no room data
+                        if (!item.room.toLowerCase().includes(inventoryFilters.room)) return false;
                     }
                     return true;
                 });
@@ -5331,10 +5331,10 @@
                 // Only filter by location if a specific location is selected (not "all" or empty)
                 if (inventoryFilters.location && inventoryFilters.location !== 'all' && item.location !== inventoryFilters.location) return false;
                 if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search)) return false;
-                // Filter by room/notes if specified - check if room field exists and contains search term
+                // Filter by room/notes if specified - only show items that have room data AND it contains the search term
                 if (inventoryFilters.room) {
-                    const itemRoom = (item.room || '').toLowerCase();
-                    if (!itemRoom.includes(inventoryFilters.room)) return false;
+                    if (!item.room || item.room.trim() === '') return false; // Exclude items with no room data
+                    if (!item.room.toLowerCase().includes(inventoryFilters.room)) return false;
                 }
                 return true;
             });

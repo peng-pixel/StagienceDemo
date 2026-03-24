@@ -288,6 +288,34 @@
                 grid-template-columns: 1fr !important;
             }
             
+            /* Inventory stats cards - mobile responsive */
+            #inventory-stats {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            
+            #inventory-stats .stat-card {
+                padding: 16px !important;
+            }
+            
+            #total-count {
+                font-size: 24px !important;
+            }
+            
+            #status-breakdown {
+                gap: 6px !important;
+            }
+            
+            #status-breakdown span {
+                font-size: 12px !important;
+                padding: 5px 8px !important;
+            }
+            
+            #category-breakdown,
+            #location-breakdown {
+                font-size: 12px !important;
+            }
+            
             /* Status folder boxes */
             .status-folder {
                 padding: 12px !important;
@@ -1446,6 +1474,63 @@
                                 <button onclick="clearSelection()" style="padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; font-size: 14px; white-space: nowrap;">
                                     Clear Selection
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Count Stats Cards -->
+                    <div id="inventory-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 8px;">
+                        <!-- Total Items Card -->
+                        <div class="stat-card" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(176,138,90,0.1), rgba(47,111,107,0.1)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📊
+                                </div>
+                                <div>
+                                    <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Items</div>
+                                    <div id="total-count" style="font-size: 28px; font-weight: 800; color: #1f2937; line-height: 1;">0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- By Status Card -->
+                        <div class="stat-card" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    🔄
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">By Status</div>
+                            </div>
+                            <div id="status-breakdown" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600;">
+                                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">0 IN</span>
+                                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">0 OUT</span>
+                                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">0 HOLD</span>
+                            </div>
+                        </div>
+
+                        <!-- By Category Card -->
+                        <div class="stat-card" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #fef3c7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📦
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">By Category</div>
+                            </div>
+                            <div id="category-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                                <!-- Will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- By Location Card -->
+                        <div class="stat-card" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: all 0.3s;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #dcfce7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📍
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">By Location</div>
+                            </div>
+                            <div id="location-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;">
+                                <!-- Will be populated dynamically -->
                             </div>
                         </div>
                     </div>
@@ -5314,6 +5399,73 @@
             locationSelect.innerHTML = optionsHTML;
         }
         
+        function updateInventoryStats(filteredInventory) {
+            // Total count
+            document.getElementById('total-count').textContent = filteredInventory.length;
+            
+            // Status breakdown
+            const statusCounts = {
+                IN: filteredInventory.filter(item => item.status === 'IN').length,
+                OUT: filteredInventory.filter(item => item.status === 'OUT').length,
+                HOLD: filteredInventory.filter(item => item.status === 'HOLD').length
+            };
+            
+            document.getElementById('status-breakdown').innerHTML = `
+                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">${statusCounts.IN} IN</span>
+                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">${statusCounts.OUT} OUT</span>
+                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">${statusCounts.HOLD} HOLD</span>
+            `;
+            
+            // Category breakdown
+            const categoryCounts = {};
+            filteredInventory.forEach(item => {
+                const category = item.itemType || item.category || 'Uncategorized';
+                categoryCounts[category] = (categoryCounts[category] || 0) + 1;
+            });
+            
+            const categoryEmojis = {
+                'Seating': '🛋️',
+                'Tables': '🪑',
+                'Lighting': '💡',
+                'Decor': '🎨',
+                'Art': '🖼️',
+                'Rugs': '🔲'
+            };
+            
+            const categoryHtml = Object.entries(categoryCounts)
+                .sort((a, b) => b[1] - a[1]) // Sort by count descending
+                .map(([category, count]) => {
+                    const emoji = categoryEmojis[category] || '📦';
+                    return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+                        <span style="color: #6b7280;">${emoji} ${category}</span>
+                        <span style="font-weight: 700; color: #1f2937;">${count}</span>
+                    </div>`;
+                })
+                .join('');
+            
+            document.getElementById('category-breakdown').innerHTML = categoryHtml || '<div style="color: #9ca3af; font-style: italic;">No categories</div>';
+            
+            // Location breakdown
+            const locationCounts = {};
+            filteredInventory.forEach(item => {
+                const location = item.location || 'Unknown';
+                locationCounts[location] = (locationCounts[location] || 0) + 1;
+            });
+            
+            const locationHtml = Object.entries(locationCounts)
+                .sort((a, b) => b[1] - a[1]) // Sort by count descending
+                .slice(0, 5) // Show top 5 locations
+                .map(([location, count]) => {
+                    return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+                        <span style="color: #6b7280;">${location}</span>
+                        <span style="font-weight: 700; color: #1f2937;">${count}</span>
+                    </div>`;
+                })
+                .join('');
+            
+            document.getElementById('location-breakdown').innerHTML = locationHtml || '<div style="color: #9ca3af; font-style: italic;">No locations</div>';
+        }
+        
         function renderInventory() {
             // Reload inventory from localStorage if available
             let inventory = [];
@@ -5339,10 +5491,16 @@
                 return true;
             });
             
+            // Update inventory stats with filtered data
+            updateInventoryStats(inventory);
+            
             const grid = document.getElementById('inventory-grid');
             const list = document.getElementById('inventory-list');
             
             if (inventory.length === 0) {
+                // Update stats to show zeros
+                updateInventoryStats([]);
+                
                 const emptyMessage = `
                     <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📦</div>

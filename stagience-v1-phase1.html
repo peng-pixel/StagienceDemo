@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stagience - AI-Powered Home Staging Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #fbfaf7; color: #1f2937; }
+        .gradient-accent { background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); }
+        .page { display: none; }
+        .page.active { display: block; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+    </style>
+</head>
+<body>
+
+    <!-- Authentication Page -->
+    <div id="auth-page" class="page active">
+        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);">
+            <div style="background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); padding: 48px; max-width: 440px; width: 100%; margin: 20px;">
+                <div style="text-align: center; margin-bottom: 32px;">
+                    <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">
+                        S
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Welcome to Stagience</h1>
+                    <p style="color: #6b7280; font-size: 14px;">AI-Powered Home Staging Intelligence</p>
+                </div>
+
+                <!-- Sign In Form -->
+                <div id="signin-form">
+                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Sign In</h2>
+                    <form onsubmit="handleSignIn(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Email</label>
+                            <input type="email" id="signin-email" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
+                            <input type="password" id="signin-password" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                        <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
+                            Sign In
+                        </button>
+                    </form>
+                    <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
+                        Don't have an account? 
+                        <a href="#" onclick="showSignUpForm(); return false;" style="color: #2f6f6b; font-weight: 600; text-decoration: none;">Sign Up</a>
+                    </p>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div id="signup-form" style="display: none;">
+                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Create Account</h2>
+                    <form onsubmit="handleSignUp(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Email</label>
+                            <input type="email" id="signup-email" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
+                            <input type="password" id="signup-password" required minlength="6" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <p style="color: #6b7280; font-size: 12px; margin-top: 4px;">Minimum 6 characters</p>
+                        </div>
+                        <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
+                            Create Account
+                        </button>
+                    </form>
+                    <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
+                        Already have an account? 
+                        <a href="#" onclick="showSignInForm(); return false;" style="color: #2f6f6b; font-weight: 600; text-decoration: none;">Sign In</a>
+                    </p>
+                </div>
+
+                <div id="auth-message" style="margin-top: 16px; padding: 12px; border-radius: 8px; display: none; font-size: 14px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App (Will be shown after authentication) -->
+    <div id="app-page" class="page">
+        <div style="min-height: 100vh;">
+            <!-- Navigation -->
+            <nav style="background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 50;">
+                <div style="max-width: 1120px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px; font-weight: 700;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                            S
+                        </div>
+                        <span>Stagience</span>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showSection('projects')" id="nav-projects" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
+                        <button onclick="showSection('clients')" id="nav-clients" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Clients</button>
+                        <button onclick="showSection('calendar')" id="nav-calendar" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
+                        <button onclick="handleSignOut()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out</button>
+                    </div>
+                </div>
+            </nav>
+
+            <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
+                <!-- Inventory Section -->
+                <div id="inventory-section" class="section active" style="display: block;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                        <h1 style="font-size: 32px; font-weight: 800;">Inventory</h1>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <!-- View Toggle -->
+                            <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
+                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer;">
+                                    📦 Grid
+                                </button>
+                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer;">
+                                    📋 List
+                                </button>
+                            </div>
+                            <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
+                                🔍 Filter
+                            </button>
+                            <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                                + Add Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Stats Cards -->
+                    <div id="inventory-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <!-- Total Items Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(176,138,90,0.1), rgba(47,111,107,0.1)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📊
+                                </div>
+                                <div>
+                                    <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">Total Items</div>
+                                    <div id="total-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- By Status Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    🔄
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Status</div>
+                            </div>
+                            <div id="status-breakdown" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600;">
+                                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">0 IN</span>
+                                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">0 OUT</span>
+                                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">0 HOLD</span>
+                            </div>
+                        </div>
+
+                        <!-- By Category Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #fef3c7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📦
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Category</div>
+                            </div>
+                            <div id="category-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;"></div>
+                        </div>
+
+                        <!-- By Location Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #dcfce7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📍
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Location</div>
+                            </div>
+                            <div id="location-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Container -->
+                    <div id="inventory-container"></div>
+                </div>
+
+                <!-- Projects Section -->
+                <div id="projects-section" class="section" style="display: none;">
+                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 24px;">Projects</h1>
+                    <p style="color: #6b7280; margin-bottom: 32px;">This section will display your projects from Supabase.</p>
+                    <div id="projects-container"></div>
+                </div>
+
+                <!-- Clients Section -->
+                <div id="clients-section" class="section" style="display: none;">
+                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 24px;">Clients</h1>
+                    <p style="color: #6b7280; margin-bottom: 32px;">This section will display your clients from Supabase.</p>
+                    <div id="clients-container"></div>
+                </div>
+
+                <!-- Calendar Section -->
+                <div id="calendar-section" class="section" style="display: none;">
+                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 24px;">Calendar</h1>
+                    <p style="color: #6b7280; margin-bottom: 32px;">This section will display your calendar events from Supabase.</p>
+                    <div id="calendar-container"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Item Modal -->
+    <div id="item-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 id="modal-title" style="font-size: 24px; font-weight: 800;">Add Item</h2>
+                <button onclick="closeItemModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <form id="item-form" onsubmit="saveItem(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                <input type="hidden" id="item-id">
+                
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Item Name *</label>
+                    <input type="text" id="item-name" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Category *</label>
+                    <select id="item-category" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select category...</option>
+                        <option value="Seating">🛋️ Seating</option>
+                        <option value="Tables">🪑 Tables</option>
+                        <option value="Lighting">💡 Lighting</option>
+                        <option value="Decor">🎨 Decor</option>
+                        <option value="Art">🖼️ Art</option>
+                        <option value="Rugs">🔲 Rugs</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Color</label>
+                    <input type="text" id="item-color" placeholder="e.g., Navy Blue, Gold" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Location *</label>
+                    <select id="item-location" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select location...</option>
+                        <option value="Warehouse A">Warehouse A</option>
+                        <option value="Warehouse B">Warehouse B</option>
+                        <option value="Storage Unit">Storage Unit</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Status *</label>
+                    <select id="item-status" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="IN">IN - Available</option>
+                        <option value="OUT">OUT - On Project</option>
+                        <option value="HOLD">HOLD - Reserved</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Room/Notes</label>
+                    <textarea id="item-room" placeholder="e.g., Living Room, Master Bedroom" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 8px;">
+                    <button type="button" onclick="closeItemModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Save Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div id="filter-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Filter Inventory</h2>
+                <button onclick="closeFilterModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Status Filter -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px;">Status</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-in" checked onchange="applyFilters()">
+                            <span>IN</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-out" checked onchange="applyFilters()">
+                            <span>OUT</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-hold" checked onchange="applyFilters()">
+                            <span>HOLD</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Category Filter -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px;">Category</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-seating" checked onchange="applyFilters()">
+                            <span>🛋️ Seating</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-tables" checked onchange="applyFilters()">
+                            <span>🪑 Tables</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-lighting" checked onchange="applyFilters()">
+                            <span>💡 Lighting</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-decor" checked onchange="applyFilters()">
+                            <span>🎨 Decor</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-art" checked onchange="applyFilters()">
+                            <span>🖼️ Art</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-rugs" checked onchange="applyFilters()">
+                            <span>🔲 Rugs</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px;">Search by Name</label>
+                    <input type="text" id="filter-search" placeholder="e.g., Sofa, Lamp..." oninput="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <!-- Room/Notes Search -->
+                <div>
+                    <label style="display: block; font-weight: 700; margin-bottom: 12px;">Search by Room/Notes</label>
+                    <input type="text" id="filter-room" placeholder="e.g., Living Room..." oninput="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <button onclick="clearFilters()" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                    Clear All Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==============================================
+        // SUPABASE CONFIGURATION
+        // ==============================================
+        const SUPABASE_URL = 'https://sdvgzqaoexuanxrjtytp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkdmd6cWFvZXh1YW54cmp0eXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0OTc5NzksImV4cCI6MjA5NDA3Mzk3OX0.eWepcu_FKvkh1iTcRWMaR-R8Z0ci2mZ9L1pi0LDjAHk';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Current user
+        let currentUser = null;
+
+        // ==============================================
+        // AUTHENTICATION FUNCTIONS
+        // ==============================================
+        
+        // Check if user is authenticated on page load
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                currentUser = session.user;
+                showApp();
+                loadAllData();
+            } else {
+                showAuthPage();
+            }
+        }
+
+        // Sign In
+        async function handleSignIn(event) {
+            event.preventDefault();
+            const email = document.getElementById('signin-email').value;
+            const password = document.getElementById('signin-password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                showAuthMessage(error.message, 'error');
+            } else {
+                currentUser = data.user;
+                showAuthMessage('Sign in successful!', 'success');
+                setTimeout(() => {
+                    showApp();
+                    loadAllData();
+                }, 1000);
+            }
+        }
+
+        // Sign Up
+        async function handleSignUp(event) {
+            event.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                showAuthMessage(error.message, 'error');
+            } else {
+                showAuthMessage('Account created! Please check your email to verify your account.', 'success');
+                setTimeout(() => {
+                    showSignInForm();
+                }, 3000);
+            }
+        }
+
+        // Sign Out
+        async function handleSignOut() {
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                currentUser = null;
+                showAuthPage();
+            }
+        }
+
+        // Show/Hide auth forms
+        function showSignInForm() {
+            document.getElementById('signin-form').style.display = 'block';
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('auth-message').style.display = 'none';
+        }
+
+        function showSignUpForm() {
+            document.getElementById('signin-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+            document.getElementById('auth-message').style.display = 'none';
+        }
+
+        function showAuthMessage(message, type) {
+            const messageEl = document.getElementById('auth-message');
+            messageEl.textContent = message;
+            messageEl.style.display = 'block';
+            messageEl.style.background = type === 'error' ? '#fee2e2' : '#dcfce7';
+            messageEl.style.color = type === 'error' ? '#991b1b' : '#166534';
+            messageEl.style.borderLeft = type === 'error' ? '4px solid #dc2626' : '4px solid #16a34a';
+        }
+
+        function showAuthPage() {
+            document.getElementById('auth-page').classList.add('active');
+            document.getElementById('app-page').classList.remove('active');
+        }
+
+        function showApp() {
+            document.getElementById('auth-page').classList.remove('active');
+            document.getElementById('app-page').classList.add('active');
+        }
+
+        // ==============================================
+        // NAVIGATION
+        // ==============================================
+        
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Remove active from all nav buttons
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.style.background = 'transparent';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Highlight active nav button
+            document.getElementById('nav-' + sectionName).style.background = 'rgba(176,138,90,.10)';
+        }
+
+        // ==============================================
+        // DATA LOADING FUNCTIONS
+        // ==============================================
+        
+        async function loadAllData() {
+            await loadInventory();
+            await loadProjects();
+            await loadClients();
+            await loadCalendar();
+        }
+
+        // ==============================================
+        // INVENTORY STATE & MANAGEMENT
+        // ==============================================
+        
+        let inventoryItems = [];
+        let currentView = 'list'; // 'grid' or 'list'
+        let inventoryFilters = {
+            statuses: ['IN', 'OUT', 'HOLD'],
+            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
+            search: '',
+            room: ''
+        };
+        let editingItemId = null;
+
+        // Load inventory from Supabase
+        async function loadInventory() {
+            const { data, error } = await supabase
+                .from('inventory')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading inventory:', error);
+                return;
+            }
+
+            inventoryItems = data;
+            renderInventory();
+        }
+
+        // Render inventory with filters and views
+        function renderInventory() {
+            // Apply filters
+            let filteredItems = inventoryItems.filter(item => {
+                // Status filter
+                if (!inventoryFilters.statuses.includes(item.status)) return false;
+                
+                // Category filter
+                if (!inventoryFilters.categories.includes(item.category)) return false;
+                
+                // Name search
+                if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search.toLowerCase())) return false;
+                
+                // Room/Notes search
+                if (inventoryFilters.room) {
+                    if (!item.room || item.room.trim() === '') return false;
+                    if (!item.room.toLowerCase().includes(inventoryFilters.room.toLowerCase())) return false;
+                }
+                
+                return true;
+            });
+
+            // Update stats
+            updateInventoryStats(filteredItems);
+
+            // Render based on view
+            const container = document.getElementById('inventory-container');
+            
+            if (filteredItems.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';
+                return;
+            }
+
+            if (currentView === 'grid') {
+                renderGridView(filteredItems, container);
+            } else {
+                renderListView(filteredItems, container);
+            }
+        }
+
+        // Render grid view
+        function renderGridView(items, container) {
+            const categoryEmojis = {
+                'Seating': '🛋️',
+                'Tables': '🪑',
+                'Lighting': '💡',
+                'Decor': '🎨',
+                'Art': '🖼️',
+                'Rugs': '🔲'
+            };
+
+            container.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                    ${items.map(item => {
+                        const emoji = categoryEmojis[item.category] || '📦';
+                        const statusColors = {
+                            'IN': 'background: #dcfce7; color: #166534;',
+                            'OUT': 'background: #dbeafe; color: #1e40af;',
+                            'HOLD': 'background: #fef3c7; color: #92400e;'
+                        };
+                        return `
+                            <div onclick="editItem(${item.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                                <div style="font-size: 48px; text-align: center; margin-bottom: 12px;">${emoji}</div>
+                                <h3 style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">${item.name}</h3>
+                                <p style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">${item.category}</p>
+                                ${item.color ? `<p style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Color: ${item.color}</p>` : ''}
+                                <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">📍 ${item.location}</p>
+                                ${item.room ? `<p style="color: #9ca3af; font-size: 12px; font-style: italic; margin-bottom: 8px;">${item.room}</p>` : ''}
+                                <span style="display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // Render list view
+        function renderListView(items, container) {
+            const statusColors = {
+                'IN': 'background: #dcfce7; color: #166534;',
+                'OUT': 'background: #dbeafe; color: #1e40af;',
+                'HOLD': 'background: #fef3c7; color: #92400e;'
+            };
+
+            container.innerHTML = `
+                <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f9fafb;">
+                            <tr>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Name</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Category</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Color</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Location</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Room</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Status</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${items.map(item => `
+                                <tr style="border-top: 1px solid #e5e7eb;">
+                                    <td style="padding: 16px; font-weight: 600;">${item.name}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.category}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.color || '-'}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.location}</td>
+                                    <td style="padding: 16px; color: #6b7280; font-size: 13px;">${item.room || '-'}</td>
+                                    <td style="padding: 16px;"><span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span></td>
+                                    <td style="padding: 16px;">
+                                        <button onclick="event.stopPropagation(); editItem(${item.id})" style="padding: 6px 12px; background: #eff6ff; color: #1e40af; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-right: 6px;">Edit</button>
+                                        <button onclick="event.stopPropagation(); deleteItem(${item.id})" style="padding: 6px 12px; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Update inventory stats
+        function updateInventoryStats(items) {
+            // Total count
+            document.getElementById('total-count').textContent = items.length;
+
+            // Status breakdown
+            const statusCounts = {
+                IN: items.filter(item => item.status === 'IN').length,
+                OUT: items.filter(item => item.status === 'OUT').length,
+                HOLD: items.filter(item => item.status === 'HOLD').length
+            };
+
+            document.getElementById('status-breakdown').innerHTML = `
+                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">${statusCounts.IN} IN</span>
+                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">${statusCounts.OUT} OUT</span>
+                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">${statusCounts.HOLD} HOLD</span>
+            `;
+
+            // Category breakdown
+            const categoryCounts = {};
+            items.forEach(item => {
+                categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
+            });
+
+            const categoryEmojis = {
+                'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
+                'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
+            };
+
+            const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
+            const top8 = sortedCategories.slice(0, 8);
+            const remaining = sortedCategories.length - 8;
+
+            let categoryHtml = top8.map(([cat, count]) => `
+                <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                    <span style="color: #6b7280;">${categoryEmojis[cat] || '📦'} ${cat}</span>
+                    <span style="font-weight: 700;">${count}</span>
+                </div>
+            `).join('');
+
+            if (remaining > 0) {
+                categoryHtml += `<div style="padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid #e5e7eb;"><span style="color: #9ca3af; font-size: 12px; font-style: italic;">+ ${remaining} more categor${remaining > 1 ? 'ies' : 'y'}</span></div>`;
+            }
+
+            document.getElementById('category-breakdown').innerHTML = categoryHtml || '<div style="color: #9ca3af; font-style: italic;">No categories</div>';
+
+            // Location breakdown
+            const locationCounts = {};
+            items.forEach(item => {
+                locationCounts[item.location] = (locationCounts[item.location] || 0) + 1;
+            });
+
+            const sortedLocations = Object.entries(locationCounts).sort((a, b) => b[1] - a[1]);
+            const top5 = sortedLocations.slice(0, 5);
+            const remainingLocs = sortedLocations.length - 5;
+
+            let locationHtml = top5.map(([loc, count]) => `
+                <div style="display: flex; justify-content: space-between; padding: 4px 0;">
+                    <span style="color: #6b7280;">${loc}</span>
+                    <span style="font-weight: 700;">${count}</span>
+                </div>
+            `).join('');
+
+            if (remainingLocs > 0) {
+                locationHtml += `<div style="padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid #e5e7eb;"><span style="color: #9ca3af; font-size: 12px; font-style: italic;">+ ${remainingLocs} more location${remainingLocs > 1 ? 's' : ''}</span></div>`;
+            }
+
+            document.getElementById('location-breakdown').innerHTML = locationHtml || '<div style="color: #9ca3af; font-style: italic;">No locations</div>';
+        }
+
+        // Switch between grid and list views
+        function switchInventoryView(view) {
+            currentView = view;
+            
+            // Update button styles
+            document.getElementById('grid-view-btn').style.background = view === 'grid' ? '#eff6ff' : 'white';
+            document.getElementById('grid-view-btn').style.color = view === 'grid' ? '#1e40af' : '#6b7280';
+            document.getElementById('list-view-btn').style.background = view === 'list' ? '#eff6ff' : 'white';
+            document.getElementById('list-view-btn').style.color = view === 'list' ? '#1e40af' : '#6b7280';
+            
+            renderInventory();
+        }
+
+        // Modal functions
+        function showAddItemModal() {
+            editingItemId = null;
+            document.getElementById('modal-title').textContent = 'Add Item';
+            document.getElementById('item-form').reset();
+            document.getElementById('item-id').value = '';
+            document.getElementById('item-modal').classList.add('active');
+        }
+
+        function closeItemModal() {
+            document.getElementById('item-modal').classList.remove('active');
+            editingItemId = null;
+        }
+
+        function editItem(itemId) {
+            const item = inventoryItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            editingItemId = itemId;
+            document.getElementById('modal-title').textContent = 'Edit Item';
+            document.getElementById('item-id').value = item.id;
+            document.getElementById('item-name').value = item.name;
+            document.getElementById('item-category').value = item.category;
+            document.getElementById('item-color').value = item.color || '';
+            document.getElementById('item-location').value = item.location;
+            document.getElementById('item-status').value = item.status;
+            document.getElementById('item-room').value = item.room || '';
+            
+            document.getElementById('item-modal').classList.add('active');
+        }
+
+        async function saveItem(event) {
+            event.preventDefault();
+
+            const itemData = {
+                name: document.getElementById('item-name').value,
+                category: document.getElementById('item-category').value,
+                item_type: document.getElementById('item-category').value, // Store in both fields
+                color: document.getElementById('item-color').value || null,
+                location: document.getElementById('item-location').value,
+                status: document.getElementById('item-status').value,
+                room: document.getElementById('item-room').value || null,
+                user_id: currentUser.id
+            };
+
+            if (editingItemId) {
+                // Update existing item
+                const { error } = await supabase
+                    .from('inventory')
+                    .update(itemData)
+                    .eq('id', editingItemId);
+
+                if (error) {
+                    alert('Error updating item: ' + error.message);
+                    return;
+                }
+            } else {
+                // Create new item
+                const { error } = await supabase
+                    .from('inventory')
+                    .insert([itemData]);
+
+                if (error) {
+                    alert('Error creating item: ' + error.message);
+                    return;
+                }
+            }
+
+            closeItemModal();
+            await loadInventory();
+        }
+
+        async function deleteItem(itemId) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+
+            const { error } = await supabase
+                .from('inventory')
+                .delete()
+                .eq('id', itemId);
+
+            if (error) {
+                alert('Error deleting item: ' + error.message);
+                return;
+            }
+
+            await loadInventory();
+        }
+
+        // Filter functions
+        function showFilterModal() {
+            document.getElementById('filter-modal').classList.add('active');
+        }
+
+        function closeFilterModal() {
+            document.getElementById('filter-modal').classList.remove('active');
+        }
+
+        function applyFilters() {
+            // Get status filters
+            const statuses = [];
+            if (document.getElementById('filter-in').checked) statuses.push('IN');
+            if (document.getElementById('filter-out').checked) statuses.push('OUT');
+            if (document.getElementById('filter-hold').checked) statuses.push('HOLD');
+
+            // Get category filters
+            const categories = [];
+            if (document.getElementById('filter-seating').checked) categories.push('Seating');
+            if (document.getElementById('filter-tables').checked) categories.push('Tables');
+            if (document.getElementById('filter-lighting').checked) categories.push('Lighting');
+            if (document.getElementById('filter-decor').checked) categories.push('Decor');
+            if (document.getElementById('filter-art').checked) categories.push('Art');
+            if (document.getElementById('filter-rugs').checked) categories.push('Rugs');
+
+            // Get search filters
+            const search = document.getElementById('filter-search').value;
+            const room = document.getElementById('filter-room').value;
+
+            // Update filter state
+            inventoryFilters = { statuses, categories, search, room };
+
+            // Re-render
+            renderInventory();
+        }
+
+        function clearFilters() {
+            // Reset all checkboxes
+            document.getElementById('filter-in').checked = true;
+            document.getElementById('filter-out').checked = true;
+            document.getElementById('filter-hold').checked = true;
+            document.getElementById('filter-seating').checked = true;
+            document.getElementById('filter-tables').checked = true;
+            document.getElementById('filter-lighting').checked = true;
+            document.getElementById('filter-decor').checked = true;
+            document.getElementById('filter-art').checked = true;
+            document.getElementById('filter-rugs').checked = true;
+
+            // Clear search fields
+            document.getElementById('filter-search').value = '';
+            document.getElementById('filter-room').value = '';
+
+            // Reset filter state
+            inventoryFilters = {
+                statuses: ['IN', 'OUT', 'HOLD'],
+                categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
+                search: '',
+                room: ''
+            };
+
+            // Re-render
+            renderInventory();
+        }
+
+        async function loadProjects() {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading projects:', error);
+                return;
+            }
+
+            const container = document.getElementById('projects-container');
+            if (data.length === 0) {
+                container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 40px;">No projects yet. Click "Add Project" to get started!</p>';
+            } else {
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                        ${data.map(project => `
+                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px;">
+                                <h3 style="font-weight: 700; font-size: 20px; margin-bottom: 12px;">${project.name}</h3>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 6px;">${project.address || 'No address'}</p>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 6px;">Status: ${project.status || 'active'}</p>
+                                ${project.start_date ? `<p style="color: #6b7280; font-size: 14px;">Start: ${new Date(project.start_date).toLocaleDateString()}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        async function loadClients() {
+            const { data, error } = await supabase
+                .from('clients')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading clients:', error);
+                return;
+            }
+
+            const container = document.getElementById('clients-container');
+            if (data.length === 0) {
+                container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 40px;">No clients yet. Click "Add Client" to get started!</p>';
+            } else {
+                container.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                        ${data.map(client => `
+                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                                <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 8px;">${client.name}</h3>
+                                ${client.company ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${client.company}</p>` : ''}
+                                ${client.email ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${client.email}</p>` : ''}
+                                ${client.phone ? `<p style="color: #6b7280; font-size: 14px;">${client.phone}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        async function loadCalendar() {
+            const { data, error } = await supabase
+                .from('calendar_events')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('start_time', { ascending: true });
+
+            if (error) {
+                console.error('Error loading calendar:', error);
+                return;
+            }
+
+            const container = document.getElementById('calendar-container');
+            if (data.length === 0) {
+                container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 40px;">No events scheduled. Click "Add Event" to get started!</p>';
+            } else {
+                container.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        ${data.map(event => `
+                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px;">
+                                <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 8px;">${event.title}</h3>
+                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${new Date(event.start_time).toLocaleString()}</p>
+                                ${event.description ? `<p style="color: #6b7280; font-size: 14px; margin-top: 8px;">${event.description}</p>` : ''}
+                                ${event.location ? `<p style="color: #6b7280; font-size: 14px; margin-top: 4px;">📍 ${event.location}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        // ==============================================
+        // INITIALIZE APP
+        // ==============================================
+        
+        // Check authentication status when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+        });
+    </script>
+
+</body>
+</html>

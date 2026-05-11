@@ -405,6 +405,7 @@
 
             if (error) {
                 showAuthMessage(error.message, 'error');
+                // Don't clear the form on error so user can see what they typed
             } else {
                 currentUser = data.user;
                 showAuthMessage('Sign in successful!', 'success');
@@ -428,10 +429,12 @@
 
             if (error) {
                 showAuthMessage(error.message, 'error');
+                // Don't clear the form on error
             } else {
                 showAuthMessage('Account created! Please check your email to verify your account.', 'success');
                 setTimeout(() => {
                     showSignInForm();
+                    document.getElementById('signup-form').reset();
                 }, 3000);
             }
         }
@@ -462,6 +465,11 @@
             const messageEl = document.getElementById('auth-message');
             messageEl.textContent = message;
             messageEl.style.display = 'block';
+            messageEl.style.padding = '12px 16px';
+            messageEl.style.borderRadius = '8px';
+            messageEl.style.fontSize = '14px';
+            messageEl.style.fontWeight = '600';
+            messageEl.style.marginTop = '16px';
             messageEl.style.background = type === 'error' ? '#fee2e2' : '#dcfce7';
             messageEl.style.color = type === 'error' ? '#991b1b' : '#166534';
             messageEl.style.borderLeft = type === 'error' ? '4px solid #dc2626' : '4px solid #16a34a';

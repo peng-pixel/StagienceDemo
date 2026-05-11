@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stagience - AI-Powered Home Staging Intelligence</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -294,15 +294,15 @@
                     <label style="display: block; font-weight: 700; margin-bottom: 12px;">Status</label>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-in" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-in" checked>
                             <span>IN</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-out" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-out" checked>
                             <span>OUT</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-hold" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-hold" checked>
                             <span>HOLD</span>
                         </label>
                     </div>
@@ -313,27 +313,27 @@
                     <label style="display: block; font-weight: 700; margin-bottom: 12px;">Category</label>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-seating" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-seating" checked>
                             <span>🛋️ Seating</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-tables" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-tables" checked>
                             <span>🪑 Tables</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-lighting" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-lighting" checked>
                             <span>💡 Lighting</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-decor" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-decor" checked>
                             <span>🎨 Decor</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-art" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-art" checked>
                             <span>🖼️ Art</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-rugs" checked onchange="applyFilters()">
+                            <input type="checkbox" id="filter-rugs" checked>
                             <span>🔲 Rugs</span>
                         </label>
                     </div>
@@ -342,18 +342,23 @@
                 <!-- Search -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 12px;">Search by Name</label>
-                    <input type="text" id="filter-search" placeholder="e.g., Sofa, Lamp..." oninput="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <input type="text" id="filter-search" placeholder="e.g., Sofa, Lamp..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
                 <!-- Room/Notes Search -->
                 <div>
                     <label style="display: block; font-weight: 700; margin-bottom: 12px;">Search by Room/Notes</label>
-                    <input type="text" id="filter-room" placeholder="e.g., Living Room..." oninput="applyFilters()" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <input type="text" id="filter-room" placeholder="e.g., Living Room..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
-                <button onclick="clearFilters()" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
-                    Clear All Filters
-                </button>
+                <div style="display: flex; gap: 12px; margin-top: 8px;">
+                    <button onclick="clearFilters()" style="flex: 1; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Clear All Filters
+                    </button>
+                    <button onclick="applyFiltersAndClose()" class="gradient-accent" style="flex: 1; padding: 12px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Apply Filters
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -860,6 +865,11 @@
 
             // Re-render
             renderInventory();
+        }
+
+        function applyFiltersAndClose() {
+            applyFilters();
+            closeFilterModal();
         }
 
         function clearFilters() {

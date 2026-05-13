@@ -713,7 +713,20 @@
                             'HOLD': 'background: #fef3c7; color: #92400e;'
                         };
                         return `
-                            <div onclick="editItem(${item.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: all 0.3s; position: relative;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                                <!-- Action Buttons -->
+                                <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;">
+                                    <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                                        📋
+                                    </button>
+                                    <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='white'">
+                                        ✏️
+                                    </button>
+                                    <button onclick="event.stopPropagation(); deleteItem(${item.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
+                                        ✕
+                                    </button>
+                                </div>
+                                
                                 <div style="font-size: 48px; text-align: center; margin-bottom: 12px;">${emoji}</div>
                                 <h3 style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">${item.name}</h3>
                                 <p style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">${item.category}</p>
@@ -760,6 +773,7 @@
                                     <td style="padding: 16px; color: #6b7280; font-size: 13px;">${item.room || '-'}</td>
                                     <td style="padding: 16px;"><span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span></td>
                                     <td style="padding: 16px;">
+                                        <button onclick="event.stopPropagation(); duplicateItem(${item.id})" style="padding: 6px 12px; background: #f3f4f6; color: #374151; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-right: 6px;">Duplicate</button>
                                         <button onclick="event.stopPropagation(); editItem(${item.id})" style="padding: 6px 12px; background: #eff6ff; color: #1e40af; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; margin-right: 6px;">Edit</button>
                                         <button onclick="event.stopPropagation(); deleteItem(${item.id})" style="padding: 6px 12px; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Delete</button>
                                     </td>
@@ -923,6 +937,36 @@
             }
 
             closeItemModal();
+            await loadInventory();
+        }
+
+        async function duplicateItem(itemId) {
+            const item = inventoryItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            // Create a copy with all the same data except id
+            const duplicateData = {
+                name: item.name + ' (Copy)',
+                category: item.category,
+                item_type: item.item_type || item.category,
+                color: item.color,
+                location: item.location,
+                status: item.status,
+                room: item.room,
+                photo: item.photo,
+                emoji: item.emoji,
+                user_id: currentUser.id
+            };
+
+            const { error } = await supabase
+                .from('inventory')
+                .insert([duplicateData]);
+
+            if (error) {
+                alert('Error duplicating item: ' + error.message);
+                return;
+            }
+
             await loadInventory();
         }
 

@@ -194,33 +194,51 @@
                         </button>
                     </div>
 
-                    <!-- Project Stats Cards -->
-                    <div id="project-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        <!-- Total Projects Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(176,138,90,0.1), rgba(47,111,107,0.1)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    📋
-                                </div>
-                                <div>
-                                    <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">Total Projects</div>
-                                    <div id="total-projects-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
-                                </div>
+                    <!-- Project Filter Cards -->
+                    <div id="project-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px;">
+                        <!-- All Projects Card -->
+                        <div id="filter-all" onclick="filterProjectsByStatus('all')" style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📁</div>
+                                <div style="font-weight: 600; font-size: 15px;">All Projects</div>
                             </div>
+                            <div id="count-all" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
 
-                        <!-- By Status Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    🔄
-                                </div>
-                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Status</div>
+                        <!-- Active Card -->
+                        <div id="filter-active" onclick="filterProjectsByStatus('active')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">🟢</div>
+                                <div style="font-weight: 600; font-size: 15px;">Active</div>
                             </div>
-                            <div id="project-status-breakdown" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600;">
-                                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">0 Active</span>
-                                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">0 Completed</span>
+                            <div id="count-active" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
+                        <!-- Completed Card -->
+                        <div id="filter-completed" onclick="filterProjectsByStatus('completed')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">✅</div>
+                                <div style="font-weight: 600; font-size: 15px;">Completed</div>
                             </div>
+                            <div id="count-completed" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
+                        <!-- On Hold Card -->
+                        <div id="filter-on-hold" onclick="filterProjectsByStatus('on-hold')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">⏸️</div>
+                                <div style="font-weight: 600; font-size: 15px;">On Hold</div>
+                            </div>
+                            <div id="count-on-hold" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
+                        <!-- Cancelled Card -->
+                        <div id="filter-cancelled" onclick="filterProjectsByStatus('cancelled')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">❌</div>
+                                <div style="font-weight: 600; font-size: 15px;">Cancelled</div>
+                            </div>
+                            <div id="count-cancelled" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
                     </div>
 
@@ -999,6 +1017,7 @@
         
         let projects = [];
         let editingProjectId = null;
+        let currentProjectFilter = 'all'; // Track which filter is active
 
         async function loadProjects() {
             const { data, error } = await supabase
@@ -1017,17 +1036,24 @@
         }
 
         function renderProjects() {
-            // Update stats
+            // Update stats for all statuses
             updateProjectStats(projects);
+            
+            // Filter projects based on selected status
+            let filteredProjects = projects;
+            if (currentProjectFilter !== 'all') {
+                filteredProjects = projects.filter(p => p.status === currentProjectFilter);
+            }
             
             const container = document.getElementById('projects-container');
             
-            if (projects.length === 0) {
+            if (filteredProjects.length === 0) {
+                const filterLabel = currentProjectFilter === 'all' ? '' : ` in "${currentProjectFilter}" status`;
                 container.innerHTML = `
                     <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
-                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No projects yet</h3>
-                        <p style="font-size: 14px; margin-bottom: 20px;">Click "Add Project" to create your first project</p>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No projects${filterLabel}</h3>
+                        <p style="font-size: 14px; margin-bottom: 20px;">${currentProjectFilter === 'all' ? 'Click "Add Project" to create your first project' : 'Try selecting a different status filter'}</p>
                     </div>
                 `;
                 return;
@@ -1049,7 +1075,7 @@
 
             container.innerHTML = `
                 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
-                    ${projects.map(project => `
+                    ${filteredProjects.map(project => `
                         <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
                                 <h3 style="font-weight: 700; font-size: 18px; flex: 1;">${project.name}</h3>
@@ -1090,36 +1116,39 @@
         }
 
         function updateProjectStats(projects) {
-            // Total count
-            document.getElementById('total-projects-count').textContent = projects.length;
-
-            // Status breakdown
-            const statusCounts = {
+            // Count by status
+            const counts = {
+                all: projects.length,
                 active: projects.filter(p => p.status === 'active').length,
                 completed: projects.filter(p => p.status === 'completed').length,
                 'on-hold': projects.filter(p => p.status === 'on-hold').length,
                 cancelled: projects.filter(p => p.status === 'cancelled').length
             };
 
-            let statusHtml = '';
-            if (statusCounts.active > 0) {
-                statusHtml += `<span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">${statusCounts.active} Active</span>`;
-            }
-            if (statusCounts.completed > 0) {
-                statusHtml += `<span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">${statusCounts.completed} Completed</span>`;
-            }
-            if (statusCounts['on-hold'] > 0) {
-                statusHtml += `<span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">${statusCounts['on-hold']} On Hold</span>`;
-            }
-            if (statusCounts.cancelled > 0) {
-                statusHtml += `<span style="padding: 6px 10px; background: #fee2e2; color: #991b1b; border-radius: 8px;">${statusCounts.cancelled} Cancelled</span>`;
-            }
+            // Update counts
+            document.getElementById('count-all').textContent = counts.all;
+            document.getElementById('count-active').textContent = counts.active;
+            document.getElementById('count-completed').textContent = counts.completed;
+            document.getElementById('count-on-hold').textContent = counts['on-hold'];
+            document.getElementById('count-cancelled').textContent = counts.cancelled;
 
-            if (statusHtml === '') {
-                statusHtml = '<span style="color: #9ca3af; font-size: 13px;">No projects yet</span>';
-            }
+            // Update active state styling
+            const filters = ['all', 'active', 'completed', 'on-hold', 'cancelled'];
+            filters.forEach(filter => {
+                const card = document.getElementById(`filter-${filter}`);
+                if (filter === currentProjectFilter) {
+                    card.style.borderColor = '#3b82f6';
+                    card.style.background = '#eff6ff';
+                } else {
+                    card.style.borderColor = '#e5e7eb';
+                    card.style.background = 'white';
+                }
+            });
+        }
 
-            document.getElementById('project-status-breakdown').innerHTML = statusHtml;
+        function filterProjectsByStatus(status) {
+            currentProjectFilter = status;
+            renderProjects();
         }
 
         function showAddProjectModal() {

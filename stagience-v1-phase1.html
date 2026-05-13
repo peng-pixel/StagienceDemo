@@ -98,7 +98,6 @@
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showSection('projects')" id="nav-projects" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
-                        <button onclick="showSection('clients')" id="nav-clients" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Clients</button>
                         <button onclick="showSection('calendar')" id="nav-calendar" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="handleSignOut()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out</button>
                     </div>
@@ -195,13 +194,6 @@
                         </button>
                     </div>
                     <div id="projects-container"></div>
-                </div>
-
-                <!-- Clients Section -->
-                <div id="clients-section" class="section" style="display: none;">
-                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 24px;">Clients</h1>
-                    <p style="color: #6b7280; margin-bottom: 32px;">This section will display your clients from Supabase.</p>
-                    <div id="clients-container"></div>
                 </div>
 
                 <!-- Calendar Section -->
@@ -582,7 +574,6 @@
         async function loadAllData() {
             await loadInventory();
             await loadProjects();
-            await loadClients();
             await loadCalendar();
         }
 
@@ -1161,37 +1152,6 @@
             }
 
             await loadProjects();
-        }
-
-        async function loadClients() {
-            const { data, error } = await supabase
-                .from('clients')
-                .select('*')
-                .eq('user_id', currentUser.id)
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                console.error('Error loading clients:', error);
-                return;
-            }
-
-            const container = document.getElementById('clients-container');
-            if (data.length === 0) {
-                container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 40px;">No clients yet. Click "Add Client" to get started!</p>';
-            } else {
-                container.innerHTML = `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-                        ${data.map(client => `
-                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                                <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 8px;">${client.name}</h3>
-                                ${client.company ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${client.company}</p>` : ''}
-                                ${client.email ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${client.email}</p>` : ''}
-                                ${client.phone ? `<p style="color: #6b7280; font-size: 14px;">${client.phone}</p>` : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
         }
 
         async function loadCalendar() {

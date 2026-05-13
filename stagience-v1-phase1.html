@@ -187,12 +187,43 @@
 
                 <!-- Projects Section -->
                 <div id="projects-section" class="section" style="display: none;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                         <h1 style="font-size: 32px; font-weight: 800;">Projects</h1>
                         <button onclick="showAddProjectModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
                             + Add Project
                         </button>
                     </div>
+
+                    <!-- Project Stats Cards -->
+                    <div id="project-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                        <!-- Total Projects Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(176,138,90,0.1), rgba(47,111,107,0.1)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    📋
+                                </div>
+                                <div>
+                                    <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">Total Projects</div>
+                                    <div id="total-projects-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- By Status Card -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                                <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                    🔄
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Status</div>
+                            </div>
+                            <div id="project-status-breakdown" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600;">
+                                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">0 Active</span>
+                                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">0 Completed</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="projects-container"></div>
                 </div>
 
@@ -389,11 +420,6 @@
                         <label style="display: block; font-weight: 600; margin-bottom: 8px;">End Date</label>
                         <input type="date" id="project-end-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
-                </div>
-
-                <div>
-                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Budget</label>
-                    <input type="number" id="project-budget" placeholder="e.g., 5000" step="0.01" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 </div>
 
                 <div>
@@ -991,6 +1017,9 @@
         }
 
         function renderProjects() {
+            // Update stats
+            updateProjectStats(projects);
+            
             const container = document.getElementById('projects-container');
             
             if (projects.length === 0) {
@@ -1040,12 +1069,6 @@
                                 </div>
                             ` : ''}
                             
-                            ${project.budget ? `
-                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
-                                    💰 Budget: $${parseFloat(project.budget).toLocaleString()}
-                                </p>
-                            ` : ''}
-                            
                             ${project.notes ? `
                                 <p style="color: #9ca3af; font-size: 13px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-style: italic;">
                                     ${project.notes.length > 100 ? project.notes.substring(0, 100) + '...' : project.notes}
@@ -1064,6 +1087,39 @@
                     `).join('')}
                 </div>
             `;
+        }
+
+        function updateProjectStats(projects) {
+            // Total count
+            document.getElementById('total-projects-count').textContent = projects.length;
+
+            // Status breakdown
+            const statusCounts = {
+                active: projects.filter(p => p.status === 'active').length,
+                completed: projects.filter(p => p.status === 'completed').length,
+                'on-hold': projects.filter(p => p.status === 'on-hold').length,
+                cancelled: projects.filter(p => p.status === 'cancelled').length
+            };
+
+            let statusHtml = '';
+            if (statusCounts.active > 0) {
+                statusHtml += `<span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">${statusCounts.active} Active</span>`;
+            }
+            if (statusCounts.completed > 0) {
+                statusHtml += `<span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">${statusCounts.completed} Completed</span>`;
+            }
+            if (statusCounts['on-hold'] > 0) {
+                statusHtml += `<span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">${statusCounts['on-hold']} On Hold</span>`;
+            }
+            if (statusCounts.cancelled > 0) {
+                statusHtml += `<span style="padding: 6px 10px; background: #fee2e2; color: #991b1b; border-radius: 8px;">${statusCounts.cancelled} Cancelled</span>`;
+            }
+
+            if (statusHtml === '') {
+                statusHtml = '<span style="color: #9ca3af; font-size: 13px;">No projects yet</span>';
+            }
+
+            document.getElementById('project-status-breakdown').innerHTML = statusHtml;
         }
 
         function showAddProjectModal() {
@@ -1090,7 +1146,6 @@
             document.getElementById('project-address').value = project.address || '';
             document.getElementById('project-start-date').value = project.start_date || '';
             document.getElementById('project-end-date').value = project.end_date || '';
-            document.getElementById('project-budget').value = project.budget || '';
             document.getElementById('project-status').value = project.status || 'active';
             document.getElementById('project-notes').value = project.notes || '';
             
@@ -1105,7 +1160,6 @@
                 address: document.getElementById('project-address').value || null,
                 start_date: document.getElementById('project-start-date').value || null,
                 end_date: document.getElementById('project-end-date').value || null,
-                budget: document.getElementById('project-budget').value || null,
                 status: document.getElementById('project-status').value,
                 notes: document.getElementById('project-notes').value || null,
                 user_id: currentUser.id

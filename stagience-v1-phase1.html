@@ -128,57 +128,51 @@
                         </div>
                     </div>
 
-                    <!-- Inventory Stats Cards -->
-                    <div id="inventory-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px;">
-                        <!-- Total Items Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(176,138,90,0.1), rgba(47,111,107,0.1)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    📊
-                                </div>
-                                <div>
-                                    <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">Total Items</div>
-                                    <div id="total-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
-                                </div>
+                    <!-- Inventory Status Filter Cards -->
+                    <div id="inventory-status-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                        <!-- All Items Card -->
+                        <div id="inv-filter-all" onclick="filterInventoryByStatus('all')" style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📦</div>
+                                <div style="font-weight: 600; font-size: 15px;">All Items</div>
                             </div>
+                            <div id="inv-count-all" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
 
-                        <!-- By Status Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <div style="width: 48px; height: 48px; background: #eff6ff; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    🔄
-                                </div>
-                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Status</div>
+                        <!-- IN Card -->
+                        <div id="inv-filter-IN" onclick="filterInventoryByStatus('IN')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">✅</div>
+                                <div style="font-weight: 600; font-size: 15px;">IN</div>
                             </div>
-                            <div id="status-breakdown" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600;">
-                                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">0 IN</span>
-                                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">0 OUT</span>
-                                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">0 HOLD</span>
-                            </div>
+                            <div id="inv-count-IN" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
 
-                        <!-- By Category Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <div style="width: 48px; height: 48px; background: #fef3c7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    📦
-                                </div>
-                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Category</div>
+                        <!-- OUT Card -->
+                        <div id="inv-filter-OUT" onclick="filterInventoryByStatus('OUT')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📤</div>
+                                <div style="font-weight: 600; font-size: 15px;">OUT</div>
                             </div>
-                            <div id="category-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;"></div>
+                            <div id="inv-count-OUT" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
 
-                        <!-- By Location Card -->
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                                <div style="width: 48px; height: 48px; background: #dcfce7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px;">
-                                    📍
-                                </div>
-                                <div style="font-size: 13px; color: #6b7280; font-weight: 600; text-transform: uppercase;">By Location</div>
+                        <!-- HOLD Card -->
+                        <div id="inv-filter-HOLD" onclick="filterInventoryByStatus('HOLD')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">⏸️</div>
+                                <div style="font-weight: 600; font-size: 15px;">HOLD</div>
                             </div>
-                            <div id="location-breakdown" style="display: flex; flex-direction: column; gap: 4px; font-size: 13px;"></div>
+                            <div id="inv-count-HOLD" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
+                    </div>
+
+                    <!-- Location Dropdown Filter -->
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Filter by Location:</label>
+                        <select id="inventory-location-filter" onchange="applyInventoryLocationFilter()" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; min-width: 250px; font-weight: 500;">
+                            <option value="all">All Locations</option>
+                        </select>
                     </div>
 
                     <!-- Inventory Container -->
@@ -627,6 +621,8 @@
         
         let inventoryItems = [];
         let currentView = 'list'; // 'grid' or 'list'
+        let currentInventoryStatusFilter = 'all'; // 'all', 'IN', 'OUT', 'HOLD'
+        let currentInventoryLocationFilter = 'all'; // 'all' or specific location
         let inventoryFilters = {
             statuses: ['IN', 'OUT', 'HOLD'],
             categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
@@ -654,9 +650,21 @@
 
         // Render inventory with filters and views
         function renderInventory() {
-            // Apply filters
-            let filteredItems = inventoryItems.filter(item => {
-                // Status filter
+            // First apply status card filter
+            let filteredItems = inventoryItems;
+            
+            if (currentInventoryStatusFilter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.status === currentInventoryStatusFilter);
+            }
+            
+            // Then apply location dropdown filter
+            if (currentInventoryLocationFilter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.location === currentInventoryLocationFilter);
+            }
+            
+            // Then apply the existing filter modal filters
+            filteredItems = filteredItems.filter(item => {
+                // Status filter from filter modal (only if not using status cards)
                 if (!inventoryFilters.statuses.includes(item.status)) return false;
                 
                 // Category filter
@@ -674,8 +682,10 @@
                 return true;
             });
 
-            // Update stats
+            // Update stats and location dropdown
             updateInventoryStats(filteredItems);
+            updateLocationDropdown();
+
 
             // Render based on view
             const container = document.getElementById('inventory-container');
@@ -793,72 +803,69 @@
 
         // Update inventory stats
         function updateInventoryStats(items) {
-            // Total count
-            document.getElementById('total-count').textContent = items.length;
-
-            // Status breakdown
-            const statusCounts = {
-                IN: items.filter(item => item.status === 'IN').length,
-                OUT: items.filter(item => item.status === 'OUT').length,
-                HOLD: items.filter(item => item.status === 'HOLD').length
+            // Count by status from ALL inventory items (not filtered)
+            const allCounts = {
+                all: inventoryItems.length,
+                IN: inventoryItems.filter(item => item.status === 'IN').length,
+                OUT: inventoryItems.filter(item => item.status === 'OUT').length,
+                HOLD: inventoryItems.filter(item => item.status === 'HOLD').length
             };
 
-            document.getElementById('status-breakdown').innerHTML = `
-                <span style="padding: 6px 10px; background: #dcfce7; color: #166534; border-radius: 8px;">${statusCounts.IN} IN</span>
-                <span style="padding: 6px 10px; background: #dbeafe; color: #1e40af; border-radius: 8px;">${statusCounts.OUT} OUT</span>
-                <span style="padding: 6px 10px; background: #fef3c7; color: #92400e; border-radius: 8px;">${statusCounts.HOLD} HOLD</span>
-            `;
+            // Update counts in status cards
+            document.getElementById('inv-count-all').textContent = allCounts.all;
+            document.getElementById('inv-count-IN').textContent = allCounts.IN;
+            document.getElementById('inv-count-OUT').textContent = allCounts.OUT;
+            document.getElementById('inv-count-HOLD').textContent = allCounts.HOLD;
 
-            // Category breakdown
-            const categoryCounts = {};
-            items.forEach(item => {
-                categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
+            // Update active state styling
+            const statuses = ['all', 'IN', 'OUT', 'HOLD'];
+            statuses.forEach(status => {
+                const card = document.getElementById(`inv-filter-${status}`);
+                if (status === currentInventoryStatusFilter) {
+                    card.style.borderColor = '#3b82f6';
+                    card.style.background = '#eff6ff';
+                } else {
+                    card.style.borderColor = '#e5e7eb';
+                    card.style.background = 'white';
+                }
             });
+        }
 
-            const categoryEmojis = {
-                'Seating': '🛋️', 'Tables': '🪑', 'Lighting': '💡',
-                'Decor': '🎨', 'Art': '🖼️', 'Rugs': '🔲'
-            };
-
-            const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
-            const top8 = sortedCategories.slice(0, 8);
-            const remaining = sortedCategories.length - 8;
-
-            let categoryHtml = top8.map(([cat, count]) => `
-                <div style="display: flex; justify-content: space-between; padding: 4px 0;">
-                    <span style="color: #6b7280;">${categoryEmojis[cat] || '📦'} ${cat}</span>
-                    <span style="font-weight: 700;">${count}</span>
-                </div>
-            `).join('');
-
-            if (remaining > 0) {
-                categoryHtml += `<div style="padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid #e5e7eb;"><span style="color: #9ca3af; font-size: 12px; font-style: italic;">+ ${remaining} more categor${remaining > 1 ? 'ies' : 'y'}</span></div>`;
-            }
-
-            document.getElementById('category-breakdown').innerHTML = categoryHtml || '<div style="color: #9ca3af; font-style: italic;">No categories</div>';
-
-            // Location breakdown
-            const locationCounts = {};
-            items.forEach(item => {
-                locationCounts[item.location] = (locationCounts[item.location] || 0) + 1;
+        function updateLocationDropdown() {
+            // Get unique locations from all inventory
+            const locations = [...new Set(inventoryItems.map(item => item.location).filter(Boolean))].sort();
+            
+            const dropdown = document.getElementById('inventory-location-filter');
+            const currentValue = dropdown.value;
+            
+            // Rebuild dropdown options
+            dropdown.innerHTML = '<option value="all">All Locations</option>';
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                dropdown.appendChild(option);
             });
-
-            const sortedLocations = Object.entries(locationCounts).sort((a, b) => b[1] - a[1]);
-            const top5 = sortedLocations.slice(0, 5);
-            const remainingLocs = sortedLocations.length - 5;
-
-            let locationHtml = top5.map(([loc, count]) => `
-                <div style="display: flex; justify-content: space-between; padding: 4px 0;">
-                    <span style="color: #6b7280;">${loc}</span>
-                    <span style="font-weight: 700;">${count}</span>
-                </div>
-            `).join('');
-
-            if (remainingLocs > 0) {
-                locationHtml += `<div style="padding: 8px 0 4px; margin-top: 4px; border-top: 1px solid #e5e7eb;"><span style="color: #9ca3af; font-size: 12px; font-style: italic;">+ ${remainingLocs} more location${remainingLocs > 1 ? 's' : ''}</span></div>`;
+            
+            // Restore selected value if it still exists
+            if (locations.includes(currentValue)) {
+                dropdown.value = currentValue;
+            } else if (currentValue !== 'all') {
+                dropdown.value = 'all';
+                currentInventoryLocationFilter = 'all';
             }
+        }
 
-            document.getElementById('location-breakdown').innerHTML = locationHtml || '<div style="color: #9ca3af; font-style: italic;">No locations</div>';
+        function filterInventoryByStatus(status) {
+            currentInventoryStatusFilter = status;
+            currentInventoryLocationFilter = 'all'; // Reset location filter when changing status
+            document.getElementById('inventory-location-filter').value = 'all';
+            renderInventory();
+        }
+
+        function applyInventoryLocationFilter() {
+            currentInventoryLocationFilter = document.getElementById('inventory-location-filter').value;
+            renderInventory();
         }
 
         // Switch between grid and list views

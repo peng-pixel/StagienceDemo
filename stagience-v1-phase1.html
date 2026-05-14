@@ -284,6 +284,43 @@
                 </div>
 
                 <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Description / Fabric</label>
+                    <input type="text" id="item-description" placeholder="e.g., Linen, Velvet sofa, Modern dining table" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">ID/Code Number</label>
+                    <input type="text" id="item-id-code" placeholder="e.g., INV-001, SKU-12345" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Room/Notes</label>
+                    <textarea id="item-room" placeholder="e.g., Living Room, Master Bedroom" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Condition</label>
+                        <select id="item-condition" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <option value="">Select condition...</option>
+                            <option value="New">✨ New</option>
+                            <option value="Excellent">⭐ Excellent</option>
+                            <option value="Good">👍 Good</option>
+                            <option value="Fair">⚠️ Fair</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Status *</label>
+                        <select id="item-status" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <option value="IN">✅ IN - Available</option>
+                            <option value="OUT">📦 OUT - On Project</option>
+                            <option value="HOLD">⏸️ HOLD - Reserved</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Location *</label>
                     <select id="item-location" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="">Select location...</option>
@@ -293,18 +330,33 @@
                     </select>
                 </div>
 
-                <div>
-                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Status *</label>
-                    <select id="item-status" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                        <option value="IN">IN - Available</option>
-                        <option value="OUT">OUT - On Project</option>
-                        <option value="HOLD">HOLD - Reserved</option>
-                    </select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Purchase Date</label>
+                        <input type="date" id="item-purchase-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Cost</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #6b7280; font-weight: 500;">$</span>
+                            <input type="number" id="item-cost" placeholder="0.00" step="0.01" min="0" style="width: 100%; padding: 12px 12px 12px 28px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                    </div>
                 </div>
 
                 <div>
-                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Room/Notes</label>
-                    <textarea id="item-room" placeholder="e.g., Living Room, Master Bedroom" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Purchased From</label>
+                    <input type="text" id="item-purchased-from" placeholder="e.g., West Elm, IKEA, HomeSense" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Photo</label>
+                    <div style="padding: 20px; border: 2px dashed #e5e7eb; border-radius: 10px; text-align: center; color: #6b7280;">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📷</div>
+                        <div style="font-size: 14px;">Photo upload coming in Phase A4</div>
+                        <div style="font-size: 12px; margin-top: 4px;">(Placeholder for now)</div>
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 8px;">
@@ -892,6 +944,8 @@
 
         function closeItemModal() {
             document.getElementById('item-modal').classList.remove('active');
+            document.getElementById('item-form').reset();
+            document.getElementById('modal-title').textContent = 'Add Item';
             editingItemId = null;
         }
 
@@ -905,9 +959,15 @@
             document.getElementById('item-name').value = item.name;
             document.getElementById('item-category').value = item.category;
             document.getElementById('item-color').value = item.color || '';
-            document.getElementById('item-location').value = item.location;
-            document.getElementById('item-status').value = item.status;
+            document.getElementById('item-description').value = item.description || '';
+            document.getElementById('item-id-code').value = item.id_code || '';
             document.getElementById('item-room').value = item.room || '';
+            document.getElementById('item-condition').value = item.condition || '';
+            document.getElementById('item-status').value = item.status;
+            document.getElementById('item-location').value = item.location;
+            document.getElementById('item-purchase-date').value = item.purchase_date || '';
+            document.getElementById('item-cost').value = item.purchase_cost || '';
+            document.getElementById('item-purchased-from').value = item.purchased_from || '';
             
             document.getElementById('item-modal').classList.add('active');
         }
@@ -920,9 +980,15 @@
                 category: document.getElementById('item-category').value,
                 item_type: document.getElementById('item-category').value, // Store in both fields
                 color: document.getElementById('item-color').value || null,
-                location: document.getElementById('item-location').value,
-                status: document.getElementById('item-status').value,
+                description: document.getElementById('item-description').value || null,
+                id_code: document.getElementById('item-id-code').value || null,
                 room: document.getElementById('item-room').value || null,
+                condition: document.getElementById('item-condition').value || null,
+                status: document.getElementById('item-status').value,
+                location: document.getElementById('item-location').value,
+                purchase_date: document.getElementById('item-purchase-date').value || null,
+                purchase_cost: document.getElementById('item-cost').value || null,
+                purchased_from: document.getElementById('item-purchased-from').value || null,
                 user_id: currentUser.id
             };
 
@@ -963,9 +1029,16 @@
                 category: item.category,
                 item_type: item.item_type || item.category,
                 color: item.color,
-                location: item.location,
-                status: item.status,
+                description: item.description,
+                id_code: item.id_code,
                 room: item.room,
+                condition: item.condition,
+                status: item.status,
+                location: item.location,
+                purchase_date: item.purchase_date,
+                purchase_cost: item.purchase_cost,
+                purchased_from: item.purchased_from,
+                photo_url: item.photo_url,
                 photo: item.photo,
                 emoji: item.emoji,
                 user_id: currentUser.id

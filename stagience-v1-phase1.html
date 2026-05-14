@@ -2928,22 +2928,33 @@
                 let detailsHtml = '';
                 
                 // Build details based on event type
-                if (event.event_type === 'photo-shoot' && event.photographer) {
-                    detailsHtml = `<div style="background: #fef3c7; padding: 16px; border-radius: 10px; margin-top: 12px;"><strong>Photographer:</strong> ${event.photographer}</div>`;
-                } else if (event.event_type === 'pickup-destage' && event.details) {
-                    detailsHtml = `<div style="background: #f3e8ff; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.details}</div>`;
-                } else if (event.event_type === 'installation-stage' && (event.team || event.items_reserved || event.building_access_code || event.contact)) {
-                    detailsHtml = `
-                        <div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">
-                            ${event.team ? `<div style="margin-bottom: 8px;"><strong>Team:</strong> ${event.team}</div>` : ''}
-                            ${event.items_reserved ? `<div style="margin-bottom: 8px;"><strong>Items Reserved:</strong> ${event.items_reserved}</div>` : ''}
-                            ${event.building_access_code ? `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>` : ''}
-                            ${event.contact ? `<div><strong>Contact:</strong> ${event.contact}</div>` : ''}
-                        </div>
-                    `;
+                if (event.event_type === 'photo-shoot' && (event.photographer || event.notes)) {
+                    let content = '';
+                    if (event.photographer) content += `<strong>Photographer:</strong> ${event.photographer}`;
+                    if (event.photographer && event.notes) content += '<br><br>';
+                    if (event.notes) content += event.notes;
+                    detailsHtml = `<div style="background: #fef3c7; padding: 16px; border-radius: 10px; margin-top: 12px;">${content}</div>`;
+                } else if (event.event_type === 'pickup-destage' && (event.details || event.notes)) {
+                    let content = '';
+                    if (event.details) content += event.details;
+                    if (event.details && event.notes) content += '<br><br>';
+                    if (event.notes) content += event.notes;
+                    detailsHtml = `<div style="background: #f3e8ff; padding: 16px; border-radius: 10px; margin-top: 12px;">${content}</div>`;
+                } else if (event.event_type === 'installation-stage' && (event.team || event.items_reserved || event.building_access_code || event.contact || event.notes)) {
+                    let installationFields = '';
+                    if (event.team) installationFields += `<div style="margin-bottom: 8px;"><strong>Team:</strong> ${event.team}</div>`;
+                    if (event.items_reserved) installationFields += `<div style="margin-bottom: 8px;"><strong>Items Reserved:</strong> ${event.items_reserved}</div>`;
+                    if (event.building_access_code) installationFields += `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>`;
+                    if (event.contact) installationFields += `<div style="margin-bottom: 8px;"><strong>Contact:</strong> ${event.contact}</div>`;
+                    if (event.notes) installationFields += `${installationFields ? '<br>' : ''}${event.notes}`;
+                    detailsHtml = `<div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">${installationFields}</div>`;
                 } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
-                    // Show consultation details AND notes if they exist
-                    detailsHtml = `<div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.consultation_details || event.notes || ''}</div>`;
+                    // Show consultation details AND notes (both if present)
+                    let consultationContent = '';
+                    if (event.consultation_details) consultationContent += event.consultation_details;
+                    if (event.consultation_details && event.notes) consultationContent += '<br><br>';
+                    if (event.notes) consultationContent += event.notes;
+                    detailsHtml = `<div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">${consultationContent}</div>`;
                 } else if (event.notes) {
                     detailsHtml = `<div style="background: #f9fafb; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.notes}</div>`;
                 }
@@ -3212,21 +3223,32 @@
                         
                         let detailsHtml = '';
                         
-                        if (event.event_type === 'photo-shoot' && event.photographer) {
-                            detailsHtml = `<div class="event-details" style="background: #fef3c7;"><strong>Photographer:</strong> ${event.photographer}</div>`;
-                        } else if (event.event_type === 'pickup-destage' && event.details) {
-                            detailsHtml = `<div class="event-details" style="background: #f3e8ff;">${event.details}</div>`;
-                        } else if (event.event_type === 'installation-stage' && (event.team || event.items_reserved || event.building_access_code || event.contact)) {
-                            detailsHtml = `
-                                <div class="event-details" style="background: #dbeafe;">
-                                    ${event.team ? `<div style="margin-bottom: 8px;"><strong>Team:</strong> ${event.team}</div>` : ''}
-                                    ${event.items_reserved ? `<div style="margin-bottom: 8px;"><strong>Items Reserved:</strong> ${event.items_reserved}</div>` : ''}
-                                    ${event.building_access_code ? `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>` : ''}
-                                    ${event.contact ? `<div><strong>Contact:</strong> ${event.contact}</div>` : ''}
-                                </div>
-                            `;
+                        if (event.event_type === 'photo-shoot' && (event.photographer || event.notes)) {
+                            let content = '';
+                            if (event.photographer) content += `<strong>Photographer:</strong> ${event.photographer}`;
+                            if (event.photographer && event.notes) content += '<br><br>';
+                            if (event.notes) content += event.notes;
+                            detailsHtml = `<div class="event-details" style="background: #fef3c7;">${content}</div>`;
+                        } else if (event.event_type === 'pickup-destage' && (event.details || event.notes)) {
+                            let content = '';
+                            if (event.details) content += event.details;
+                            if (event.details && event.notes) content += '<br><br>';
+                            if (event.notes) content += event.notes;
+                            detailsHtml = `<div class="event-details" style="background: #f3e8ff;">${content}</div>`;
+                        } else if (event.event_type === 'installation-stage' && (event.team || event.items_reserved || event.building_access_code || event.contact || event.notes)) {
+                            let installationFields = '';
+                            if (event.team) installationFields += `<div style="margin-bottom: 8px;"><strong>Team:</strong> ${event.team}</div>`;
+                            if (event.items_reserved) installationFields += `<div style="margin-bottom: 8px;"><strong>Items Reserved:</strong> ${event.items_reserved}</div>`;
+                            if (event.building_access_code) installationFields += `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>`;
+                            if (event.contact) installationFields += `<div style="margin-bottom: 8px;"><strong>Contact:</strong> ${event.contact}</div>`;
+                            if (event.notes) installationFields += `${installationFields ? '<br>' : ''}${event.notes}`;
+                            detailsHtml = `<div class="event-details" style="background: #dbeafe;">${installationFields}</div>`;
                         } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
-                            detailsHtml = `<div class="event-details" style="background: #dbeafe;">${event.consultation_details || event.notes || ''}</div>`;
+                            let consultationContent = '';
+                            if (event.consultation_details) consultationContent += event.consultation_details;
+                            if (event.consultation_details && event.notes) consultationContent += '<br><br>';
+                            if (event.notes) consultationContent += event.notes;
+                            detailsHtml = `<div class="event-details" style="background: #dbeafe;">${consultationContent}</div>`;
                         } else if (event.notes) {
                             detailsHtml = `<div class="event-details" style="background: #f9fafb;">${event.notes}</div>`;
                         }

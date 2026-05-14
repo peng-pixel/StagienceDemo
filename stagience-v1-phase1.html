@@ -319,7 +319,7 @@
 
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Room/Notes</label>
-                    <textarea id="item-room" placeholder="e.g., Living Room, Master Bedroom" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
+                    <textarea id="item-room" placeholder="e.g., Living Room, Primary Bedroom" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -1400,11 +1400,11 @@
         function renderStep11(container, nav) {
             container.innerHTML = `
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Which room is this for? (Optional)</h3>
-                <textarea id="wizard-room" placeholder="e.g., Living Room, Master Bedroom, Special handling notes..." rows="4" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 16px;">${wizardData.room || ''}</textarea>
+                <textarea id="wizard-room" placeholder="e.g., Living Room, Primary Bedroom, Special handling notes..." rows="4" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 16px;">${wizardData.room || ''}</textarea>
                 <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                     <button type="button" onclick="document.getElementById('wizard-room').value='Living Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Living Room</button>
                     <button type="button" onclick="document.getElementById('wizard-room').value='Dining Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Dining Room</button>
-                    <button type="button" onclick="document.getElementById('wizard-room').value='Master Bedroom'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Master Bedroom</button>
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Primary Bedroom'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Primary Bedroom</button>
                     <button type="button" onclick="document.getElementById('wizard-room').value='Kitchen'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Kitchen</button>
                     <button type="button" onclick="document.getElementById('wizard-room').value='Office'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Office</button>
                 </div>

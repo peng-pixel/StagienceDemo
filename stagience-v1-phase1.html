@@ -371,6 +371,29 @@
         </div>
     </div>
 
+    <!-- 11-Step Add Item Wizard -->
+    <div id="wizard-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <!-- Header with progress -->
+            <div style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 style="font-size: 24px; font-weight: 800;">Add Inventory Item - Step <span id="wizard-step-num">1</span> of 11</h2>
+                    <button onclick="cancelWizard()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+                </div>
+                <!-- Progress bar -->
+                <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                    <div id="wizard-progress" style="background: linear-gradient(135deg, #B08A5A, #2F6F6B); height: 100%; width: 9.09%; transition: width 0.3s;"></div>
+                </div>
+            </div>
+
+            <!-- Wizard Steps Container -->
+            <div id="wizard-steps"></div>
+
+            <!-- Navigation Buttons -->
+            <div id="wizard-nav" style="display: flex; gap: 12px; margin-top: 24px;"></div>
+        </div>
+    </div>
+
     <!-- Filter Modal -->
     <div id="filter-modal" class="modal">
         <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
@@ -934,7 +957,376 @@
         }
 
         // Modal functions
+        // ==============================================
+        // 11-STEP WIZARD FOR ADDING ITEMS
+        // ==============================================
+        
+        let wizardData = {};
+        let currentWizardStep = 1;
+        const totalWizardSteps = 11;
+
         function showAddItemModal() {
+            // Reset wizard
+            wizardData = {};
+            currentWizardStep = 1;
+            showWizardStep(1);
+            document.getElementById('wizard-modal').classList.add('active');
+        }
+
+        function showWizardStep(step) {
+            currentWizardStep = step;
+            document.getElementById('wizard-step-num').textContent = step;
+            
+            // Update progress bar
+            const progress = (step / totalWizardSteps) * 100;
+            document.getElementById('wizard-progress').style.width = progress + '%';
+            
+            // Render step content
+            const stepsContainer = document.getElementById('wizard-steps');
+            const navContainer = document.getElementById('wizard-nav');
+            
+            switch(step) {
+                case 1: renderStep1(stepsContainer, navContainer); break;
+                case 2: renderStep2(stepsContainer, navContainer); break;
+                case 3: renderStep3(stepsContainer, navContainer); break;
+                case 4: renderStep4(stepsContainer, navContainer); break;
+                case 5: renderStep5(stepsContainer, navContainer); break;
+                case 6: renderStep6(stepsContainer, navContainer); break;
+                case 7: renderStep7(stepsContainer, navContainer); break;
+                case 8: renderStep8(stepsContainer, navContainer); break;
+                case 9: renderStep9(stepsContainer, navContainer); break;
+                case 10: renderStep10(stepsContainer, navContainer); break;
+                case 11: renderStep11(stepsContainer, navContainer); break;
+            }
+        }
+
+        // Step 1: Item Type
+        function renderStep1(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">What type of item is this?</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div onclick="selectItemType('Seating')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🛋️</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Seating</div>
+                        <div style="font-size: 13px; color: #6b7280;">Sofas, chairs, benches</div>
+                    </div>
+                    <div onclick="selectItemType('Tables')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🪑</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Tables</div>
+                        <div style="font-size: 13px; color: #6b7280;">Coffee, dining, side</div>
+                    </div>
+                    <div onclick="selectItemType('Lighting')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">💡</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Lighting</div>
+                        <div style="font-size: 13px; color: #6b7280;">Lamps, fixtures</div>
+                    </div>
+                    <div onclick="selectItemType('Decor')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🎨</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Decor</div>
+                        <div style="font-size: 13px; color: #6b7280;">Vases, sculptures</div>
+                    </div>
+                    <div onclick="selectItemType('Art')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🖼️</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Art</div>
+                        <div style="font-size: 13px; color: #6b7280;">Paintings, prints</div>
+                    </div>
+                    <div onclick="selectItemType('Rugs')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🔲</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Rugs</div>
+                        <div style="font-size: 13px; color: #6b7280;">Area rugs, runners</div>
+                    </div>
+                </div>
+            `;
+            renderWizardNav(nav, false, false);
+        }
+
+        function selectItemType(type) {
+            wizardData.category = type;
+            showWizardStep(2);
+        }
+
+        // Step 2: Color
+        function renderStep2(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">What color is this item?</h3>
+                <input type="text" id="wizard-color" placeholder="e.g., Navy Blue, Charcoal Gray, Ivory..." value="${wizardData.color || ''}" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.color = document.getElementById('wizard-color').value;
+                showWizardStep(3);
+            });
+        }
+
+        // Step 3: Description
+        function renderStep3(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Description</h3>
+                <input type="text" id="wizard-description" placeholder="e.g., Velvet sofa, Modern dining table, Abstract painting..." value="${wizardData.description || ''}" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.description = document.getElementById('wizard-description').value;
+                showWizardStep(4);
+            });
+        }
+
+        // Step 4: ID/Code Number
+        function renderStep4(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">ID/Code Number (Optional)</h3>
+                <input type="text" id="wizard-id-code" placeholder="e.g., INV-001, SKU-12345..." value="${wizardData.id_code || ''}" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+                <p style="font-size: 13px; color: #6b7280; margin-top: 8px;">Add a unique identifier or code for tracking</p>
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.id_code = document.getElementById('wizard-id-code').value;
+                showWizardStep(5);
+            });
+        }
+
+        // Step 5: Condition
+        function renderStep5(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">What condition is it in?</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div onclick="selectCondition('New')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">✨</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">New</div>
+                                <div style="font-size: 13px; color: #6b7280;">Brand new, never used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="selectCondition('Excellent')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">⭐</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">Excellent</div>
+                                <div style="font-size: 13px; color: #6b7280;">Like new, minimal wear</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="selectCondition('Good')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">👍</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">Good</div>
+                                <div style="font-size: 13px; color: #6b7280;">Minor wear, fully functional</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="selectCondition('Fair')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">⚠️</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">Fair</div>
+                                <div style="font-size: 13px; color: #6b7280;">Noticeable wear, still usable</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            renderWizardNav(nav, true, false);
+        }
+
+        function selectCondition(condition) {
+            wizardData.condition = condition;
+            showWizardStep(6);
+        }
+
+        // Step 6: Status
+        function renderStep6(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">What's the current status?</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div onclick="selectStatus('IN')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">✅</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">IN - Available</div>
+                                <div style="font-size: 13px; color: #6b7280;">Ready to be used on projects</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="selectStatus('OUT')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">📦</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">OUT - On Project</div>
+                                <div style="font-size: 13px; color: #6b7280;">Currently being used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="selectStatus('HOLD')" style="padding: 20px; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 28px;">⏸️</div>
+                            <div>
+                                <div style="font-weight: 700; margin-bottom: 4px;">HOLD - Reserved</div>
+                                <div style="font-size: 13px; color: #6b7280;">Reserved for upcoming project</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            renderWizardNav(nav, true, false);
+        }
+
+        function selectStatus(status) {
+            wizardData.status = status;
+            showWizardStep(7);
+        }
+
+        // Step 7: Location
+        function renderStep7(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Where is this item located?</h3>
+                <select id="wizard-location" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+                    <option value="">Select location...</option>
+                    <option value="Warehouse A" ${wizardData.location === 'Warehouse A' ? 'selected' : ''}>Warehouse A</option>
+                    <option value="Warehouse B" ${wizardData.location === 'Warehouse B' ? 'selected' : ''}>Warehouse B</option>
+                    <option value="Storage Unit" ${wizardData.location === 'Storage Unit' ? 'selected' : ''}>Storage Unit</option>
+                </select>
+            `;
+            renderWizardNav(nav, true, true, () => {
+                const loc = document.getElementById('wizard-location').value;
+                if (!loc) {
+                    alert('Please select a location');
+                    return;
+                }
+                wizardData.location = loc;
+                showWizardStep(8);
+            });
+        }
+
+        // Step 8: Purchase Date
+        function renderStep8(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">When was this purchased?</h3>
+                <input type="date" id="wizard-purchase-date" value="${wizardData.purchase_date || ''}" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.purchase_date = document.getElementById('wizard-purchase-date').value;
+                showWizardStep(9);
+            });
+        }
+
+        // Step 9: Purchased From
+        function renderStep9(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Where was this purchased?</h3>
+                <input type="text" id="wizard-purchased-from" placeholder="e.g., West Elm, IKEA, HomeSense, Amazon..." value="${wizardData.purchased_from || ''}" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 16px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button type="button" onclick="document.getElementById('wizard-purchased-from').value='West Elm'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">West Elm</button>
+                    <button type="button" onclick="document.getElementById('wizard-purchased-from').value='IKEA'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">IKEA</button>
+                    <button type="button" onclick="document.getElementById('wizard-purchased-from').value='HomeSense'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">HomeSense</button>
+                    <button type="button" onclick="document.getElementById('wizard-purchased-from').value='Amazon'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Amazon</button>
+                    <button type="button" onclick="document.getElementById('wizard-purchased-from').value='Wayfair'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Wayfair</button>
+                </div>
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.purchased_from = document.getElementById('wizard-purchased-from').value;
+                showWizardStep(10);
+            });
+        }
+
+        // Step 10: Cost
+        function renderStep10(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">What was the purchase cost?</h3>
+                <div style="position: relative;">
+                    <span style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #6b7280; font-weight: 600; font-size: 18px;">$</span>
+                    <input type="number" id="wizard-cost" placeholder="0.00" step="0.01" min="0" value="${wizardData.purchase_cost || ''}" style="width: 100%; padding: 16px 16px 16px 36px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+                </div>
+            `;
+            renderWizardNav(nav, true, true, () => {
+                wizardData.purchase_cost = document.getElementById('wizard-cost').value;
+                showWizardStep(11);
+            });
+        }
+
+        // Step 11: Room (Final Step)
+        function renderStep11(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Which room is this for? (Optional)</h3>
+                <textarea id="wizard-room" placeholder="e.g., Living Room, Master Bedroom, Special handling notes..." rows="4" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 16px;">${wizardData.room || ''}</textarea>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Living Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Living Room</button>
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Dining Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Dining Room</button>
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Master Bedroom'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Master Bedroom</button>
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Kitchen'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Kitchen</button>
+                    <button type="button" onclick="document.getElementById('wizard-room').value='Office'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Office</button>
+                </div>
+            `;
+            renderWizardNav(nav, true, false, saveWizardItem, true);
+        }
+
+        function renderWizardNav(nav, showUndo, showNext, nextAction = null, isFinalStep = false) {
+            let html = '<button type="button" onclick="cancelWizard()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>';
+            
+            if (showUndo) {
+                html += '<button type="button" onclick="showWizardStep(' + (currentWizardStep - 1) + ')" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">← Undo</button>';
+            }
+            
+            if (showNext && nextAction) {
+                html += '<button type="button" onclick="(' + nextAction.toString() + ')()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Next →</button>';
+            } else if (isFinalStep) {
+                html += '<button type="button" onclick="saveWizardItem()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Save Item</button>';
+            }
+            
+            nav.innerHTML = html;
+        }
+
+        async function saveWizardItem() {
+            wizardData.room = document.getElementById('wizard-room').value;
+            wizardData.name = document.getElementById('wizard-item-name')?.value || `${wizardData.category} Item`;
+            
+            // Ask for item name if not provided
+            const itemName = prompt('What should we name this item?', `${wizardData.category} Item`);
+            if (!itemName) return;
+            
+            const itemData = {
+                name: itemName,
+                category: wizardData.category,
+                item_type: wizardData.category,
+                color: wizardData.color || null,
+                description: wizardData.description || null,
+                id_code: wizardData.id_code || null,
+                room: wizardData.room || null,
+                condition: wizardData.condition || null,
+                status: wizardData.status,
+                location: wizardData.location,
+                purchase_date: wizardData.purchase_date || null,
+                purchase_cost: wizardData.purchase_cost || null,
+                purchased_from: wizardData.purchased_from || null,
+                user_id: currentUser.id
+            };
+
+            const { error } = await supabase
+                .from('inventory')
+                .insert([itemData]);
+
+            if (error) {
+                alert('Error creating item: ' + error.message);
+                return;
+            }
+
+            closeWizard();
+            await loadInventory();
+        }
+
+        function closeWizard() {
+            document.getElementById('wizard-modal').classList.remove('active');
+            wizardData = {};
+            currentWizardStep = 1;
+        }
+
+        function cancelWizard() {
+            if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                closeWizard();
+            }
+        }
+
+        // Original functions kept for editing
+        function showAddItemModalOLD() {
             editingItemId = null;
             document.getElementById('modal-title').textContent = 'Add Item';
             document.getElementById('item-form').reset();

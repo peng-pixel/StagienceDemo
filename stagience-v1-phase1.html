@@ -1870,18 +1870,15 @@
                     </table>
                     
                     <div class="total">Total Items: ${items.length}</div>
-                    
-                    <script>
-                        window.onload = function() {
-                            setTimeout(function() {
-                                window.print();
-                            }, 500);
-                        };
-                    </script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            
+            // Let user manually print
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         function printGridView(items) {
@@ -1951,17 +1948,16 @@
                     
                     <div class="total">Total Items: ${items.length}</div>
                     
-                    <script>
-                        window.onload = function() {
-                            setTimeout(function() {
-                                window.print();
-                            }, 500);
-                        };
-                    </script>
+                    <div class="total">Total Items: ${items.length}</div>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            
+            // Let user manually print
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
         }
 
         // Original functions kept for editing

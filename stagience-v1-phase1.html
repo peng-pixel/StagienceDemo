@@ -2418,34 +2418,35 @@
                         <span style="color: #6b7280; font-size: 14px;">${grouped[monthYear].length} project${grouped[monthYear].length !== 1 ? 's' : ''}</span>
                     </div>
 
-                    <!-- Projects Grid -->
-                    <div id="month-${monthYear.replace(/\s/g, '-')}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                    <!-- Projects List -->
+                    <div id="month-${monthYear.replace(/\s/g, '-')}" style="display: flex; flex-direction: column; gap: 12px;">
                         ${grouped[monthYear].map(project => `
-                            <div onclick="openProjectDetail(${project.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                                    <h3 style="font-weight: 700; font-size: 18px; flex: 1;">${project.name}</h3>
-                                    <span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; ${statusColors[project.status] || statusColors['active']}">${statusLabels[project.status] || 'Active'}</span>
+                            <div onclick="openProjectDetail(${project.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.2s; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;" onmouseover="this.style.borderColor='#d1d5db'" onmouseout="this.style.borderColor='#e5e7eb'">
+                                <!-- Left: Project Info -->
+                                <div style="flex: 1; min-width: 0;">
+                                    <h3 style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">${project.name}</h3>
+                                    ${project.address ? `
+                                        <p style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">
+                                            📍 ${project.address}
+                                        </p>
+                                    ` : ''}
+                                    ${project.start_date ? `
+                                        <p style="color: #6b7280; font-size: 13px;">
+                                            Stage: ${new Date(project.start_date).toLocaleDateString()}
+                                        </p>
+                                    ` : ''}
                                 </div>
                                 
-                                ${project.address ? `
-                                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
-                                        📍 ${project.address}
-                                    </p>
-                                ` : ''}
-                                
-                                ${project.start_date || project.end_date ? `
-                                    <div style="display: flex; gap: 16px; margin-bottom: 8px; font-size: 13px; color: #6b7280;">
-                                        ${project.start_date ? `<div>Stage: ${new Date(project.start_date).toLocaleDateString()}</div>` : ''}
-                                        ${project.end_date ? `<div>Destage: ${new Date(project.end_date).toLocaleDateString()}</div>` : ''}
-                                    </div>
-                                ` : ''}
-                                
-                                <div style="display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
-                                    <button onclick="event.stopPropagation(); editProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #eff6ff; color: #1e40af; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                                        ✏️ Edit
+                                <!-- Right: Status Badge + Action Buttons -->
+                                <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+                                    <span style="padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; ${statusColors[project.status] || statusColors['active']}">${statusLabels[project.status] || 'Active'}</span>
+                                    
+                                    <button onclick="event.stopPropagation(); editProject(${project.id})" title="Edit" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='white'">
+                                        🔍
                                     </button>
-                                    <button onclick="event.stopPropagation(); deleteProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                                        ✕ Delete
+                                    
+                                    <button onclick="event.stopPropagation(); deleteProject(${project.id})" title="Delete" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
+                                        ✕
                                     </button>
                                 </div>
                             </div>

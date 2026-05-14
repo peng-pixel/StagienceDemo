@@ -212,6 +212,11 @@
                         </button>
                     </div>
 
+                    <!-- Search Bar -->
+                    <div style="margin-bottom: 24px;">
+                        <input type="text" id="project-search" onkeyup="searchProjects()" placeholder="Search projects..." style="width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 15px;">
+                    </div>
+
                     <!-- Project Filter Cards -->
                     <div id="project-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px;">
                         <!-- All Projects Card -->
@@ -2331,10 +2336,19 @@
             // Update stats for all statuses
             updateProjectStats(projects);
             
-            // Filter projects based on selected status
+            // Filter projects based on selected status and search
             let filteredProjects = projects;
             if (currentProjectFilter !== 'all') {
-                filteredProjects = projects.filter(p => p.status === currentProjectFilter);
+                filteredProjects = filteredProjects.filter(p => p.status === currentProjectFilter);
+            }
+            
+            // Apply search filter
+            const searchTerm = document.getElementById('project-search')?.value.toLowerCase() || '';
+            if (searchTerm) {
+                filteredProjects = filteredProjects.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    (p.address && p.address.toLowerCase().includes(searchTerm))
+                );
             }
             
             const container = document.getElementById('projects-container');
@@ -2345,11 +2359,29 @@
                     <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
                         <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
                         <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No projects${filterLabel}</h3>
-                        <p style="font-size: 14px; margin-bottom: 20px;">${currentProjectFilter === 'all' ? 'Click "Add Project" to create your first project' : 'Try selecting a different status filter'}</p>
+                        <p style="font-size: 14px; margin-bottom: 20px;">${currentProjectFilter === 'all' ? 'Click "+ Add Project" to create your first project' : 'Try selecting a different status filter'}</p>
                     </div>
                 `;
                 return;
             }
+
+            // Group projects by month/year
+            const grouped = {};
+            filteredProjects.forEach(project => {
+                const date = project.start_date ? new Date(project.start_date) : new Date();
+                const monthYear = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                if (!grouped[monthYear]) {
+                    grouped[monthYear] = [];
+                }
+                grouped[monthYear].push(project);
+            });
+
+            // Sort months (most recent first)
+            const sortedMonths = Object.keys(grouped).sort((a, b) => {
+                const dateA = new Date(grouped[a][0].start_date || new Date());
+                const dateB = new Date(grouped[b][0].start_date || new Date());
+                return dateB - dateA;
+            });
 
             const statusColors = {
                 'active': 'background: #dcfce7; color: #166534;',
@@ -2365,46 +2397,75 @@
                 'cancelled': 'Cancelled'
             };
 
-            container.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
-                    ${filteredProjects.map(project => `
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
-                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                                <h3 style="font-weight: 700; font-size: 18px; flex: 1;">${project.name}</h3>
-                                <span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; ${statusColors[project.status] || statusColors['active']}">${statusLabels[project.status] || 'Active'}</span>
-                            </div>
-                            
-                            ${project.address ? `
-                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
-                                    📍 ${project.address}
-                                </p>
-                            ` : ''}
-                            
-                            ${project.start_date || project.end_date ? `
-                                <div style="display: flex; gap: 16px; margin-bottom: 8px; font-size: 13px; color: #6b7280;">
-                                    ${project.start_date ? `<div>Start: ${new Date(project.start_date).toLocaleDateString()}</div>` : ''}
-                                    ${project.end_date ? `<div>End: ${new Date(project.end_date).toLocaleDateString()}</div>` : ''}
+            container.innerHTML = sortedMonths.map(monthYear => `
+                <div style="margin-bottom: 32px;">
+                    <!-- Month Header -->
+                    <div onclick="toggleMonthSection('${monthYear}')" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: white; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; margin-bottom: 16px; transition: all 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <span id="toggle-${monthYear.replace(/\s/g, '-')}" style="font-size: 20px; transition: transform 0.2s;">▼</span>
+                        <h3 style="font-size: 18px; font-weight: 700; flex: 1;">${monthYear}</h3>
+                        <span style="color: #6b7280; font-size: 14px;">${grouped[monthYear].length} project${grouped[monthYear].length !== 1 ? 's' : ''}</span>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div id="month-${monthYear.replace(/\s/g, '-')}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                        ${grouped[monthYear].map(project => `
+                            <div onclick="openProjectDetail(${project.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 16px rgba(0,0,0,0.1)'" onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                                    <h3 style="font-weight: 700; font-size: 18px; flex: 1;">${project.name}</h3>
+                                    <span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; ${statusColors[project.status] || statusColors['active']}">${statusLabels[project.status] || 'Active'}</span>
                                 </div>
-                            ` : ''}
-                            
-                            ${project.notes ? `
-                                <p style="color: #9ca3af; font-size: 13px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-style: italic;">
-                                    ${project.notes.length > 100 ? project.notes.substring(0, 100) + '...' : project.notes}
-                                </p>
-                            ` : ''}
-                            
-                            <div style="display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
-                                <button onclick="editProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #eff6ff; color: #1e40af; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                                    Edit
-                                </button>
-                                <button onclick="deleteProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                                    Delete
-                                </button>
+                                
+                                ${project.address ? `
+                                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+                                        📍 ${project.address}
+                                    </p>
+                                ` : ''}
+                                
+                                ${project.start_date || project.end_date ? `
+                                    <div style="display: flex; gap: 16px; margin-bottom: 8px; font-size: 13px; color: #6b7280;">
+                                        ${project.start_date ? `<div>Start: ${new Date(project.start_date).toLocaleDateString()}</div>` : ''}
+                                        ${project.end_date ? `<div>End: ${new Date(project.end_date).toLocaleDateString()}</div>` : ''}
+                                    </div>
+                                ` : ''}
+                                
+                                <div style="display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                                    <button onclick="event.stopPropagation(); editProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #eff6ff; color: #1e40af; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                        ✏️ Edit
+                                    </button>
+                                    <button onclick="event.stopPropagation(); deleteProject(${project.id})" style="flex: 1; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                        ✕ Delete
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    `).join('')}
+                        `).join('')}
+                    </div>
                 </div>
-            `;
+            `).join('');
+        }
+
+        function toggleMonthSection(monthYear) {
+            const monthId = monthYear.replace(/\s/g, '-');
+            const section = document.getElementById(`month-${monthId}`);
+            const toggle = document.getElementById(`toggle-${monthId}`);
+            
+            if (section.style.display === 'none') {
+                section.style.display = 'grid';
+                toggle.style.transform = 'rotate(0deg)';
+                toggle.textContent = '▼';
+            } else {
+                section.style.display = 'none';
+                toggle.style.transform = 'rotate(-90deg)';
+                toggle.textContent = '▶';
+            }
+        }
+
+        function searchProjects() {
+            renderProjects();
+        }
+
+        function openProjectDetail(projectId) {
+            // Placeholder - will build this in Phase B1
+            alert(`Project detail view coming in Phase B1! Project ID: ${projectId}`);
         }
 
         function updateProjectStats(projects) {

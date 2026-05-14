@@ -366,10 +366,24 @@
                         </div>
                     </div>
                     <div id="photos-tab-content" style="display: none;">
-                        <div style="text-align: center; padding: 60px; color: #9ca3af;">
-                            <div style="font-size: 48px; margin-bottom: 16px;">🖼️</div>
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Photos Tab</h3>
-                            <p>Coming soon in Phase B4</p>
+                        <!-- Photos Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="font-size: 20px; font-weight: 700;">Photo Folders</h2>
+                            <button onclick="showCreateFolderModal()" style="padding: 10px 20px; border: none; border-radius: 10px; background: #3b82f6; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                📁 Create New Folder
+                            </button>
+                        </div>
+
+                        <!-- Folders Container -->
+                        <div id="photo-folders-container">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="folders-empty" style="text-align: center; padding: 60px; color: #9ca3af; display: none;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📁</div>
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No photo folders yet</h3>
+                            <p>Click "Create New Folder" to organize your photos</p>
                         </div>
                     </div>
                     <div id="files-tab-content" style="display: none;">
@@ -965,6 +979,61 @@
                     </button>
                     <button type="submit" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                         Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Folder Modal -->
+    <div id="create-folder-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Create New Folder</h2>
+                <button onclick="closeCreateFolderModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <form id="create-folder-form" onsubmit="createPhotoFolder(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Folder Name *</label>
+                    <input type="text" id="folder-name" required placeholder="e.g., Before Photos, After Photos" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" onclick="closeCreateFolderModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Create Folder
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Photos Modal -->
+    <div id="upload-photos-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Upload Photos</h2>
+                <button onclick="closeUploadPhotosModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <form id="upload-photos-form" onsubmit="uploadPhotos(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="hidden" id="upload-folder-id">
+                
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Select Photos *</label>
+                    <input type="file" id="photos-files" required accept="image/*" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos</p>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" onclick="closeUploadPhotosModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Upload Photos
                     </button>
                 </div>
             </form>
@@ -2930,6 +2999,7 @@
             await loadTimelineEvents();
             await loadProjectNotes();
             await loadProjectDocuments();
+            await loadPhotoFolders();
 
             // Switch views
             document.getElementById('projects-section').style.display = 'none';
@@ -3728,6 +3798,295 @@
             }
 
             await loadProjectDocuments();
+        }
+
+        // ==============================================
+        // PROJECT PHOTOS (FOLDERS)
+        // ==============================================
+        
+        let photoFolders = [];
+        let currentUploadFolderId = null;
+
+        async function loadPhotoFolders() {
+            if (!currentProjectId) return;
+
+            // Load folders
+            const { data: foldersData, error: foldersError } = await supabase
+                .from('photo_folders')
+                .select('*')
+                .eq('project_id', currentProjectId)
+                .order('created_at', { ascending: true });
+
+            if (foldersError) {
+                console.error('Error loading photo folders:', foldersError);
+                photoFolders = [];
+            } else {
+                photoFolders = foldersData || [];
+            }
+
+            // Load all photos for this project
+            const { data: photosData, error: photosError } = await supabase
+                .from('project_photos')
+                .select('*')
+                .eq('project_id', currentProjectId)
+                .order('uploaded_at', { ascending: false });
+
+            if (photosError) {
+                console.error('Error loading photos:', photosError);
+            } else {
+                // Group photos by folder
+                photoFolders.forEach(folder => {
+                    folder.photos = photosData?.filter(p => p.folder_id === folder.id) || [];
+                });
+            }
+
+            await renderPhotoFolders();
+        }
+
+        async function renderPhotoFolders() {
+            const container = document.getElementById('photo-folders-container');
+            const emptyState = document.getElementById('folders-empty');
+
+            if (photoFolders.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+
+                const foldersHTML = await Promise.all(photoFolders.map(async folder => {
+                    const photoCount = folder.photos?.length || 0;
+                    
+                    // Generate photo thumbnails
+                    const photosHTML = await Promise.all((folder.photos || []).map(async photo => {
+                        const { data } = await supabase.storage
+                            .from('project-photos')
+                            .createSignedUrl(photo.file_path, 3600);
+                        
+                        const imageUrl = data?.signedUrl || '';
+                        const date = new Date(photo.uploaded_at);
+                        const dateStr = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+
+                        return `
+                            <div style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px;">
+                                <button onclick="deletePhoto(${photo.id}, ${folder.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                                    ×
+                                </button>
+                                <div style="width: 100%; height: 200px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                                    <img src="${imageUrl}" alt="${photo.file_name}" style="max-width: 100%; max-height: 100%; object-fit: cover; cursor: pointer;" onclick="window.open('${imageUrl}', '_blank')">
+                                </div>
+                                <div style="font-size: 13px; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${photo.file_name}</div>
+                                <div style="font-size: 12px; color: #6b7280;">${dateStr}</div>
+                            </div>
+                        `;
+                    }));
+
+                    const emptyPhotosHTML = `
+                        <div style="text-align: center; padding: 60px; border: 2px dashed #e5e7eb; border-radius: 12px; color: #9ca3af;">
+                            <div style="font-size: 36px; margin-bottom: 12px;">📷</div>
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #6b7280;">No photos yet</h4>
+                            <p style="font-size: 13px;">Click "Upload Photos" to add photos to this folder</p>
+                        </div>
+                    `;
+
+                    return `
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 32px;">📁</div>
+                                    <div>
+                                        <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 2px;">${folder.folder_name}</h3>
+                                        <p style="color: #6b7280; font-size: 13px;">${photoCount} photo${photoCount !== 1 ? 's' : ''}</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 12px;">
+                                    <button onclick="showUploadPhotosModal(${folder.id})" style="padding: 8px 16px; border: none; border-radius: 8px; background: white; border: 2px solid #3b82f6; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
+                                        📤 Upload Photos
+                                    </button>
+                                    <button onclick="deleteFolder(${folder.id})" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            ${photoCount > 0 ? 
+                                `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+                                    ${photosHTML.join('')}
+                                </div>` 
+                                : emptyPhotosHTML
+                            }
+                        </div>
+                    `;
+                }));
+
+                container.innerHTML = foldersHTML.join('');
+            }
+        }
+
+        function showCreateFolderModal() {
+            document.getElementById('create-folder-form').reset();
+            document.getElementById('create-folder-modal').classList.add('active');
+        }
+
+        function closeCreateFolderModal() {
+            document.getElementById('create-folder-modal').classList.remove('active');
+        }
+
+        async function createPhotoFolder(e) {
+            e.preventDefault();
+
+            const folderName = document.getElementById('folder-name').value;
+
+            const { error } = await supabase
+                .from('photo_folders')
+                .insert([{
+                    project_id: currentProjectId,
+                    user_id: currentUser.id,
+                    folder_name: folderName
+                }]);
+
+            if (error) {
+                alert('Error creating folder: ' + error.message);
+                return;
+            }
+
+            closeCreateFolderModal();
+            await loadPhotoFolders();
+        }
+
+        async function deleteFolder(folderId) {
+            const folder = photoFolders.find(f => f.id === folderId);
+            if (!folder) return;
+
+            const photoCount = folder.photos?.length || 0;
+            const confirmMsg = photoCount > 0 
+                ? `This folder contains ${photoCount} photo${photoCount !== 1 ? 's' : ''}. Are you sure you want to delete it?`
+                : 'Are you sure you want to delete this folder?';
+
+            if (!confirm(confirmMsg)) return;
+
+            // Delete all photos in folder from storage
+            if (folder.photos && folder.photos.length > 0) {
+                const filePaths = folder.photos.map(p => p.file_path);
+                const { error: storageError } = await supabase.storage
+                    .from('project-photos')
+                    .remove(filePaths);
+
+                if (storageError) {
+                    console.error('Error deleting photos from storage:', storageError);
+                }
+            }
+
+            // Delete folder (cascade will delete photos from database)
+            const { error } = await supabase
+                .from('photo_folders')
+                .delete()
+                .eq('id', folderId);
+
+            if (error) {
+                alert('Error deleting folder: ' + error.message);
+                return;
+            }
+
+            await loadPhotoFolders();
+        }
+
+        function showUploadPhotosModal(folderId) {
+            currentUploadFolderId = folderId;
+            document.getElementById('upload-folder-id').value = folderId;
+            document.getElementById('upload-photos-form').reset();
+            document.getElementById('upload-photos-modal').classList.add('active');
+        }
+
+        function closeUploadPhotosModal() {
+            document.getElementById('upload-photos-modal').classList.remove('active');
+            currentUploadFolderId = null;
+        }
+
+        async function uploadPhotos(e) {
+            e.preventDefault();
+
+            const filesInput = document.getElementById('photos-files');
+            const files = filesInput.files;
+
+            if (!files || files.length === 0) {
+                alert('Please select at least one photo');
+                return;
+            }
+
+            // Upload each file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Check if it's an image
+                if (!file.type.startsWith('image/')) {
+                    alert(`${file.name} is not an image file`);
+                    continue;
+                }
+
+                // Upload file to Supabase Storage
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${currentUser.id}/${currentProjectId}/${currentUploadFolderId}/${Date.now()}_${i}.${fileExt}`;
+                
+                const { error: uploadError } = await supabase.storage
+                    .from('project-photos')
+                    .upload(fileName, file);
+
+                if (uploadError) {
+                    console.error('Error uploading file:', uploadError);
+                    continue;
+                }
+
+                // Save photo record to database
+                const { error: dbError } = await supabase
+                    .from('project_photos')
+                    .insert([{
+                        folder_id: currentUploadFolderId,
+                        project_id: currentProjectId,
+                        user_id: currentUser.id,
+                        file_name: file.name,
+                        file_path: fileName,
+                        file_size: file.size
+                    }]);
+
+                if (dbError) {
+                    console.error('Error saving photo record:', dbError);
+                }
+            }
+
+            closeUploadPhotosModal();
+            await loadPhotoFolders();
+        }
+
+        async function deletePhoto(photoId, folderId) {
+            if (!confirm('Are you sure you want to delete this photo?')) return;
+
+            const folder = photoFolders.find(f => f.id === folderId);
+            if (!folder) return;
+
+            const photo = folder.photos.find(p => p.id === photoId);
+            if (!photo) return;
+
+            // Delete from storage
+            const { error: storageError } = await supabase.storage
+                .from('project-photos')
+                .remove([photo.file_path]);
+
+            if (storageError) {
+                console.error('Error deleting photo from storage:', storageError);
+            }
+
+            // Delete from database
+            const { error: dbError } = await supabase
+                .from('project_photos')
+                .delete()
+                .eq('id', photoId);
+
+            if (dbError) {
+                alert('Error deleting photo: ' + dbError.message);
+                return;
+            }
+
+            await loadPhotoFolders();
         }
 
         // ==============================================

@@ -345,10 +345,24 @@
 
                     <!-- Other Tab Contents (placeholders) -->
                     <div id="documents-tab-content" style="display: none;">
-                        <div style="text-align: center; padding: 60px; color: #9ca3af;">
+                        <!-- Documents Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="font-size: 20px; font-weight: 700;">Project Documents</h2>
+                            <button onclick="showUploadDocumentModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                                📤 Upload Document
+                            </button>
+                        </div>
+
+                        <!-- Documents Grid -->
+                        <div id="documents-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="documents-empty" style="text-align: center; padding: 60px; color: #9ca3af; display: none;">
                             <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Documents Tab</h3>
-                            <p>Coming soon in Phase B4</p>
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No documents yet</h3>
+                            <p>Click "Upload Document" to add your first document</p>
                         </div>
                     </div>
                     <div id="photos-tab-content" style="display: none;">
@@ -951,6 +965,38 @@
                     </button>
                     <button type="submit" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                         Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div id="upload-document-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Upload Document</h2>
+                <button onclick="closeUploadDocumentModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <form id="upload-document-form" onsubmit="uploadDocument(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Document Name *</label>
+                    <input type="text" id="document-name" required placeholder="e.g., Contract - Sunset Blvd" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Upload File *</label>
+                    <input type="file" id="document-file" required accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">All file types accepted (Max 10MB)</p>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" onclick="closeUploadDocumentModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Upload Document
                     </button>
                 </div>
             </form>
@@ -2880,9 +2926,10 @@
             document.getElementById('project-detail-status-badge').style = statusColors[project.status] || statusColors['active'];
             document.getElementById('project-detail-status-badge').textContent = statusLabels[project.status] || 'Active';
 
-            // Load timeline events and project notes
+            // Load timeline events, project notes, and documents
             await loadTimelineEvents();
             await loadProjectNotes();
+            await loadProjectDocuments();
 
             // Switch views
             document.getElementById('projects-section').style.display = 'none';
@@ -3477,6 +3524,190 @@
             }
 
             await loadProjectNotes();
+        }
+
+        // ==============================================
+        // PROJECT DOCUMENTS
+        // ==============================================
+        
+        let projectDocuments = [];
+
+        async function loadProjectDocuments() {
+            if (!currentProjectId) return;
+
+            const { data, error } = await supabase
+                .from('project_documents')
+                .select('*')
+                .eq('project_id', currentProjectId)
+                .order('uploaded_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading documents:', error);
+                projectDocuments = [];
+            } else {
+                projectDocuments = data || [];
+            }
+
+            renderProjectDocuments();
+        }
+
+        function renderProjectDocuments() {
+            const grid = document.getElementById('documents-grid');
+            const emptyState = document.getElementById('documents-empty');
+
+            if (projectDocuments.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                emptyState.style.display = 'none';
+
+                // Document icon based on file type
+                const getDocumentIcon = (fileType) => {
+                    if (fileType?.includes('pdf')) return '📄';
+                    if (fileType?.includes('word') || fileType?.includes('doc')) return '📝';
+                    if (fileType?.includes('sheet') || fileType?.includes('excel')) return '📊';
+                    if (fileType?.includes('image') || fileType?.includes('jpg') || fileType?.includes('png')) return '🖼️';
+                    return '📄';
+                };
+
+                grid.innerHTML = projectDocuments.map(doc => {
+                    const date = new Date(doc.uploaded_at);
+                    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const icon = getDocumentIcon(doc.file_type);
+
+                    return `
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; position: relative;">
+                            <button onclick="deleteDocument(${doc.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                                ×
+                            </button>
+                            
+                            <div style="text-align: center; margin-bottom: 12px;">
+                                <div style="font-size: 48px; margin-bottom: 8px;">${icon}</div>
+                                <h3 style="font-weight: 700; font-size: 14px; margin-bottom: 4px; word-break: break-word;">${doc.document_name}</h3>
+                                <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
+                            </div>
+                            
+                            <button onclick="downloadDocument('${doc.file_path}', '${doc.file_name}')" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                                Download
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function showUploadDocumentModal() {
+            document.getElementById('upload-document-form').reset();
+            document.getElementById('upload-document-modal').classList.add('active');
+        }
+
+        function closeUploadDocumentModal() {
+            document.getElementById('upload-document-modal').classList.remove('active');
+        }
+
+        async function uploadDocument(e) {
+            e.preventDefault();
+
+            const documentName = document.getElementById('document-name').value;
+            const fileInput = document.getElementById('document-file');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            // Check file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Upload file to Supabase Storage
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${currentUser.id}/${currentProjectId}/${Date.now()}.${fileExt}`;
+            
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('project-documents')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert('Error uploading file: ' + uploadError.message);
+                return;
+            }
+
+            // Save document record to database
+            const { error: dbError } = await supabase
+                .from('project_documents')
+                .insert([{
+                    project_id: currentProjectId,
+                    user_id: currentUser.id,
+                    document_name: documentName,
+                    file_name: file.name,
+                    file_path: fileName,
+                    file_size: file.size,
+                    file_type: file.type
+                }]);
+
+            if (dbError) {
+                alert('Error saving document: ' + dbError.message);
+                return;
+            }
+
+            closeUploadDocumentModal();
+            await loadProjectDocuments();
+        }
+
+        async function downloadDocument(filePath, fileName) {
+            const { data, error } = await supabase.storage
+                .from('project-documents')
+                .download(filePath);
+
+            if (error) {
+                alert('Error downloading file: ' + error.message);
+                return;
+            }
+
+            // Create download link
+            const url = URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function deleteDocument(docId) {
+            if (!confirm('Are you sure you want to delete this document?')) return;
+
+            // Get document info
+            const doc = projectDocuments.find(d => d.id === docId);
+            if (!doc) return;
+
+            // Delete from storage
+            const { error: storageError } = await supabase.storage
+                .from('project-documents')
+                .remove([doc.file_path]);
+
+            if (storageError) {
+                console.error('Error deleting file from storage:', storageError);
+            }
+
+            // Delete from database
+            const { error: dbError } = await supabase
+                .from('project_documents')
+                .delete()
+                .eq('id', docId);
+
+            if (dbError) {
+                alert('Error deleting document: ' + dbError.message);
+                return;
+            }
+
+            await loadProjectDocuments();
         }
 
         // ==============================================

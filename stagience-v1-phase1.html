@@ -924,8 +924,6 @@
                 <button onclick="closeShareModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
             </div>
             
-            <p style="color: #6b7280; margin-bottom: 24px;">Share project timeline with your team</p>
-            
             <button onclick="printProjectTimeline()" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 🖨️ Print / Save as PDF
             </button>
@@ -2921,7 +2919,9 @@
             };
 
             container.innerHTML = timelineEvents.map(event => {
-                const date = new Date(event.event_date);
+                // Fix date parsing to avoid timezone issues
+                const dateParts = event.event_date.split('-');
+                const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
                 const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                 const timeStr = event.event_time ? ` at ${new Date(`2000-01-01T${event.event_time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}` : '';
                 
@@ -2941,8 +2941,9 @@
                             ${event.contact ? `<div><strong>Contact:</strong> ${event.contact}</div>` : ''}
                         </div>
                     `;
-                } else if (event.event_type === 'consultation' && event.consultation_details) {
-                    detailsHtml = `<div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.consultation_details}</div>`;
+                } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
+                    // Show consultation details AND notes if they exist
+                    detailsHtml = `<div style="background: #dbeafe; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.consultation_details || event.notes || ''}</div>`;
                 } else if (event.notes) {
                     detailsHtml = `<div style="background: #f9fafb; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.notes}</div>`;
                 }
@@ -2963,7 +2964,7 @@
                                 </div>
                                 <div style="display: flex; gap: 8px; flex-shrink: 0;">
                                     <button onclick="editEvent(${event.id})" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px;" title="Edit">
-                                        🔍
+                                        ✏️
                                     </button>
                                     <button onclick="deleteEvent(${event.id})" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;" title="Delete">
                                         ✕
@@ -3203,7 +3204,9 @@
                     </div>
                     
                     ${timelineEvents.map(event => {
-                        const date = new Date(event.event_date);
+                        // Fix date parsing to avoid timezone issues
+                        const dateParts = event.event_date.split('-');
+                        const date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
                         const dateStr = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                         const timeStr = event.event_time ? ` at ${new Date(`2000-01-01T${event.event_time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}` : '';
                         
@@ -3222,8 +3225,8 @@
                                     ${event.contact ? `<div><strong>Contact:</strong> ${event.contact}</div>` : ''}
                                 </div>
                             `;
-                        } else if (event.event_type === 'consultation' && event.consultation_details) {
-                            detailsHtml = `<div class="event-details" style="background: #dbeafe;">${event.consultation_details}</div>`;
+                        } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
+                            detailsHtml = `<div class="event-details" style="background: #dbeafe;">${event.consultation_details || event.notes || ''}</div>`;
                         } else if (event.notes) {
                             detailsHtml = `<div class="event-details" style="background: #f9fafb;">${event.notes}</div>`;
                         }

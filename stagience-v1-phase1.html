@@ -3551,7 +3551,7 @@
             renderProjectDocuments();
         }
 
-        function renderProjectDocuments() {
+        async function renderProjectDocuments() {
             const grid = document.getElementById('documents-grid');
             const emptyState = document.getElementById('documents-empty');
 
@@ -3571,19 +3571,36 @@
                     return '📄';
                 };
 
-                grid.innerHTML = projectDocuments.map(doc => {
+                // Build cards with image previews where applicable
+                const cardPromises = projectDocuments.map(async doc => {
                     const date = new Date(doc.uploaded_at);
                     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
                     const icon = getDocumentIcon(doc.file_type);
+                    const isImage = doc.file_type?.includes('image') || doc.file_type?.includes('jpg') || doc.file_type?.includes('png') || doc.file_type?.includes('jpeg');
+
+                    // For images, get signed URL for thumbnail
+                    let imagePreview = '';
+                    if (isImage) {
+                        const { data } = await supabase.storage
+                            .from('project-documents')
+                            .createSignedUrl(doc.file_path, 3600); // 1 hour expiry
+                        imagePreview = data?.signedUrl || '';
+                    }
 
                     return `
                         <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; position: relative;">
-                            <button onclick="deleteDocument(${doc.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                            <button onclick="deleteDocument(${doc.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
                                 ×
                             </button>
                             
                             <div style="text-align: center; margin-bottom: 12px;">
-                                <div style="font-size: 48px; margin-bottom: 8px;">${icon}</div>
+                                ${isImage && imagePreview ? 
+                                    `<div style="width: 100%; height: 120px; margin-bottom: 8px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${imagePreview}" alt="${doc.document_name}" style="max-width: 100%; max-height: 100%; object-fit: cover;">
+                                    </div>` 
+                                    : 
+                                    `<div style="font-size: 48px; margin-bottom: 8px;">${icon}</div>`
+                                }
                                 <h3 style="font-weight: 700; font-size: 14px; margin-bottom: 4px; word-break: break-word;">${doc.document_name}</h3>
                                 <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
                             </div>
@@ -3593,7 +3610,10 @@
                             </button>
                         </div>
                     `;
-                }).join('');
+                });
+
+                const cards = await Promise.all(cardPromises);
+                grid.innerHTML = cards.join('');
             }
         }
 

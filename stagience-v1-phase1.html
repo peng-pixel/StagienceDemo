@@ -387,10 +387,24 @@
                         </div>
                     </div>
                     <div id="files-tab-content" style="display: none;">
-                        <div style="text-align: center; padding: 60px; color: #9ca3af;">
+                        <!-- Files Header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="font-size: 20px; font-weight: 700;">Project Files</h2>
+                            <button onclick="showUploadFileModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                                📁 Upload File
+                            </button>
+                        </div>
+
+                        <!-- Files Grid -->
+                        <div id="files-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="files-empty" style="text-align: center; padding: 60px; color: #9ca3af; display: none;">
                             <div style="font-size: 48px; margin-bottom: 16px;">📁</div>
-                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Files Tab</h3>
-                            <p>Coming soon in Phase B4</p>
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No files yet</h3>
+                            <p>Click "Upload File" to add your first file</p>
                         </div>
                     </div>
                 </div>
@@ -1034,6 +1048,38 @@
                     </button>
                     <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
                         Upload Photos
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload File Modal -->
+    <div id="upload-file-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Upload File</h2>
+                <button onclick="closeUploadFileModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <form id="upload-file-form" onsubmit="uploadFile(event)" style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">File Name *</label>
+                    <input type="text" id="file-name" required placeholder="e.g., Floor Plan - Living Room" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Upload File *</label>
+                    <input type="file" id="file-file" required accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.jpg,.jpeg,.png" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">All file types accepted (Max 10MB)</p>
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" onclick="closeUploadFileModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                        Upload File
                     </button>
                 </div>
             </form>
@@ -2999,6 +3045,7 @@
             await loadTimelineEvents();
             await loadProjectNotes();
             await loadProjectDocuments();
+            await loadProjectFiles();
             await loadPhotoFolders();
 
             // Switch views
@@ -3798,6 +3845,210 @@
             }
 
             await loadProjectDocuments();
+        }
+
+        // ==============================================
+        // PROJECT FILES
+        // ==============================================
+        
+        let projectFiles = [];
+
+        async function loadProjectFiles() {
+            if (!currentProjectId) return;
+
+            const { data, error } = await supabase
+                .from('project_files')
+                .select('*')
+                .eq('project_id', currentProjectId)
+                .order('uploaded_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading files:', error);
+                projectFiles = [];
+            } else {
+                projectFiles = data || [];
+            }
+
+            await renderProjectFiles();
+        }
+
+        async function renderProjectFiles() {
+            const grid = document.getElementById('files-grid');
+            const emptyState = document.getElementById('files-empty');
+
+            if (projectFiles.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                emptyState.style.display = 'none';
+
+                // File icon based on file type
+                const getFileIcon = (fileType) => {
+                    if (fileType?.includes('pdf')) return '📄';
+                    if (fileType?.includes('word') || fileType?.includes('doc')) return '📝';
+                    if (fileType?.includes('sheet') || fileType?.includes('excel')) return '📊';
+                    if (fileType?.includes('image') || fileType?.includes('jpg') || fileType?.includes('png')) return '🖼️';
+                    return '📄';
+                };
+
+                // Build cards with image previews where applicable
+                const cardPromises = projectFiles.map(async file => {
+                    const date = new Date(file.uploaded_at);
+                    const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const icon = getFileIcon(file.file_type);
+                    const isImage = file.file_type?.includes('image') || file.file_type?.includes('jpg') || file.file_type?.includes('png') || file.file_type?.includes('jpeg');
+
+                    // For images, get signed URL for thumbnail
+                    let imagePreview = '';
+                    if (isImage) {
+                        const { data } = await supabase.storage
+                            .from('project-files')
+                            .createSignedUrl(file.file_path, 3600);
+                        imagePreview = data?.signedUrl || '';
+                    }
+
+                    return `
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; position: relative;">
+                            <button onclick="deleteFile(${file.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                                ×
+                            </button>
+                            
+                            <div style="text-align: center; margin-bottom: 12px;">
+                                ${isImage && imagePreview ? 
+                                    `<div style="width: 100%; height: 120px; margin-bottom: 8px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center;">
+                                        <img src="${imagePreview}" alt="${file.file_name_display}" style="max-width: 100%; max-height: 100%; object-fit: cover;">
+                                    </div>` 
+                                    : 
+                                    `<div style="font-size: 48px; margin-bottom: 8px;">${icon}</div>`
+                                }
+                                <h3 style="font-weight: 700; font-size: 14px; margin-bottom: 4px; word-break: break-word;">${file.file_name_display}</h3>
+                                <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
+                            </div>
+                            
+                            <button onclick="downloadFile('${file.file_path}', '${file.file_name}')" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                                Download
+                            </button>
+                        </div>
+                    `;
+                });
+
+                const cards = await Promise.all(cardPromises);
+                grid.innerHTML = cards.join('');
+            }
+        }
+
+        function showUploadFileModal() {
+            document.getElementById('upload-file-form').reset();
+            document.getElementById('upload-file-modal').classList.add('active');
+        }
+
+        function closeUploadFileModal() {
+            document.getElementById('upload-file-modal').classList.remove('active');
+        }
+
+        async function uploadFile(e) {
+            e.preventDefault();
+
+            const fileName = document.getElementById('file-name').value;
+            const fileInput = document.getElementById('file-file');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            // Check file size (10MB max)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Upload file to Supabase Storage
+            const fileExt = file.name.split('.').pop();
+            const filePath = `${currentUser.id}/${currentProjectId}/${Date.now()}.${fileExt}`;
+            
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('project-files')
+                .upload(filePath, file);
+
+            if (uploadError) {
+                alert('Error uploading file: ' + uploadError.message);
+                return;
+            }
+
+            // Save file record to database
+            const { error: dbError } = await supabase
+                .from('project_files')
+                .insert([{
+                    project_id: currentProjectId,
+                    user_id: currentUser.id,
+                    file_name_display: fileName,
+                    file_name: file.name,
+                    file_path: filePath,
+                    file_size: file.size,
+                    file_type: file.type
+                }]);
+
+            if (dbError) {
+                alert('Error saving file: ' + dbError.message);
+                return;
+            }
+
+            closeUploadFileModal();
+            await loadProjectFiles();
+        }
+
+        async function downloadFile(filePath, fileName) {
+            const { data, error } = await supabase.storage
+                .from('project-files')
+                .download(filePath);
+
+            if (error) {
+                alert('Error downloading file: ' + error.message);
+                return;
+            }
+
+            // Create download link
+            const url = URL.createObjectURL(data);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function deleteFile(fileId) {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+
+            // Get file info
+            const file = projectFiles.find(f => f.id === fileId);
+            if (!file) return;
+
+            // Delete from storage
+            const { error: storageError } = await supabase.storage
+                .from('project-files')
+                .remove([file.file_path]);
+
+            if (storageError) {
+                console.error('Error deleting file from storage:', storageError);
+            }
+
+            // Delete from database
+            const { error: dbError } = await supabase
+                .from('project_files')
+                .delete()
+                .eq('id', fileId);
+
+            if (dbError) {
+                alert('Error deleting file: ' + dbError.message);
+                return;
+            }
+
+            await loadProjectFiles();
         }
 
         // ==============================================

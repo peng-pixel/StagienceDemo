@@ -859,6 +859,7 @@
         };
         let editingItemId = null;
         let selectedPhotoFile = null; // For photo uploads
+        let shouldDeletePhoto = false; // Flag to delete existing photo
 
         // Load inventory from Supabase
         async function loadInventory() {
@@ -1706,6 +1707,7 @@
             document.getElementById('item-form').reset();
             document.getElementById('modal-title').textContent = 'Add Item';
             editingItemId = null;
+            shouldDeletePhoto = false; // Reset deletion flag
             deletePhoto(); // Reset photo state
         }
 
@@ -1742,6 +1744,7 @@
 
         function deletePhoto() {
             selectedPhotoFile = null;
+            shouldDeletePhoto = true; // Mark that we want to delete the photo
             document.getElementById('item-photo-input').value = '';
             document.getElementById('photo-preview-container').style.display = 'none';
             document.getElementById('photo-preview').src = '';
@@ -1817,6 +1820,7 @@
             
             // Load existing photo
             selectedPhotoFile = null;
+            shouldDeletePhoto = false; // Reset deletion flag
             if (item.photo_url) {
                 document.getElementById('photo-preview').src = item.photo_url;
                 document.getElementById('photo-preview-container').style.display = 'block';
@@ -1849,11 +1853,17 @@
 
             if (editingItemId) {
                 // Update existing item
+                const oldItem = inventoryItems.find(i => i.id === editingItemId);
+                
+                // Handle photo deletion
+                if (shouldDeletePhoto && oldItem && oldItem.photo_url) {
+                    await deletePhotoFromStorage(oldItem.photo_url);
+                    itemData.photo_url = null;
+                }
                 
                 // Upload new photo if selected
                 if (selectedPhotoFile) {
                     // Delete old photo if exists
-                    const oldItem = inventoryItems.find(i => i.id === editingItemId);
                     if (oldItem && oldItem.photo_url) {
                         await deletePhotoFromStorage(oldItem.photo_url);
                     }

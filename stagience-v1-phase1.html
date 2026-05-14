@@ -2822,8 +2822,9 @@
             document.getElementById('project-detail-status-badge').style = statusColors[project.status] || statusColors['active'];
             document.getElementById('project-detail-status-badge').textContent = statusLabels[project.status] || 'Active';
 
-            // Load timeline events
+            // Load timeline events and project notes
             await loadTimelineEvents();
+            await loadProjectNotes();
 
             // Switch views
             document.getElementById('projects-section').style.display = 'none';
@@ -3273,13 +3274,97 @@
         }
 
         // Project Notes Functions
-        function addProjectNote() {
+        // ==============================================
+        // PROJECT NOTES
+        // ==============================================
+        
+        let projectNotes = [];
+
+        async function loadProjectNotes() {
+            if (!currentProjectId) return;
+
+            const { data, error } = await supabase
+                .from('project_notes')
+                .select('*')
+                .eq('project_id', currentProjectId)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error loading project notes:', error);
+                projectNotes = [];
+            } else {
+                projectNotes = data || [];
+            }
+
+            renderProjectNotes();
+        }
+
+        function renderProjectNotes() {
+            const emptyState = document.getElementById('project-notes-empty');
+            const notesList = document.getElementById('project-notes-list');
+
+            if (projectNotes.length === 0) {
+                emptyState.style.display = 'block';
+                notesList.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                notesList.style.display = 'block';
+                
+                notesList.innerHTML = projectNotes.map(note => {
+                    const date = new Date(note.created_at);
+                    const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                    
+                    return `
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                                <div style="color: #6b7280; font-size: 13px;">${dateStr} at ${timeStr}</div>
+                                <button onclick="deleteProjectNote(${note.id})" style="padding: 6px 12px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                                    Delete
+                                </button>
+                            </div>
+                            <div style="white-space: pre-wrap; line-height: 1.6;">${note.note_text}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        async function addProjectNote() {
             const noteText = document.getElementById('new-note-text').value;
             if (!noteText.trim()) return;
             
-            // TODO: Save to database in future phase
-            alert('Note added! (Project notes will be saved to database in a future update)');
+            const { error } = await supabase
+                .from('project_notes')
+                .insert([{
+                    project_id: currentProjectId,
+                    user_id: currentUser.id,
+                    note_text: noteText
+                }]);
+
+            if (error) {
+                alert('Error adding note: ' + error.message);
+                return;
+            }
+
             document.getElementById('new-note-text').value = '';
+            await loadProjectNotes();
+        }
+
+        async function deleteProjectNote(noteId) {
+            if (!confirm('Are you sure you want to delete this note?')) return;
+
+            const { error } = await supabase
+                .from('project_notes')
+                .delete()
+                .eq('id', noteId);
+
+            if (error) {
+                alert('Error deleting note: ' + error.message);
+                return;
+            }
+
+            await loadProjectNotes();
         }
 
         async function loadCalendar() {

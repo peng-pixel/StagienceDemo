@@ -237,6 +237,33 @@
                             <div id="count-active" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
 
+                        <!-- Scheduled Card -->
+                        <div id="filter-scheduled" onclick="filterProjectsByStatus('scheduled')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📅</div>
+                                <div style="font-weight: 600; font-size: 15px;">Scheduled</div>
+                            </div>
+                            <div id="count-scheduled" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
+                        <!-- Consult Only Card -->
+                        <div id="filter-consult-only" onclick="filterProjectsByStatus('consult-only')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📋</div>
+                                <div style="font-weight: 600; font-size: 15px;">Consult Only</div>
+                            </div>
+                            <div id="count-consult-only" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
+                        <!-- Pending Card -->
+                        <div id="filter-pending" onclick="filterProjectsByStatus('pending')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">⏳</div>
+                                <div style="font-weight: 600; font-size: 15px;">Pending</div>
+                            </div>
+                            <div id="count-pending" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
+                        </div>
+
                         <!-- Completed Card -->
                         <div id="filter-completed" onclick="filterProjectsByStatus('completed')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
@@ -244,24 +271,6 @@
                                 <div style="font-weight: 600; font-size: 15px;">Completed</div>
                             </div>
                             <div id="count-completed" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
-                        </div>
-
-                        <!-- On Hold Card -->
-                        <div id="filter-on-hold" onclick="filterProjectsByStatus('on-hold')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <div style="font-size: 24px;">⏸️</div>
-                                <div style="font-weight: 600; font-size: 15px;">On Hold</div>
-                            </div>
-                            <div id="count-on-hold" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
-                        </div>
-
-                        <!-- Cancelled Card -->
-                        <div id="filter-cancelled" onclick="filterProjectsByStatus('cancelled')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <div style="font-size: 24px;">❌</div>
-                                <div style="font-weight: 600; font-size: 15px;">Cancelled</div>
-                            </div>
-                            <div id="count-cancelled" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
                     </div>
 
@@ -712,11 +721,11 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div>
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Start Date</label>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Stage Date</label>
                         <input type="date" id="project-start-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
                     <div>
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">End Date</label>
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px;">Destage Date</label>
                         <input type="date" id="project-end-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     </div>
                 </div>
@@ -725,9 +734,10 @@
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Status *</label>
                     <select id="project-status" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="active">Active</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="consult-only">Consult Only</option>
+                        <option value="pending">Pending</option>
                         <option value="completed">Completed</option>
-                        <option value="on-hold">On Hold</option>
-                        <option value="cancelled">Cancelled</option>
                     </select>
                 </div>
 
@@ -2385,16 +2395,18 @@
 
             const statusColors = {
                 'active': 'background: #dcfce7; color: #166534;',
-                'completed': 'background: #dbeafe; color: #1e40af;',
-                'on-hold': 'background: #fef3c7; color: #92400e;',
-                'cancelled': 'background: #fee2e2; color: #991b1b;'
+                'scheduled': 'background: #dbeafe; color: #1e40af;',
+                'consult-only': 'background: #fef3c7; color: #92400e;',
+                'pending': 'background: #fef3c7; color: #92400e;',
+                'completed': 'background: #e0e7ff; color: #3730a3;'
             };
 
             const statusLabels = {
                 'active': 'Active',
-                'completed': 'Completed',
-                'on-hold': 'On Hold',
-                'cancelled': 'Cancelled'
+                'scheduled': 'Scheduled',
+                'consult-only': 'Consult Only',
+                'pending': 'Pending',
+                'completed': 'Completed'
             };
 
             container.innerHTML = sortedMonths.map(monthYear => `
@@ -2423,8 +2435,8 @@
                                 
                                 ${project.start_date || project.end_date ? `
                                     <div style="display: flex; gap: 16px; margin-bottom: 8px; font-size: 13px; color: #6b7280;">
-                                        ${project.start_date ? `<div>Start: ${new Date(project.start_date).toLocaleDateString()}</div>` : ''}
-                                        ${project.end_date ? `<div>End: ${new Date(project.end_date).toLocaleDateString()}</div>` : ''}
+                                        ${project.start_date ? `<div>Stage: ${new Date(project.start_date).toLocaleDateString()}</div>` : ''}
+                                        ${project.end_date ? `<div>Destage: ${new Date(project.end_date).toLocaleDateString()}</div>` : ''}
                                     </div>
                                 ` : ''}
                                 
@@ -2473,20 +2485,22 @@
             const counts = {
                 all: projects.length,
                 active: projects.filter(p => p.status === 'active').length,
-                completed: projects.filter(p => p.status === 'completed').length,
-                'on-hold': projects.filter(p => p.status === 'on-hold').length,
-                cancelled: projects.filter(p => p.status === 'cancelled').length
+                scheduled: projects.filter(p => p.status === 'scheduled').length,
+                'consult-only': projects.filter(p => p.status === 'consult-only').length,
+                pending: projects.filter(p => p.status === 'pending').length,
+                completed: projects.filter(p => p.status === 'completed').length
             };
 
             // Update counts
             document.getElementById('count-all').textContent = counts.all;
             document.getElementById('count-active').textContent = counts.active;
+            document.getElementById('count-scheduled').textContent = counts.scheduled;
+            document.getElementById('count-consult-only').textContent = counts['consult-only'];
+            document.getElementById('count-pending').textContent = counts.pending;
             document.getElementById('count-completed').textContent = counts.completed;
-            document.getElementById('count-on-hold').textContent = counts['on-hold'];
-            document.getElementById('count-cancelled').textContent = counts.cancelled;
 
             // Update active state styling
-            const filters = ['all', 'active', 'completed', 'on-hold', 'cancelled'];
+            const filters = ['all', 'active', 'scheduled', 'consult-only', 'pending', 'completed'];
             filters.forEach(filter => {
                 const card = document.getElementById(`filter-${filter}`);
                 if (filter === currentProjectFilter) {

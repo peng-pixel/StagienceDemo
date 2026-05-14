@@ -369,9 +369,50 @@
 
                 <!-- Calendar Section -->
                 <div id="calendar-section" class="section" style="display: none;">
-                    <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 24px;">Calendar</h1>
-                    <p style="color: #6b7280; margin-bottom: 32px;">This section will display your calendar events from Supabase.</p>
-                    <div id="calendar-container"></div>
+                    <!-- Calendar Header -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+                        <h1 style="font-size: 32px; font-weight: 800;">Schedule</h1>
+                        
+                        <!-- Month Navigation -->
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <button onclick="previousMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                                ← Prev
+                            </button>
+                            <div id="current-month-year" style="font-size: 18px; font-weight: 700; min-width: 180px; text-align: center;">
+                                May 2026
+                            </div>
+                            <button onclick="todayMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                                Today
+                            </button>
+                            <button onclick="nextMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                                Next →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Event Type Filters -->
+                    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+                        <button onclick="toggleEventTypeFilter('all')" id="filter-event-all" style="padding: 8px 16px; border: 2px solid #3b82f6; border-radius: 10px; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            All Events
+                        </button>
+                        <button onclick="toggleEventTypeFilter('consultation')" id="filter-event-consultation" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            📋 Consultation
+                        </button>
+                        <button onclick="toggleEventTypeFilter('installation-stage')" id="filter-event-installation-stage" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            🔧 Installation
+                        </button>
+                        <button onclick="toggleEventTypeFilter('photo-shoot')" id="filter-event-photo-shoot" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            📸 Photo Shoot
+                        </button>
+                        <button onclick="toggleEventTypeFilter('pickup-destage')" id="filter-event-pickup-destage" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            📦 Pickup/Destage
+                        </button>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                        <!-- Calendar will be rendered here -->
+                    </div>
                 </div>
             </main>
         </div>
@@ -3367,35 +3408,173 @@
             await loadProjectNotes();
         }
 
+        // ==============================================
+        // CALENDAR
+        // ==============================================
+        
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
+        let calendarEventTypeFilter = ['all'];
+        let allCalendarEvents = [];
+
         async function loadCalendar() {
-            const { data, error } = await supabase
-                .from('calendar_events')
-                .select('*')
+            // Load all timeline events from all projects
+            const { data, error} = await supabase
+                .from('timeline_events')
+                .select(`
+                    *,
+                    projects (
+                        name,
+                        address
+                    )
+                `)
                 .eq('user_id', currentUser.id)
-                .order('start_time', { ascending: true });
+                .order('event_date', { ascending: true });
 
             if (error) {
-                console.error('Error loading calendar:', error);
-                return;
+                console.error('Error loading calendar events:', error);
+                allCalendarEvents = [];
+            } else {
+                allCalendarEvents = data || [];
             }
 
-            const container = document.getElementById('calendar-container');
-            if (data.length === 0) {
-                container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 40px;">No events scheduled. Click "Add Event" to get started!</p>';
-            } else {
-                container.innerHTML = `
-                    <div style="display: flex; flex-direction: column; gap: 16px;">
-                        ${data.map(event => `
-                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px;">
-                                <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 8px;">${event.title}</h3>
-                                <p style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">${new Date(event.start_time).toLocaleString()}</p>
-                                ${event.description ? `<p style="color: #6b7280; font-size: 14px; margin-top: 8px;">${event.description}</p>` : ''}
-                                ${event.location ? `<p style="color: #6b7280; font-size: 14px; margin-top: 4px;">📍 ${event.location}</p>` : ''}
-                            </div>
-                        `).join('')}
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            // Update month/year display
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('current-month-year').textContent = 
+                `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+
+            // Filter events by current month and event type filter
+            const filteredEvents = allCalendarEvents.filter(event => {
+                const dateParts = event.event_date.split('-');
+                const eventDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                const matchesMonth = eventDate.getMonth() === currentCalendarMonth && 
+                                    eventDate.getFullYear() === currentCalendarYear;
+                const matchesType = calendarEventTypeFilter.includes('all') || 
+                                   calendarEventTypeFilter.includes(event.event_type);
+                return matchesMonth && matchesType;
+            });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+            const daysInMonth = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+
+            // Event colors by type
+            const eventColors = {
+                'consultation': '#3b82f6',
+                'installation-stage': '#10b981',
+                'photo-shoot': '#f59e0b',
+                'pickup-destage': '#8b5cf6',
+                'completed': '#6b7280',
+                'payment': '#f59e0b',
+                'call-meeting': '#6b7280'
+            };
+
+            // Build calendar grid
+            let calendarHTML = `
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 2px solid #e5e7eb;">
+                    ${['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => 
+                        `<div style="padding: 12px; text-align: center; font-weight: 700; font-size: 12px; color: #6b7280;">${day}</div>`
+                    ).join('')}
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); min-height: 600px;">
+            `;
+
+            // Empty cells before first day
+            for (let i = 0; i < firstDay; i++) {
+                calendarHTML += `<div style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; background: #f9fafb;"></div>`;
+            }
+
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = day === new Date().getDate() && 
+                               currentCalendarMonth === new Date().getMonth() && 
+                               currentCalendarYear === new Date().getFullYear();
+
+                // Get events for this day
+                const dayEvents = filteredEvents.filter(event => {
+                    const dateParts = event.event_date.split('-');
+                    const eventDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    return eventDate.getDate() === day;
+                });
+
+                calendarHTML += `
+                    <div style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px; min-height: 100px; ${isToday ? 'background: #eff6ff;' : ''}">
+                        <div style="font-weight: ${isToday ? '700' : '600'}; margin-bottom: 6px; color: ${isToday ? '#1e40af' : '#1f2937'};">${day}</div>
+                        ${dayEvents.map(event => {
+                            const time = event.event_time ? new Date(`2000-01-01T${event.event_time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+                            const projectName = event.projects?.name || '';
+                            return `
+                                <div onclick="openProjectFromCalendar(${event.project_id})" style="background: ${eventColors[event.event_type] || '#6b7280'}; color: white; padding: 4px 6px; border-radius: 4px; margin-bottom: 4px; font-size: 11px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${event.title} - ${projectName}">
+                                    ${time ? time + ' ' : ''}${event.title}
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
                 `;
             }
+
+            calendarHTML += `</div>`;
+
+            document.getElementById('calendar-grid').innerHTML = calendarHTML;
+        }
+
+        function previousMonth() {
+            currentCalendarMonth--;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentCalendarMonth++;
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            renderCalendar();
+        }
+
+        function todayMonth() {
+            currentCalendarMonth = new Date().getMonth();
+            currentCalendarYear = new Date().getFullYear();
+            renderCalendar();
+        }
+
+        function toggleEventTypeFilter(type) {
+            if (type === 'all') {
+                calendarEventTypeFilter = ['all'];
+            } else {
+                calendarEventTypeFilter = [type];
+            }
+
+            // Update filter button styles
+            ['all', 'consultation', 'installation-stage', 'photo-shoot', 'pickup-destage'].forEach(filterType => {
+                const btn = document.getElementById(`filter-event-${filterType}`);
+                if (calendarEventTypeFilter.includes(filterType) || (filterType === 'all' && calendarEventTypeFilter.includes('all'))) {
+                    btn.style.borderColor = '#3b82f6';
+                    btn.style.background = '#eff6ff';
+                    btn.style.color = '#1e40af';
+                } else {
+                    btn.style.borderColor = '#e5e7eb';
+                    btn.style.background = 'white';
+                    btn.style.color = '#6b7280';
+                }
+            });
+
+            renderCalendar();
+        }
+
+        async function openProjectFromCalendar(projectId) {
+            // Switch to projects section and open the project
+            showSection('projects');
+            await openProjectDetail(projectId);
         }
 
         // ==============================================

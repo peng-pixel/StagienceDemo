@@ -47,6 +47,8 @@
             font-weight: 600;
             font-size: 18px;
             color: #78716c;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -465,71 +467,6 @@
             display: inline-block;
         }
 
-        /* Testimonials */
-        .testimonials {
-            padding: 100px 0;
-            background: white;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            margin-top: 60px;
-        }
-
-        .testimonial-card {
-            background: #fafaf9;
-            border: 1px solid #e7e5e4;
-            border-radius: 16px;
-            padding: 32px;
-        }
-
-        .stars {
-            color: #fbbf24;
-            margin-bottom: 16px;
-            font-size: 18px;
-        }
-
-        .testimonial-text {
-            color: #1f2937;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .author-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #b0a586 0%, #8b7d5f 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-        }
-
-        .author-info {
-            flex: 1;
-        }
-
-        .author-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .author-title {
-            color: #57534e;
-            font-size: 13px;
-        }
-
         /* Footer */
         footer {
             background: #292524;
@@ -595,8 +532,7 @@
             }
 
             .features-grid,
-            .pricing-grid,
-            .testimonials-grid {
+            .pricing-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -629,10 +565,10 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <a href="#" class="logo">
                     <div class="logo-icon"></div>
                     Stagience
-                </div>
+                </a>
                 <div class="header-buttons">
                     <a href="#waitlist" class="btn-secondary">Join Waitlist</a>
                     <a href="stagience-v1-complete.html" class="btn-primary">Get Started</a>
@@ -655,7 +591,7 @@
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=800&h=600&fit=crop" alt="Staged Living Room">
+                    <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&h=600&fit=crop&q=80" alt="Elegantly Staged Living Room">
                 </div>
             </div>
         </div>
@@ -827,53 +763,6 @@
                 <h2 class="cta-title">Bring calm, clarity, and consistency to every stage.</h2>
                 <p class="cta-description">Stagience helps you deliver a premium client experience while keeping your team organized behind the scenes. Start with your next project and feel the difference immediately.</p>
                 <a href="#waitlist" class="btn-white">Request a demo</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Loved by Professional Stagers</h2>
-                <p class="section-subtitle">See what home stagers are saying about Stagience</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Stagience has completely transformed how I manage my staging business. I can track all my inventory, manage multiple projects, and stay organized—all in one place. Game changer!"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">SM</div>
-                        <div class="author-info">
-                            <div class="author-name">Sarah Martinez</div>
-                            <div class="author-title">Luxury Staging Pro, Toronto</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"As someone who stages 20+ homes per month, I needed something better than spreadsheets. Stagience gives me everything I need—inventory tracking, project timelines, client management. So intuitive!"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">JC</div>
-                        <div class="author-info">
-                            <div class="author-name">Jessica Chen</div>
-                            <div class="author-title">Premier Home Staging, Vancouver</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="testimonial-card">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
-                    <p class="testimonial-text">"Finally, software built by someone who understands staging! The photo organization alone is worth it. I can keep before/after/pro photos perfectly organized for every project."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">MR</div>
-                        <div class="author-info">
-                            <div class="author-name">Michael Rodriguez</div>
-                            <div class="author-title">Elite Staging Solutions, Calgary</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

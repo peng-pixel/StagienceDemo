@@ -119,11 +119,35 @@
                                     📋 List
                                 </button>
                             </div>
+                            <button onclick="toggleSelectAll()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
+                                ☑️ Select All
+                            </button>
                             <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
                                 🔍 Filter
                             </button>
                             <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
                                 + Add Item
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Actions Banner (hidden by default) -->
+                    <div id="bulk-actions-banner" style="display: none; background: #eff6ff; border: 2px solid #3b82f6; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <h3 id="bulk-selected-count" style="font-size: 18px; font-weight: 700; color: #1e40af; margin-bottom: 4px;">0 items selected</h3>
+                        </div>
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="showBulkUpdateModal()" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                🔄 Bulk Update
+                            </button>
+                            <button onclick="showUpdateLocationModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                📍 Update Location
+                            </button>
+                            <button onclick="showUpdateStatusModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                📋 Update Status
+                            </button>
+                            <button onclick="clearSelection()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                Clear Selection
                             </button>
                         </div>
                     </div>
@@ -391,6 +415,133 @@
 
             <!-- Navigation Buttons -->
             <div id="wizard-nav" style="display: flex; gap: 12px; margin-top: 24px;"></div>
+        </div>
+    </div>
+
+    <!-- Bulk Update Modal -->
+    <div id="bulk-update-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Bulk Update Items</h2>
+                <button onclick="closeBulkUpdateModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                <div style="font-weight: 700; color: #1e40af; margin-bottom: 4px;"><span id="bulk-update-count">0</span> items selected</div>
+                <div style="font-size: 13px; color: #1e40af;">Update multiple fields at once</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Update Location -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-location-check" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Location</span>
+                    </label>
+                    <select id="bulk-location" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select location...</option>
+                        <option value="Warehouse A">Warehouse A</option>
+                        <option value="Warehouse B">Warehouse B</option>
+                        <option value="Storage Unit">Storage Unit</option>
+                    </select>
+                </div>
+
+                <!-- Update Status -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-status-check" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Status</span>
+                    </label>
+                    <select id="bulk-status" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select status...</option>
+                        <option value="IN">✅ IN - Available</option>
+                        <option value="OUT">📦 OUT - On Project</option>
+                        <option value="HOLD">⏸️ HOLD - Reserved</option>
+                    </select>
+                </div>
+
+                <!-- Clear Room/Notes -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-clear-room-check" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Clear Room/Notes</span>
+                    </label>
+                    <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 13px; color: #92400e;">
+                        ⚠️ This will clear the Room/Notes field for all selected items
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closeBulkUpdateModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button onclick="executeBulkUpdate()" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                    Update Items
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Location Modal -->
+    <div id="update-location-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 450px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Update Location</h2>
+                <button onclick="closeUpdateLocationModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <div style="background: #eff6ff; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="font-weight: 700; color: #1e40af;"><span id="location-update-count">0</span> items selected</div>
+            </div>
+
+            <label style="display: block; font-weight: 600; margin-bottom: 8px;">New Location</label>
+            <select id="quick-location" style="width: 100%; padding: 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                <option value="">Select location...</option>
+                <option value="Warehouse A">Warehouse A</option>
+                <option value="Warehouse B">Warehouse B</option>
+                <option value="Storage Unit">Storage Unit</option>
+            </select>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closeUpdateLocationModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button onclick="executeLocationUpdate()" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                    Update Location
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="update-status-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 450px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Update Status</h2>
+                <button onclick="closeUpdateStatusModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <div style="background: #eff6ff; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="font-weight: 700; color: #1e40af;"><span id="status-update-count">0</span> items selected</div>
+            </div>
+
+            <label style="display: block; font-weight: 600; margin-bottom: 8px;">New Status</label>
+            <select id="quick-status" style="width: 100%; padding: 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                <option value="">Select status...</option>
+                <option value="IN">✅ IN - Available</option>
+                <option value="OUT">📦 OUT - On Project</option>
+                <option value="HOLD">⏸️ HOLD - Reserved</option>
+            </select>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closeUpdateStatusModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button onclick="executeStatusUpdate()" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                    Update Status
+                </button>
+            </div>
         </div>
     </div>
 
@@ -839,6 +990,7 @@
                     <table style="width: 100%; border-collapse: collapse;">
                         <thead style="background: #f9fafb;">
                             <tr>
+                                <th style="padding: 16px; width: 50px;"><input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;"></th>
                                 <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Name</th>
                                 <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Category</th>
                                 <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Color</th>
@@ -851,6 +1003,7 @@
                         <tbody>
                             ${items.map(item => `
                                 <tr style="border-top: 1px solid #e5e7eb;">
+                                    <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkActions()" style="width: 18px; height: 18px; cursor: pointer;"></td>
                                     <td style="padding: 16px; font-weight: 600;">${item.name}</td>
                                     <td style="padding: 16px; color: #6b7280;">${item.category}</td>
                                     <td style="padding: 16px; color: #6b7280;">${item.color || '-'}</td>
@@ -1323,6 +1476,210 @@
             if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
                 closeWizard();
             }
+        }
+
+        // ==============================================
+        // BULK ACTIONS
+        // ==============================================
+        
+        function getSelectedItems() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            return Array.from(checkboxes).map(cb => parseInt(cb.dataset.itemId));
+        }
+
+        function updateBulkActions() {
+            const selectedIds = getSelectedItems();
+            const count = selectedIds.length;
+            
+            // Show/hide bulk actions banner
+            const banner = document.getElementById('bulk-actions-banner');
+            if (count > 0) {
+                banner.style.display = 'block';
+                document.getElementById('bulk-selected-count').textContent = `${count} item${count > 1 ? 's' : ''} selected`;
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            
+            if (selectAllCheckbox) {
+                const checked = selectAllCheckbox.checked;
+                checkboxes.forEach(cb => cb.checked = checked);
+            } else {
+                // Button was clicked, toggle all
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                checkboxes.forEach(cb => cb.checked = !allChecked);
+            }
+            
+            updateBulkActions();
+        }
+
+        function clearSelection() {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            if (selectAllCheckbox) selectAllCheckbox.checked = false;
+            updateBulkActions();
+        }
+
+        // Bulk Update Modal
+        function showBulkUpdateModal() {
+            const count = getSelectedItems().length;
+            if (count === 0) return;
+            
+            document.getElementById('bulk-update-count').textContent = count;
+            document.getElementById('bulk-update-modal').classList.add('active');
+            
+            // Enable/disable fields based on checkboxes
+            document.getElementById('bulk-update-location-check').onchange = function() {
+                document.getElementById('bulk-location').disabled = !this.checked;
+            };
+            document.getElementById('bulk-update-status-check').onchange = function() {
+                document.getElementById('bulk-status').disabled = !this.checked;
+            };
+        }
+
+        function closeBulkUpdateModal() {
+            document.getElementById('bulk-update-modal').classList.remove('active');
+            // Reset form
+            document.getElementById('bulk-update-location-check').checked = false;
+            document.getElementById('bulk-update-status-check').checked = false;
+            document.getElementById('bulk-clear-room-check').checked = false;
+            document.getElementById('bulk-location').disabled = true;
+            document.getElementById('bulk-status').disabled = true;
+            document.getElementById('bulk-location').value = '';
+            document.getElementById('bulk-status').value = '';
+        }
+
+        async function executeBulkUpdate() {
+            const selectedIds = getSelectedItems();
+            if (selectedIds.length === 0) return;
+
+            const updateData = {};
+            
+            // Check which fields to update
+            if (document.getElementById('bulk-update-location-check').checked) {
+                const location = document.getElementById('bulk-location').value;
+                if (!location) {
+                    alert('Please select a location');
+                    return;
+                }
+                updateData.location = location;
+            }
+            
+            if (document.getElementById('bulk-update-status-check').checked) {
+                const status = document.getElementById('bulk-status').value;
+                if (!status) {
+                    alert('Please select a status');
+                    return;
+                }
+                updateData.status = status;
+            }
+            
+            if (document.getElementById('bulk-clear-room-check').checked) {
+                updateData.room = null;
+            }
+
+            if (Object.keys(updateData).length === 0) {
+                alert('Please select at least one field to update');
+                return;
+            }
+
+            // Update all selected items
+            const { error } = await supabase
+                .from('inventory')
+                .update(updateData)
+                .in('id', selectedIds);
+
+            if (error) {
+                alert('Error updating items: ' + error.message);
+                return;
+            }
+
+            closeBulkUpdateModal();
+            clearSelection();
+            await loadInventory();
+        }
+
+        // Update Location Modal
+        function showUpdateLocationModal() {
+            const count = getSelectedItems().length;
+            if (count === 0) return;
+            
+            document.getElementById('location-update-count').textContent = count;
+            document.getElementById('update-location-modal').classList.add('active');
+        }
+
+        function closeUpdateLocationModal() {
+            document.getElementById('update-location-modal').classList.remove('active');
+            document.getElementById('quick-location').value = '';
+        }
+
+        async function executeLocationUpdate() {
+            const selectedIds = getSelectedItems();
+            if (selectedIds.length === 0) return;
+
+            const location = document.getElementById('quick-location').value;
+            if (!location) {
+                alert('Please select a location');
+                return;
+            }
+
+            const { error } = await supabase
+                .from('inventory')
+                .update({ location: location })
+                .in('id', selectedIds);
+
+            if (error) {
+                alert('Error updating location: ' + error.message);
+                return;
+            }
+
+            closeUpdateLocationModal();
+            clearSelection();
+            await loadInventory();
+        }
+
+        // Update Status Modal
+        function showUpdateStatusModal() {
+            const count = getSelectedItems().length;
+            if (count === 0) return;
+            
+            document.getElementById('status-update-count').textContent = count;
+            document.getElementById('update-status-modal').classList.add('active');
+        }
+
+        function closeUpdateStatusModal() {
+            document.getElementById('update-status-modal').classList.remove('active');
+            document.getElementById('quick-status').value = '';
+        }
+
+        async function executeStatusUpdate() {
+            const selectedIds = getSelectedItems().length;
+            if (selectedIds.length === 0) return;
+
+            const status = document.getElementById('quick-status').value;
+            if (!status) {
+                alert('Please select a status');
+                return;
+            }
+
+            const { error } = await supabase
+                .from('inventory')
+                .update({ status: status })
+                .in('id', getSelectedItems());
+
+            if (error) {
+                alert('Error updating status: ' + error.message);
+                return;
+            }
+
+            closeUpdateStatusModal();
+            clearSelection();
+            await loadInventory();
         }
 
         // Original functions kept for editing

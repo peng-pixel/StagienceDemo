@@ -122,6 +122,9 @@
                             <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
                                 🔍 Filter
                             </button>
+                            <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
+                                🖨️ Print
+                            </button>
                             <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
                                 + Add Item
                             </button>
@@ -542,6 +545,57 @@
                 </button>
                 <button onclick="executeStatusUpdate()" style="flex: 1; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                     Update Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Modal -->
+    <div id="print-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Print Inventory</h2>
+                <button onclick="closePrintModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            
+            <p style="color: #6b7280; margin-bottom: 24px;">Choose how you'd like to print your inventory:</p>
+
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- List View Option -->
+                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="radio" name="print-format" value="list" checked style="width: 20px; height: 20px; cursor: pointer;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="font-size: 24px;">📋</span>
+                                <span style="font-weight: 700; font-size: 16px;">List View</span>
+                            </div>
+                            <div style="font-size: 13px; color: #6b7280;">Detailed table with all item information</div>
+                        </div>
+                    </div>
+                </label>
+
+                <!-- Grid View Option -->
+                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="radio" name="print-format" value="grid" style="width: 20px; height: 20px; cursor: pointer;">
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="font-size: 24px;">📦</span>
+                                <span style="font-weight: 700; font-size: 16px;">Grid View</span>
+                            </div>
+                            <div style="font-size: 13px; color: #6b7280;">Visual cards with photos and key details</div>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closePrintModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                    Cancel
+                </button>
+                <button onclick="executePrint()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                    Print
                 </button>
             </div>
         </div>
@@ -1691,6 +1745,223 @@
             closeUpdateStatusModal();
             clearSelection();
             await loadInventory();
+        }
+
+        // ==============================================
+        // PRINT FUNCTIONALITY
+        // ==============================================
+        
+        function showPrintModal() {
+            document.getElementById('print-modal').classList.add('active');
+        }
+
+        function closePrintModal() {
+            document.getElementById('print-modal').classList.remove('active');
+        }
+
+        function executePrint() {
+            const format = document.querySelector('input[name="print-format"]:checked').value;
+            
+            // Get current filtered items
+            let itemsToPrint = inventoryItems;
+            
+            // Apply current filters
+            if (currentInventoryStatusFilter !== 'all') {
+                itemsToPrint = itemsToPrint.filter(item => item.status === currentInventoryStatusFilter);
+            }
+            
+            if (currentInventoryLocationFilter !== 'all') {
+                itemsToPrint = itemsToPrint.filter(item => item.location === currentInventoryLocationFilter);
+            }
+            
+            // Apply filter modal filters
+            itemsToPrint = itemsToPrint.filter(item => {
+                if (!inventoryFilters.statuses.includes(item.status)) return false;
+                if (!inventoryFilters.categories.includes(item.category)) return false;
+                if (inventoryFilters.search && !item.name.toLowerCase().includes(inventoryFilters.search.toLowerCase())) return false;
+                if (inventoryFilters.room) {
+                    if (!item.room || item.room.trim() === '') return false;
+                    if (!item.room.toLowerCase().includes(inventoryFilters.room.toLowerCase())) return false;
+                }
+                return true;
+            });
+            
+            if (itemsToPrint.length === 0) {
+                alert('No items to print');
+                return;
+            }
+            
+            if (format === 'list') {
+                printListView(itemsToPrint);
+            } else {
+                printGridView(itemsToPrint);
+            }
+            
+            closePrintModal();
+        }
+
+        function printListView(items) {
+            const printWindow = window.open('', '_blank');
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const statusColors = {
+                'IN': 'background: #dcfce7; color: #166534;',
+                'OUT': 'background: #dbeafe; color: #1e40af;',
+                'HOLD': 'background: #fef3c7; color: #92400e;'
+            };
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Stagience Inventory</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { font-family: system-ui, -apple-system, sans-serif; padding: 40px; }
+                        h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+                        .date { color: #6b7280; margin-bottom: 20px; font-size: 14px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th { background: #f9fafb; padding: 12px; text-align: left; font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; border-bottom: 2px solid #e5e7eb; }
+                        td { padding: 12px; border-bottom: 1px solid #e5e7eb; font-size: 13px; }
+                        .photo { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; }
+                        .no-photo { width: 50px; height: 50px; background: #f3f4f6; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+                        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; display: inline-block; }
+                        .total { margin-top: 20px; font-weight: 600; font-size: 14px; }
+                        @media print {
+                            body { padding: 20px; }
+                            @page { margin: 0.5in; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Stagience Inventory</h1>
+                    <div class="date">Printed on ${today}</div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Item</th>
+                                <th>Category</th>
+                                <th>Color</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Room/Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${items.map(item => `
+                                <tr>
+                                    <td>
+                                        ${item.photo_url 
+                                            ? `<img src="${item.photo_url}" class="photo">`
+                                            : `<div class="no-photo">📷</div>`
+                                        }
+                                    </td>
+                                    <td style="font-weight: 600;">${item.name}</td>
+                                    <td>${item.category}</td>
+                                    <td>${item.color || '-'}</td>
+                                    <td><span class="status-badge" style="${statusColors[item.status]}">${item.status}</span></td>
+                                    <td>${item.location}</td>
+                                    <td>${item.room || '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    
+                    <div class="total">Total Items: ${items.length}</div>
+                    
+                    <script>
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                            }, 500);
+                        };
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function printGridView(items) {
+            const printWindow = window.open('', '_blank');
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const categoryEmojis = {
+                'Seating': '🛋️',
+                'Tables': '🪑',
+                'Lighting': '💡',
+                'Decor': '🎨',
+                'Art': '🖼️',
+                'Rugs': '🔲'
+            };
+            
+            const statusColors = {
+                'IN': 'background: #dcfce7; color: #166534;',
+                'OUT': 'background: #dbeafe; color: #1e40af;',
+                'HOLD': 'background: #fef3c7; color: #92400e;'
+            };
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Stagience Inventory - Grid View</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { font-family: system-ui, -apple-system, sans-serif; padding: 40px; }
+                        h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+                        .date { color: #6b7280; margin-bottom: 30px; font-size: 14px; }
+                        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+                        .card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; break-inside: avoid; }
+                        .photo { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 12px; border: 2px solid #e5e7eb; }
+                        .no-photo { width: 100%; height: 150px; background: #f3f4f6; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+                        .name { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+                        .category { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
+                        .location { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+                        .room { font-size: 11px; color: #9ca3af; font-style: italic; margin-bottom: 8px; }
+                        .status-badge { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; display: inline-block; }
+                        .total { margin-top: 30px; font-weight: 600; font-size: 14px; text-align: center; }
+                        @media print {
+                            body { padding: 20px; }
+                            @page { margin: 0.5in; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Stagience Inventory</h1>
+                    <div class="date">Printed on ${today}</div>
+                    
+                    <div class="grid">
+                        ${items.map(item => `
+                            <div class="card">
+                                ${item.photo_url 
+                                    ? `<img src="${item.photo_url}" class="photo">`
+                                    : `<div class="no-photo">${categoryEmojis[item.category] || '📦'}</div>`
+                                }
+                                <div class="name">${item.name}</div>
+                                <div class="category">${item.category}${item.color ? ` • ${item.color}` : ''}</div>
+                                <div class="location">📍 ${item.location}</div>
+                                ${item.room ? `<div class="room">Room: ${item.room}</div>` : ''}
+                                <span class="status-badge" style="${statusColors[item.status]}">${item.status}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="total">Total Items: ${items.length}</div>
+                    
+                    <script>
+                        window.onload = function() {
+                            setTimeout(function() {
+                                window.print();
+                            }, 500);
+                        };
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         }
 
         // Original functions kept for editing

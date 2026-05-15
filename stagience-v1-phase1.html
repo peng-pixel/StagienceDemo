@@ -455,9 +455,20 @@
                         </button>
                     </div>
 
-                    <!-- Calendar Grid -->
-                    <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                    <!-- View Toggle -->
+                    <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                        <button id="cal-view-month" onclick="setCalendarView('month')" style="padding: 8px 18px; border-radius: 10px; border: 2px solid #e5e7eb; background: white; font-weight: 600; font-size: 13px; cursor: pointer; color: #6b7280;">📅 Month</button>
+                        <button id="cal-view-agenda" onclick="setCalendarView('agenda')" style="padding: 8px 18px; border-radius: 10px; border: 2px solid #b0a586; background: #fef9f0; font-weight: 600; font-size: 13px; cursor: pointer; color: #1f2937;">📋 Agenda</button>
+                    </div>
+
+                    <!-- Calendar Grid (month view) -->
+                    <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden; display: none;">
                         <!-- Calendar will be rendered here -->
+                    </div>
+
+                    <!-- Agenda View -->
+                    <div id="calendar-agenda" style="display: block;">
+                        <!-- Agenda will be rendered here -->
                     </div>
                 </div>
 
@@ -2202,7 +2213,7 @@
         }
 
         async function executeStatusUpdate() {
-            const selectedIds = getSelectedItems().length;
+            const selectedIds = getSelectedItems();
             if (selectedIds.length === 0) return;
 
             const status = document.getElementById('quick-status').value;
@@ -2938,11 +2949,6 @@
 
         function searchProjects() {
             renderProjects();
-        }
-
-        function openProjectDetail(projectId) {
-            // Placeholder - will build this in Phase B1
-            alert(`Project detail view coming in Phase B1! Project ID: ${projectId}`);
         }
 
         function updateProjectStats(projects) {
@@ -4187,16 +4193,17 @@
                             .createSignedUrl(photo.file_path, 3600);
                         
                         const imageUrl = data?.signedUrl || '';
+                        if (imageUrl) folderPhotosCache[photo.id] = imageUrl;
                         const date = new Date(photo.uploaded_at);
                         const dateStr = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
 
                         return `
-                            <div style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px;">
-                                <button onclick="deletePhoto(${photo.id}, ${folder.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                            <div style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; cursor: pointer;" onclick="openLightbox('${folder.id}', ${photo.id})">
+                                <button onclick="event.stopPropagation(); deletePhoto(${photo.id}, ${folder.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
                                     ×
                                 </button>
-                                <div style="width: 100%; height: 200px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                                    <img src="${imageUrl}" alt="${photo.file_name}" style="max-width: 100%; max-height: 100%; object-fit: cover; cursor: pointer;" onclick="window.open('${imageUrl}', '_blank')">
+                                <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                                    <img src="${imageUrl}" alt="${photo.file_name}" style="width:100%;height:100%;object-fit:cover;">
                                 </div>
                                 <div style="font-size: 13px; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${photo.file_name}</div>
                                 <div style="font-size: 12px; color: #6b7280;">${dateStr}</div>
@@ -4233,9 +4240,14 @@
                             </div>
                             
                             ${photoCount > 0 ? 
-                                `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
-                                    ${photosHTML.join('')}
-                                </div>` 
+                                `<div id="photo-grid-${folder.id}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                                    ${photosHTML.slice(0, 12).join('')}
+                                </div>
+                                ${photoCount > 12 ? `<div style="text-align:center;margin-top:16px;">
+                                    <button onclick="loadMorePhotos('${folder.id}')" id="load-more-${folder.id}" style="padding:10px 24px;border:2px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;font-size:14px;cursor:pointer;">
+                                        Load more (${photoCount - 12} remaining)
+                                    </button>
+                                </div>` : ''}` 
                                 : emptyPhotosHTML
                             }
                         </div>
@@ -4420,6 +4432,7 @@
         let currentCalendarMonth = new Date().getMonth();
         let currentCalendarYear = new Date().getFullYear();
         let calendarEventTypeFilter = ['all'];
+        let calendarView = 'agenda';
         let allCalendarEvents = [];
 
         async function loadCalendar() {
@@ -4443,7 +4456,7 @@
                 allCalendarEvents = data || [];
             }
 
-            renderCalendar();
+            setCalendarView(calendarView);
         }
 
         function renderCalendar() {
@@ -4530,28 +4543,115 @@
             document.getElementById('calendar-grid').innerHTML = calendarHTML;
         }
 
+        function renderAgenda() {
+            const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            document.getElementById('current-month-year').textContent = monthNames[currentCalendarMonth] + ' ' + currentCalendarYear;
+
+            const eventColors = {
+                'consultation': '#3b82f6', 'installation-stage': '#10b981',
+                'photo-shoot': '#f59e0b', 'pickup-destage': '#8b5cf6',
+                'completed': '#6b7280', 'payment': '#f59e0b', 'call-meeting': '#6b7280'
+            };
+
+            const filteredEvents = allCalendarEvents.filter(event => {
+                const d = event.event_date.split('-');
+                const eventDate = new Date(d[0], d[1]-1, d[2]);
+                const matchesMonth = eventDate.getMonth() === currentCalendarMonth && eventDate.getFullYear() === currentCalendarYear;
+                const matchesType = calendarEventTypeFilter.includes('all') || calendarEventTypeFilter.includes(event.event_type);
+                return matchesMonth && matchesType;
+            }).sort((a,b) => new Date(a.event_date) - new Date(b.event_date));
+
+            const agenda = document.getElementById('calendar-agenda');
+            if (!filteredEvents.length) {
+                agenda.innerHTML = '<div style="text-align:center;padding:60px 20px;color:#6b7280;"><div style="font-size:40px;margin-bottom:12px;">📅</div><div style="font-weight:600;font-size:16px;">No events this month</div><div style="font-size:14px;margin-top:4px;">Add events from within a project.</div></div>';
+                return;
+            }
+
+            const grouped = {};
+            filteredEvents.forEach(event => {
+                if (!grouped[event.event_date]) grouped[event.event_date] = [];
+                grouped[event.event_date].push(event);
+            });
+
+            const today = new Date();
+            const todayStr = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+
+            let html = '';
+            Object.keys(grouped).sort().forEach(dateStr => {
+                const d = dateStr.split('-');
+                const dt = new Date(d[0], d[1]-1, d[2]);
+                const dateLabel = dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+                const isToday = dateStr === todayStr;
+
+                html += '<div style="margin-bottom:20px;">';
+                html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
+                html += '<div style="width:44px;height:44px;border-radius:12px;background:' + (isToday ? 'linear-gradient(135deg,rgba(176,138,90,1),rgba(47,111,107,1))' : '#f3f4f6') + ';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">';
+                html += '<div style="font-size:16px;font-weight:800;color:' + (isToday ? 'white' : '#1f2937') + ';line-height:1;">' + dt.getDate() + '</div>';
+                html += '<div style="font-size:9px;font-weight:600;color:' + (isToday ? 'rgba(255,255,255,0.8)' : '#6b7280') + ';text-transform:uppercase;">' + dt.toLocaleDateString('en-US',{weekday:'short'}) + '</div></div>';
+                html += '<div><div style="font-weight:700;font-size:15px;">' + dateLabel + '</div>';
+                html += '<div style="font-size:12px;color:#6b7280;">' + grouped[dateStr].length + ' event' + (grouped[dateStr].length > 1 ? 's' : '') + '</div></div></div>';
+
+                grouped[dateStr].forEach(event => {
+                    const time = event.event_time ? new Date('2000-01-01T' + event.event_time).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}) : 'All day';
+                    const projectName = event.projects?.name || '';
+                    const color = eventColors[event.event_type] || '#6b7280';
+                    html += '<div onclick="openProjectFromCalendar(' + event.project_id + ')" style="background:white;border:1.5px solid #e5e7eb;border-left:4px solid ' + color + ';border-radius:10px;padding:14px 16px;margin-bottom:8px;cursor:pointer;margin-left:54px;">';
+                    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">';
+                    html += '<div><div style="font-weight:700;font-size:14px;margin-bottom:2px;">' + event.title + '</div>';
+                    if (projectName) html += '<div style="font-size:12px;color:#6b7280;">' + projectName + '</div>';
+                    html += '</div><div style="font-size:12px;font-weight:600;color:' + color + ';white-space:nowrap;">' + time + '</div></div></div>';
+                });
+                html += '</div>';
+            });
+            agenda.innerHTML = html;
+        }
+
+        function setCalendarView(view) {
+            calendarView = view;
+            const monthBtn = document.getElementById('cal-view-month');
+            const agendaBtn = document.getElementById('cal-view-agenda');
+            const grid = document.getElementById('calendar-grid');
+            const agenda = document.getElementById('calendar-agenda');
+
+            if (view === 'month') {
+                grid.style.display = 'block';
+                agenda.style.display = 'none';
+                monthBtn.style.borderColor = '#b0a586';
+                monthBtn.style.background = '#fef9f0';
+                monthBtn.style.color = '#1f2937';
+                agendaBtn.style.borderColor = '#e5e7eb';
+                agendaBtn.style.background = 'white';
+                agendaBtn.style.color = '#6b7280';
+                renderCalendar();
+            } else {
+                grid.style.display = 'none';
+                agenda.style.display = 'block';
+                agendaBtn.style.borderColor = '#b0a586';
+                agendaBtn.style.background = '#fef9f0';
+                agendaBtn.style.color = '#1f2937';
+                monthBtn.style.borderColor = '#e5e7eb';
+                monthBtn.style.background = 'white';
+                monthBtn.style.color = '#6b7280';
+                renderAgenda();
+            }
+        }
+
         function previousMonth() {
             currentCalendarMonth--;
-            if (currentCalendarMonth < 0) {
-                currentCalendarMonth = 11;
-                currentCalendarYear--;
-            }
-            renderCalendar();
+            if (currentCalendarMonth < 0) { currentCalendarMonth = 11; currentCalendarYear--; }
+            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
         }
 
         function nextMonth() {
             currentCalendarMonth++;
-            if (currentCalendarMonth > 11) {
-                currentCalendarMonth = 0;
-                currentCalendarYear++;
-            }
-            renderCalendar();
+            if (currentCalendarMonth > 11) { currentCalendarMonth = 0; currentCalendarYear++; }
+            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
         }
 
         function todayMonth() {
             currentCalendarMonth = new Date().getMonth();
             currentCalendarYear = new Date().getFullYear();
-            renderCalendar();
+            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
         }
 
         function toggleEventTypeFilter(type) {
@@ -4575,7 +4675,7 @@
                 }
             });
 
-            renderCalendar();
+            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
         }
 
         async function openProjectFromCalendar(projectId) {
@@ -4838,6 +4938,76 @@
             await loadTemplates();
         }
 
+
+        // ==============================================
+        // PHOTO LIGHTBOX + PAGINATION
+        // ==============================================
+        let lightboxPhotos = [];
+        let lightboxIndex = 0;
+        let folderPhotosCache = {};
+
+        function openLightbox(folderId, photoId) {
+            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            if (!folder || !folder.photos) return;
+            lightboxPhotos = folder.photos.map(p => ({
+                id: p.id,
+                url: folderPhotosCache[p.id] || '',
+                name: p.file_name
+            }));
+            lightboxIndex = lightboxPhotos.findIndex(p => String(p.id) === String(photoId));
+            if (lightboxIndex < 0) lightboxIndex = 0;
+            showLightboxPhoto();
+            document.getElementById('lightbox-modal').style.display = 'flex';
+            document.addEventListener('keydown', lightboxKeyHandler);
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').style.display = 'none';
+            document.removeEventListener('keydown', lightboxKeyHandler);
+        }
+
+        function lightboxKeyHandler(e) {
+            if (e.key === 'ArrowRight') lightboxNext();
+            else if (e.key === 'ArrowLeft') lightboxPrev();
+            else if (e.key === 'Escape') closeLightbox();
+        }
+
+        function lightboxNext() {
+            lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+            showLightboxPhoto();
+        }
+
+        function lightboxPrev() {
+            lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+            showLightboxPhoto();
+        }
+
+        function showLightboxPhoto() {
+            const photo = lightboxPhotos[lightboxIndex];
+            if (!photo) return;
+            document.getElementById('lightbox-img').src = photo.url;
+            document.getElementById('lightbox-caption').textContent = photo.name;
+            document.getElementById('lightbox-counter').textContent = (lightboxIndex + 1) + ' of ' + lightboxPhotos.length;
+            document.getElementById('lightbox-download').href = photo.url;
+            document.getElementById('lightbox-download').download = photo.name;
+        }
+
+        function loadMorePhotos(folderId) {
+            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            if (!folder) return;
+            const grid = document.getElementById('photo-grid-' + folderId);
+            const btn = document.getElementById('load-more-' + folderId);
+            if (!grid || !btn) return;
+            // Photos beyond the first 12 - get their cached HTML
+            const remaining = folder._allPhotosHTML || [];
+            remaining.forEach(html => {
+                const div = document.createElement('div');
+                div.innerHTML = html;
+                grid.appendChild(div.firstChild);
+            });
+            btn.parentElement.remove();
+        }
+
         // ==============================================
         // INITIALIZE APP
         // ==============================================
@@ -4847,6 +5017,26 @@
             checkAuth();
         });
     </script>
+
+
+    <!-- Photo Lightbox Modal -->
+    <div id="lightbox-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:2000;align-items:center;justify-content:center;flex-direction:column;">
+        <div style="position:absolute;top:16px;right:16px;display:flex;gap:12px;z-index:2010;">
+            <a id="lightbox-download" href="#" download style="padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">⬇ Download</a>
+            <button onclick="closeLightbox()" style="padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">✕ Close</button>
+        </div>
+        <div style="position:absolute;top:50%;left:16px;transform:translateY(-50%);z-index:2010;">
+            <button onclick="lightboxPrev()" style="width:48px;height:48px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:50%;font-size:22px;cursor:pointer;">‹</button>
+        </div>
+        <div style="position:absolute;top:50%;right:16px;transform:translateY(-50%);z-index:2010;">
+            <button onclick="lightboxNext()" style="width:48px;height:48px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:50%;font-size:22px;cursor:pointer;">›</button>
+        </div>
+        <img id="lightbox-img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px;">
+        <div style="margin-top:12px;text-align:center;">
+            <div id="lightbox-caption" style="color:white;font-size:14px;font-weight:600;margin-bottom:4px;"></div>
+            <div id="lightbox-counter" style="color:rgba(255,255,255,0.6);font-size:13px;"></div>
+        </div>
+    </div>
 
 
     <!-- Manage Locations Modal -->

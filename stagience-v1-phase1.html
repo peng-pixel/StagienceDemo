@@ -12,15 +12,6 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #fbfaf7; color: #1f2937; }
-        @media (max-width: 768px) {
-            main > div { padding: 20px 16px !important; }
-            h1 { font-size: 24px !important; }
-            .modal > div { margin: 10px !important; padding: 24px 20px !important; max-height: 95vh !important; }
-            #calendar-grid { display: none !important; }
-            #calendar-agenda { display: block !important; }
-            #cal-view-month { border-color: #e5e7eb !important; background: white !important; color: #6b7280 !important; }
-            #cal-view-agenda { border-color: #b0a586 !important; background: #fef9f0 !important; color: #1f2937 !important; }
-        }
         .gradient-accent { background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); }
         .page { display: none; }
         .page.active { display: block; }
@@ -52,10 +43,7 @@
                         </div>
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
-                            <div style="position: relative;">
-                                <input type="password" id="signin-password" required style="width: 100%; padding: 12px 44px 12px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                                <button type="button" onclick="togglePassword('signin-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
-                            </div>
+                            <input type="password" id="signin-password" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
                             Sign In
@@ -77,10 +65,7 @@
                         </div>
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
-                            <div style="position: relative;">
-                                <input type="password" id="signup-password" required minlength="6" style="width: 100%; padding: 12px 44px 12px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                                <button type="button" onclick="togglePassword('signup-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
-                            </div>
+                            <input type="password" id="signup-password" required minlength="6" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                             <p style="color: #6b7280; font-size: 12px; margin-top: 4px;">Minimum 6 characters</p>
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
@@ -102,147 +87,120 @@
     <div id="app-page" class="page">
         <div style="min-height: 100vh;">
             <!-- Navigation -->
-            <style>
-                .app-nav-desktop { display: flex; gap: 12px; align-items: center; }
-                .app-hamburger { display: none; background: none; border: none; font-size: 24px; cursor: pointer; padding: 4px; }
-                .app-mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; }
-                .app-mobile-menu.open { display: block; }
-                .app-mobile-menu-panel { position: absolute; top: 0; right: 0; width: 260px; height: 100%; background: white; padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: -4px 0 20px rgba(0,0,0,0.1); }
-                .app-mobile-nav-btn { width: 100%; padding: 14px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 15px; cursor: pointer; border: none; text-align: left; }
-                .app-mobile-nav-btn:hover { background: rgba(176,138,90,.10); }
-                .app-mobile-signout { width: 100%; padding: 14px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 15px; cursor: pointer; text-align: left; margin-top: auto; }
-                @media (max-width: 768px) {
-                    .app-nav-desktop { display: none; }
-                    .app-hamburger { display: block; }
-                }
-            </style>
             <nav style="background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 50;">
                 <div style="max-width: 1120px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
-                    <a href="stagience-landing-page.html" style="display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; color: #1f2937;">
-                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">S</div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-weight: 700;">
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                            S
+                        </div>
                         <span>Stagience</span>
-                    </a>
-                    <!-- Desktop Nav -->
-                    <div class="app-nav-desktop">
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
                         <button onclick="showSection('calendar')" id="nav-calendar" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showSection('projects')" id="nav-projects" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
-                        <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
+                        <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: rgba(176,138,90,.10); font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showSection('templates')" id="nav-templates" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
                         <button onclick="handleSignOut()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out</button>
                     </div>
-                    <!-- Hamburger (mobile) -->
-                    <button class="app-hamburger" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </nav>
 
-            <!-- Mobile Menu Overlay -->
-            <div id="app-mobile-menu" class="app-mobile-menu" onclick="closeMobileMenuOutside(event)">
-                <div class="app-mobile-menu-panel">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <div style="font-weight: 700; font-size: 18px;">Menu</div>
-                        <button onclick="toggleMobileMenu()" style="background: none; border: none; font-size: 22px; cursor: pointer;">×</button>
-                    </div>
-                    <button class="app-mobile-nav-btn" onclick="showSection('calendar'); toggleMobileMenu();">📅 Calendar</button>
-                    <button class="app-mobile-nav-btn" onclick="showSection('projects'); toggleMobileMenu();">🏠 Projects</button>
-                    <button class="app-mobile-nav-btn" onclick="showSection('inventory'); toggleMobileMenu();">📦 Inventory</button>
-                    <button class="app-mobile-nav-btn" onclick="showSection('templates'); toggleMobileMenu();">📄 Templates</button>
-                    <button class="app-mobile-signout" onclick="handleSignOut()">Sign Out</button>
-                </div>
-            </div>
-
             <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Inventory Section -->
-                <div id="inventory-section" class="section" style="display: none;">
-                    <style>
-                        .inv-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-                        .inv-toolbar-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-                        .inv-mobile-toolbar { display: none; margin-bottom: 16px; gap: 10px; }
-                        .inv-mobile-toolbar button { flex: 1; padding: 12px 8px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 13px; cursor: pointer; }
-                        .inv-mobile-add { width: 100%; padding: 14px; border: none; border-radius: 12px; color: white; font-weight: 700; font-size: 15px; cursor: pointer; margin-bottom: 4px; }
-                        @media (max-width: 768px) {
-                            .inv-toolbar-actions { display: none; }
-                            .inv-mobile-toolbar { display: flex; }
-                            .inv-status-card { padding: 12px 10px !important; }
-                            .inv-status-card .inv-count { font-size: 22px !important; }
-                            .inv-status-card .inv-label { font-size: 12px !important; }
-                        }
-                    </style>
-                    <div class="inv-toolbar">
+                <div id="inventory-section" class="section active" style="display: block;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                         <h1 style="font-size: 32px; font-weight: 800;">Inventory</h1>
-                        <!-- Desktop Actions -->
-                        <div class="inv-toolbar-actions">
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <!-- View Toggle -->
                             <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
-                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer;">📦 Grid</button>
-                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer;">📋 List</button>
+                                <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer;">
+                                    📦 Grid
+                                </button>
+                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer;">
+                                    📋 List
+                                </button>
                             </div>
-                            <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🔍 Filter</button>
-                            <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🖨️ Print</button>
-                            <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add Item</button>
+                            <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
+                                🔍 Filter
+                            </button>
+                            <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">
+                                🖨️ Print
+                            </button>
+                            <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                                + Add Item
+                            </button>
                         </div>
-                    </div>
-                    <!-- Mobile Actions -->
-                    <button onclick="showAddItemModal()" class="gradient-accent inv-mobile-add">+ Add Item</button>
-                    <div class="inv-mobile-toolbar">
-                        <button onclick="switchInventoryView('grid')">📦 Grid</button>
-                        <button onclick="switchInventoryView('list')">📋 List</button>
-                        <button onclick="showFilterModal()">🔍 Filter</button>
-                        <button onclick="showPrintModal()">🖨️ Print</button>
                     </div>
 
                     <!-- Bulk Actions Banner (hidden by default) -->
-                    <div id="bulk-actions-banner" style="display: none; background: #eff6ff; border: 2px solid #3b82f6; border-radius: 16px; padding: 16px 20px; margin-bottom: 24px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-                            <h3 id="bulk-selected-count" style="font-size: 16px; font-weight: 700; color: #1e40af;">0 items selected</h3>
-                            <button onclick="clearSelection()" style="padding: 6px 14px; background: white; border: 1.5px solid #e5e7eb; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer;">Clear</button>
+                    <div id="bulk-actions-banner" style="display: none; background: #eff6ff; border: 2px solid #3b82f6; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <h3 id="bulk-selected-count" style="font-size: 18px; font-weight: 700; color: #1e40af; margin-bottom: 4px;">0 items selected</h3>
                         </div>
-                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <button onclick="showBulkUpdateModal()" style="flex: 1; min-width: 120px; padding: 10px 16px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer;">🔄 Bulk Update</button>
-                            <button onclick="showUpdateLocationModal()" style="flex: 1; min-width: 120px; padding: 10px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer;">📍 Location</button>
-                            <button onclick="showUpdateStatusModal()" style="flex: 1; min-width: 120px; padding: 10px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer;">📋 Status</button>
+                        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="showBulkUpdateModal()" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                🔄 Bulk Update
+                            </button>
+                            <button onclick="showUpdateLocationModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                📍 Update Location
+                            </button>
+                            <button onclick="showUpdateStatusModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                📋 Update Status
+                            </button>
+                            <button onclick="clearSelection()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                                Clear Selection
+                            </button>
                         </div>
                     </div>
 
                     <!-- Inventory Status Filter Cards -->
-                    <div id="inventory-status-filters" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px;">
-                        <div id="inv-filter-all" class="inv-status-card" onclick="filterInventoryByStatus('all')" style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center;">
-                            <div style="font-size: 20px; margin-bottom: 4px;">📦</div>
-                            <div class="inv-label" style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">All</div>
-                            <div id="inv-count-all" class="inv-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+                    <div id="inventory-status-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
+                        <!-- All Items Card -->
+                        <div id="inv-filter-all" onclick="filterInventoryByStatus('all')" style="background: white; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📦</div>
+                                <div style="font-weight: 600; font-size: 15px;">All Items</div>
+                            </div>
+                            <div id="inv-count-all" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
-                        <div id="inv-filter-IN" class="inv-status-card" onclick="filterInventoryByStatus('IN')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center;">
-                            <div style="font-size: 20px; margin-bottom: 4px;">✅</div>
-                            <div class="inv-label" style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">IN</div>
-                            <div id="inv-count-IN" class="inv-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+
+                        <!-- IN Card -->
+                        <div id="inv-filter-IN" onclick="filterInventoryByStatus('IN')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">✅</div>
+                                <div style="font-weight: 600; font-size: 15px;">IN</div>
+                            </div>
+                            <div id="inv-count-IN" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
-                        <div id="inv-filter-OUT" class="inv-status-card" onclick="filterInventoryByStatus('OUT')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center;">
-                            <div style="font-size: 20px; margin-bottom: 4px;">📤</div>
-                            <div class="inv-label" style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">OUT</div>
-                            <div id="inv-count-OUT" class="inv-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+
+                        <!-- OUT Card -->
+                        <div id="inv-filter-OUT" onclick="filterInventoryByStatus('OUT')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">📤</div>
+                                <div style="font-weight: 600; font-size: 15px;">OUT</div>
+                            </div>
+                            <div id="inv-count-OUT" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
-                        <div id="inv-filter-HOLD" class="inv-status-card" onclick="filterInventoryByStatus('HOLD')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; text-align: center;">
-                            <div style="font-size: 20px; margin-bottom: 4px;">⏸️</div>
-                            <div class="inv-label" style="font-weight: 600; font-size: 13px; margin-bottom: 4px;">HOLD</div>
-                            <div id="inv-count-HOLD" class="inv-count" style="font-size: 28px; font-weight: 800; color: #1f2937;">0</div>
+
+                        <!-- HOLD Card -->
+                        <div id="inv-filter-HOLD" onclick="filterInventoryByStatus('HOLD')" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <div style="font-size: 24px;">⏸️</div>
+                                <div style="font-weight: 600; font-size: 15px;">HOLD</div>
+                            </div>
+                            <div id="inv-count-HOLD" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
                     </div>
 
                     <!-- Location Dropdown Filter -->
                     <div style="margin-bottom: 24px;">
-                        <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Filter by Location:</label>
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                            <label style="font-weight: 600; font-size: 14px;">Filter by Location:</label>
+                            <button onclick="showManageLocationsModal()" style="padding: 7px 14px; border: 1.5px solid #b0a586; border-radius: 8px; background: white; font-weight: 600; font-size: 13px; cursor: pointer; color: #1f2937;">⚙️ Manage Locations</button>
+                        </div>
                         <select id="inventory-location-filter" onchange="applyInventoryLocationFilter()" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; min-width: 250px; font-weight: 500;">
                             <option value="all">All Locations</option>
                         </select>
-                    </div>
-
-                    <!-- Import Inventory Banner -->
-                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #fef9f0 100%); border: 1.5px solid #b0a586; border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                        <div style="font-size: 36px; flex-shrink: 0;">📦</div>
-                        <div style="flex: 1; min-width: 200px;">
-                            <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Import Your Inventory</div>
-                            <div style="color: #2f6f6b; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Migrate your catalog easily</div>
-                            <div style="color: #57534e; font-size: 14px;">Upload your inventory from Google Sheets, Excel, CSV, or import photos and files from Google Drive or Dropbox. Keep all your items organized in one place.</div>
-                        </div>
-                        <button onclick="openImportWizard('inventory')" style="flex-shrink: 0; padding: 12px 24px; background: white; border: 1.5px solid #b0a586; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; color: #1f2937; white-space: nowrap;">Start Import →</button>
                     </div>
 
                     <!-- Inventory Container -->
@@ -318,17 +276,6 @@
                             </div>
                             <div id="count-completed" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
-                    </div>
-
-                    <!-- Import Projects Banner -->
-                    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #fef9f0 100%); border: 1.5px solid #b0a586; border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                        <div style="font-size: 36px; flex-shrink: 0;">📥</div>
-                        <div style="flex: 1; min-width: 200px;">
-                            <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Import Your Projects</div>
-                            <div style="color: #2f6f6b; font-size: 13px; font-weight: 600; margin-bottom: 8px;">Get started in minutes</div>
-                            <div style="color: #57534e; font-size: 14px;">Bring your existing projects from Google Sheets, Excel, CSV, Google Drive, or Dropbox. We'll help you map your data and get everything organized.</div>
-                        </div>
-                        <button onclick="openImportWizard('projects')" style="flex-shrink: 0; padding: 12px 24px; background: white; border: 1.5px solid #b0a586; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; color: #1f2937; white-space: nowrap;">Start Import →</button>
                     </div>
 
                     <div id="projects-container"></div>
@@ -508,20 +455,9 @@
                         </button>
                     </div>
 
-                    <!-- View Toggle (desktop: month, mobile: agenda) -->
-                    <div id="calendar-view-toggle" style="display: flex; gap: 8px; margin-bottom: 20px;">
-                        <button id="cal-view-month" onclick="setCalendarView('month')" style="padding: 8px 18px; border-radius: 10px; border: 2px solid #b0a586; background: #fef9f0; font-weight: 600; font-size: 13px; cursor: pointer; color: #1f2937;">📅 Month</button>
-                        <button id="cal-view-agenda" onclick="setCalendarView('agenda')" style="padding: 8px 18px; border-radius: 10px; border: 2px solid #e5e7eb; background: white; font-weight: 600; font-size: 13px; cursor: pointer; color: #6b7280;">📋 Agenda</button>
-                    </div>
-
-                    <!-- Calendar Grid (month view) -->
+                    <!-- Calendar Grid -->
                     <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
                         <!-- Calendar will be rendered here -->
-                    </div>
-
-                    <!-- Agenda View (mobile default) -->
-                    <div id="calendar-agenda" style="display: none;">
-                        <!-- Agenda will be rendered here -->
                     </div>
                 </div>
 
@@ -632,9 +568,6 @@
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Location *</label>
                     <select id="item-location" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="">Select location...</option>
-                        <option value="Warehouse A">Warehouse A</option>
-                        <option value="Warehouse B">Warehouse B</option>
-                        <option value="Storage Unit">Storage Unit</option>
                     </select>
                 </div>
 
@@ -729,9 +662,6 @@
                     </label>
                     <select id="bulk-location" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="">Select location...</option>
-                        <option value="Warehouse A">Warehouse A</option>
-                        <option value="Warehouse B">Warehouse B</option>
-                        <option value="Storage Unit">Storage Unit</option>
                     </select>
                 </div>
 
@@ -787,9 +717,6 @@
             <label style="display: block; font-weight: 600; margin-bottom: 8px;">New Location</label>
             <select id="quick-location" style="width: 100%; padding: 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                 <option value="">Select location...</option>
-                <option value="Warehouse A">Warehouse A</option>
-                <option value="Warehouse B">Warehouse B</option>
-                <option value="Storage Unit">Storage Unit</option>
             </select>
 
             <div style="display: flex; gap: 12px; margin-top: 24px;">
@@ -1296,105 +1223,6 @@
         </div>
     </div>
 
-    <!-- Import Wizard Modal -->
-    <div id="import-wizard-modal" class="modal">
-        <div style="background: white; border-radius: 20px; padding: 36px; max-width: 560px; width: 100%; margin: 20px; max-height: 90vh; overflow-y: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2 id="import-wizard-title" style="font-size: 22px; font-weight: 700;">Import - Step 1 of 3</h2>
-                <button onclick="closeImportWizard()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #6b7280;">×</button>
-            </div>
-            <div style="display: flex; gap: 8px; margin-bottom: 28px;">
-                <div id="import-progress-1" style="flex: 1; height: 6px; border-radius: 4px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));"></div>
-                <div id="import-progress-2" style="flex: 1; height: 6px; border-radius: 4px; background: #e5e7eb;"></div>
-                <div id="import-progress-3" style="flex: 1; height: 6px; border-radius: 4px; background: #e5e7eb;"></div>
-            </div>
-            <div id="import-step-1">
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 4px;">Choose Your Data Source</h3>
-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Select where your data currently lives</p>
-                <div style="display: flex; flex-direction: column; gap: 12px;" id="import-source-list">
-                    <div class="import-source-option" onclick="selectImportSource(this)" data-source="google-sheets" style="border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
-                        <span style="font-size: 28px;">📊</span>
-                        <div><div style="font-weight: 700; font-size: 15px;">Google Sheets</div><div style="color: #6b7280; font-size: 13px;">Import from your Google Sheets spreadsheet</div></div>
-                    </div>
-                    <div class="import-source-option" onclick="selectImportSource(this)" data-source="excel" style="border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
-                        <span style="font-size: 28px;">📁</span>
-                        <div><div style="font-weight: 700; font-size: 15px;">Excel / CSV File</div><div style="color: #6b7280; font-size: 13px;">Upload an Excel or CSV file from your computer</div></div>
-                    </div>
-                    <div class="import-source-option" onclick="selectImportSource(this)" data-source="google-drive" style="border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
-                        <span style="font-size: 28px;">☁️</span>
-                        <div><div style="font-weight: 700; font-size: 15px;">Google Drive</div><div style="color: #6b7280; font-size: 13px;" id="google-drive-desc">Import files from Google Drive</div></div>
-                    </div>
-                    <div class="import-source-option" onclick="selectImportSource(this)" data-source="dropbox" style="border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; cursor: pointer; display: flex; align-items: center; gap: 16px;">
-                        <span style="font-size: 28px;">📦</span>
-                        <div><div style="font-weight: 700; font-size: 15px;">Dropbox</div><div style="color: #6b7280; font-size: 13px;" id="dropbox-desc">Import files and data from Dropbox</div></div>
-                    </div>
-                </div>
-                <!-- File upload + guide (shown only for Excel/CSV) -->
-                <div id="import-file-area" style="display:none; margin-top: 16px;">
-
-                    <!-- Column Guide -->
-                    <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;">
-                        <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #15803d;">📋 Expected Columns</div>
-                        <div id="import-column-guide" style="font-size: 13px; color: #166534; line-height: 1.8;"></div>
-                        <div style="margin-top: 4px; font-size: 12px; color: #6b7280;">* Required &nbsp;|&nbsp; All other columns are optional</div>
-                    </div>
-
-                    <!-- Download Template -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: #fef9f0; border: 1.5px solid #b0a586; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
-                        <div>
-                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 2px;">Not sure where to start?</div>
-                            <div style="font-size: 12px; color: #6b7280;">Download our pre-formatted CSV template, fill it in, and upload it below.</div>
-                        </div>
-                        <button onclick="downloadImportTemplate()" style="flex-shrink: 0; padding: 10px 18px; background: white; border: 1.5px solid #b0a586; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #1f2937; white-space: nowrap;">⬇ Download Template</button>
-                    </div>
-
-                    <!-- File Upload -->
-                    <div style="background: #f9fafb; border: 1.5px dashed #d6d3d1; border-radius: 10px; padding: 20px; text-align: center;">
-                        <div style="font-size: 22px; margin-bottom: 6px;">📂</div>
-                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Upload your CSV file</div>
-                        <div style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">Accepted formats: CSV, Excel (.xlsx, .xls)</div>
-                        <input type="file" id="import-file-input" accept=".csv,.xlsx,.xls" style="font-size: 13px;">
-                    </div>
-                </div>
-
-                <div id="import-error-msg" style="display:none; margin-top: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 12px; color: #dc2626; font-size: 13px;"></div>
-
-                <div style="display: flex; justify-content: space-between; margin-top: 28px;">
-                    <button onclick="closeImportWizard()" style="padding: 12px 24px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
-                    <button onclick="importNextStep()" class="gradient-accent" style="padding: 12px 28px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Next</button>
-                </div>
-            </div>
-            <div id="import-step-2" style="display: none;">
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 4px;">Map Your Fields</h3>
-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Match your spreadsheet columns to Stagience fields</p>
-                <div id="import-field-mapping" style="display: flex; flex-direction: column; gap: 16px;"></div>
-                <div style="display: flex; justify-content: space-between; margin-top: 28px;">
-                    <button onclick="closeImportWizard()" style="padding: 12px 24px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
-                    <div style="display: flex; gap: 12px;">
-                        <button onclick="importPrevStep()" style="padding: 12px 24px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Back</button>
-                        <button onclick="importNextStep()" class="gradient-accent" style="padding: 12px 28px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Next</button>
-                    </div>
-                </div>
-            </div>
-            <div id="import-step-3" style="display: none;">
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 4px;">Preview & Confirm</h3>
-                <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Review your data before importing</p>
-                <div id="import-preview-table" style="border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; margin-bottom: 16px;"></div>
-                <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 10px; padding: 16px; margin-bottom: 8px;">
-                    <div style="font-weight: 700; color: #16a34a; margin-bottom: 4px;">✓ Ready to import</div>
-                    <div id="import-ready-text" style="color: #15803d; font-size: 14px;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 28px;">
-                    <button onclick="closeImportWizard()" style="padding: 12px 24px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
-                    <div style="display: flex; gap: 12px;">
-                        <button onclick="importPrevStep()" style="padding: 12px 24px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Back</button>
-                        <button id="import-confirm-btn" onclick="confirmImport()" class="gradient-accent" style="padding: 12px 28px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // ==============================================
         // SUPABASE CONFIGURATION
@@ -1515,7 +1343,6 @@
         function showApp() {
             document.getElementById('auth-page').classList.remove('active');
             document.getElementById('app-page').classList.add('active');
-            showSection('calendar');
         }
 
         // ==============================================
@@ -1545,7 +1372,9 @@
         // ==============================================
         
         async function loadAllData() {
+            await loadUserLocations();
             await loadInventory();
+            populateLocationDropdowns();
             await loadProjects();
             await loadCalendar();
             await loadTemplates();
@@ -1556,7 +1385,7 @@
         // ==============================================
         
         let inventoryItems = [];
-        let currentView = window.innerWidth <= 768 ? 'list' : 'list'; // 'grid' or 'list'
+        let currentView = 'list'; // 'grid' or 'list'
         let currentInventoryStatusFilter = 'all'; // 'all', 'IN', 'OUT', 'HOLD'
         let currentInventoryLocationFilter = 'all'; // 'all' or specific location
         let inventoryFilters = {
@@ -1652,7 +1481,7 @@
             };
 
             container.innerHTML = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 16px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
                     ${items.map(item => {
                         const emoji = categoryEmojis[item.category] || '📦';
                         const statusColors = {
@@ -1699,81 +1528,53 @@
                 'OUT': 'background: #dbeafe; color: #1e40af;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
-            const isMobile = window.innerWidth <= 768;
 
-            if (isMobile) {
-                // Mobile: card-based list view
-                container.innerHTML = `
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #f9fafb; border-radius: 10px; margin-bottom: 4px;">
-                            <input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span style="font-size: 13px; font-weight: 600; color: #6b7280;">Select All (${items.length} items)</span>
-                        </div>
-                        ${items.map(item => `
-                            <div style="background: white; border: 1.5px solid #e5e7eb; border-radius: 14px; padding: 14px; display: flex; gap: 12px; align-items: flex-start;">
-                                <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkActions()" style="width: 18px; height: 18px; cursor: pointer; margin-top: 4px; flex-shrink: 0;">
-                                ${item.photo_url
-                                    ? `<img src="${item.photo_url}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 10px; border: 1.5px solid #e5e7eb; flex-shrink: 0;">`
-                                    : `<div style="width: 60px; height: 60px; background: #f3f4f6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;">📷</div>`
-                                }
-                                <div style="flex: 1; min-width: 0;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                                        <div style="font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${item.name}</div>
-                                        <span style="padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; flex-shrink: 0; ${statusColors[item.status]}">${item.status}</span>
-                                    </div>
-                                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 2px;">${item.category}${item.color ? ' · ' + item.color : ''}</div>
-                                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 8px;">📍 ${item.location}${item.room ? ' · ' + item.room : ''}</div>
-                                    <div style="display: flex; gap: 8px;">
-                                        <button onclick="editItem(${item.id})" style="flex: 1; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; cursor: pointer;">✏️ Edit</button>
-                                        <button onclick="duplicateItem(${item.id})" style="flex: 1; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; cursor: pointer;">📋 Copy</button>
-                                        <button onclick="deleteItem(${item.id})" style="padding: 8px 12px; border: 1px solid #fee2e2; border-radius: 8px; background: white; font-size: 13px; cursor: pointer; color: #dc2626;">✕</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>`;
-            } else {
-                // Desktop: full table view
-                container.innerHTML = `
-                    <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead style="background: #f9fafb;">
-                                <tr>
-                                    <th style="padding: 16px; width: 50px;"><input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;"></th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Photo</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Name</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Category</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Color</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Location</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Room</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Status</th>
-                                    <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Actions</th>
+            container.innerHTML = `
+                <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f9fafb;">
+                            <tr>
+                                <th style="padding: 16px; width: 50px;"><input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()" style="width: 18px; height: 18px; cursor: pointer;"></th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Photo</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Name</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Category</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Color</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Location</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Room</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Status</th>
+                                <th style="padding: 16px; text-align: left; font-weight: 700; font-size: 13px; color: #6b7280; text-transform: uppercase;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${items.map(item => `
+                                <tr style="border-top: 1px solid #e5e7eb;">
+                                    <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkActions()" style="width: 18px; height: 18px; cursor: pointer;"></td>
+                                    <td style="padding: 16px;">
+                                        ${item.photo_url ? `<img src="${item.photo_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 2px solid #e5e7eb;">` : `<div style="width: 50px; height: 50px; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px;">📷</div>`}
+                                    </td>
+                                    <td style="padding: 16px; font-weight: 600;">${item.name}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.category}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.color || '-'}</td>
+                                    <td style="padding: 16px; color: #6b7280;">${item.location}</td>
+                                    <td style="padding: 16px; color: #6b7280; font-size: 13px;">${item.room || '-'}</td>
+                                    <td style="padding: 16px;"><span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span></td>
+                                    <td style="padding: 16px;">
+                                        <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
+                                            📋
+                                        </button>
+                                        <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px; transition: all 0.2s;" onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='white'">
+                                            ✏️
+                                        </button>
+                                        <button onclick="event.stopPropagation(); deleteItem(${item.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
+                                            ✕
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                ${items.map(item => `
-                                    <tr style="border-top: 1px solid #e5e7eb;">
-                                        <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkActions()" style="width: 18px; height: 18px; cursor: pointer;"></td>
-                                        <td style="padding: 16px;">
-                                            ${item.photo_url ? `<img src="${item.photo_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 2px solid #e5e7eb;">` : `<div style="width: 50px; height: 50px; background: #f3f4f6; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px;">📷</div>`}
-                                        </td>
-                                        <td style="padding: 16px; font-weight: 600;">${item.name}</td>
-                                        <td style="padding: 16px; color: #6b7280;">${item.category}</td>
-                                        <td style="padding: 16px; color: #6b7280;">${item.color || '-'}</td>
-                                        <td style="padding: 16px; color: #6b7280;">${item.location}</td>
-                                        <td style="padding: 16px; color: #6b7280; font-size: 13px;">${item.room || '-'}</td>
-                                        <td style="padding: 16px;"><span style="padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span></td>
-                                        <td style="padding: 16px;">
-                                            <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px;">📋</button>
-                                            <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px;">✏️</button>
-                                            <button onclick="event.stopPropagation(); deleteItem(${item.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;">✕</button>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>`;
-            }
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
         }
 
         // Update inventory stats
@@ -1807,15 +1608,17 @@
         }
 
         function updateLocationDropdown() {
-            // Get unique locations from all inventory
-            const locations = [...new Set(inventoryItems.map(item => item.location).filter(Boolean))].sort();
+            // Combine user-defined locations with any locations already in inventory
+            const userLocationNames = userLocations.map(l => l.name);
+            const inventoryLocations = [...new Set(inventoryItems.map(item => item.location).filter(Boolean))];
+            const allLocations = [...new Set([...userLocationNames, ...inventoryLocations])].sort();
             
             const dropdown = document.getElementById('inventory-location-filter');
             const currentValue = dropdown.value;
             
             // Rebuild dropdown options
             dropdown.innerHTML = '<option value="all">All Locations</option>';
-            locations.forEach(location => {
+            allLocations.forEach(location => {
                 const option = document.createElement('option');
                 option.value = location;
                 option.textContent = location;
@@ -1823,7 +1626,7 @@
             });
             
             // Restore selected value if it still exists
-            if (locations.includes(currentValue)) {
+            if (allLocations.includes(currentValue)) {
                 dropdown.value = currentValue;
             } else if (currentValue !== 'all') {
                 dropdown.value = 'all';
@@ -2077,13 +1880,15 @@
 
         // Step 7: Location
         function renderStep7(container, nav) {
+            const locationOptions = userLocations.length > 0
+                ? userLocations.map(l => `<option value="${l.name}" ${wizardData.location === l.name ? 'selected' : ''}>${l.name}</option>`).join('')
+                : '<option value="" disabled>No locations set up yet — add them in Manage Locations</option>';
             container.innerHTML = `
-                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Where is this item located?</h3>
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Where is this item located?</h3>
+                ${userLocations.length === 0 ? `<div style="background: #fef9f0; border: 1.5px solid #b0a586; border-radius: 10px; padding: 14px; margin-bottom: 16px; font-size: 13px; color: #6b7280;">You haven't added any locations yet. <button type="button" onclick="cancelWizard(); showManageLocationsModal();" style="color: #2f6f6b; font-weight: 700; background: none; border: none; cursor: pointer; text-decoration: underline;">Add locations first</button></div>` : ''}
                 <select id="wizard-location" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
                     <option value="">Select location...</option>
-                    <option value="Warehouse A" ${wizardData.location === 'Warehouse A' ? 'selected' : ''}>Warehouse A</option>
-                    <option value="Warehouse B" ${wizardData.location === 'Warehouse B' ? 'selected' : ''}>Warehouse B</option>
-                    <option value="Storage Unit" ${wizardData.location === 'Storage Unit' ? 'selected' : ''}>Storage Unit</option>
+                    ${locationOptions}
                 </select>
             `;
             renderWizardNav(nav, true, true, () => {
@@ -2552,7 +2357,35 @@
                     </table>
                     
                     <div class="total">Total Items: ${items.length}</div>
-                </body>
+                
+    <!-- Manage Locations Modal -->
+    <div id="manage-locations-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Manage Locations</h2>
+                <button onclick="closeManageLocationsModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+
+            <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Add your storage locations (e.g. Warehouse, Storage Unit, Studio). These will appear in your location dropdowns.</p>
+
+            <!-- Add New Location -->
+            <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                <input type="text" id="new-location-input" placeholder="e.g. Warehouse, Storage Unit..." style="flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;" onkeydown="if(event.key==='Enter'){addLocation();}">
+                <button onclick="addLocation()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 10px; color: white; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;">+ Add</button>
+            </div>
+
+            <!-- Locations List -->
+            <div id="locations-list" style="display: flex; flex-direction: column; gap: 10px; min-height: 60px;">
+                <div style="text-align: center; color: #9ca3af; padding: 20px; font-size: 14px;">Loading locations...</div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button onclick="closeManageLocationsModal()" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Done</button>
+            </div>
+        </div>
+    </div>
+
+</body>
                 </html>
             `);
             printWindow.document.close();
@@ -4623,7 +4456,6 @@
         let currentCalendarMonth = new Date().getMonth();
         let currentCalendarYear = new Date().getFullYear();
         let calendarEventTypeFilter = ['all'];
-        let calendarView = window.innerWidth <= 768 ? 'agenda' : 'month';
         let allCalendarEvents = [];
 
         async function loadCalendar() {
@@ -4647,7 +4479,7 @@
                 allCalendarEvents = data || [];
             }
 
-            setCalendarView(calendarView);
+            renderCalendar();
         }
 
         function renderCalendar() {
@@ -4734,132 +4566,13 @@
             document.getElementById('calendar-grid').innerHTML = calendarHTML;
         }
 
-        function renderAgenda() {
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                               'July', 'August', 'September', 'October', 'November', 'December'];
-            document.getElementById('current-month-year').textContent =
-                `${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
-
-            const eventColors = {
-                'consultation': '#3b82f6',
-                'installation-stage': '#10b981',
-                'photo-shoot': '#f59e0b',
-                'pickup-destage': '#8b5cf6',
-                'completed': '#6b7280',
-                'payment': '#f59e0b',
-                'call-meeting': '#6b7280'
-            };
-
-            // Get all events for this month, sorted by date
-            const filteredEvents = allCalendarEvents.filter(event => {
-                const dateParts = event.event_date.split('-');
-                const eventDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                const matchesMonth = eventDate.getMonth() === currentCalendarMonth &&
-                                    eventDate.getFullYear() === currentCalendarYear;
-                const matchesType = calendarEventTypeFilter.includes('all') ||
-                                   calendarEventTypeFilter.includes(event.event_type);
-                return matchesMonth && matchesType;
-            }).sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
-
-            if (!filteredEvents.length) {
-                document.getElementById('calendar-agenda').innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
-                        <div style="font-size: 40px; margin-bottom: 12px;">📅</div>
-                        <div style="font-weight: 600; font-size: 16px;">No events this month</div>
-                        <div style="font-size: 14px; margin-top: 4px;">Add events from within a project.</div>
-                    </div>`;
-                return;
-            }
-
-            // Group events by date
-            const grouped = {};
-            filteredEvents.forEach(event => {
-                const key = event.event_date;
-                if (!grouped[key]) grouped[key] = [];
-                grouped[key].push(event);
-            });
-
-            const today = new Date();
-            const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-
-            let html = '';
-            Object.keys(grouped).sort().forEach(dateStr => {
-                const dateParts = dateStr.split('-');
-                const d = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                const dayName = d.toLocaleDateString('en-US', { weekday: 'long' });
-                const dateLabel = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-                const isToday = dateStr === todayStr;
-
-                html += `
-                    <div style="margin-bottom: 20px;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <div style="width: 44px; height: 44px; border-radius: 12px; background: ${isToday ? 'linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1))' : '#f3f4f6'}; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <div style="font-size: 16px; font-weight: 800; color: ${isToday ? 'white' : '#1f2937'}; line-height: 1;">${d.getDate()}</div>
-                                <div style="font-size: 9px; font-weight: 600; color: ${isToday ? 'rgba(255,255,255,0.8)' : '#6b7280'}; text-transform: uppercase;">${d.toLocaleDateString('en-US', {weekday: 'short'})}</div>
-                            </div>
-                            <div>
-                                <div style="font-weight: 700; font-size: 15px;">${dateLabel}</div>
-                                <div style="font-size: 12px; color: #6b7280;">${grouped[dateStr].length} event${grouped[dateStr].length > 1 ? 's' : ''}</div>
-                            </div>
-                        </div>
-                        ${grouped[dateStr].map(event => {
-                            const time = event.event_time ? new Date(`2000-01-01T${event.event_time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : 'All day';
-                            const projectName = event.projects?.name || '';
-                            const color = eventColors[event.event_type] || '#6b7280';
-                            return `
-                                <div onclick="openProjectFromCalendar(${event.project_id})" style="background: white; border: 1.5px solid #e5e7eb; border-left: 4px solid ${color}; border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; cursor: pointer; margin-left: 54px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
-                                        <div>
-                                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 2px;">${event.title}</div>
-                                            ${projectName ? `<div style="font-size: 12px; color: #6b7280;">${projectName}</div>` : ''}
-                                        </div>
-                                        <div style="font-size: 12px; font-weight: 600; color: ${color}; white-space: nowrap;">${time}</div>
-                                    </div>
-                                </div>`;
-                        }).join('')}
-                    </div>`;
-            });
-
-            document.getElementById('calendar-agenda').innerHTML = html;
-        }
-
-        function setCalendarView(view) {
-            calendarView = view;
-            const monthBtn = document.getElementById('cal-view-month');
-            const agendaBtn = document.getElementById('cal-view-agenda');
-            const grid = document.getElementById('calendar-grid');
-            const agenda = document.getElementById('calendar-agenda');
-
-            if (view === 'month') {
-                grid.style.display = 'block';
-                agenda.style.display = 'none';
-                monthBtn.style.borderColor = '#b0a586';
-                monthBtn.style.background = '#fef9f0';
-                monthBtn.style.color = '#1f2937';
-                agendaBtn.style.borderColor = '#e5e7eb';
-                agendaBtn.style.background = 'white';
-                agendaBtn.style.color = '#6b7280';
-                renderCalendar();
-            } else {
-                grid.style.display = 'none';
-                agenda.style.display = 'block';
-                agendaBtn.style.borderColor = '#b0a586';
-                agendaBtn.style.background = '#fef9f0';
-                agendaBtn.style.color = '#1f2937';
-                monthBtn.style.borderColor = '#e5e7eb';
-                monthBtn.style.background = 'white';
-                monthBtn.style.color = '#6b7280';
-                renderAgenda();
-            }
-        }
-
         function previousMonth() {
             currentCalendarMonth--;
             if (currentCalendarMonth < 0) {
                 currentCalendarMonth = 11;
                 currentCalendarYear--;
             }
-            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
+            renderCalendar();
         }
 
         function nextMonth() {
@@ -4868,13 +4581,13 @@
                 currentCalendarMonth = 0;
                 currentCalendarYear++;
             }
-            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
+            renderCalendar();
         }
 
         function todayMonth() {
             currentCalendarMonth = new Date().getMonth();
             currentCalendarYear = new Date().getFullYear();
-            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
+            renderCalendar();
         }
 
         function toggleEventTypeFilter(type) {
@@ -4898,7 +4611,7 @@
                 }
             });
 
-            calendarView === 'agenda' ? renderAgenda() : renderCalendar();
+            renderCalendar();
         }
 
         async function openProjectFromCalendar(projectId) {
@@ -5163,383 +4876,155 @@
 
 
         // ==============================================
-        // IMPORT WIZARD - REAL SUPABASE INTEGRATION
+        // MANAGE LOCATIONS
         // ==============================================
-        let importWizardType = 'projects';
-        let importCurrentStep = 1;
-        let importSelectedSource = null;
-        let importParsedData = [];
-        let importColumnMapping = {};
+        let userLocations = [];
 
-        const projectsFields = [
-            { label: 'Project Name', col: 'name', required: true },
-            { label: 'Address', col: 'address', required: false },
-            { label: 'Status', col: 'status', required: false },
-            { label: 'Start Date', col: 'start_date', required: false },
-            { label: 'End Date', col: 'end_date', required: false },
-            { label: 'Budget', col: 'budget', required: false },
-            { label: 'Notes', col: 'notes', required: false },
-        ];
+        async function loadUserLocations() {
+            const { data, error } = await supabase
+                .from('locations')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('name', { ascending: true });
 
-        const inventoryFields = [
-            { label: 'Item Name', col: 'name', required: true },
-            { label: 'Category', col: 'category', required: false },
-            { label: 'Color', col: 'color', required: false },
-            { label: 'Location', col: 'location', required: false },
-            { label: 'Status', col: 'status', required: false },
-            { label: 'Room', col: 'room', required: false },
-            { label: 'Description', col: 'description', required: false },
-            { label: 'ID Code', col: 'id_code', required: false },
-            { label: 'Condition', col: 'condition', required: false },
-            { label: 'Purchase Date', col: 'purchase_date', required: false },
-            { label: 'Purchased From', col: 'purchased_from', required: false },
-            { label: 'Purchase Cost', col: 'purchase_cost', required: false },
-        ];
-
-        function openImportWizard(type) {
-            importWizardType = type;
-            importCurrentStep = 1;
-            importSelectedSource = null;
-            importParsedData = [];
-            importColumnMapping = {};
-
-            const label = type === 'projects' ? 'Projects' : 'Inventory';
-            document.getElementById('import-wizard-title').textContent = `Import ${label} - Step 1 of 3`;
-            document.getElementById('import-confirm-btn').textContent = `Import ${label}`;
-
-            if (type === 'inventory') {
-                document.getElementById('google-drive-desc').textContent = 'Import inventory photos from Google Drive';
-                document.getElementById('dropbox-desc').textContent = 'Import inventory photos and data from Dropbox';
+            if (error) {
+                console.error('Error loading locations:', error);
+                userLocations = [];
             } else {
-                document.getElementById('google-drive-desc').textContent = 'Import project files from Google Drive';
-                document.getElementById('dropbox-desc').textContent = 'Import project files and data from Dropbox';
+                userLocations = data || [];
+            }
+            return userLocations;
+        }
+
+        function showManageLocationsModal() {
+            document.getElementById('manage-locations-modal').classList.add('active');
+            renderLocationsList();
+            loadUserLocations().then(() => renderLocationsList());
+        }
+
+        function closeManageLocationsModal() {
+            document.getElementById('manage-locations-modal').classList.remove('active');
+            document.getElementById('new-location-input').value = '';
+            // Refresh all location dropdowns
+            populateLocationDropdowns();
+            renderInventory();
+        }
+
+        function renderLocationsList() {
+            const container = document.getElementById('locations-list');
+            if (userLocations.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #9ca3af; padding: 20px; font-size: 14px; border: 2px dashed #e5e7eb; border-radius: 10px;">No locations yet. Add your first location above!</div>';
+                return;
+            }
+            container.innerHTML = userLocations.map(loc => `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 12px 16px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 18px;">📍</span>
+                        <span style="font-weight: 600; font-size: 15px;">${loc.name}</span>
+                    </div>
+                    <button onclick="deleteLocation(${loc.id})" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid #fecaca; background: #fee2e2; color: #dc2626; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        async function addLocation() {
+            const input = document.getElementById('new-location-input');
+            const name = input.value.trim();
+            if (!name) return;
+
+            // Check for duplicate
+            if (userLocations.some(l => l.name.toLowerCase() === name.toLowerCase())) {
+                alert('That location already exists.');
+                return;
             }
 
-            document.getElementById('import-step-1').style.display = 'block';
-            document.getElementById('import-step-2').style.display = 'none';
-            document.getElementById('import-step-3').style.display = 'none';
-            document.getElementById('import-error-msg').style.display = 'none';
+            const { data, error } = await supabase
+                .from('locations')
+                .insert([{ user_id: currentUser.id, name: name }])
+                .select();
 
-            document.querySelectorAll('.import-source-option').forEach(el => {
-                el.style.border = '1.5px solid #e5e7eb';
-                el.style.background = 'white';
-            });
+            if (error) {
+                alert('Error adding location: ' + error.message);
+                return;
+            }
 
-            updateImportProgress(1);
-            document.getElementById('import-wizard-modal').classList.add('active');
+            userLocations.push(data[0]);
+            userLocations.sort((a, b) => a.name.localeCompare(b.name));
+            input.value = '';
+            renderLocationsList();
+            populateLocationDropdowns();
         }
 
-        function closeImportWizard() {
-            document.getElementById('import-wizard-modal').classList.remove('active');
-        }
+        async function deleteLocation(locationId) {
+            const loc = userLocations.find(l => l.id === locationId);
+            if (!loc) return;
 
-
-        function getImportFields() {
-            return importWizardType === 'projects' ? projectsFields : inventoryFields;
-        }
-
-        function showImportColumnGuide() {
-            const fields = getImportFields();
-            const guide = document.getElementById('import-column-guide');
-            if (!guide) return;
-            guide.innerHTML = fields.map(f =>
-                `<span style="display:inline-block; margin-right:16px; margin-bottom:4px;">
-                    <strong>${f.label}</strong>${f.required ? ' <span style="color:#dc2626;">*</span>' : ''}
-                </span>`
-            ).join('');
-        }
-
-        function downloadImportTemplate() {
-            const fields = getImportFields();
-            const headers = fields.map(f => f.label).join(',');
-            const exampleRow = importWizardType === 'projects'
-                ? '"Sunset Blvd Staging","1234 Sunset Blvd, Toronto","active","2026-06-01","2026-06-15","","Staging for spring market"'
-                : '"Modern Grey Sofa","Seating","Grey","Warehouse A","IN","Living Room","Charcoal linen sectional","SOF-001","Excellent","2024-03-15","HomeSense","299.00"';
-            const csv = headers + '\n' + exampleRow;
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `stagience-${importWizardType}-template.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function selectImportSource(el) {
-            document.querySelectorAll('.import-source-option').forEach(opt => {
-                opt.style.border = '1.5px solid #e5e7eb';
-                opt.style.background = 'white';
-            });
-            el.style.border = '1.5px solid #b0a586';
-            el.style.background = '#fef9f0';
-            importSelectedSource = el.dataset.source;
-
-            // Show file upload input only for Excel/CSV
-            const fileArea = document.getElementById('import-file-area');
-            if (importSelectedSource === 'excel') {
-                fileArea.style.display = 'block';
-                showImportColumnGuide();
+            // Check if any inventory items use this location
+            const itemsUsingLocation = inventoryItems.filter(i => i.location === loc.name);
+            if (itemsUsingLocation.length > 0) {
+                if (!confirm(`${itemsUsingLocation.length} inventory item(s) are currently assigned to "${loc.name}". Delete this location anyway?`)) return;
             } else {
-                fileArea.style.display = 'none';
+                if (!confirm(`Delete location "${loc.name}"?`)) return;
+            }
+
+            const { error } = await supabase
+                .from('locations')
+                .delete()
+                .eq('id', locationId);
+
+            if (error) {
+                alert('Error deleting location: ' + error.message);
+                return;
+            }
+
+            userLocations = userLocations.filter(l => l.id !== locationId);
+            renderLocationsList();
+            populateLocationDropdowns();
+        }
+
+        function populateLocationDropdowns() {
+            const locationNames = userLocations.map(l => l.name);
+            const optionsHtml = locationNames.map(name => `<option value="${name}">${name}</option>`).join('');
+            const blankOption = '<option value="">Select location...</option>';
+
+            // Update Add/Edit Item modal
+            const itemLocationSelect = document.getElementById('item-location');
+            if (itemLocationSelect) {
+                const currentVal = itemLocationSelect.value;
+                itemLocationSelect.innerHTML = blankOption + optionsHtml;
+                if (currentVal) itemLocationSelect.value = currentVal;
+            }
+
+            // Update Bulk Update modal
+            const bulkLocationSelect = document.getElementById('bulk-location');
+            if (bulkLocationSelect) {
+                const currentVal = bulkLocationSelect.value;
+                bulkLocationSelect.innerHTML = blankOption + optionsHtml;
+                if (currentVal) bulkLocationSelect.value = currentVal;
+            }
+
+            // Update Quick Location modal
+            const quickLocationSelect = document.getElementById('quick-location');
+            if (quickLocationSelect) {
+                const currentVal = quickLocationSelect.value;
+                quickLocationSelect.innerHTML = blankOption + optionsHtml;
+                if (currentVal) quickLocationSelect.value = currentVal;
+            }
+
+            // Update filter dropdown (keep "All Locations" at top)
+            const filterDropdown = document.getElementById('inventory-location-filter');
+            if (filterDropdown) {
+                const currentVal = filterDropdown.value;
+                // Get locations from both userLocations AND existing inventory items
+                const inventoryLocations = [...new Set(inventoryItems.map(i => i.location).filter(Boolean))];
+                const allLocations = [...new Set([...locationNames, ...inventoryLocations])].sort();
+                filterDropdown.innerHTML = '<option value="all">All Locations</option>' +
+                    allLocations.map(name => `<option value="${name}">${name}</option>`).join('');
+                if (currentVal && currentVal !== 'all') filterDropdown.value = currentVal;
             }
         }
 
-        function updateImportProgress(step) {
-            const accent = 'linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1))';
-            for (let i = 1; i <= 3; i++) {
-                document.getElementById('import-progress-' + i).style.background = i <= step ? accent : '#e5e7eb';
-            }
-        }
-
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            if (lines.length < 2) return { headers: [], rows: [] };
-            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-            const rows = lines.slice(1).map(line => {
-                const cols = [];
-                let current = '';
-                let inQuotes = false;
-                for (let ch of line) {
-                    if (ch === '"') { inQuotes = !inQuotes; }
-                    else if (ch === ',' && !inQuotes) { cols.push(current.trim()); current = ''; }
-                    else { current += ch; }
-                }
-                cols.push(current.trim());
-                return cols;
-            }).filter(row => row.some(c => c));
-            return { headers, rows };
-        }
-
-        async function importNextStep() {
-            const label = importWizardType === 'projects' ? 'Projects' : 'Inventory';
-            document.getElementById('import-error-msg').style.display = 'none';
-
-            if (importCurrentStep === 1) {
-                if (!importSelectedSource) {
-                    showImportError('Please select a data source to continue.');
-                    return;
-                }
-
-                if (importSelectedSource === 'excel') {
-                    const fileInput = document.getElementById('import-file-input');
-                    if (!fileInput.files.length) {
-                        showImportError('Please select a CSV or Excel file to upload.');
-                        return;
-                    }
-                    const file = fileInput.files[0];
-                    const text = await file.text();
-                    const parsed = parseCSV(text);
-                    if (!parsed.headers.length) {
-                        showImportError('Could not parse your file. Please make sure it is a valid CSV with headers.');
-                        return;
-                    }
-                    importParsedData = parsed;
-                    buildFieldMapping(parsed.headers);
-                } else {
-                    // For Google Sheets / Drive / Dropbox: show placeholder mapping with sample columns
-                    const sampleHeaders = importWizardType === 'projects'
-                        ? ['Project Name', 'Address', 'Status']
-                        : ['Item Name', 'Category', 'Location'];
-                    importParsedData = { headers: sampleHeaders, rows: [] };
-                    buildFieldMapping(sampleHeaders);
-                }
-
-                document.getElementById('import-step-1').style.display = 'none';
-                document.getElementById('import-step-2').style.display = 'block';
-                importCurrentStep = 2;
-
-            } else if (importCurrentStep === 2) {
-                // Collect mapping
-                importColumnMapping = {};
-                document.querySelectorAll('.import-mapping-row').forEach(row => {
-                    const yourCol = row.dataset.col;
-                    const stagCol = row.querySelector('select').value;
-                    if (stagCol !== '--skip--') {
-                        importColumnMapping[yourCol] = stagCol;
-                    }
-                });
-
-                if (!Object.values(importColumnMapping).includes('name')) {
-                    showImportError('Please map at least one column to the Name field.');
-                    return;
-                }
-
-                buildImportPreview();
-                document.getElementById('import-step-2').style.display = 'none';
-                document.getElementById('import-step-3').style.display = 'block';
-                importCurrentStep = 3;
-            }
-
-            document.getElementById('import-wizard-title').textContent = `Import ${label} - Step ${importCurrentStep} of 3`;
-            updateImportProgress(importCurrentStep);
-        }
-
-        function importPrevStep() {
-            const label = importWizardType === 'projects' ? 'Projects' : 'Inventory';
-            if (importCurrentStep === 2) {
-                document.getElementById('import-step-2').style.display = 'none';
-                document.getElementById('import-step-1').style.display = 'block';
-                importCurrentStep = 1;
-            } else if (importCurrentStep === 3) {
-                document.getElementById('import-step-3').style.display = 'none';
-                document.getElementById('import-step-2').style.display = 'block';
-                importCurrentStep = 2;
-            }
-            document.getElementById('import-wizard-title').textContent = `Import ${label} - Step ${importCurrentStep} of 3`;
-            updateImportProgress(importCurrentStep);
-        }
-
-        function buildFieldMapping(headers) {
-            const fields = importWizardType === 'projects' ? projectsFields : inventoryFields;
-            const container = document.getElementById('import-field-mapping');
-            container.innerHTML = headers.map(header => {
-                // Auto-match by similarity
-                const match = fields.find(f =>
-                    f.label.toLowerCase() === header.toLowerCase() ||
-                    f.col.toLowerCase() === header.toLowerCase().replace(/\s+/g, '_')
-                );
-                const options = fields.map(f =>
-                    `<option value="${f.col}"${match && match.col === f.col ? ' selected' : ''}>${f.label}</option>`
-                ).join('');
-                return `
-                    <div class="import-mapping-row" data-col="${header}" style="background: #f9fafb; border-radius: 10px; padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center;">
-                        <div>
-                            <div style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Your Column</div>
-                            <div style="font-weight: 700; font-size: 15px;">${header}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Stagience Field</div>
-                            <select style="width: 100%; padding: 10px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; font-weight: 500;">
-                                ${options}
-                                <option value="--skip--">-- Skip --</option>
-                            </select>
-                        </div>
-                    </div>`;
-            }).join('');
-        }
-
-        function buildImportPreview() {
-            const headers = importParsedData.headers;
-            const rows = importParsedData.rows.slice(0, 5);
-            const fields = importWizardType === 'projects' ? projectsFields : inventoryFields;
-            const mappedHeaders = headers.filter(h => importColumnMapping[h]);
-            const count = rows.length || '—';
-
-            let tableHtml = `<table style="width:100%;border-collapse:collapse;font-size:13px;">
-                <thead><tr style="background:#f9fafb;">
-                    ${mappedHeaders.map(h => `<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">${importColumnMapping[h]}</th>`).join('')}
-                </tr></thead>
-                <tbody>`;
-
-            if (rows.length) {
-                rows.forEach(row => {
-                    tableHtml += '<tr style="border-top:1px solid #e5e7eb;">';
-                    mappedHeaders.forEach(h => {
-                        const idx = headers.indexOf(h);
-                        tableHtml += `<td style="padding:12px 14px;">${row[idx] || ''}</td>`;
-                    });
-                    tableHtml += '</tr>';
-                });
-            } else {
-                // Sample data for non-CSV sources
-                const sampleRows = importWizardType === 'projects'
-                    ? [['Downtown Loft Staging','123 Main St','Active'],['Suburban Home Consult','456 Oak Ave','Pending']]
-                    : [['Modern Grey Sofa','Seating','Warehouse A'],['Oak Coffee Table','Tables','Warehouse A']];
-                sampleRows.forEach(row => {
-                    tableHtml += '<tr style="border-top:1px solid #e5e7eb;">';
-                    mappedHeaders.forEach((h, i) => {
-                        tableHtml += `<td style="padding:12px 14px;">${row[i] || ''}</td>`;
-                    });
-                    tableHtml += '</tr>';
-                });
-            }
-
-            tableHtml += '</tbody></table>';
-            document.getElementById('import-preview-table').innerHTML = tableHtml;
-
-            const label = importWizardType === 'projects' ? 'projects' : 'inventory items';
-            document.getElementById('import-ready-text').textContent =
-                rows.length
-                    ? `${rows.length} ${label} will be imported into Stagience`
-                    : `Your ${label} will be imported into Stagience`;
-        }
-
-        function showImportError(msg) {
-            const el = document.getElementById('import-error-msg');
-            el.textContent = msg;
-            el.style.display = 'block';
-        }
-
-        async function confirmImport() {
-            const btn = document.getElementById('import-confirm-btn');
-            btn.textContent = 'Importing...';
-            btn.disabled = true;
-
-            try {
-                if (importSelectedSource === 'excel' && importParsedData.rows.length) {
-                    // Real import from parsed CSV
-                    const table = importWizardType === 'projects' ? 'projects' : 'inventory';
-                    const records = importParsedData.rows.map(row => {
-                        const record = { user_id: currentUser.id };
-                        importParsedData.headers.forEach((h, i) => {
-                            const col = importColumnMapping[h];
-                            if (col) record[col] = row[i] || null;
-                        });
-                        return record;
-                    });
-
-                    const { error } = await supabase.from(table).insert(records);
-                    if (error) throw error;
-
-                    btn.textContent = '✓ Imported!';
-                    setTimeout(async () => {
-                        closeImportWizard();
-                        if (importWizardType === 'projects') {
-                            await loadProjects();
-                        } else {
-                            await loadInventory();
-                        }
-                        btn.textContent = importWizardType === 'projects' ? 'Import Projects' : 'Import Inventory';
-                        btn.disabled = false;
-                    }, 1200);
-                } else {
-                    // For Google Sheets / Drive / Dropbox — show coming soon message
-                    showImportError('Direct integration with ' + importSelectedSource.replace('-', ' ') + ' is coming soon! For now, please export your data as a CSV and use the Excel/CSV option.');
-                    btn.textContent = importWizardType === 'projects' ? 'Import Projects' : 'Import Inventory';
-                    btn.disabled = false;
-                }
-            } catch (err) {
-                showImportError('Import failed: ' + err.message);
-                btn.textContent = importWizardType === 'projects' ? 'Import Projects' : 'Import Inventory';
-                btn.disabled = false;
-            }
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('app-mobile-menu');
-            menu.classList.toggle('open');
-        }
-
-        function closeMobileMenuOutside(event) {
-            if (event.target === document.getElementById('app-mobile-menu')) {
-                toggleMobileMenu();
-            }
-        }
-
-                function togglePassword(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.textContent = '🙈';
-            } else {
-                input.type = 'password';
-                btn.textContent = '👁';
-            }
-        }
-
-                // ==============================================
+        // ==============================================
         // INITIALIZE APP
         // ==============================================
         

@@ -1284,10 +1284,32 @@
                         <div><div style="font-weight: 700; font-size: 15px;">Dropbox</div><div style="color: #6b7280; font-size: 13px;" id="dropbox-desc">Import files and data from Dropbox</div></div>
                     </div>
                 </div>
-                <!-- File upload (shown only for Excel/CSV) -->
-                <div id="import-file-area" style="display:none; margin-top: 16px; background: #f9fafb; border: 1.5px dashed #d6d3d1; border-radius: 10px; padding: 16px; text-align: center;">
-                    <div style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">Upload your CSV or Excel file</div>
-                    <input type="file" id="import-file-input" accept=".csv,.xlsx,.xls" style="font-size: 14px;">
+                <!-- File upload + guide (shown only for Excel/CSV) -->
+                <div id="import-file-area" style="display:none; margin-top: 16px;">
+
+                    <!-- Column Guide -->
+                    <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 16px 20px; margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 14px; margin-bottom: 8px; color: #15803d;">📋 Expected Columns</div>
+                        <div id="import-column-guide" style="font-size: 13px; color: #166534; line-height: 1.8;"></div>
+                        <div style="margin-top: 4px; font-size: 12px; color: #6b7280;">* Required &nbsp;|&nbsp; All other columns are optional</div>
+                    </div>
+
+                    <!-- Download Template -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; background: #fef9f0; border: 1.5px solid #b0a586; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 2px;">Not sure where to start?</div>
+                            <div style="font-size: 12px; color: #6b7280;">Download our pre-formatted CSV template, fill it in, and upload it below.</div>
+                        </div>
+                        <button onclick="downloadImportTemplate()" style="flex-shrink: 0; padding: 10px 18px; background: white; border: 1.5px solid #b0a586; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; color: #1f2937; white-space: nowrap;">⬇ Download Template</button>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div style="background: #f9fafb; border: 1.5px dashed #d6d3d1; border-radius: 10px; padding: 20px; text-align: center;">
+                        <div style="font-size: 22px; margin-bottom: 6px;">📂</div>
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Upload your CSV file</div>
+                        <div style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">Accepted formats: CSV, Excel (.xlsx, .xls)</div>
+                        <input type="file" id="import-file-input" accept=".csv,.xlsx,.xls" style="font-size: 13px;">
+                    </div>
                 </div>
 
                 <div id="import-error-msg" style="display:none; margin-top: 12px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 12px; color: #dc2626; font-size: 13px;"></div>
@@ -5017,6 +5039,40 @@
             document.getElementById('import-wizard-modal').classList.remove('active');
         }
 
+
+        function getImportFields() {
+            return importWizardType === 'projects' ? projectsFields : inventoryFields;
+        }
+
+        function showImportColumnGuide() {
+            const fields = getImportFields();
+            const guide = document.getElementById('import-column-guide');
+            if (!guide) return;
+            guide.innerHTML = fields.map(f =>
+                `<span style="display:inline-block; margin-right:16px; margin-bottom:4px;">
+                    <strong>${f.label}</strong>${f.required ? ' <span style="color:#dc2626;">*</span>' : ''}
+                </span>`
+            ).join('');
+        }
+
+        function downloadImportTemplate() {
+            const fields = getImportFields();
+            const headers = fields.map(f => f.label).join(',');
+            const exampleRow = importWizardType === 'projects'
+                ? '"Sunset Blvd Staging","1234 Sunset Blvd, Toronto","active","2026-06-01","2026-06-15","","Staging for spring market"'
+                : '"Modern Grey Sofa","Seating","Grey","Warehouse A","IN","Living Room","Charcoal linen sectional","SOF-001","Excellent","2024-03-15","HomeSense","299.00"';
+            const csv = headers + '\n' + exampleRow;
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `stagience-${importWizardType}-template.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         function selectImportSource(el) {
             document.querySelectorAll('.import-source-option').forEach(opt => {
                 opt.style.border = '1.5px solid #e5e7eb';
@@ -5030,6 +5086,7 @@
             const fileArea = document.getElementById('import-file-area');
             if (importSelectedSource === 'excel') {
                 fileArea.style.display = 'block';
+                showImportColumnGuide();
             } else {
                 fileArea.style.display = 'none';
             }

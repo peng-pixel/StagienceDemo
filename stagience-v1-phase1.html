@@ -12,6 +12,11 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #fbfaf7; color: #1f2937; }
+        @media (max-width: 768px) {
+            main > div { padding: 20px 16px !important; }
+            h1 { font-size: 24px !important; }
+            .modal > div { margin: 10px !important; padding: 24px 20px !important; max-height: 95vh !important; }
+        }
         .gradient-accent { background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); }
         .page { display: none; }
         .page.active { display: block; }
@@ -93,23 +98,53 @@
     <div id="app-page" class="page">
         <div style="min-height: 100vh;">
             <!-- Navigation -->
+            <style>
+                .app-nav-desktop { display: flex; gap: 12px; align-items: center; }
+                .app-hamburger { display: none; background: none; border: none; font-size: 24px; cursor: pointer; padding: 4px; }
+                .app-mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; }
+                .app-mobile-menu.open { display: block; }
+                .app-mobile-menu-panel { position: absolute; top: 0; right: 0; width: 260px; height: 100%; background: white; padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: -4px 0 20px rgba(0,0,0,0.1); }
+                .app-mobile-nav-btn { width: 100%; padding: 14px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 15px; cursor: pointer; border: none; text-align: left; }
+                .app-mobile-nav-btn:hover { background: rgba(176,138,90,.10); }
+                .app-mobile-signout { width: 100%; padding: 14px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 15px; cursor: pointer; text-align: left; margin-top: auto; }
+                @media (max-width: 768px) {
+                    .app-nav-desktop { display: none; }
+                    .app-hamburger { display: block; }
+                }
+            </style>
             <nav style="background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 50;">
                 <div style="max-width: 1120px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
                     <a href="stagience-landing-page.html" style="display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; color: #1f2937;">
-                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
-                            S
-                        </div>
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1)); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">S</div>
                         <span>Stagience</span>
                     </a>
-                    <div style="display: flex; gap: 12px; align-items: center;">
+                    <!-- Desktop Nav -->
+                    <div class="app-nav-desktop">
                         <button onclick="showSection('calendar')" id="nav-calendar" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Calendar</button>
                         <button onclick="showSection('projects')" id="nav-projects" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showSection('templates')" id="nav-templates" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
                         <button onclick="handleSignOut()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out</button>
                     </div>
+                    <!-- Hamburger (mobile) -->
+                    <button class="app-hamburger" onclick="toggleMobileMenu()">☰</button>
                 </div>
             </nav>
+
+            <!-- Mobile Menu Overlay -->
+            <div id="app-mobile-menu" class="app-mobile-menu" onclick="closeMobileMenuOutside(event)">
+                <div class="app-mobile-menu-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div style="font-weight: 700; font-size: 18px;">Menu</div>
+                        <button onclick="toggleMobileMenu()" style="background: none; border: none; font-size: 22px; cursor: pointer;">×</button>
+                    </div>
+                    <button class="app-mobile-nav-btn" onclick="showSection('calendar'); toggleMobileMenu();">📅 Calendar</button>
+                    <button class="app-mobile-nav-btn" onclick="showSection('projects'); toggleMobileMenu();">🏠 Projects</button>
+                    <button class="app-mobile-nav-btn" onclick="showSection('inventory'); toggleMobileMenu();">📦 Inventory</button>
+                    <button class="app-mobile-nav-btn" onclick="showSection('templates'); toggleMobileMenu();">📄 Templates</button>
+                    <button class="app-mobile-signout" onclick="handleSignOut()">Sign Out</button>
+                </div>
+            </div>
 
             <main style="max-width: 1120px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Inventory Section -->
@@ -5330,7 +5365,18 @@
             }
         }
 
-        function togglePassword(inputId, btn) {
+        function toggleMobileMenu() {
+            const menu = document.getElementById('app-mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        function closeMobileMenuOutside(event) {
+            if (event.target === document.getElementById('app-mobile-menu')) {
+                toggleMobileMenu();
+            }
+        }
+
+                function togglePassword(inputId, btn) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
                 input.type = 'text';

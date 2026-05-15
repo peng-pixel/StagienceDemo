@@ -43,7 +43,10 @@
                         </div>
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
-                            <input type="password" id="signin-password" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <div style="position: relative;">
+                                <input type="password" id="signin-password" required style="width: 100%; padding: 12px 44px 12px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                                <button type="button" onclick="togglePassword('signin-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
+                            </div>
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
                             Sign In
@@ -65,7 +68,10 @@
                         </div>
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
-                            <input type="password" id="signup-password" required minlength="6" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <div style="position: relative;">
+                                <input type="password" id="signup-password" required minlength="6" style="width: 100%; padding: 12px 44px 12px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                                <button type="button" onclick="togglePassword('signup-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
+                            </div>
                             <p style="color: #6b7280; font-size: 12px; margin-top: 4px;">Minimum 6 characters</p>
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
@@ -5324,7 +5330,18 @@
             }
         }
 
-        // ==============================================
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
+        }
+
+                // ==============================================
         // INITIALIZE APP
         // ==============================================
         

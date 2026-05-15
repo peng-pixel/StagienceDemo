@@ -4270,12 +4270,15 @@
                         const dateStr = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
 
                         return `
-                            <div style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; cursor: pointer;" onclick="openLightbox('${folder.id}', ${photo.id})">
+                            <div id="photo-card-${photo.id}" style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; cursor: pointer; transition: border-color 0.2s;" onclick="togglePhotoSelection('${folder.id}', ${photo.id}, this)">
+                                <!-- Selection checkbox -->
+                                <div id="photo-check-${photo.id}" style="position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; background: white; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 1px 4px rgba(0,0,0,0.2); font-size: 13px; opacity: 0; transition: opacity 0.2s;">✓</div>
+                                <!-- Delete single -->
                                 <button onclick="event.stopPropagation(); deletePhoto(${photo.id}, ${folder.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
                                     ×
                                 </button>
                                 <div style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
-                                    <img src="${imageUrl}" alt="${photo.file_name}" style="width:100%;height:100%;object-fit:cover;">
+                                    <img data-src="${imageUrl}" alt="${photo.file_name}" class="lazy-photo" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;">
                                 </div>
                                 <div style="font-size: 13px; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${photo.file_name}</div>
                                 <div style="font-size: 12px; color: #6b7280;">${dateStr}</div>
@@ -4301,25 +4304,31 @@
                                         <p style="color: #6b7280; font-size: 13px;">${photoCount} photo${photoCount !== 1 ? 's' : ''}</p>
                                     </div>
                                 </div>
-                                <div style="display: flex; gap: 12px;">
-                                    <button onclick="showUploadPhotosModal(${folder.id})" style="padding: 8px 16px; border: none; border-radius: 8px; background: white; border: 2px solid #3b82f6; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-                                        📤 Upload Photos
-                                    </button>
-                                    <button onclick="deleteFolder(${folder.id})" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">
-                                        🗑️
-                                    </button>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                                    <button onclick="selectAllFolderPhotos('${folder.id}')" style="padding: 8px 14px; border: 2px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; font-size: 13px;">☑ Select All</button>
+                                    <button id="bulk-delete-btn-${folder.id}" onclick="bulkDeletePhotos('${folder.id}')" style="display:none; padding: 8px 14px; border: 2px solid #fecaca; border-radius: 8px; background: #fee2e2; color: #991b1b; font-weight: 600; cursor: pointer; font-size: 13px;">🗑 Delete Selected</button>
+                                    <button onclick="showUploadPhotosModal(${folder.id})" style="padding: 8px 14px; border: 2px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px;">📤 Upload</button>
+                                    <button onclick="deleteFolder(${folder.id})" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">🗑️</button>
                                 </div>
                             </div>
                             
                             ${photoCount > 0 ? 
-                                `<div id="photo-grid-${folder.id}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
-                                    ${photosHTML.slice(0, 12).join('')}
-                                </div>
-                                ${photoCount > 12 ? `<div style="text-align:center;margin-top:16px;">
-                                    <button onclick="loadMorePhotos('${folder.id}')" id="load-more-${folder.id}" style="padding:10px 24px;border:2px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;font-size:14px;cursor:pointer;">
-                                        Load more (${photoCount - 12} remaining)
-                                    </button>
-                                </div>` : ''}` 
+                                (() => {
+                                    // Store remaining photos in cache for loadMorePhotos
+                                    if (photosHTML.length > 12) {
+                                        folderRemainingHTML[folder.id] = photosHTML.slice(12);
+                                    } else {
+                                        delete folderRemainingHTML[folder.id];
+                                    }
+                                    return `<div id="photo-grid-${folder.id}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                                        ${photosHTML.slice(0, 12).join('')}
+                                    </div>
+                                    ${photoCount > 12 ? `<div id="load-more-container-${folder.id}" style="text-align:center;margin-top:16px;">
+                                        <button onclick="loadMorePhotos('${folder.id}')" id="load-more-${folder.id}" style="padding:10px 24px;border:2px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;font-size:14px;cursor:pointer;">
+                                            Load more (${photoCount - 12} remaining)
+                                        </button>
+                                    </div>` : ''}`;
+                                })()
                                 : emptyPhotosHTML
                             }
                         </div>
@@ -4327,6 +4336,7 @@
                 }));
 
                 container.innerHTML = foldersHTML.join('');
+                initLazyLoading();
             }
         }
 
@@ -4410,6 +4420,34 @@
             currentUploadFolderId = null;
         }
 
+        // Compress image before upload (max 1200px, 0.82 quality)
+        async function compressImage(file, maxWidth = 1200, quality = 0.82) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        if (width > maxWidth) {
+                            height = Math.round(height * maxWidth / width);
+                            width = maxWidth;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        canvas.toBlob((blob) => {
+                            // Use compressed if smaller, otherwise original
+                            resolve(blob.size < file.size ? new File([blob], file.name, { type: 'image/jpeg' }) : file);
+                        }, 'image/jpeg', quality);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         async function uploadPhotos(e) {
             e.preventDefault();
 
@@ -4421,6 +4459,10 @@
                 return;
             }
 
+            // Show uploading indicator
+            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
+            if (submitBtn) { submitBtn.textContent = 'Uploading...'; submitBtn.disabled = true; }
+
             // Upload each file
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
@@ -4431,13 +4473,15 @@
                     continue;
                 }
 
+                // Compress before uploading
+                const compressedFile = await compressImage(file);
+
                 // Upload file to Supabase Storage
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${currentUser.id}/${currentProjectId}/${currentUploadFolderId}/${Date.now()}_${i}.${fileExt}`;
+                const fileName = `${currentUser.id}/${currentProjectId}/${currentUploadFolderId}/${Date.now()}_${i}.jpg`;
                 
                 const { error: uploadError } = await supabase.storage
                     .from('project-photos')
-                    .upload(fileName, file);
+                    .upload(fileName, compressedFile);
 
                 if (uploadError) {
                     console.error('Error uploading file:', uploadError);
@@ -4453,7 +4497,7 @@
                         user_id: currentUser.id,
                         file_name: file.name,
                         file_path: fileName,
-                        file_size: file.size
+                        file_size: compressedFile.size
                     }]);
 
                 if (dbError) {
@@ -4461,6 +4505,7 @@
                 }
             }
 
+            if (submitBtn) { submitBtn.textContent = 'Upload Photos'; submitBtn.disabled = false; }
             closeUploadPhotosModal();
             await loadPhotoFolders();
         }
@@ -5017,6 +5062,8 @@
         let lightboxPhotos = [];
         let lightboxIndex = 0;
         let folderPhotosCache = {};
+        let folderRemainingHTML = {};
+        let selectedPhotoIds = {};  // { folderId: Set of photoIds }
 
         function openLightbox(folderId, photoId) {
             const folder = photoFolders.find(f => String(f.id) === String(folderId));
@@ -5065,19 +5112,23 @@
         }
 
         function loadMorePhotos(folderId) {
-            const folder = photoFolders.find(f => String(f.id) === String(folderId));
-            if (!folder) return;
             const grid = document.getElementById('photo-grid-' + folderId);
-            const btn = document.getElementById('load-more-' + folderId);
-            if (!grid || !btn) return;
-            // Photos beyond the first 12 - get their cached HTML
-            const remaining = folder._allPhotosHTML || [];
+            const container = document.getElementById('load-more-container-' + folderId);
+            if (!grid) return;
+
+            const remaining = folderRemainingHTML[folderId] || [];
             remaining.forEach(html => {
                 const div = document.createElement('div');
                 div.innerHTML = html;
-                grid.appendChild(div.firstChild);
+                if (div.firstChild) grid.appendChild(div.firstChild);
             });
-            btn.parentElement.remove();
+
+            // Remove the load more button
+            if (container) container.remove();
+            delete folderRemainingHTML[folderId];
+
+            // Initialize lazy loading for newly added images
+            initLazyLoading();
         }
 
         function toggleMobileMenu() {
@@ -5089,6 +5140,110 @@
             if (event.target === document.getElementById('app-mobile-menu')) {
                 toggleMobileMenu();
             }
+        }
+
+                function initLazyLoading() {
+            const lazyImages = document.querySelectorAll('img.lazy-photo');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.onload = () => { img.style.opacity = '1'; };
+                            observer.unobserve(img);
+                        }
+                    });
+                }, { rootMargin: '100px' });
+                lazyImages.forEach(img => observer.observe(img));
+            } else {
+                // Fallback: load all immediately
+                lazyImages.forEach(img => {
+                    img.src = img.dataset.src;
+                    img.style.opacity = '1';
+                });
+            }
+        }
+
+                function togglePhotoSelection(folderId, photoId, card) {
+            if (!selectedPhotoIds[folderId]) selectedPhotoIds[folderId] = new Set();
+            const selected = selectedPhotoIds[folderId];
+            const check = document.getElementById('photo-check-' + photoId);
+
+            if (selected.has(photoId)) {
+                selected.delete(photoId);
+                card.style.borderColor = '#e5e7eb';
+                card.style.background = 'white';
+                if (check) check.style.opacity = '0';
+            } else {
+                selected.add(photoId);
+                card.style.borderColor = '#3b82f6';
+                card.style.background = '#eff6ff';
+                if (check) { check.style.opacity = '1'; check.style.background = '#3b82f6'; check.style.color = 'white'; check.style.borderColor = '#3b82f6'; }
+            }
+
+            // Show/hide bulk delete button
+            const bulkBtn = document.getElementById('bulk-delete-btn-' + folderId);
+            if (bulkBtn) bulkBtn.style.display = selected.size > 0 ? 'inline-block' : 'none';
+        }
+
+        function selectAllFolderPhotos(folderId) {
+            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            if (!folder || !folder.photos) return;
+
+            if (!selectedPhotoIds[folderId]) selectedPhotoIds[folderId] = new Set();
+            const selected = selectedPhotoIds[folderId];
+            const allIds = folder.photos.map(p => p.id);
+            const allSelected = allIds.every(id => selected.has(id));
+
+            if (allSelected) {
+                // Deselect all
+                allIds.forEach(id => {
+                    selected.delete(id);
+                    const card = document.getElementById('photo-card-' + id);
+                    const check = document.getElementById('photo-check-' + id);
+                    if (card) { card.style.borderColor = '#e5e7eb'; card.style.background = 'white'; }
+                    if (check) check.style.opacity = '0';
+                });
+            } else {
+                // Select all
+                allIds.forEach(id => {
+                    selected.add(id);
+                    const card = document.getElementById('photo-card-' + id);
+                    const check = document.getElementById('photo-check-' + id);
+                    if (card) { card.style.borderColor = '#3b82f6'; card.style.background = '#eff6ff'; }
+                    if (check) { check.style.opacity = '1'; check.style.background = '#3b82f6'; check.style.color = 'white'; check.style.borderColor = '#3b82f6'; }
+                });
+            }
+
+            const bulkBtn = document.getElementById('bulk-delete-btn-' + folderId);
+            if (bulkBtn) bulkBtn.style.display = selected.size > 0 ? 'inline-block' : 'none';
+        }
+
+        async function bulkDeletePhotos(folderId) {
+            const selected = selectedPhotoIds[folderId];
+            if (!selected || selected.size === 0) return;
+
+            const count = selected.size;
+            if (!confirm(`Delete ${count} selected photo${count > 1 ? 's' : ''}? This cannot be undone.`)) return;
+
+            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            if (!folder) return;
+
+            const photosToDelete = folder.photos.filter(p => selected.has(p.id));
+
+            // Delete from storage
+            const filePaths = photosToDelete.map(p => p.file_path);
+            await supabase.storage.from('project-photos').remove(filePaths);
+
+            // Delete from database
+            const ids = photosToDelete.map(p => p.id);
+            const { error } = await supabase.from('project_photos').delete().in('id', ids);
+            if (error) { alert('Error deleting photos: ' + error.message); return; }
+
+            // Clear selection and reload
+            delete selectedPhotoIds[folderId];
+            await loadPhotoFolders();
         }
 
                 // ==============================================

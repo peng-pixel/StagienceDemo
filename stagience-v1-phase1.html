@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How Stagience Works - Staging Management Software</title>
+    <title>FAQ - Stagience Staging Management Software</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 24px;
         }
@@ -42,6 +42,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
         .logo {
@@ -112,79 +115,64 @@
             color: #57534e;
         }
 
-        /* Steps */
-        .steps {
+        /* FAQ Accordion */
+        .faq-list {
             display: flex;
             flex-direction: column;
-            gap: 48px;
+            gap: 16px;
         }
 
-        .step {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 32px;
+        .faq-item {
+            background: white;
+            border: 1px solid #e7e5e4;
+            border-radius: 16px;
+            overflow: hidden;
         }
 
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #b0a586 0%, #8b7d5f 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .step-content {
-            padding-top: 8px;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .step-icon {
+        .faq-question {
+            width: 100%;
+            padding: 24px;
+            background: white;
+            border: none;
+            text-align: left;
             font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
         }
 
-        .step-title {
-            font-size: 24px;
-            font-weight: 700;
+        .faq-question:hover {
+            background: #fafaf9;
         }
 
-        .step-description {
-            color: #1f2937;
+        .faq-icon {
+            font-size: 20px;
+            color: #b0a586;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 24px 24px;
+            color: #57534e;
             font-size: 15px;
             line-height: 1.6;
-            margin-bottom: 16px;
         }
 
-        .pro-tip {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 16px 20px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .pro-tip-label {
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
-
-        .pro-tip-text {
-            color: #78350f;
-            font-size: 14px;
-            line-height: 1.5;
+        .faq-item.active .faq-answer {
+            max-height: 500px;
         }
 
         /* CTA Section */
@@ -224,19 +212,13 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .step {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .step-number {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-
             .page-title {
                 font-size: 32px;
+            }
+
+            .faq-question {
+                font-size: 16px;
+                padding: 20px;
             }
 
             .cta-section {
@@ -248,16 +230,14 @@
 <body>
     <!-- Header -->
     <header>
-        <div class="container">
-            <div class="header-content">
-                <a href="stagience-landing-page.html" class="logo">
-                    <div class="logo-icon"></div>
-                    Stagience
-                </a>
-                <div class="header-buttons">
-                    <a href="stagience-landing-page.html#waitlist" class="btn-secondary">Join Waitlist</a>
-                    <a href="stagience-v1-phase1.html" class="btn-primary">Sign In</a>
-                </div>
+        <div class="header-content">
+            <a href="stagience-landing-page.html" class="logo">
+                <div class="logo-icon"></div>
+                Stagience
+            </a>
+            <div class="header-buttons">
+                <a href="stagience-landing-page.html#waitlist" class="btn-secondary">Join Waitlist</a>
+                <a href="stagience-v1-phase1.html" class="btn-primary">Sign In</a>
             </div>
         </div>
     </header>
@@ -266,71 +246,137 @@
     <main>
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title">How Stagience Works</h1>
-                <p class="page-subtitle">Simple, powerful staging management in 4 easy steps</p>
+                <h1 class="page-title">Frequently Asked Questions</h1>
+                <p class="page-subtitle">Everything you need to know about Stagience</p>
             </div>
 
-            <div class="steps">
-                <!-- Step 1 -->
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <span class="step-icon">📦</span>
-                            <h2 class="step-title">Build Your Inventory</h2>
-                        </div>
-                        <p class="step-description">Add your staging items to your digital inventory. Upload photos, add details like color, fabric, dimensions, and ID codes. Track where each item is located—warehouse, in transit, or at a project.</p>
-                        <div class="pro-tip">
-                            <div class="pro-tip-label">Pro tip:</div>
-                            <div class="pro-tip-text">Use the bulk import feature or add items one-by-one with the guided wizard.</div>
+            <div class="faq-list">
+                <!-- FAQ 1 -->
+                <div class="faq-item active">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is Stagience?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Stagience is an all-in-one platform designed specifically for home staging professionals. It helps you manage inventory, track projects, organize photos, maintain client timelines, and store documents—all in one beautiful, easy-to-use interface. Built by a stager, for stagers.
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2 -->
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <span class="step-icon">🏠</span>
-                            <h2 class="step-title">Create Projects</h2>
-                        </div>
-                        <p class="step-description">Set up each staging project with client details, property address, and project status. Stagience organizes projects by status—Pending, Scheduled, Active, Consult Only, or Completed—so you always know what's happening.</p>
-                        <div class="pro-tip">
-                            <div class="pro-tip-label">Pro tip:</div>
-                            <div class="pro-tip-text">Projects automatically group by month/year, making it easy to find past work.</div>
+                <!-- FAQ 2 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How much does Stagience cost?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Pricing details will be announced closer to launch. Join the waitlist to be notified first and receive special early-adopter pricing when we launch!
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 3 -->
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <span class="step-icon">📅</span>
-                            <h2 class="step-title">Manage Timelines</h2>
-                        </div>
-                        <p class="step-description">Track every milestone with project timelines. Add consultation dates, installation days, pickup schedules, and more. Export timelines as PDFs to share with clients. Everything syncs with your calendar automatically.</p>
-                        <div class="pro-tip">
-                            <div class="pro-tip-label">Pro tip:</div>
-                            <div class="pro-tip-text">Upload documents, photos, and files to each project for easy access.</div>
+                <!-- FAQ 3 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I access Stagience on my phone or tablet?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Stagience is fully responsive and works beautifully on desktop, tablet, and mobile devices. Update your inventory from the warehouse, check project details on-site, or review timelines from anywhere.
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 4 -->
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <div class="step-header">
-                            <span class="step-icon">✨</span>
-                            <h2 class="step-title">Work Smarter</h2>
+                <!-- FAQ 4 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>How do I track my inventory?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Add items to your digital inventory with photos, descriptions, colors, fabrics, dimensions, and ID codes. Mark items as IN (warehouse), OUT (on project), or HOLD. Search and filter instantly. Know exactly where every piece is at all times.
                         </div>
-                        <p class="step-description">With everything in one place, you'll save hours every week. Search and filter inventory instantly. Print professional reports. Organize photos by project. Use templates for common documents. Focus on staging, not admin work.</p>
-                        <div class="pro-tip">
-                            <div class="pro-tip-label">Pro tip:</div>
-                            <div class="pro-tip-text">The mobile-responsive design means you can update inventory from anywhere.</div>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I organize photos by project?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely! Each project has a Photos tab where you can create custom folders (Before Photos, After Photos, Pro Photos, etc.). Upload unlimited photos and organize them however you like. Perfect for keeping project documentation organized.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>What about document storage?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Each project has dedicated tabs for Documents (contracts, invoices, reports) and Files (floor plans, mood boards, checklists). Plus, upload and manage reusable templates for documents you use frequently. Everything stays organized by project.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 7 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I print inventory reports?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Print professional inventory lists with photos, or export project timelines as PDFs. Perfect for sharing with team members, keeping physical records, or providing to clients.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 8 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>When will Stagience launch?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We're putting the finishing touches on Stagience now! Join the waitlist to be notified as soon as we launch. Waitlist members will receive priority access and special launch pricing.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 9 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is my data secure?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Your data is stored securely with industry-standard encryption. Only you have access to your account and information. We take data privacy seriously and will never share your information with third parties.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 10 -->
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span>Can I import my existing inventory?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! We'll provide tools to help you import existing inventory from spreadsheets or other systems. Our team is also available to help with the migration process to make it as smooth as possible.
                         </div>
                     </div>
                 </div>
@@ -338,11 +384,36 @@
 
             <!-- CTA Section -->
             <div class="cta-section">
-                <h2 class="cta-title">Ready to transform your staging business?</h2>
-                <p class="cta-description">Join the waitlist and be among the first to experience Stagience.</p>
-                <a href="stagience-landing-page.html#waitlist" class="btn-large">Join Waitlist</a>
+                <h2 class="cta-title">Still have questions?</h2>
+                <p class="cta-description">We'd love to hear from you! Request a demo to see Stagience in action.</p>
+                <a href="stagience-landing-page.html#demo" class="btn-large">Request Demo</a>
             </div>
         </div>
     </main>
+
+    <script>
+        function toggleFaq(button) {
+            const faqItem = button.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Open first FAQ by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFaq = document.querySelector('.faq-item');
+            if (firstFaq) {
+                firstFaq.classList.add('active');
+            }
+        });
+    </script>
 </body>
 </html>

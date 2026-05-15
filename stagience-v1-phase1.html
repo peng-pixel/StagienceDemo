@@ -1608,13 +1608,11 @@
         }
 
         function updateLocationDropdown() {
-            const userLocationNames = userLocations.map(l => l.name);
+            const userLocationNames = userLocations ? userLocations.map(l => l.name) : [];
             const inventoryLocations = [...new Set(inventoryItems.map(item => item.location).filter(Boolean))];
             const allLocations = [...new Set([...userLocationNames, ...inventoryLocations])].sort();
-            
             const dropdown = document.getElementById('inventory-location-filter');
             const currentValue = dropdown.value;
-            
             dropdown.innerHTML = '<option value="all">All Locations</option>';
             allLocations.forEach(location => {
                 const option = document.createElement('option');
@@ -1622,7 +1620,6 @@
                 option.textContent = location;
                 dropdown.appendChild(option);
             });
-            
             if (allLocations.includes(currentValue)) {
                 dropdown.value = currentValue;
             } else if (currentValue !== 'all') {
@@ -1877,12 +1874,10 @@
 
         // Step 7: Location
         function renderStep7(container, nav) {
-            const locationOptions = userLocations.length > 0
-                ? userLocations.map(l => `<option value="${l.name}" ${wizardData.location === l.name ? 'selected' : ''}>${l.name}</option>`).join('')
-                : '';
+            const locationOptions = (userLocations || []).map(l => `<option value="${l.name}" ${wizardData.location === l.name ? 'selected' : ''}>${l.name}</option>`).join('');
             container.innerHTML = `
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Where is this item located?</h3>
-                ${userLocations.length === 0 ? `<div style="background: #fef9f0; border: 1.5px solid #b0a586; border-radius: 10px; padding: 14px; margin-bottom: 16px; font-size: 13px; color: #6b7280;">No locations set up yet. <button type="button" onclick="cancelWizard(); showManageLocationsModal();" style="color: #2f6f6b; font-weight: 700; background: none; border: none; cursor: pointer; text-decoration: underline;">Add locations first</button></div>` : ''}
+                ${!userLocations || userLocations.length === 0 ? '<div style="background:#fef9f0;border:1.5px solid #b0a586;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#6b7280;">No locations set up yet. <button type=\"button\" onclick=\"cancelWizard();showManageLocationsModal();\" style=\"color:#2f6f6b;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;\">Add locations first</button></div>' : ''}
                 <select id="wizard-location" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
                     <option value="">Select location...</option>
                     ${locationOptions}
@@ -2354,129 +2349,7 @@
                     </table>
                     
                     <div class="total">Total Items: ${items.length}</div>
-                
-    <!-- Manage Locations Modal -->
-    <div id="manage-locations-modal" class="modal">
-        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h2 style="font-size: 24px; font-weight: 800;">Manage Locations</h2>
-                <button onclick="closeManageLocationsModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
-            </div>
-            <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Add your storage locations (e.g. Warehouse, Storage Unit, Studio). These will appear in your location dropdowns.</p>
-            <div style="display: flex; gap: 10px; margin-bottom: 24px;">
-                <input type="text" id="new-location-input" placeholder="e.g. Warehouse, Storage Unit..." style="flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;" onkeydown="if(event.key==='Enter'){addLocation();}">
-                <button onclick="addLocation()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 10px; color: white; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;">+ Add</button>
-            </div>
-            <div id="locations-list" style="display: flex; flex-direction: column; gap: 10px; min-height: 60px;">
-                <div style="text-align: center; color: #9ca3af; padding: 20px; font-size: 14px;">Loading locations...</div>
-            </div>
-            <div style="margin-top: 24px;">
-                <button onclick="closeManageLocationsModal()" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Done</button>
-            </div>
-        </div>
-    </div>
-
-        // ==============================================
-        // MANAGE LOCATIONS
-        // ==============================================
-        let userLocations = [];
-
-        async function loadUserLocations() {
-            const { data, error } = await supabase
-                .from('locations')
-                .select('*')
-                .eq('user_id', currentUser.id)
-                .order('name', { ascending: true });
-            if (error) { console.error('Error loading locations:', error); userLocations = []; }
-            else { userLocations = data || []; }
-            return userLocations;
-        }
-
-        function showManageLocationsModal() {
-            document.getElementById('manage-locations-modal').classList.add('active');
-            renderLocationsList();
-            loadUserLocations().then(() => renderLocationsList());
-        }
-
-        function closeManageLocationsModal() {
-            document.getElementById('manage-locations-modal').classList.remove('active');
-            document.getElementById('new-location-input').value = '';
-            populateLocationDropdowns();
-            renderInventory();
-        }
-
-        function renderLocationsList() {
-            const container = document.getElementById('locations-list');
-            if (userLocations.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #9ca3af; padding: 20px; font-size: 14px; border: 2px dashed #e5e7eb; border-radius: 10px;">No locations yet. Add your first location above!</div>';
-                return;
-            }
-            container.innerHTML = userLocations.map(loc => `
-                <div style="display: flex; align-items: center; justify-content: space-between; background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 12px 16px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 18px;">📍</span>
-                        <span style="font-weight: 600; font-size: 15px;">${loc.name}</span>
-                    </div>
-                    <button onclick="deleteLocation(${loc.id})" style="width: 30px; height: 30px; border-radius: 8px; border: 1px solid #fecaca; background: #fee2e2; color: #dc2626; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
-                </div>
-            `).join('');
-        }
-
-        async function addLocation() {
-            const input = document.getElementById('new-location-input');
-            const name = input.value.trim();
-            if (!name) return;
-            if (userLocations.some(l => l.name.toLowerCase() === name.toLowerCase())) {
-                alert('That location already exists.');
-                return;
-            }
-            const { data, error } = await supabase.from('locations').insert([{ user_id: currentUser.id, name: name }]).select();
-            if (error) { alert('Error adding location: ' + error.message); return; }
-            userLocations.push(data[0]);
-            userLocations.sort((a, b) => a.name.localeCompare(b.name));
-            input.value = '';
-            renderLocationsList();
-            populateLocationDropdowns();
-        }
-
-        async function deleteLocation(locationId) {
-            const loc = userLocations.find(l => l.id === locationId);
-            if (!loc) return;
-            const itemsUsing = inventoryItems.filter(i => i.location === loc.name);
-            const msg = itemsUsing.length > 0
-                ? `${itemsUsing.length} inventory item(s) are assigned to "${loc.name}". Delete anyway?`
-                : `Delete location "${loc.name}"?`;
-            if (!confirm(msg)) return;
-            const { error } = await supabase.from('locations').delete().eq('id', locationId);
-            if (error) { alert('Error deleting location: ' + error.message); return; }
-            userLocations = userLocations.filter(l => l.id !== locationId);
-            renderLocationsList();
-            populateLocationDropdowns();
-        }
-
-        function populateLocationDropdowns() {
-            const locationNames = userLocations.map(l => l.name);
-            const optionsHtml = locationNames.map(name => `<option value="${name}">${name}</option>`).join('');
-            const blankOption = '<option value="">Select location...</option>';
-
-            const itemLoc = document.getElementById('item-location');
-            if (itemLoc) { const v = itemLoc.value; itemLoc.innerHTML = blankOption + optionsHtml; if (v) itemLoc.value = v; }
-
-            const bulkLoc = document.getElementById('bulk-location');
-            if (bulkLoc) { const v = bulkLoc.value; bulkLoc.innerHTML = blankOption + optionsHtml; if (v) bulkLoc.value = v; }
-
-            const quickLoc = document.getElementById('quick-location');
-            if (quickLoc) { const v = quickLoc.value; quickLoc.innerHTML = blankOption + optionsHtml; if (v) quickLoc.value = v; }
-
-            const filterDrop = document.getElementById('inventory-location-filter');
-            if (filterDrop) {
-                const v = filterDrop.value;
-                const invLocs = [...new Set(inventoryItems.map(i => i.location).filter(Boolean))];
-                const all = [...new Set([...locationNames, ...invLocs])].sort();
-                filterDrop.innerHTML = '<option value="all">All Locations</option>' + all.map(n => `<option value="${n}">${n}</option>`).join('');
-                if (v && v !== 'all') filterDrop.value = v;
-            }
-        }
+                </body>
                 </html>
             `);
             printWindow.document.close();
@@ -4975,5 +4848,109 @@
         });
     </script>
 
+
+    <!-- Manage Locations Modal -->
+    <div id="manage-locations-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 480px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Manage Locations</h2>
+                <button onclick="closeManageLocationsModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Add your storage locations (e.g. Warehouse, Storage Unit, Studio). These will appear in your location dropdowns.</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+                <input type="text" id="new-location-input" placeholder="e.g. Warehouse, Storage Unit..." style="flex: 1; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;" onkeydown="if(event.key==='Enter'){addLocation();}">
+                <button onclick="addLocation()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 10px; color: white; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;">+ Add</button>
+            </div>
+            <div id="locations-list" style="display: flex; flex-direction: column; gap: 10px; min-height: 60px;">
+                <div style="text-align: center; color: #9ca3af; padding: 20px; font-size: 14px;">Loading locations...</div>
+            </div>
+            <div style="margin-top: 24px;">
+                <button onclick="closeManageLocationsModal()" style="width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userLocations = [];
+
+        async function loadUserLocations() {
+            if (!currentUser) return;
+            const { data, error } = await supabase.from('locations').select('*').eq('user_id', currentUser.id).order('name', { ascending: true });
+            if (error) { console.error('Error loading locations:', error); userLocations = []; }
+            else { userLocations = data || []; }
+        }
+
+        function showManageLocationsModal() {
+            document.getElementById('manage-locations-modal').classList.add('active');
+            renderLocationsList();
+            loadUserLocations().then(() => renderLocationsList());
+        }
+
+        function closeManageLocationsModal() {
+            document.getElementById('manage-locations-modal').classList.remove('active');
+            document.getElementById('new-location-input').value = '';
+            populateLocationDropdowns();
+            renderInventory();
+        }
+
+        function renderLocationsList() {
+            const container = document.getElementById('locations-list');
+            if (!userLocations || userLocations.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:#9ca3af;padding:20px;font-size:14px;border:2px dashed #e5e7eb;border-radius:10px;">No locations yet. Add your first location above!</div>';
+                return;
+            }
+            container.innerHTML = userLocations.map(loc =>
+                '<div style="display:flex;align-items:center;justify-content:space-between;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px 16px;">' +
+                '<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">📍</span><span style="font-weight:600;font-size:15px;">' + loc.name + '</span></div>' +
+                '<button onclick="deleteLocation(' + loc.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:16px;">✕</button>' +
+                '</div>'
+            ).join('');
+        }
+
+        async function addLocation() {
+            const input = document.getElementById('new-location-input');
+            const name = input.value.trim();
+            if (!name) return;
+            if (userLocations.some(l => l.name.toLowerCase() === name.toLowerCase())) { alert('That location already exists.'); return; }
+            const { data, error } = await supabase.from('locations').insert([{ user_id: currentUser.id, name: name }]).select();
+            if (error) { alert('Error adding location: ' + error.message); return; }
+            userLocations.push(data[0]);
+            userLocations.sort((a, b) => a.name.localeCompare(b.name));
+            input.value = '';
+            renderLocationsList();
+            populateLocationDropdowns();
+        }
+
+        async function deleteLocation(locationId) {
+            const loc = userLocations.find(l => l.id === locationId);
+            if (!loc) return;
+            const itemsUsing = inventoryItems.filter(i => i.location === loc.name);
+            const msg = itemsUsing.length > 0 ? itemsUsing.length + ' item(s) assigned to "' + loc.name + '". Delete anyway?' : 'Delete location "' + loc.name + '"?';
+            if (!confirm(msg)) return;
+            const { error } = await supabase.from('locations').delete().eq('id', locationId);
+            if (error) { alert('Error deleting location: ' + error.message); return; }
+            userLocations = userLocations.filter(l => l.id !== locationId);
+            renderLocationsList();
+            populateLocationDropdowns();
+        }
+
+        function populateLocationDropdowns() {
+            const names = (userLocations || []).map(l => l.name);
+            const opts = names.map(n => '<option value="' + n + '">' + n + '</option>').join('');
+            const blank = '<option value="">Select location...</option>';
+            ['item-location','bulk-location','quick-location'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { const v = el.value; el.innerHTML = blank + opts; if (v) el.value = v; }
+            });
+            const filter = document.getElementById('inventory-location-filter');
+            if (filter) {
+                const v = filter.value;
+                const invLocs = [...new Set((inventoryItems||[]).map(i => i.location).filter(Boolean))];
+                const all = [...new Set([...names, ...invLocs])].sort();
+                filter.innerHTML = '<option value="all">All Locations</option>' + all.map(n => '<option value="' + n + '">' + n + '</option>').join('');
+                if (v && v !== 'all') filter.value = v;
+            }
+        }
+    </script>
 </body>
 </html>

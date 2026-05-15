@@ -6,7 +6,7 @@
     <title>FAQ - Stagience Staging Management Software</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,14 +15,14 @@
         }
 
         body {
-            font-family: Georgia, 'Times New Roman', serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: #1f2937;
             background: #fafaf9;
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', Georgia, serif;
+            font-family: 'Inter', sans-serif;
         }
 
         .container {
@@ -45,6 +45,24 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: #57534e;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .header-nav a:hover, .header-nav a.active {
+            color: #1f2937;
         }
 
         .logo {
@@ -235,6 +253,11 @@
                 <div class="logo-icon"></div>
                 Stagience
             </a>
+            <nav class="header-nav">
+                <a href="stagience-landing-page.html">Home</a>
+                <a href="stagience-how-it-works.html">How It Works</a>
+                <a href="stagience-faq.html" class="active">FAQ</a>
+            </nav>
             <div class="header-buttons">
                 <a href="stagience-landing-page.html#waitlist" class="btn-secondary">Join Waitlist</a>
                 <a href="stagience-v1-phase1.html" class="btn-primary">Sign In</a>

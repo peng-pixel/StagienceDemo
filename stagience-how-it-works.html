@@ -242,24 +242,12 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .step {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .step-number {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-
-            .page-title {
-                font-size: 32px;
-            }
-
-            .cta-section {
-                padding: 40px 24px;
-            }
+            .header-nav { display: none; }
+            .header-buttons .btn-secondary { display: none; }
+            .step { grid-template-columns: 1fr; gap: 20px; }
+            .step-number { width: 60px; height: 60px; font-size: 24px; }
+            .page-title { font-size: 32px; }
+            .cta-section { padding: 40px 24px; }
         }
     </style>
 </head>

@@ -4900,11 +4900,47 @@
                 return;
             }
             container.innerHTML = userLocations.map(loc =>
-                '<div style="display:flex;align-items:center;justify-content:space-between;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px 16px;">' +
-                '<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">📍</span><span style="font-weight:600;font-size:15px;">' + loc.name + '</span></div>' +
-                '<button onclick="deleteLocation(' + loc.id + ')" style="width:30px;height:30px;border-radius:8px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:16px;">✕</button>' +
+                '<div id="loc-row-' + loc.id + '" style="display:flex;align-items:center;gap:8px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:10px;padding:12px 16px;">' +
+                '<span style="font-size:18px;flex-shrink:0;">📍</span>' +
+                '<span id="loc-name-' + loc.id + '" style="font-weight:600;font-size:15px;flex:1;">' + loc.name + '</span>' +
+                '<input id="loc-input-' + loc.id + '" type="text" value="' + loc.name + '" style="display:none;flex:1;padding:6px 10px;border:2px solid #b0a586;border-radius:8px;font-size:14px;font-weight:600;" onkeydown="if(event.key===\'Enter\'){saveLocationRename(' + loc.id + ');}if(event.key===\'Escape\'){cancelLocationRename(' + loc.id + ');}"/>' +
+                '<button onclick="startLocationRename(' + loc.id + ')" id="loc-edit-' + loc.id + '" title="Rename" style="width:30px;height:30px;border-radius:8px;border:1px solid #e5e7eb;background:white;cursor:pointer;font-size:14px;">✏️</button>' +
+                '<button onclick="saveLocationRename(' + loc.id + ')" id="loc-save-' + loc.id + '" title="Save" style="display:none;width:30px;height:30px;border-radius:8px;border:1px solid #86efac;background:#f0fdf4;cursor:pointer;font-size:16px;">✓</button>' +
+                '<button onclick="deleteLocation(' + loc.id + ')" title="Delete" style="width:30px;height:30px;border-radius:8px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:16px;">✕</button>' +
                 '</div>'
             ).join('');
+        }
+
+        function startLocationRename(id) {
+            document.getElementById('loc-name-' + id).style.display = 'none';
+            document.getElementById('loc-input-' + id).style.display = 'inline-block';
+            document.getElementById('loc-edit-' + id).style.display = 'none';
+            document.getElementById('loc-save-' + id).style.display = 'inline-block';
+            document.getElementById('loc-input-' + id).focus();
+        }
+
+        function cancelLocationRename(id) {
+            const loc = userLocations.find(l => l.id === id);
+            document.getElementById('loc-input-' + id).value = loc.name;
+            document.getElementById('loc-name-' + id).style.display = 'inline-block';
+            document.getElementById('loc-input-' + id).style.display = 'none';
+            document.getElementById('loc-edit-' + id).style.display = 'inline-block';
+            document.getElementById('loc-save-' + id).style.display = 'none';
+        }
+
+        async function saveLocationRename(id) {
+            const newName = document.getElementById('loc-input-' + id).value.trim();
+            if (!newName) { cancelLocationRename(id); return; }
+            if (userLocations.some(l => l.id !== id && l.name.toLowerCase() === newName.toLowerCase())) {
+                alert('A location with that name already exists.');
+                return;
+            }
+            const { error } = await supabase.from('locations').update({ name: newName }).eq('id', id);
+            if (error) { alert('Error renaming location: ' + error.message); return; }
+            userLocations = userLocations.map(l => l.id === id ? { ...l, name: newName } : l);
+            userLocations.sort((a, b) => a.name.localeCompare(b.name));
+            renderLocationsList();
+            populateLocationDropdowns();
         }
 
         async function addLocation() {

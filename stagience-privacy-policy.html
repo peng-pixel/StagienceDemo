@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Stagience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #fafaf9;
+        }
+
+        h1, h2, h3, h4, h5, h6 { font-family: 'Inter', sans-serif; }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e7e5e4;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1f2937;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .header-nav a {
+            color: #57534e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header-nav a:hover { color: #1f2937; }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #b0a586 0%, #8b7d5f 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .page-hero {
+            background: white;
+            padding: 60px 0 40px;
+            border-bottom: 1px solid #e7e5e4;
+            margin-bottom: 48px;
+        }
+
+        .page-hero h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .page-hero p {
+            color: #57534e;
+            font-size: 16px;
+        }
+
+        .effective-date {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: #f0fdf4;
+            color: #166534;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .policy-content {
+            padding-bottom: 80px;
+        }
+
+        .policy-section {
+            background: white;
+            border: 1px solid #e7e5e4;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .policy-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .policy-section h2 .section-icon {
+            font-size: 24px;
+        }
+
+        .policy-section p {
+            color: #57534e;
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .policy-section p:last-child { margin-bottom: 0; }
+
+        .policy-section ul {
+            list-style: none;
+            margin: 12px 0;
+        }
+
+        .policy-section ul li {
+            color: #57534e;
+            font-size: 15px;
+            line-height: 1.7;
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .policy-section ul li::before {
+            content: "•";
+            color: #b0a586;
+            font-weight: 700;
+            position: absolute;
+            left: 0;
+        }
+
+        .highlight-box {
+            background: #fef9f0;
+            border: 1.5px solid #b0a586;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 14px;
+            color: #57534e;
+            line-height: 1.7;
+        }
+
+        .contact-box {
+            background: linear-gradient(135deg, #f0fdf4, #fef9f0);
+            border: 1.5px solid #b0a586;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .contact-box h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .contact-box p {
+            color: #57534e;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .contact-box a {
+            color: #2f6f6b;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* TOC */
+        .toc {
+            background: white;
+            border: 1px solid #e7e5e4;
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+        }
+
+        .toc h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #1f2937;
+        }
+
+        .toc ol {
+            list-style: decimal;
+            padding-left: 20px;
+        }
+
+        .toc ol li {
+            margin-bottom: 8px;
+        }
+
+        .toc ol li a {
+            color: #2f6f6b;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .toc ol li a:hover { text-decoration: underline; }
+
+        /* Footer */
+        footer {
+            background: #292524;
+            color: #d6d3d1;
+            padding: 40px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        footer a { color: #d6d3d1; text-decoration: none; }
+        footer a:hover { color: white; }
+
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 28px; }
+            .header-nav { display: none; }
+            .policy-section { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="stagience-landing-page.html" class="logo">
+                <div class="logo-icon">S</div>
+                Stagience
+            </a>
+            <div class="header-nav">
+                <a href="stagience-landing-page.html">Home</a>
+                <a href="stagience-how-it-works.html">How It Works</a>
+                <a href="stagience-faq.html">FAQ</a>
+                <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="page-hero">
+        <div class="container">
+            <h1>Privacy Policy</h1>
+            <p>Your privacy matters to us. This policy explains what data we collect, how we use it, and how we protect it.</p>
+            <span class="effective-date">Effective Date: May 16, 2026</span>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="policy-content">
+        <div class="container">
+
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>📋 Table of Contents</h3>
+                <ol>
+                    <li><a href="#who-we-are">Who We Are</a></li>
+                    <li><a href="#what-we-collect">What Information We Collect</a></li>
+                    <li><a href="#how-we-use">How We Use Your Information</a></li>
+                    <li><a href="#data-storage">Data Storage & Security</a></li>
+                    <li><a href="#sharing">Sharing of Information</a></li>
+                    <li><a href="#your-rights">Your Rights</a></li>
+                    <li><a href="#cookies">Cookies & Tracking</a></li>
+                    <li><a href="#third-parties">Third-Party Services</a></li>
+                    <li><a href="#children">Children's Privacy</a></li>
+                    <li><a href="#changes">Changes to This Policy</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ol>
+            </div>
+
+            <!-- 1. Who We Are -->
+            <div class="policy-section" id="who-we-are">
+                <h2><span class="section-icon">🏢</span> 1. Who We Are</h2>
+                <p>Stagience ("we," "us," or "our") is a home staging business management platform operated from Ontario, Canada. We provide tools to help home staging professionals manage their inventory, projects, scheduling, photos, and documents.</p>
+                <p>This Privacy Policy applies to all users of the Stagience platform, including our website at <strong>stagience.com</strong> and our web application.</p>
+            </div>
+
+            <!-- 2. What We Collect -->
+            <div class="policy-section" id="what-we-collect">
+                <h2><span class="section-icon">📋</span> 2. What Information We Collect</h2>
+                <p>We collect the following types of information when you use Stagience:</p>
+
+                <p><strong>Account Information:</strong></p>
+                <ul>
+                    <li>Email address (used for login and communication)</li>
+                    <li>Password (stored in encrypted form — we never see your plain-text password)</li>
+                </ul>
+
+                <p><strong>Business Data you provide:</strong></p>
+                <ul>
+                    <li>Project details (client names, addresses, dates, notes)</li>
+                    <li>Inventory items (names, descriptions, photos, locations, status)</li>
+                    <li>Calendar events and project timelines</li>
+                    <li>Photos and files uploaded to projects</li>
+                    <li>Document templates</li>
+                    <li>Team member email addresses and roles</li>
+                </ul>
+
+                <p><strong>Technical Information:</strong></p>
+                <ul>
+                    <li>Browser type and device information</li>
+                    <li>IP address</li>
+                    <li>Pages visited and actions taken within the app (for troubleshooting and improvement)</li>
+                </ul>
+
+                <div class="highlight-box">
+                    💡 We collect only what is necessary to provide you with the Stagience service. We do not collect payment card information directly — payments are processed securely by Stripe.
+                </div>
+            </div>
+
+            <!-- 3. How We Use -->
+            <div class="policy-section" id="how-we-use">
+                <h2><span class="section-icon">⚙️</span> 3. How We Use Your Information</h2>
+                <p>We use the information we collect to:</p>
+                <ul>
+                    <li>Provide, operate, and maintain the Stagience platform</li>
+                    <li>Authenticate your identity and keep your account secure</li>
+                    <li>Store and organize the business data you enter</li>
+                    <li>Send account-related emails (password resets, team invitations)</li>
+                    <li>Respond to your support requests</li>
+                    <li>Improve and develop new features based on usage patterns</li>
+                    <li>Comply with legal obligations</li>
+                </ul>
+                <p>We do <strong>not</strong> use your data for advertising purposes, and we do <strong>not</strong> sell your data to third parties.</p>
+            </div>
+
+            <!-- 4. Data Storage & Security -->
+            <div class="policy-section" id="data-storage">
+                <h2><span class="section-icon">🔒</span> 4. Data Storage & Security</h2>
+                <p>Your data is stored securely using <strong>Supabase</strong>, a trusted cloud database provider. Here is how we protect your information:</p>
+                <ul>
+                    <li><strong>Encryption in transit:</strong> All data transmitted between your browser and our servers is encrypted using HTTPS/TLS</li>
+                    <li><strong>Encryption at rest:</strong> Your data is encrypted at the database level</li>
+                    <li><strong>Row Level Security:</strong> Every user can only access their own data — there is no way for one user to view another user's projects, inventory, or photos</li>
+                    <li><strong>Private file storage:</strong> Photos and files are stored in private, access-controlled storage — they are never publicly accessible</li>
+                    <li><strong>Password security:</strong> Passwords are hashed using industry-standard algorithms and are never stored in plain text</li>
+                </ul>
+                <p>While we take every reasonable measure to protect your data, no system is 100% immune to security risks. We encourage you to use a strong, unique password and keep your login credentials confidential.</p>
+
+                <div class="highlight-box">
+                    📍 Your data is stored on servers located in <strong>Canada and/or the United States</strong> via Supabase's infrastructure. By using Stagience, you consent to this storage location.
+                </div>
+            </div>
+
+            <!-- 5. Sharing -->
+            <div class="policy-section" id="sharing">
+                <h2><span class="section-icon">🤝</span> 5. Sharing of Information</h2>
+                <p>We do not sell, rent, or trade your personal information. We share your information only in the following limited circumstances:</p>
+                <ul>
+                    <li><strong>Service providers:</strong> We use trusted third-party services (Supabase for database and storage, Vercel for hosting) that process data on our behalf under strict confidentiality agreements</li>
+                    <li><strong>Team members:</strong> If you invite team members to your Stagience account, they will have access to your shared business data based on their assigned role and permissions</li>
+                    <li><strong>Legal requirements:</strong> We may disclose your information if required by law, court order, or to protect the rights and safety of Stagience or its users</li>
+                    <li><strong>Business transfer:</strong> In the event of a merger, acquisition, or sale of Stagience, your data may be transferred as part of that transaction. We will notify you before this occurs.</li>
+                </ul>
+            </div>
+
+            <!-- 6. Your Rights -->
+            <div class="policy-section" id="your-rights">
+                <h2><span class="section-icon">✅</span> 6. Your Rights</h2>
+                <p>As a user of Stagience, and as a resident of Canada under <strong>PIPEDA</strong> (Personal Information Protection and Electronic Documents Act), you have the following rights:</p>
+                <ul>
+                    <li><strong>Access:</strong> You can request a copy of the personal information we hold about you</li>
+                    <li><strong>Correction:</strong> You can update or correct your personal information at any time through your account settings</li>
+                    <li><strong>Deletion:</strong> You can request that we delete your account and all associated data. Contact us and we will process your request within 30 days</li>
+                    <li><strong>Portability:</strong> You can export your data (inventory, projects) at any time using our export features</li>
+                    <li><strong>Withdraw consent:</strong> You may withdraw consent to our data processing at any time by deleting your account</li>
+                </ul>
+                <p>To exercise any of these rights, please contact us at the email address listed at the bottom of this policy.</p>
+            </div>
+
+            <!-- 7. Cookies -->
+            <div class="policy-section" id="cookies">
+                <h2><span class="section-icon">🍪</span> 7. Cookies & Tracking</h2>
+                <p>Stagience uses minimal cookies and local browser storage necessary for the application to function:</p>
+                <ul>
+                    <li><strong>Authentication cookies:</strong> Used to keep you logged in securely between sessions</li>
+                    <li><strong>Session data:</strong> Temporary data stored in your browser to maintain your session</li>
+                </ul>
+                <p>We do <strong>not</strong> use advertising cookies, tracking pixels, or third-party analytics tools that monitor your behaviour across other websites.</p>
+            </div>
+
+            <!-- 8. Third Parties -->
+            <div class="policy-section" id="third-parties">
+                <h2><span class="section-icon">🔗</span> 8. Third-Party Services</h2>
+                <p>Stagience uses the following third-party services to operate. Each has their own privacy policy:</p>
+                <ul>
+                    <li><strong>Supabase</strong> — Database, authentication, and file storage (<a href="https://supabase.com/privacy" target="_blank" style="color:#2f6f6b;">supabase.com/privacy</a>)</li>
+                    <li><strong>Vercel</strong> — Web hosting and deployment (<a href="https://vercel.com/legal/privacy-policy" target="_blank" style="color:#2f6f6b;">vercel.com/legal/privacy-policy</a>)</li>
+                    <li><strong>Google Fonts</strong> — Font delivery (<a href="https://policies.google.com/privacy" target="_blank" style="color:#2f6f6b;">policies.google.com/privacy</a>)</li>
+                </ul>
+                <p>We carefully select third-party providers that meet high standards of security and privacy.</p>
+            </div>
+
+            <!-- 9. Children -->
+            <div class="policy-section" id="children">
+                <h2><span class="section-icon">👶</span> 9. Children's Privacy</h2>
+                <p>Stagience is a professional business tool intended for adults (18 years and older). We do not knowingly collect personal information from anyone under the age of 18. If you believe a minor has created an account, please contact us and we will promptly delete the account and associated data.</p>
+            </div>
+
+            <!-- 10. Changes -->
+            <div class="policy-section" id="changes">
+                <h2><span class="section-icon">📝</span> 10. Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time as our service evolves. When we make significant changes, we will:</p>
+                <ul>
+                    <li>Update the "Effective Date" at the top of this page</li>
+                    <li>Notify registered users by email</li>
+                    <li>Display a notice within the Stagience app</li>
+                </ul>
+                <p>Your continued use of Stagience after any changes constitutes your acceptance of the updated Privacy Policy. We encourage you to review this page periodically.</p>
+            </div>
+
+            <!-- 11. Contact -->
+            <div class="contact-box" id="contact">
+                <h2>11. Contact Us</h2>
+                <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us:</p>
+                <br>
+                <p><strong>Stagience</strong></p>
+                <p>Ontario, Canada</p>
+                <p>📧 <a href="mailto:privacy@stagience.com">privacy@stagience.com</a></p>
+                <br>
+                <p style="font-size: 13px; color: #78716c;">We aim to respond to all privacy-related inquiries within <strong>5 business days</strong>.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+            <p style="margin-bottom: 12px;">© 2026 Stagience. All rights reserved.</p>
+            <p>
+                <a href="stagience-landing-page.html">Home</a> &nbsp;·&nbsp;
+                <a href="stagience-faq.html">FAQ</a> &nbsp;·&nbsp;
+                <a href="stagience-how-it-works.html">How It Works</a> &nbsp;·&nbsp;
+                <a href="stagience-privacy-policy.html">Privacy Policy</a>
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

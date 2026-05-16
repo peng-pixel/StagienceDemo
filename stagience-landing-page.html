@@ -683,6 +683,39 @@
                 grid-template-columns: 1fr;
                 gap: 40px;
             }
+
+            .responsive-2col {
+                grid-template-columns: 1fr !important;
+            }
+
+            .responsive-3col {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title { font-size: 26px !important; }
+            .section-subtitle { font-size: 15px !important; }
+            .hero-description { font-size: 16px !important; }
+        }
+
+        /* Mobile Nav & Layout */
+        @media (max-width: 768px) {
+            .header-nav-links { display: none !important; }
+            .btn-secondary.header-only { display: none !important; }
+            .hero-title { font-size: 32px !important; }
+            .hero-content { grid-template-columns: 1fr !important; gap: 32px !important; }
+            .hero-text { padding-right: 0 !important; }
+            .features-grid { grid-template-columns: 1fr !important; }
+            .steps-grid { grid-template-columns: 1fr !important; }
+            .pricing-grid { grid-template-columns: 1fr !important; }
+            .pricing-card.featured { transform: none !important; }
+            .footer-content { grid-template-columns: 1fr !important; gap: 32px !important; }
+            .cta-box { padding: 48px 24px !important; }
+            .cta-title { font-size: 28px !important; }
+            .responsive-2col { grid-template-columns: 1fr !important; }
+            .responsive-3col { grid-template-columns: 1fr !important; }
+            .benefits-content { grid-template-columns: 1fr !important; gap: 32px !important; }
         }
     </style>
 </head>
@@ -696,9 +729,9 @@
                     Stagience
                 </a>
                 <div class="header-buttons" style="display: flex; align-items: center; gap: 12px;">
-                    <a href="stagience-how-it-works.html" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">How It Works</a>
-                    <a href="stagience-faq.html" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">FAQ</a>
-                    <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary">Join Waitlist</a>
+                    <a href="stagience-how-it-works.html" class="header-nav-links" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">How It Works</a>
+                    <a href="stagience-faq.html" class="header-nav-links" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">FAQ</a>
+                    <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary header-only">Join Waitlist</a>
                     <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
                 </div>
             </div>
@@ -787,7 +820,7 @@
                 <h2 class="section-title">Everything a project needs, in one place</h2>
                 <p class="section-subtitle">Every project in Stagience has four dedicated tabs — so nothing gets lost in emails or folders.</p>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px;" class="responsive-2col">
                 <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
                     <div style="font-size: 36px; flex-shrink: 0;">📅</div>
                     <div>
@@ -941,7 +974,7 @@
                 <h2 class="section-title">What stagers are saying</h2>
                 <p class="section-subtitle">Join stagers who are already running a more organized business.</p>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;" class="responsive-3col">
                 <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 32px;">
                     <div style="color: #b0a586; font-size: 24px; margin-bottom: 16px;">★★★★★</div>
                     <p style="color: #57534e; font-size: 15px; line-height: 1.7; margin-bottom: 24px; font-style: italic;">"Stagience has completely replaced my spreadsheets. I can see everything about a project — the timeline, inventory, photos — without digging through emails or folders."</p>
@@ -986,7 +1019,7 @@
                 <h2 class="section-title">More on the way</h2>
                 <p class="section-subtitle">Stagience is actively growing. Here's what's coming next.</p>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;" class="responsive-3col">
                 <div style="background: #fafaf9; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
                     <div style="font-size: 32px; margin-bottom: 12px;">💰</div>
                     <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Invoicing & Payments</h3>

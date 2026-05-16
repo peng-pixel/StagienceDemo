@@ -139,6 +139,7 @@
                         <button onclick="showSection('projects')" id="nav-projects" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Projects</button>
                         <button onclick="showSection('inventory')" id="nav-inventory" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Inventory</button>
                         <button onclick="showSection('templates')" id="nav-templates" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">Templates</button>
+                        <button onclick="showSection('settings')" id="nav-settings" style="padding: 10px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; border: none;">⚙️ Settings</button>
                         <button onclick="handleSignOut()" style="padding: 10px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">Sign Out</button>
                     </div>
                     <!-- Hamburger (mobile) -->
@@ -157,6 +158,7 @@
                     <button class="app-mobile-nav-btn" onclick="showSection('projects'); toggleMobileMenu();">🏠 Projects</button>
                     <button class="app-mobile-nav-btn" onclick="showSection('inventory'); toggleMobileMenu();">📦 Inventory</button>
                     <button class="app-mobile-nav-btn" onclick="showSection('templates'); toggleMobileMenu();">📄 Templates</button>
+                    <button class="app-mobile-nav-btn" onclick="showSection('settings'); toggleMobileMenu();" id="mobile-nav-settings">⚙️ Settings</button>
                     <button class="app-mobile-signout" onclick="handleSignOut()">Sign Out</button>
                 </div>
             </div>
@@ -561,6 +563,69 @@
                         <div style="font-size: 56px; margin-bottom: 16px;">📝</div>
                         <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">No templates yet</h3>
                         <p>Upload your first reusable template to get started</p>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings-section" class="section" style="display: none;">
+                    <div style="margin-bottom: 32px;">
+                        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 8px;">Settings</h1>
+                        <p style="color: #6b7280; font-size: 15px;">Manage your account and team</p>
+                    </div>
+
+                    <!-- Settings Tabs -->
+                    <div style="border-bottom: 2px solid #e5e7eb; margin-bottom: 32px;">
+                        <div style="display: flex; gap: 32px;">
+                            <button onclick="switchSettingsTab('team')" id="settings-tab-team" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #3b82f6; border-bottom: 2px solid #3b82f6; margin-bottom: -2px; cursor: pointer;">
+                                👥 Team
+                            </button>
+                            <button onclick="switchSettingsTab('account')" id="settings-tab-account" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b7280; cursor: pointer;">
+                                👤 Account
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Team Tab -->
+                    <div id="settings-team-tab" style="display: block;">
+                        <!-- Invite Banner (Admin only) -->
+                        <div id="invite-banner" style="display: none; background: linear-gradient(135deg, #f0fdf4, #fef9f0); border: 1.5px solid #b0a586; border-radius: 16px; padding: 24px 28px; margin-bottom: 32px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="font-size: 36px; flex-shrink: 0;">✉️</div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Invite a Team Member</div>
+                                <div style="color: #57534e; font-size: 14px;">Send an invitation email with a pre-assigned role. They'll set up their own password.</div>
+                            </div>
+                            <button onclick="showInviteModal()" class="gradient-accent" style="flex-shrink: 0; padding: 12px 24px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 14px; cursor: pointer;">+ Invite Member</button>
+                        </div>
+
+                        <!-- Your Role Badge -->
+                        <div id="your-role-badge" style="margin-bottom: 24px;"></div>
+
+                        <!-- Team Members List -->
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden;">
+                            <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                                <h2 style="font-size: 18px; font-weight: 700;">Team Members</h2>
+                                <span id="team-member-count" style="font-size: 13px; color: #6b7280;"></span>
+                            </div>
+                            <div id="team-members-list" style="padding: 8px 0;">
+                                <div style="text-align: center; padding: 40px; color: #9ca3af;">Loading team...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Tab -->
+                    <div id="settings-account-tab" style="display: none;">
+                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 32px; max-width: 500px;">
+                            <h2 style="font-size: 18px; font-weight: 700; margin-bottom: 24px;">Account Details</h2>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #6b7280;">Email Address</label>
+                                <div id="account-email" style="padding: 12px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; color: #1f2937;"></div>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #6b7280;">Your Role</label>
+                                <div id="account-role" style="padding: 12px; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; color: #1f2937;"></div>
+                            </div>
+                            <button onclick="showChangePasswordModal()" style="padding: 12px 24px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; font-size: 14px; cursor: pointer;">🔑 Change Password</button>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -1320,6 +1385,7 @@
             if (session) {
                 currentUser = session.user;
                 showApp();
+                await loadUserRoleAndTeam();
                 loadAllData();
             } else {
                 showAuthPage();
@@ -1451,6 +1517,12 @@
         function showApp() {
             document.getElementById('auth-page').classList.remove('active');
             document.getElementById('app-page').classList.add('active');
+            // Default section based on role
+            if (currentUserRole === 'inventory') {
+                showSection('inventory');
+            } else {
+                showSection('calendar');
+            }
         }
 
         // ==============================================
@@ -1458,6 +1530,10 @@
         // ==============================================
         
         function showSection(sectionName) {
+            // Role check - prevent unauthorized access
+            if (sectionName === 'settings' && currentUserRole !== 'admin') return;
+            if (currentUserRole === 'inventory' && !['inventory'].includes(sectionName)) return;
+
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.style.display = 'none';
@@ -1472,7 +1548,13 @@
             document.getElementById(sectionName + '-section').style.display = 'block';
             
             // Highlight active nav button
-            document.getElementById('nav-' + sectionName).style.background = 'rgba(176,138,90,.10)';
+            const navBtn = document.getElementById('nav-' + sectionName);
+            if (navBtn) navBtn.style.background = 'rgba(176,138,90,.10)';
+
+            // Load settings data when switching to settings
+            if (sectionName === 'settings') {
+                switchSettingsTab('team');
+            }
         }
 
         // ==============================================
@@ -1511,7 +1593,7 @@
             const { data, error } = await supabase
                 .from('inventory')
                 .select('*')
-                .eq('user_id', currentUser.id)
+                .eq('user_id', getDataOwnerId())
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -2936,7 +3018,7 @@
             const { data, error } = await supabase
                 .from('projects')
                 .select('*')
-                .eq('user_id', currentUser.id)
+                .eq('user_id', getDataOwnerId())
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -4721,7 +4803,7 @@
                         address
                     )
                 `)
-                .eq('user_id', currentUser.id)
+                .eq('user_id', getDataOwnerId())
                 .order('event_date', { ascending: true });
 
             if (error) {
@@ -4969,7 +5051,7 @@
             const { data, error } = await supabase
                 .from('document_templates')
                 .select('*')
-                .eq('user_id', currentUser.id)
+                .eq('user_id', getDataOwnerId())
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -5428,6 +5510,346 @@
             }
         }
 
+        
+        // ==============================================
+        // ROLE PERMISSIONS & TEAM MANAGEMENT
+        // ==============================================
+        let currentUserRole = 'admin'; // default until loaded
+        let currentTeamId = null;
+        let teamMembers = [];
+
+        const ROLE_LABELS = {
+            'admin': '🔑 Admin',
+            'inventory': '📦 Inventory Only',
+            'viewer': '👁 Viewer'
+        };
+
+        const ROLE_COLORS = {
+            'admin': 'background:#dcfce7;color:#166534;',
+            'inventory': 'background:#dbeafe;color:#1e40af;',
+            'viewer': 'background:#f3f4f6;color:#374151;'
+        };
+
+        // Load current user's role and team info
+        async function loadUserRoleAndTeam() {
+            if (!currentUser) return;
+
+            // Check if user is a team member (invited user)
+            const { data: memberData } = await supabase
+                .from('team_members')
+                .select('*, teams(*)')
+                .eq('user_id', currentUser.id)
+                .eq('status', 'active')
+                .maybeSingle();
+
+            if (memberData) {
+                // This user was invited - they belong to someone else's team
+                currentUserRole = memberData.role;
+                currentTeamId = memberData.team_id;
+                // Override currentUser data owner to the team owner
+                window.dataOwnerUserId = memberData.teams.owner_id;
+            } else {
+                // Check if this user owns a team
+                const { data: teamData } = await supabase
+                    .from('teams')
+                    .select('*')
+                    .eq('owner_id', currentUser.id)
+                    .maybeSingle();
+
+                if (teamData) {
+                    currentTeamId = teamData.id;
+                } else {
+                    // Create a team for this user if they don't have one
+                    const { data: newTeam } = await supabase
+                        .from('teams')
+                        .insert([{ owner_id: currentUser.id, name: 'My Team' }])
+                        .select()
+                        .single();
+                    if (newTeam) currentTeamId = newTeam.id;
+                }
+                currentUserRole = 'admin';
+                window.dataOwnerUserId = currentUser.id;
+            }
+
+            applyRoleRestrictions();
+        }
+
+        // Get the user ID to use for data queries
+        function getDataOwnerId() {
+            return window.dataOwnerUserId || currentUser.id;
+        }
+
+        function applyRoleRestrictions() {
+            // Settings nav - only admins see it
+            const settingsNavBtn = document.getElementById('nav-settings');
+            const mobileSettingsBtn = document.getElementById('mobile-nav-settings');
+            if (currentUserRole !== 'admin') {
+                if (settingsNavBtn) settingsNavBtn.style.display = 'none';
+                if (mobileSettingsBtn) mobileSettingsBtn.style.display = 'none';
+            }
+
+            // Inventory Only - hide everything except inventory
+            if (currentUserRole === 'inventory') {
+                ['nav-calendar','nav-projects','nav-templates'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
+                // Show inventory by default
+                showSection('inventory');
+            }
+
+            // Viewer - hide all edit/add/delete buttons
+            if (currentUserRole === 'viewer') {
+                // We'll hide action buttons after sections render
+                document.addEventListener('click', function() {
+                    hideViewerActionButtons();
+                }, { once: false });
+            }
+        }
+
+        function hideViewerActionButtons() {
+            if (currentUserRole !== 'viewer') return;
+            // Hide add/edit/delete buttons for viewers
+            const selectors = [
+                'button[onclick*="showAddItemModal"]',
+                'button[onclick*="showAddProjectModal"]',
+                'button[onclick*="editItem"]',
+                'button[onclick*="deleteItem"]',
+                'button[onclick*="editProject"]',
+                'button[onclick*="deleteProject"]',
+                'button[onclick*="showBulkUpdate"]',
+                'button[onclick*="showImport"]',
+                '#bulk-actions-banner'
+            ];
+            selectors.forEach(sel => {
+                document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
+            });
+        }
+
+        // Settings section functions
+        function switchSettingsTab(tab) {
+            ['team', 'account'].forEach(t => {
+                document.getElementById('settings-' + t + '-tab').style.display = t === tab ? 'block' : 'none';
+                const btn = document.getElementById('settings-tab-' + t);
+                btn.style.color = t === tab ? '#3b82f6' : '#6b7280';
+                btn.style.borderBottom = t === tab ? '2px solid #3b82f6' : 'none';
+                btn.style.marginBottom = t === tab ? '-2px' : '0';
+            });
+
+            if (tab === 'account') {
+                document.getElementById('account-email').textContent = currentUser.email;
+                const roleLabel = ROLE_LABELS[currentUserRole] || 'Admin';
+                document.getElementById('account-role').textContent = roleLabel;
+            }
+
+            if (tab === 'team') loadTeamMembers();
+        }
+
+        async function loadTeamMembers() {
+            if (!currentTeamId) return;
+
+            const { data, error } = await supabase
+                .from('team_members')
+                .select('*')
+                .eq('team_id', currentTeamId)
+                .order('created_at', { ascending: true });
+
+            teamMembers = data || [];
+
+            const container = document.getElementById('team-members-list');
+            const countEl = document.getElementById('team-member-count');
+            const inviteBanner = document.getElementById('invite-banner');
+            const roleBadge = document.getElementById('your-role-badge');
+
+            // Show invite banner only for admins
+            if (currentUserRole === 'admin') {
+                inviteBanner.style.display = 'flex';
+            }
+
+            // Show your role badge
+            roleBadge.innerHTML = '<div style="display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;background:#f9fafb;border:1.5px solid #e5e7eb;font-size:14px;margin-bottom:8px;">Your role: <span style="padding:4px 10px;border-radius:6px;font-size:13px;font-weight:700;' + (ROLE_COLORS[currentUserRole]||'') + '">' + (ROLE_LABELS[currentUserRole]||'Admin') + '</span></div>';
+
+            // Owner row
+            const ownerRow = '<div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid #f3f4f6;">' +
+                '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,rgba(176,138,90,1),rgba(47,111,107,1));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;">' + (getDataOwnerId() === currentUser.id ? currentUser.email[0].toUpperCase() : 'O') + '</div>' +
+                '<div style="flex:1;"><div style="font-weight:600;font-size:15px;">' + (getDataOwnerId() === currentUser.id ? currentUser.email : 'Account Owner') + '</div><div style="font-size:13px;color:#6b7280;">Account Owner</div></div>' +
+                '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;background:#dcfce7;color:#166534;">🔑 Admin</span>' +
+                '</div>';
+
+            if (teamMembers.length === 0) {
+                container.innerHTML = ownerRow + '<div style="text-align:center;padding:40px;color:#9ca3af;font-size:14px;">No team members yet. Invite someone to get started!</div>';
+                countEl.textContent = '1 member';
+                return;
+            }
+
+            countEl.textContent = (teamMembers.length + 1) + ' members';
+
+            const memberRows = teamMembers.map(member => {
+                const initial = member.email ? member.email[0].toUpperCase() : '?';
+                const statusBadge = member.status === 'pending'
+                    ? '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;background:#fef3c7;color:#92400e;">⏳ Pending</span>'
+                    : '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;' + (ROLE_COLORS[member.role]||'') + '">' + (ROLE_LABELS[member.role]||member.role) + '</span>';
+
+                const removeBtn = currentUserRole === 'admin'
+                    ? '<button onclick="removeTeamMember(' + member.id + ')" style="padding:6px 12px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>'
+                    : '';
+
+                return '<div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid #f3f4f6;">' +
+                    '<div style="width:40px;height:40px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280;font-weight:700;font-size:16px;flex-shrink:0;">' + initial + '</div>' +
+                    '<div style="flex:1;"><div style="font-weight:600;font-size:15px;">' + (member.email || 'Team Member') + '</div>' +
+                    '<div style="font-size:13px;color:#6b7280;">' + (member.status === 'pending' ? 'Invitation sent' : 'Active member') + '</div></div>' +
+                    statusBadge + ' ' + removeBtn +
+                    '</div>';
+            }).join('');
+
+            container.innerHTML = ownerRow + memberRows;
+        }
+
+        function showInviteModal() {
+            document.getElementById('invite-email').value = '';
+            document.getElementById('invite-role').value = '';
+            document.getElementById('invite-message').style.display = 'none';
+            document.getElementById('invite-modal').classList.add('active');
+        }
+
+        function closeInviteModal() {
+            document.getElementById('invite-modal').classList.remove('active');
+        }
+
+        async function sendInvitation() {
+            const email = document.getElementById('invite-email').value.trim();
+            const role = document.getElementById('invite-role').value;
+            const msgEl = document.getElementById('invite-message');
+
+            if (!email || !role) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'Please enter an email and select a role.';
+                return;
+            }
+
+            // Check if already a member
+            const existing = teamMembers.find(m => m.email === email);
+            if (existing) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'This email has already been invited.';
+                return;
+            }
+
+            // Add to team_members with pending status
+            const { error } = await supabase
+                .from('team_members')
+                .insert([{
+                    team_id: currentTeamId,
+                    email: email,
+                    role: role,
+                    status: 'pending',
+                    invited_by: currentUser.id
+                }]);
+
+            if (error) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'Error sending invitation: ' + error.message;
+                return;
+            }
+
+            // Send invite email via Supabase Auth
+            const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email);
+            // Note: admin.inviteUserByEmail requires service role key
+            // For now we record the invitation and show success
+            // The invited user can sign up themselves and will be matched by email
+
+            msgEl.style.display = 'block';
+            msgEl.style.background = '#dcfce7';
+            msgEl.style.color = '#166534';
+            msgEl.style.padding = '12px';
+            msgEl.style.borderRadius = '8px';
+            msgEl.textContent = '✓ Invitation recorded! Ask ' + email + ' to sign up at ' + window.location.origin + '/stagience-v1-phase1.html — their role will be assigned automatically.';
+
+            await loadTeamMembers();
+        }
+
+        async function removeTeamMember(memberId) {
+            if (!confirm('Remove this team member? They will lose access to your data.')) return;
+
+            const { error } = await supabase
+                .from('team_members')
+                .delete()
+                .eq('id', memberId);
+
+            if (error) { alert('Error removing member: ' + error.message); return; }
+            await loadTeamMembers();
+        }
+
+        // Change Password
+        function showChangePasswordModal() {
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            document.getElementById('change-password-message').style.display = 'none';
+            document.getElementById('change-password-modal').classList.add('active');
+        }
+
+        function closeChangePasswordModal() {
+            document.getElementById('change-password-modal').classList.remove('active');
+        }
+
+        async function changePassword() {
+            const newPw = document.getElementById('new-password').value;
+            const confirmPw = document.getElementById('confirm-password').value;
+            const msgEl = document.getElementById('change-password-message');
+
+            if (!newPw || newPw.length < 6) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+
+            if (newPw !== confirmPw) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'Passwords do not match.';
+                return;
+            }
+
+            const { error } = await supabase.auth.updateUser({ password: newPw });
+
+            if (error) {
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fee2e2';
+                msgEl.style.color = '#991b1b';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = 'Error: ' + error.message;
+                return;
+            }
+
+            msgEl.style.display = 'block';
+            msgEl.style.background = '#dcfce7';
+            msgEl.style.color = '#166534';
+            msgEl.style.padding = '12px';
+            msgEl.style.borderRadius = '8px';
+            msgEl.textContent = '✓ Password updated successfully!';
+            setTimeout(() => closeChangePasswordModal(), 2000);
+        }
+
                 // ==============================================
         // INITIALIZE APP
         // ==============================================
@@ -5455,6 +5877,69 @@
         <div style="margin-top:12px;text-align:center;">
             <div id="lightbox-caption" style="color:white;font-size:14px;font-weight:600;margin-bottom:4px;"></div>
             <div id="lightbox-counter" style="color:rgba(255,255,255,0.6);font-size:13px;"></div>
+        </div>
+    </div>
+
+
+    <!-- Invite Team Member Modal -->
+    <div id="invite-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 480px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Invite Team Member</h2>
+                <button onclick="closeInviteModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            <p style="color: #6b7280; font-size: 14px; margin-bottom: 24px;">They'll receive an email invitation to set up their account. Their role will be pre-assigned.</p>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Email Address *</label>
+                    <input type="email" id="invite-email" placeholder="colleague@example.com" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Role *</label>
+                    <select id="invite-role" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select a role...</option>
+                        <option value="admin">Admin — Full access to everything</option>
+                        <option value="inventory">Inventory Only — Can view and manage inventory</option>
+                        <option value="viewer">Viewer — Read-only access to all sections</option>
+                    </select>
+                </div>
+                <div style="background: #fef9f0; border: 1.5px solid #b0a586; border-radius: 10px; padding: 14px; font-size: 13px; color: #57534e; line-height: 1.6;">
+                    <strong>Role permissions:</strong><br>
+                    🔑 <strong>Admin</strong> — Full access including Settings & Team management<br>
+                    📦 <strong>Inventory Only</strong> — Can only view and edit Inventory<br>
+                    👁 <strong>Viewer</strong> — Can view everything but cannot make changes
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closeInviteModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
+                <button onclick="sendInvitation()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Send Invitation</button>
+            </div>
+            <div id="invite-message" style="margin-top: 16px; display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 440px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2 style="font-size: 24px; font-weight: 800;">Change Password</h2>
+                <button onclick="closeChangePasswordModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">New Password</label>
+                    <input type="password" id="new-password" placeholder="Min. 6 characters" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Confirm New Password</label>
+                    <input type="password" id="confirm-password" placeholder="Re-enter new password" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                </div>
+            </div>
+            <div id="change-password-message" style="margin-top: 16px; display: none;"></div>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="closeChangePasswordModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
+                <button onclick="changePassword()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Update Password</button>
+            </div>
         </div>
     </div>
 

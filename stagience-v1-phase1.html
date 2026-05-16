@@ -5690,15 +5690,20 @@
                     ? '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;background:#fef3c7;color:#92400e;">⏳ Pending</span>'
                     : '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;' + (ROLE_COLORS[member.role]||'') + '">' + (ROLE_LABELS[member.role]||member.role) + '</span>';
 
-                const removeBtn = currentUserRole === 'admin'
-                    ? '<button onclick="removeTeamMember(' + member.id + ')" style="padding:6px 12px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>'
-                    : '';
+                const adminActions = currentUserRole === 'admin' ? (
+                    '<select onchange="changeTeamMemberRole(' + member.id + ', this.value)" style="padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:white;">' +
+                    '<option value="admin"' + (member.role === 'admin' ? ' selected' : '') + '>🔑 Admin</option>' +
+                    '<option value="inventory"' + (member.role === 'inventory' ? ' selected' : '') + '>📦 Inventory Only</option>' +
+                    '<option value="viewer"' + (member.role === 'viewer' ? ' selected' : '') + '>👁 Viewer</option>' +
+                    '</select>' +
+                    '<button onclick="removeTeamMember(' + member.id + ')" style="padding:6px 12px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>'
+                ) : '';
 
-                return '<div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid #f3f4f6;">' +
+                return '<div style="display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid #f3f4f6;flex-wrap:wrap;">' +
                     '<div style="width:40px;height:40px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280;font-weight:700;font-size:16px;flex-shrink:0;">' + initial + '</div>' +
-                    '<div style="flex:1;"><div style="font-weight:600;font-size:15px;">' + (member.email || 'Team Member') + '</div>' +
+                    '<div style="flex:1;min-width:120px;"><div style="font-weight:600;font-size:15px;">' + (member.email || 'Team Member') + '</div>' +
                     '<div style="font-size:13px;color:#6b7280;">' + (member.status === 'pending' ? 'Invitation sent' : 'Active member') + '</div></div>' +
-                    statusBadge + ' ' + removeBtn +
+                    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' + adminActions + '</div>' +
                     '</div>';
             }).join('');
 
@@ -5790,6 +5795,20 @@
 
             if (error) { alert('Error removing member: ' + error.message); return; }
             await loadTeamMembers();
+        }
+
+        async function changeTeamMemberRole(memberId, newRole) {
+            const { error } = await supabase
+                .from('team_members')
+                .update({ role: newRole })
+                .eq('id', memberId);
+
+            if (error) {
+                alert('Error updating role: ' + error.message);
+                await loadTeamMembers(); // Revert UI
+                return;
+            }
+            // Subtle confirmation — no full reload needed, dropdown already shows new value
         }
 
         // Change Password

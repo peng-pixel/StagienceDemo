@@ -2174,11 +2174,16 @@
             });
         }
 
-        // Step 11: Room (Final Step)
+        // Step 11: Room + Item Name (Final Step)
         function renderStep11(container, nav) {
             container.innerHTML = `
-                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Which room is this for? (Optional)</h3>
-                <textarea id="wizard-room" placeholder="e.g., Living Room, Primary Bedroom, Special handling notes..." rows="4" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 16px;">${wizardData.room || ''}</textarea>
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Almost done! Name your item</h3>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Item Name *</label>
+                    <input type="text" id="wizard-item-name" value="${wizardData.name || (wizardData.category ? wizardData.category + ' Item' : '')}" placeholder="e.g., Grey Sofa, Oak Coffee Table..." style="width: 100%; padding: 14px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+                </div>
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px; color: #6b7280;">Which room is this for? (Optional)</h3>
+                <textarea id="wizard-room" placeholder="e.g., Living Room, Primary Bedroom..." rows="2" style="width: 100%; padding: 14px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px; margin-bottom: 12px;">${wizardData.room || ''}</textarea>
                 <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                     <button type="button" onclick="document.getElementById('wizard-room').value='Living Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Living Room</button>
                     <button type="button" onclick="document.getElementById('wizard-room').value='Dining Room'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Dining Room</button>
@@ -2206,13 +2211,22 @@
             nav.innerHTML = html;
         }
 
+        let wizardSaving = false;
         async function saveWizardItem() {
-            wizardData.room = document.getElementById('wizard-room').value;
-            wizardData.name = document.getElementById('wizard-item-name')?.value || `${wizardData.category} Item`;
+            if (wizardSaving) return; // Prevent duplicate saves
             
-            // Ask for item name if not provided
-            const itemName = prompt('What should we name this item?', `${wizardData.category} Item`);
-            if (!itemName) return;
+            wizardData.room = document.getElementById('wizard-room')?.value || '';
+            const itemName = document.getElementById('wizard-item-name')?.value?.trim() || `${wizardData.category} Item`;
+            
+            if (!itemName) {
+                alert('Please enter a name for this item.');
+                return;
+            }
+
+            // Disable save button to prevent duplicates
+            wizardSaving = true;
+            const saveBtn = document.querySelector('#wizard-nav button.gradient-accent');
+            if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving...'; }
             
             const itemData = {
                 name: itemName,
@@ -2248,6 +2262,7 @@
             document.getElementById('wizard-modal').classList.remove('active');
             wizardData = {};
             currentWizardStep = 1;
+            wizardSaving = false;
         }
 
         function cancelWizard() {

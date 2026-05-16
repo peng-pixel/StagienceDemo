@@ -1,16 +1,8 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/app", "destination": "/stagience-v1-phase1.html" },
     { "source": "/faq", "destination": "/stagience-faq.html" },
     { "source": "/how-it-works", "destination": "/stagience-how-it-works.html" },
     { "source": "/privacy", "destination": "/stagience-privacy-policy.html" }
-  ],
-  "redirects": [
-    { "source": "/stagience-landing-page.html", "destination": "/", "permanent": true },
-    { "source": "/stagience-v1-phase1.html", "destination": "/app", "permanent": true },
-    { "source": "/stagience-faq.html", "destination": "/faq", "permanent": true },
-    { "source": "/stagience-how-it-works.html", "destination": "/how-it-works", "permanent": true },
-    { "source": "/stagience-privacy-policy.html", "destination": "/privacy", "permanent": true }
   ]
 }

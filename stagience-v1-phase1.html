@@ -2098,9 +2098,12 @@
         // Step 7: Location
         function renderStep7(container, nav) {
             const locationOptions = (userLocations || []).map(l => `<option value="${l.name}" ${wizardData.location === l.name ? 'selected' : ''}>${l.name}</option>`).join('');
+            const noLocationsMsg = (!userLocations || userLocations.length === 0)
+                ? '<div style="background:#fef9f0;border:1.5px solid #b0a586;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#6b7280;">No locations set up yet. <button type="button" onclick="showLocationsFromWizard()" style="color:#2f6f6b;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;">Add locations first</button></div>'
+                : '';
             container.innerHTML = `
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Where is this item located?</h3>
-                ${!userLocations || userLocations.length === 0 ? '<div style="background:#fef9f0;border:1.5px solid #b0a586;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#6b7280;">No locations set up yet. <button type=\"button\" onclick=\"cancelWizard();showManageLocationsModal();\" style=\"color:#2f6f6b;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;\">Add locations first</button></div>' : ''}
+                ${noLocationsMsg}
                 <select id="wizard-location" style="width: 100%; padding: 16px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
                     <option value="">Select location...</option>
                     ${locationOptions}
@@ -2115,6 +2118,14 @@
                 wizardData.location = loc;
                 showWizardStep(8);
             });
+        }
+
+        function showLocationsFromWizard() {
+            // Show manage locations modal WITHOUT cancelling the wizard
+            // When modal closes, refresh step 7 with new locations
+            document.getElementById('manage-locations-modal').classList.add('active');
+            renderLocationsList();
+            loadUserLocations().then(() => renderLocationsList());
         }
 
         // Step 8: Purchase Date
@@ -6003,7 +6014,13 @@
             document.getElementById('manage-locations-modal').classList.remove('active');
             document.getElementById('new-location-input').value = '';
             populateLocationDropdowns();
-            renderInventory();
+            // If wizard is open, refresh step 7 so new locations appear immediately
+            const wizardModal = document.getElementById('wizard-modal');
+            if (wizardModal && wizardModal.classList.contains('active')) {
+                showWizardStep(7);
+            } else {
+                renderInventory();
+            }
         }
 
         function renderLocationsList() {

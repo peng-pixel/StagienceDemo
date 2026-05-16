@@ -4351,7 +4351,7 @@
                     dateDiv.textContent = dateStr;
                     cardDiv.appendChild(dateDiv);
 
-                    photoCards.push(cardDiv.outerHTML);
+                    photoCards.push(cardDiv);
                 }
 
                 // Store all cards for pagination
@@ -4415,7 +4415,7 @@
                     const grid = document.createElement('div');
                     grid.id = 'photo-grid-' + folder.id;
                     grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;';
-                    grid.innerHTML = photoCards.slice(0, 12).join('');
+                    photoCards.slice(0, 12).forEach(card => grid.appendChild(card));
                     folderBody.appendChild(grid);
 
                     if (photoCount > 12) {
@@ -5226,13 +5226,12 @@
             const newShown = currentShown + nextBatch.length;
             folderShownCount[folderId] = newShown;
 
-            nextBatch.forEach(html => {
-                const div = document.createElement('div');
-                div.innerHTML = html;
-                if (div.firstChild) grid.appendChild(div.firstChild);
+            // DOM nodes can only be appended once - clone them
+            nextBatch.forEach(card => {
+                const clone = card.cloneNode(true);
+                grid.appendChild(clone);
             });
 
-            // Update or remove the load more button
             if (newShown >= allPhotos.length) {
                 if (container) container.remove();
             } else {

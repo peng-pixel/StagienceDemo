@@ -6,7 +6,7 @@
     <title>Stagience - Home Staging Business Management Software</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,14 +15,14 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: Georgia, 'Times New Roman', serif;
             line-height: 1.6;
             color: #1f2937;
             background: #fafaf9;
         }
 
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Playfair Display', Georgia, serif;
         }
 
         .container {
@@ -134,7 +134,7 @@
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 20px;
-            font-family: 'Inter', sans-serif;
+            font-family: Georgia, serif;
         }
 
         .hero-description {
@@ -176,7 +176,7 @@
             font-size: 40px;
             font-weight: 700;
             margin-bottom: 16px;
-            font-family: 'Inter', sans-serif;
+            font-family: Georgia, serif;
         }
 
         .section-subtitle {
@@ -451,7 +451,7 @@
             font-size: 40px;
             font-weight: 700;
             margin-bottom: 20px;
-            font-family: 'Inter', sans-serif;
+            font-family: Georgia, serif;
         }
 
         .cta-description {
@@ -645,12 +645,6 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .header-buttons .btn-secondary { display: none; }
-            .header-buttons .btn-primary { padding: 8px 16px; font-size: 13px; }
-            .logo span { display: inline; }
-        }
-
         @media (max-width: 968px) {
             .hero-content,
             .benefits-content {
@@ -695,7 +689,9 @@
                     <div class="logo-icon"></div>
                     Stagience
                 </a>
-                <div class="header-buttons">
+                <div class="header-buttons" style="display: flex; align-items: center; gap: 12px;">
+                    <a href="stagience-how-it-works.html" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">How It Works</a>
+                    <a href="stagience-faq.html" style="color: #57534e; text-decoration: none; font-size: 14px; font-weight: 500;">FAQ</a>
                     <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary">Join Waitlist</a>
                     <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
                 </div>
@@ -710,7 +706,7 @@
                 <div class="hero-text">
                     <div class="hero-badge">Built by a stager, for stagers</div>
                     <h1 class="hero-title">All your staging data, one smart platform.</h1>
-                    <p class="hero-description">Stagience brings intelligent automation to your staging business—from inventory tracking to project management, all in one beautiful interface.</p>
+                    <p class="hero-description">Stagience brings your entire staging business together — inventory, projects, scheduling, photos, and documents — all in one place, so you can focus on what you do best.</p>
                     <div class="hero-buttons">
                         <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
                         <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary">Join Waitlist</a>
@@ -734,17 +730,17 @@
                 <div class="feature-card">
                     <div class="feature-number">01</div>
                     <h3 class="feature-title">Project management</h3>
-                    <p class="feature-description">Centralize all project details in one place—photos, consultation reports, invoices, and notes—so every staging has a complete history.</p>
+                    <p class="feature-description">Every project gets its own space — timeline events, notes, documents, files, and photo folders organized under one roof. Know exactly where every project stands at a glance.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-number">02</div>
                     <h3 class="feature-title">Scheduling & timeline tracking</h3>
-                    <p class="feature-description">Track consult dates, install days, photo shoots, and pickup windows with clarity—so nothing slips through.</p>
+                    <p class="feature-description">Track consultations, install days, photo shoots, and pickup windows on a calendar built for stagers. Share a printable project timeline with clients in one click.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-number">03</div>
-                    <h3 class="feature-title">Inventory tracking & reservations</h3>
-                    <p class="feature-description">Know what's available, what's on a project, and where each item lives—without the spreadsheet chaos.</p>
+                    <h3 class="feature-title">Inventory tracking & management</h3>
+                    <p class="feature-description">Know what's IN, OUT, or on HOLD at any moment. Filter by location, category, or status. Bulk update items after a destage in seconds — no spreadsheet chaos.</p>
                 </div>
             </div>
         </div>
@@ -760,18 +756,59 @@
             <div class="steps-grid">
                 <div class="step">
                     <div class="step-icon">1</div>
-                    <h3 class="step-title">Sign Up & Set Up</h3>
-                    <p class="step-description">Create your account and add your inventory in minutes. Import from spreadsheets or start fresh.</p>
+                    <h3 class="step-title">Sign Up & Import</h3>
+                    <p class="step-description">Create your account and bring your existing inventory with you. Import from CSV or Excel using our step-by-step import wizard, or add items one at a time.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">2</div>
                     <h3 class="step-title">Create Your First Project</h3>
-                    <p class="step-description">Add projects, schedule events, upload photos and documents. Everything in one organized place.</p>
+                    <p class="step-description">Add a project, build your timeline, upload before & after photos, and store documents — all organized in one place per client.</p>
                 </div>
                 <div class="step">
                     <div class="step-icon">3</div>
                     <h3 class="step-title">Manage & Grow</h3>
-                    <p class="step-description">Track timelines, reserve inventory, share updates with clients. Run your business with confidence.</p>
+                    <p class="step-description">Track every project from consult to destage. Bulk update inventory status after a stage, share timelines with clients, and keep your business running smoothly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Inside Every Project Section -->
+    <section style="padding: 100px 0; background: #fafaf9;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Everything a project needs, in one place</h2>
+                <p class="section-subtitle">Every project in Stagience has four dedicated tabs — so nothing gets lost in emails or folders.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px;">
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                    <div style="font-size: 36px; flex-shrink: 0;">📅</div>
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Schedule & Notes</h3>
+                        <p style="color: #57534e; font-size: 15px; line-height: 1.6;">Build a visual project timeline with consultations, staging days, photo shoots, and pickups. Add notes, team details, and access codes per event. Share a printable timeline with your client.</p>
+                    </div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                    <div style="font-size: 36px; flex-shrink: 0;">📄</div>
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Documents</h3>
+                        <p style="color: #57534e; font-size: 15px; line-height: 1.6;">Upload and store contracts, invoices, consultation reports, and any other project documents. Access them instantly from anywhere, no more hunting through email attachments.</p>
+                    </div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                    <div style="font-size: 36px; flex-shrink: 0;">🖼️</div>
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Photos</h3>
+                        <p style="color: #57534e; font-size: 15px; line-height: 1.6;">Organize photos into custom folders — Before, After, Pro Shots, and more. Browse in a beautiful fullscreen lightbox, select multiple photos to delete, and photos are compressed automatically on upload.</p>
+                    </div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                    <div style="font-size: 36px; flex-shrink: 0;">📁</div>
+                    <div>
+                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Files</h3>
+                        <p style="color: #57534e; font-size: 15px; line-height: 1.6;">Store floor plans, mood boards, staging guides, and any other files for the project. Download or share them anytime, all securely stored in the cloud.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -792,22 +829,29 @@
                     <div class="benefit">
                         <div class="benefit-icon">✓</div>
                         <div class="benefit-content">
-                            <h3>Professional communication, automatically</h3>
-                            <p>Share clear plans and schedules so clients and agents always know what to expect.</p>
+                            <h3>Professional communication, effortlessly</h3>
+                            <p>Share a clean, printable project timeline with clients and agents so everyone is always on the same page — no more text chains or chasing emails.</p>
                         </div>
                     </div>
                     <div class="benefit">
                         <div class="benefit-icon">✓</div>
                         <div class="benefit-content">
                             <h3>Better margins through better visibility</h3>
-                            <p>Know which inventory is active, what's reserved, and where items are located—keeping your operations efficient.</p>
+                            <p>Know exactly what's IN, OUT, or on HOLD at any moment. Filter inventory by location, status, or category, and bulk update dozens of items after a destage in seconds.</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">✓</div>
+                        <div class="benefit-content">
+                            <h3>Your document library, always at hand</h3>
+                            <p>Store reusable templates — contracts, consultation forms, checklists — and pull them into any project instantly. No more recreating documents from scratch.</p>
                         </div>
                     </div>
                     <div class="benefit">
                         <div class="benefit-icon">✓</div>
                         <div class="benefit-content">
                             <h3>Consistent results across every listing</h3>
-                            <p>Standardize what "done" looks like, from first consult to photo day to pickup.</p>
+                            <p>Standardize your process from first consult to photo day to pickup. Every project follows the same workflow so nothing slips through.</p>
                         </div>
                     </div>
                 </div>
@@ -882,13 +926,93 @@
         </div>
     </section>
 
+
+
+    <!-- Testimonials Section -->
+    <section style="padding: 80px 0; background: #fafaf9;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What stagers are saying</h2>
+                <p class="section-subtitle">Join stagers who are already running a more organized business.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;">
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 32px;">
+                    <div style="color: #b0a586; font-size: 24px; margin-bottom: 16px;">★★★★★</div>
+                    <p style="color: #57534e; font-size: 15px; line-height: 1.7; margin-bottom: 24px; font-style: italic;">"Stagience has completely replaced my spreadsheets. I can see everything about a project — the timeline, inventory, photos — without digging through emails or folders."</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #b0a586, #6d8b8a); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">J</div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 14px;">Jill S.</div>
+                            <div style="color: #78716c; font-size: 13px;">Home Stager, Toronto</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 32px;">
+                    <div style="color: #b0a586; font-size: 24px; margin-bottom: 16px;">★★★★★</div>
+                    <p style="color: #57534e; font-size: 15px; line-height: 1.7; margin-bottom: 24px; font-style: italic;">"The inventory management alone is worth it. I used to lose track of what was OUT on projects. Now I bulk update everything after a destage in seconds."</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #b0a586, #6d8b8a); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">S</div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 14px;">Sarah M.</div>
+                            <div style="color: #78716c; font-size: 13px;">Home Stager, Mississauga</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="background: white; border-radius: 16px; border: 1px solid #e7e5e4; padding: 32px;">
+                    <div style="color: #b0a586; font-size: 24px; margin-bottom: 16px;">★★★★★</div>
+                    <p style="color: #57534e; font-size: 15px; line-height: 1.7; margin-bottom: 24px; font-style: italic;">"Being able to share a clean project timeline with my clients has been a game changer. It looks so professional and saves me so many back-and-forth messages."</p>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #b0a586, #6d8b8a); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">A</div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 14px;">Amanda R.</div>
+                            <div style="color: #78716c; font-size: 13px;">Home Stager, Etobicoke</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coming Soon Section -->
+    <section style="padding: 80px 0; background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">More on the way</h2>
+                <p class="section-subtitle">Stagience is actively growing. Here's what's coming next.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;">
+                <div style="background: #fafaf9; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">💰</div>
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Invoicing & Payments</h3>
+                    <p style="color: #78716c; font-size: 14px;">Create and send invoices directly from a project. Track payments and deposits without leaving Stagience.</p>
+                    <div style="display: inline-block; margin-top: 16px; padding: 4px 12px; background: #f0fdf4; color: #16a34a; border-radius: 20px; font-size: 12px; font-weight: 600;">Coming Soon</div>
+                </div>
+                <div style="background: #fafaf9; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">👥</div>
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Client Portal</h3>
+                    <p style="color: #78716c; font-size: 14px;">Give clients their own view of the project timeline, photos, and documents — no login required on their end.</p>
+                    <div style="display: inline-block; margin-top: 16px; padding: 4px 12px; background: #f0fdf4; color: #16a34a; border-radius: 20px; font-size: 12px; font-weight: 600;">Coming Soon</div>
+                </div>
+                <div style="background: #fafaf9; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">📊</div>
+                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Reporting & Analytics</h3>
+                    <p style="color: #78716c; font-size: 14px;">See your busiest months, most-used inventory items, revenue trends, and project turnaround times at a glance.</p>
+                    <div style="display: inline-block; margin-top: 16px; padding: 4px 12px; background: #f0fdf4; color: #16a34a; border-radius: 20px; font-size: 12px; font-weight: 600;">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Section -->
     <section class="cta">
         <div class="container">
             <div class="cta-box">
                 <h2 class="cta-title">Bring calm, clarity, and consistency to every stage.</h2>
-                <p class="cta-description">Stagience helps you deliver a premium client experience while keeping your team organized behind the scenes. Start with your next project and feel the difference immediately.</p>
-                <a href="javascript:void(0)" onclick="openDemoModal()" class="btn-white">Request a demo</a>
+                <p class="cta-description">Stagience helps you deliver a premium client experience while keeping your business organized behind the scenes. Start with your next project and feel the difference immediately.</p>
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <a href="stagience-v1-phase1.html" class="btn-white">Get Started Free</a>
+                    <a href="javascript:void(0)" onclick="openDemoModal()" style="padding: 14px 32px; background: transparent; color: white; border: 2px solid white; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block;">Request a Demo</a>
+                </div>
             </div>
         </div>
     </section>

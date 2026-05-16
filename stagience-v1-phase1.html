@@ -481,28 +481,27 @@
                 <!-- Calendar Section -->
                 <div id="calendar-section" class="section" style="display: none;">
                     <!-- Calendar Header -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
-                        <h1 style="font-size: 32px; font-weight: 800;">Schedule</h1>
-                        
+                    <div style="margin-bottom: 24px;">
+                        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 16px;">Schedule</h1>
                         <!-- Month Navigation -->
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <button onclick="previousMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;">
+                            <button onclick="previousMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer; flex-shrink: 0;">
                                 ← Prev
                             </button>
-                            <div id="current-month-year" style="font-size: 18px; font-weight: 700; min-width: 180px; text-align: center;">
+                            <div id="current-month-year" style="font-size: 18px; font-weight: 700; text-align: center; flex: 1; min-width: 120px;">
                                 May 2026
                             </div>
-                            <button onclick="todayMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                            <button onclick="todayMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer; flex-shrink: 0;">
                                 Today
                             </button>
-                            <button onclick="nextMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
+                            <button onclick="nextMonth()" style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer; flex-shrink: 0;">
                                 Next →
                             </button>
                         </div>
                     </div>
 
                     <!-- Event Type Filters -->
-                    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
                         <button onclick="toggleEventTypeFilter('all')" id="filter-event-all" style="padding: 8px 16px; border: 2px solid #3b82f6; border-radius: 10px; background: #eff6ff; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px;">
                             All Events
                         </button>

@@ -43,7 +43,13 @@
                         </div>
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Password</label>
-                            <input type="password" id="signin-password" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            <div style="position: relative;">
+                                <input type="password" id="signin-password" required style="width: 100%; padding: 12px 44px 12px 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                                <button type="button" onclick="togglePassword('signin-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
+                            </div>
+                            <div style="text-align: right; margin-top: 6px;">
+                                <a href="#" onclick="showForgotPasswordForm(); return false;" style="color: #2f6f6b; font-size: 13px; font-weight: 600; text-decoration: none;">Forgot password?</a>
+                            </div>
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
                             Sign In
@@ -52,6 +58,25 @@
                     <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
                         Don't have an account? 
                         <a href="#" onclick="showSignUpForm(); return false;" style="color: #2f6f6b; font-weight: 600; text-decoration: none;">Sign Up</a>
+                    </p>
+                </div>
+
+                <!-- Forgot Password Form -->
+                <div id="forgot-password-form" style="display: none;">
+                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Reset Password</h2>
+                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 24px;">Enter your email address and we'll send you a link to reset your password.</p>
+                    <form onsubmit="handleForgotPassword(event)" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Email</label>
+                            <input type="email" id="reset-email" required placeholder="Enter your email address" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        </div>
+                        <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
+                            Send Reset Link
+                        </button>
+                    </form>
+                    <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
+                        Remember your password?
+                        <a href="#" onclick="showSignInForm(); return false;" style="color: #2f6f6b; font-weight: 600; text-decoration: none;">Sign In</a>
                     </p>
                 </div>
 
@@ -1361,12 +1386,46 @@
         function showSignInForm() {
             document.getElementById('signin-form').style.display = 'block';
             document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('forgot-password-form').style.display = 'none';
             document.getElementById('auth-message').style.display = 'none';
+        }
+
+        function showForgotPasswordForm() {
+            document.getElementById('signin-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('forgot-password-form').style.display = 'block';
+            document.getElementById('auth-message').style.display = 'none';
+            document.getElementById('reset-email').value = document.getElementById('signin-email').value || '';
+        }
+
+        async function handleForgotPassword(event) {
+            event.preventDefault();
+            const email = document.getElementById('reset-email').value;
+            const btn = event.target.querySelector('button[type="submit"]');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + '/stagience-v1-phase1.html'
+            });
+
+            btn.textContent = 'Send Reset Link';
+            btn.disabled = false;
+
+            if (error) {
+                showAuthMessage(error.message, 'error');
+            } else {
+                showAuthMessage('Password reset link sent! Check your email inbox (and spam folder just in case).', 'success');
+                setTimeout(() => {
+                    showSignInForm();
+                }, 4000);
+            }
         }
 
         function showSignUpForm() {
             document.getElementById('signin-form').style.display = 'none';
             document.getElementById('signup-form').style.display = 'block';
+            document.getElementById('forgot-password-form').style.display = 'none';
             document.getElementById('auth-message').style.display = 'none';
         }
 

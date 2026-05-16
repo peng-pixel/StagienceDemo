@@ -4252,91 +4252,180 @@
             if (photoFolders.length === 0) {
                 container.innerHTML = '';
                 emptyState.style.display = 'block';
-            } else {
-                emptyState.style.display = 'none';
-
-                const foldersHTML = await Promise.all(photoFolders.map(async folder => {
-                    const photoCount = folder.photos?.length || 0;
-                    
-                    // Generate photo thumbnails
-                    const photosHTML = await Promise.all((folder.photos || []).map(async photo => {
-                        const { data } = await supabase.storage
-                            .from('project-photos')
-                            .createSignedUrl(photo.file_path, 3600);
-                        
-                        const imageUrl = data?.signedUrl || '';
-                        if (imageUrl) folderPhotosCache[photo.id] = imageUrl;
-                        const date = new Date(photo.uploaded_at);
-                        const dateStr = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-
-                        return `
-                            <div id="photo-card-${photo.id}" style="position: relative; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 12px; transition: border-color 0.2s;">
-                                <!-- Selection checkbox (top left) -->
-                                <input type="checkbox" id="photo-check-${photo.id}" 
-                                    onclick="event.stopPropagation(); togglePhotoSelection('${folder.id}', ${photo.id}, document.getElementById('photo-card-${photo.id}'))"
-                                    style="position: absolute; top: 10px; left: 10px; width: 18px; height: 18px; cursor: pointer; z-index: 10; accent-color: #3b82f6;">
-                                <!-- Delete single -->
-                                <button onclick="event.stopPropagation(); deletePhoto(${photo.id}, ${folder.id})" style="position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 6px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10;">
-                                    ×
-                                </button>
-                                <!-- Image - click opens lightbox -->
-                                <div onclick="openLightbox('${folder.id}', ${photo.id})" style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background: #f3f4f6; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; cursor: pointer;">
-                                    <img data-src="${imageUrl}" alt="${photo.file_name}" class="lazy-photo" style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;">
-                                </div>
-                                <div style="font-size: 13px; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${photo.file_name}</div>
-                                <div style="font-size: 12px; color: #6b7280;">${dateStr}</div>
-                            </div>
-                        `;
-                    }));
-
-                    const emptyPhotosHTML = `
-                        <div style="text-align: center; padding: 60px; border: 2px dashed #e5e7eb; border-radius: 12px; color: #9ca3af;">
-                            <div style="font-size: 36px; margin-bottom: 12px;">📷</div>
-                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #6b7280;">No photos yet</h4>
-                            <p style="font-size: 13px;">Click "Upload Photos" to add photos to this folder</p>
-                        </div>
-                    `;
-
-                    return `
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 24px; margin-bottom: 24px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="font-size: 32px;">📁</div>
-                                    <div>
-                                        <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 2px;">${folder.folder_name}</h3>
-                                        <p style="color: #6b7280; font-size: 13px;">${photoCount} photo${photoCount !== 1 ? 's' : ''}</p>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                                    <button onclick="selectAllFolderPhotos('${folder.id}')" style="padding: 8px 14px; border: 2px solid #e5e7eb; border-radius: 8px; background: white; font-weight: 600; cursor: pointer; font-size: 13px;">☑ Select All</button>
-                                    <button id="bulk-delete-btn-${folder.id}" onclick="bulkDeletePhotos('${folder.id}')" style="display:none; padding: 8px 14px; border: 2px solid #fecaca; border-radius: 8px; background: #fee2e2; color: #991b1b; font-weight: 600; cursor: pointer; font-size: 13px;">🗑 Delete Selected</button>
-                                    <button onclick="showUploadPhotosModal(${folder.id})" style="padding: 8px 14px; border: 2px solid #3b82f6; border-radius: 8px; background: white; color: #1e40af; font-weight: 600; cursor: pointer; font-size: 13px;">📤 Upload</button>
-                                    <button onclick="deleteFolder(${folder.id})" style="width: 36px; height: 36px; border-radius: 8px; border: none; background: #fee2e2; color: #991b1b; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;">🗑️</button>
-                                </div>
-                            </div>
-                            
-                            ${(() => {
-                                if (photoCount === 0) return emptyPhotosHTML;
-                                // Store ALL photos HTML in cache (not just remaining)
-                                folderRemainingHTML[folder.id] = photosHTML;
-                                const shown = photosHTML.slice(0, 12);
-                                const remaining = photoCount - 12;
-                                return `<div id="photo-grid-${folder.id}" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
-                                    ${shown.join('')}
-                                </div>
-                                ${photoCount > 12 ? `<div id="load-more-container-${folder.id}" style="text-align:center;margin-top:16px;">
-                                    <button onclick="loadMorePhotos('${folder.id}')" id="load-more-${folder.id}" style="padding:10px 24px;border:2px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;font-size:14px;cursor:pointer;">
-                                        Load more (${remaining} remaining)
-                                    </button>
-                                </div>` : ''}`;
-                            })()}
-                        </div>
-                    `;
-                }));
-
-                container.innerHTML = foldersHTML.join('');
-                initLazyLoading();
+                return;
             }
+
+            emptyState.style.display = 'none';
+
+            // Show loading skeletons immediately
+            container.innerHTML = photoFolders.map(folder => {
+                const count = folder.photos?.length || 0;
+                const skeletons = Array(Math.min(count, 6)).fill(0).map(() =>
+                    '<div style="border-radius:12px;background:#f3f4f6;height:220px;animation:shimmer 1.5s infinite;"></div>'
+                ).join('');
+                return '<div style="background:white;border:2px solid #e5e7eb;border-radius:16px;padding:24px;margin-bottom:24px;">' +
+                    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">' +
+                    '<div style="font-size:32px;">📁</div>' +
+                    '<div><div style="font-weight:700;font-size:18px;">' + folder.folder_name + '</div>' +
+                    '<div style="color:#6b7280;font-size:13px;">' + count + ' photo' + (count !== 1 ? 's' : '') + ' — loading...</div></div></div>' +
+                    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">' + skeletons + '</div></div>';
+            }).join('');
+
+            // Add shimmer CSS if not already added
+            if (!document.getElementById('shimmer-style')) {
+                const style = document.createElement('style');
+                style.id = 'shimmer-style';
+                style.textContent = '@keyframes shimmer{0%{background:#f3f4f6}50%{background:#e5e7eb}100%{background:#f3f4f6}}';
+                document.head.appendChild(style);
+            }
+
+            // Generate ALL signed URLs in parallel (huge speed improvement)
+            const allPhotos = photoFolders.flatMap(folder => folder.photos || []);
+            const photosNeedingUrls = allPhotos.filter(p => !folderPhotosCache[p.id]);
+
+            if (photosNeedingUrls.length > 0) {
+                await Promise.all(photosNeedingUrls.map(async photo => {
+                    const { data } = await supabase.storage
+                        .from('project-photos')
+                        .createSignedUrl(photo.file_path, 3600);
+                    if (data?.signedUrl) folderPhotosCache[photo.id] = data.signedUrl;
+                }));
+            }
+
+            // Now render folders with cached URLs
+            container.innerHTML = '';
+
+            for (const folder of photoFolders) {
+                const photoCount = folder.photos?.length || 0;
+
+                // Build photo cards using cached URLs
+                const photoCards = [];
+                for (const photo of (folder.photos || [])) {
+                    const imageUrl = folderPhotosCache[photo.id] || '';
+                    const date = new Date(photo.uploaded_at);
+                    const dateStr = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
+
+                    const fid = folder.id;
+                    const pid = photo.id;
+                    const cardDiv = document.createElement('div');
+                    cardDiv.id = 'photo-card-' + pid;
+                    cardDiv.style.cssText = 'position:relative;background:white;border:2px solid #e5e7eb;border-radius:12px;padding:12px;transition:border-color 0.2s;';
+
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.id = 'photo-check-' + pid;
+                    cb.style.cssText = 'position:absolute;top:10px;left:10px;width:18px;height:18px;cursor:pointer;z-index:10;accent-color:#3b82f6;';
+                    cb.onclick = (e) => { e.stopPropagation(); togglePhotoSelection(fid, pid, cardDiv); };
+                    cardDiv.appendChild(cb);
+
+                    const delBtn = document.createElement('button');
+                    delBtn.style.cssText = 'position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;border:none;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:16px;z-index:10;';
+                    delBtn.textContent = '×';
+                    delBtn.onclick = (e) => { e.stopPropagation(); deletePhoto(pid, fid); };
+                    cardDiv.appendChild(delBtn);
+
+                    const imgDiv = document.createElement('div');
+                    imgDiv.style.cssText = 'width:100%;height:180px;border-radius:8px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin-bottom:8px;cursor:pointer;';
+                    imgDiv.onclick = () => openLightbox(fid, pid);
+                    const img = document.createElement('img');
+                    img.dataset.src = imageUrl;
+                    img.alt = photo.file_name;
+                    img.className = 'lazy-photo';
+                    img.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 0.3s;';
+                    imgDiv.appendChild(img);
+                    cardDiv.appendChild(imgDiv);
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.style.cssText = 'font-size:13px;font-weight:600;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+                    nameDiv.textContent = photo.file_name;
+                    cardDiv.appendChild(nameDiv);
+
+                    const dateDiv = document.createElement('div');
+                    dateDiv.style.cssText = 'font-size:12px;color:#6b7280;';
+                    dateDiv.textContent = dateStr;
+                    cardDiv.appendChild(dateDiv);
+
+                    photoCards.push(cardDiv.outerHTML);
+                }
+
+                // Store all cards for pagination
+                folderRemainingHTML[folder.id] = photoCards;
+                folderShownCount[folder.id] = Math.min(12, photoCount);
+
+                // Build folder wrapper
+                const folderDiv = document.createElement('div');
+                folderDiv.style.cssText = 'background:white;border:2px solid #e5e7eb;border-radius:16px;padding:24px;margin-bottom:24px;';
+
+                // Header
+                // Build header using DOM
+                const header = document.createElement('div');
+                header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:8px;';
+
+                const folderInfo = document.createElement('div');
+                folderInfo.style.cssText = 'display:flex;align-items:center;gap:12px;';
+                folderInfo.innerHTML = '<div style="font-size:32px;">📁</div><div><h3 style="font-weight:700;font-size:18px;margin-bottom:2px;">' + folder.folder_name + '</h3><p style="color:#6b7280;font-size:13px;">' + photoCount + ' photo' + (photoCount !== 1 ? 's' : '') + '</p></div>';
+                header.appendChild(folderInfo);
+
+                const actions = document.createElement('div');
+                actions.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
+
+                const selAllBtn = document.createElement('button');
+                selAllBtn.style.cssText = 'padding:8px 14px;border:2px solid #e5e7eb;border-radius:8px;background:white;font-weight:600;cursor:pointer;font-size:13px;';
+                selAllBtn.textContent = '☑ Select All';
+                selAllBtn.onclick = () => selectAllFolderPhotos(folder.id);
+                actions.appendChild(selAllBtn);
+
+                const bulkDelBtn = document.createElement('button');
+                bulkDelBtn.id = 'bulk-delete-btn-' + folder.id;
+                bulkDelBtn.style.cssText = 'display:none;padding:8px 14px;border:2px solid #fecaca;border-radius:8px;background:#fee2e2;color:#991b1b;font-weight:600;cursor:pointer;font-size:13px;';
+                bulkDelBtn.textContent = '🗑 Delete Selected';
+                bulkDelBtn.onclick = () => bulkDeletePhotos(folder.id);
+                actions.appendChild(bulkDelBtn);
+
+                const uploadBtn = document.createElement('button');
+                uploadBtn.style.cssText = 'padding:8px 14px;border:2px solid #3b82f6;border-radius:8px;background:white;color:#1e40af;font-weight:600;cursor:pointer;font-size:13px;';
+                uploadBtn.textContent = '📤 Upload';
+                uploadBtn.onclick = () => showUploadPhotosModal(folder.id);
+                actions.appendChild(uploadBtn);
+
+                const delFolderBtn = document.createElement('button');
+                delFolderBtn.style.cssText = 'width:36px;height:36px;border-radius:8px;border:none;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:18px;';
+                delFolderBtn.textContent = '🗑️';
+                delFolderBtn.onclick = () => deleteFolder(folder.id);
+                actions.appendChild(delFolderBtn);
+
+                header.appendChild(actions);
+                folderDiv.appendChild(header);
+
+                                if (photoCount === 0) {
+                    folderDiv.innerHTML += '<div style="text-align:center;padding:60px;border:2px dashed #e5e7eb;border-radius:12px;color:#9ca3af;"><div style="font-size:36px;margin-bottom:12px;">📷</div><h4 style="font-size:16px;font-weight:600;margin-bottom:4px;color:#6b7280;">No photos yet</h4><p style="font-size:13px;">Click Upload to add photos</p></div>';
+                } else {
+                    // Grid with first 12
+                    const grid = document.createElement('div');
+                    grid.id = 'photo-grid-' + folder.id;
+                    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;';
+                    grid.innerHTML = photoCards.slice(0, 12).join('');
+                    folderDiv.appendChild(grid);
+
+                    // Load more button
+                    if (photoCount > 12) {
+                        const loadMoreDiv = document.createElement('div');
+                        loadMoreDiv.id = 'load-more-container-' + folder.id;
+                        loadMoreDiv.style.cssText = 'text-align:center;margin-top:16px;';
+                        const lmBtn = document.createElement('button');
+                        lmBtn.id = 'load-more-' + folder.id;
+                        lmBtn.style.cssText = 'padding:10px 24px;border:2px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;font-size:14px;cursor:pointer;';
+                        lmBtn.textContent = 'Load more (' + (photoCount - 12) + ' remaining)';
+                        lmBtn.onclick = () => loadMorePhotos(folder.id);
+                        loadMoreDiv.appendChild(lmBtn);
+                        folderDiv.appendChild(loadMoreDiv);
+                    }
+                }
+
+                container.appendChild(folderDiv);
+            }
+
+            initLazyLoading();
         }
 
         function showCreateFolderModal() {
@@ -5075,7 +5164,10 @@
             lightboxIndex = lightboxPhotos.findIndex(p => String(p.id) === String(photoId));
             if (lightboxIndex < 0) lightboxIndex = 0;
             showLightboxPhoto();
-            document.getElementById('lightbox-modal').style.display = 'flex';
+            const lb = document.getElementById('lightbox-modal');
+            lb.style.display = 'flex';
+            lb.style.alignItems = 'center';
+            lb.style.justifyContent = 'center';
             document.addEventListener('keydown', lightboxKeyHandler);
         }
 

@@ -47,40 +47,28 @@
             padding: 0 24px;
         }
 
-        .header-nav {
-            display: flex;
-            gap: 28px;
-            align-items: center;
-        }
-
-        .header-nav a {
-            text-decoration: none;
-            color: #57534e;
-            font-size: 14px;
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .header-nav a:hover, .header-nav a.active {
-            color: #1f2937;
-        }
-
         .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
+            gap: 10px;
+            font-weight: 700;
             font-size: 18px;
-            color: #78716c;
+            color: #1f2937;
             text-decoration: none;
             cursor: pointer;
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #78716c;
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
         }
 
         .header-buttons {
@@ -230,11 +218,18 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-nav { display: none; }
-            .header-buttons .btn-secondary { display: none; }
-            .page-title { font-size: 32px; }
-            .faq-question { font-size: 16px; padding: 20px; }
-            .cta-section { padding: 40px 24px; }
+            .page-title {
+                font-size: 32px;
+            }
+
+            .faq-question {
+                font-size: 16px;
+                padding: 20px;
+            }
+
+            .cta-section {
+                padding: 40px 24px;
+            }
         }
     </style>
 </head>
@@ -243,14 +238,9 @@
     <header>
         <div class="header-content">
             <a href="stagience-landing-page.html" class="logo">
-                <div class="logo-icon"></div>
+                <div class="logo-icon">S</div>
                 Stagience
             </a>
-            <nav class="header-nav">
-                <a href="stagience-landing-page.html">Home</a>
-                <a href="stagience-how-it-works.html">How It Works</a>
-                <a href="stagience-faq.html" class="active">FAQ</a>
-            </nav>
             <div class="header-buttons">
                 <a href="stagience-landing-page.html#waitlist" class="btn-secondary">Join Waitlist</a>
                 <a href="stagience-v1-phase1.html" class="btn-primary">Sign In</a>

@@ -2353,6 +2353,7 @@
             }
 
             // Upload photo if one was selected in step 12
+            console.log('[saveWizardItem] wizardData.photoFile:', wizardData.photoFile);
             if (wizardData.photoFile && data && data[0]) {
                 const newItemId = data[0].id;
                 const photoUrl = await uploadPhoto(newItemId, wizardData.photoFile);
@@ -2862,10 +2863,12 @@
 
         async function uploadPhoto(itemId, fileOverride) {
             const fileToUpload = fileOverride || selectedPhotoFile;
-            if (!fileToUpload) return null;
+            console.log('[uploadPhoto] itemId:', itemId, 'fileToUpload:', fileToUpload, 'selectedPhotoFile:', selectedPhotoFile);
+            if (!fileToUpload) { console.log('[uploadPhoto] No file to upload, returning null'); return null; }
 
             const fileExt = fileToUpload.name.split('.').pop();
             const fileName = `${currentUser.id}/${itemId}-${Date.now()}.${fileExt}`;
+            console.log('[uploadPhoto] Uploading to:', fileName);
 
             const { data, error } = await supabase.storage
                 .from('inventory-photos')
@@ -2875,7 +2878,7 @@
                 });
 
             if (error) {
-                console.error('Error uploading photo:', error);
+                console.error('[uploadPhoto] Storage error:', error);
                 return null;
             }
 
@@ -2883,6 +2886,7 @@
                 .from('inventory-photos')
                 .getPublicUrl(fileName);
 
+            console.log('[uploadPhoto] Success, publicUrl:', publicUrl);
             return publicUrl;
         }
 
@@ -2977,6 +2981,7 @@
                 }
                 
                 // Upload new photo if selected
+                console.log('[saveItem] selectedPhotoFile at save time:', selectedPhotoFile);
                 if (selectedPhotoFile) {
                     const photoFile = selectedPhotoFile; // capture before any async reset
                     // Delete old photo if exists

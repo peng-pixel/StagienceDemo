@@ -5716,12 +5716,12 @@
                     : '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;' + (ROLE_COLORS[member.role]||'') + '">' + (ROLE_LABELS[member.role]||member.role) + '</span>';
 
                 const adminActions = currentUserRole === 'admin' ? (
-                    '<select onchange="changeTeamMemberRole(' + member.id + ', this.value)" style="padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:white;">' +
+                    '<select onchange="changeTeamMemberRole(\'' + member.id + '\', this.value)" style="padding:6px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;background:white;">' +
                     '<option value="admin"' + (member.role === 'admin' ? ' selected' : '') + '>🔑 Admin</option>' +
                     '<option value="inventory"' + (member.role === 'inventory' ? ' selected' : '') + '>📦 Inventory Only</option>' +
                     '<option value="viewer"' + (member.role === 'viewer' ? ' selected' : '') + '>👁 Viewer</option>' +
                     '</select>' +
-                    '<button onclick="removeTeamMember(' + member.id + ')" style="padding:6px 12px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>'
+                    '<button onclick="removeTeamMember(\'' + member.id + '\')" style="padding:6px 12px;border:1px solid #fecaca;background:#fee2e2;color:#dc2626;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;">Remove</button>'
                 ) : '';
 
                 return '<div style="display:flex;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid #f3f4f6;flex-wrap:wrap;">' +
@@ -5833,7 +5833,8 @@
                 await loadTeamMembers(); // Revert UI
                 return;
             }
-            // Subtle confirmation — no full reload needed, dropdown already shows new value
+            // Reload to confirm change saved
+            await loadTeamMembers();
         }
 
         // Change Password

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us — Stagience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #fafaf9;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e7e5e4;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1f2937;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            border: 1px solid #d6d3d1;
+            border-radius: 8px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #b0a586 0%, #8b7d5f 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #fef9f0 0%, #f0fdfa 100%);
+            padding: 80px 24px;
+            text-align: center;
+            border-bottom: 1px solid #e7e5e4;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #1f2937;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #57534e;
+            max-width: 480px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Main layout */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 24px 100px;
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 64px;
+            align-items: start;
+        }
+
+        /* Form side */
+        .form-card {
+            background: white;
+            border: 1px solid #e7e5e4;
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .form-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 28px;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+            background: white;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #b0a586;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover { opacity: 0.92; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-message .success-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .success-message h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .success-message p {
+            color: #57534e;
+            font-size: 15px;
+        }
+
+        /* Info side */
+        .info-side {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .info-card {
+            background: white;
+            border: 1px solid #e7e5e4;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .info-card .info-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .info-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            color: #57534e;
+            line-height: 1.6;
+        }
+
+        .info-card a {
+            color: #2f6f6b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .founder-card {
+            background: linear-gradient(135deg, #fef9f0, #f0fdfa);
+            border: 1.5px solid #b0a586;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .founder-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .founder-card p {
+            font-size: 14px;
+            color: #57534e;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: #1c1917;
+            color: #d6d3d1;
+            padding: 60px 0 32px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #a8a29e;
+        }
+
+        .footer-links h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: #a8a29e;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 0;
+            border-top: 1px solid #292524;
+            font-size: 13px;
+            color: #78716c;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 48px 24px 80px;
+            }
+
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .form-card { padding: 28px 20px; }
+            .footer-content { grid-template-columns: 1fr; }
+            .header-buttons .btn-secondary { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">S</div>
+                Stagience
+            </a>
+            <div class="header-buttons">
+                <a href="/" class="btn-secondary">← Back to Home</a>
+                <a href="/app" class="btn-primary">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+        <h1>We'd love to hear from you.</h1>
+        <p>Whether you have a question, a suggestion, or just want to say hello — we're here and we actually read every message.</p>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Contact Form -->
+        <div class="form-card">
+            <h2>Send us a message</h2>
+
+            <div id="contact-form-wrap">
+                <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST" onsubmit="handleSubmit(event)">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name *</label>
+                            <input type="text" id="first-name" name="first_name" required placeholder="Jane">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name *</label>
+                            <input type="text" id="last-name" name="last_name" required placeholder="Smith">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required placeholder="jane@yourbusiness.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">What can we help you with? *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="" disabled selected>Select a topic...</option>
+                            <option value="I'm interested in Stagience">I'm interested in Stagience</option>
+                            <option value="I have a question">I have a question</option>
+                            <option value="Feature suggestion">Feature suggestion</option>
+                            <option value="Something isn't working">Something isn't working</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" required placeholder="Tell us what's on your mind..."></textarea>
+                    </div>
+
+                    <!-- Hidden field so Formspree sends to the right email -->
+                    <input type="hidden" name="_replyto" value="hello@stagience.com">
+                    <input type="hidden" name="_subject" id="email-subject" value="New message from Stagience contact form">
+
+                    <button type="submit" class="btn-submit" id="submit-btn">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Success state -->
+            <div class="success-message" id="success-message">
+                <div class="success-icon">🎉</div>
+                <h3>Message sent!</h3>
+                <p>Thank you for reaching out. We'll get back to you within 1 business day.</p>
+            </div>
+        </div>
+
+        <!-- Info Side -->
+        <div class="info-side">
+
+            <div class="founder-card">
+                <h3>👋 A note from the founder</h3>
+                <p>Stagience was built by a stager who understands the day-to-day reality of running a staging business. Every message goes directly to me — so you're not filling out a ticket or talking to a bot. If you have an idea, a problem, or just want to chat about staging, I'd genuinely love to hear from you.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">⏱️</div>
+                <h3>Response time</h3>
+                <p>We typically respond within <strong>1 business day</strong>. During busy periods it may be a little longer, but we always get back to everyone.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">✉️</div>
+                <h3>Prefer email?</h3>
+                <p>You can also reach us directly at <a href="mailto:hello@stagience.com">hello@stagience.com</a> — whichever feels easier for you.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">🔒</div>
+                <h3>Your privacy matters</h3>
+                <p>We'll only use your contact information to respond to your message. We never share your details with third parties. Read our <a href="/privacy">Privacy Policy</a> for more.</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Stagience</h3>
+                <p>Built by a stager, for stagers.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="/#pricing">Pricing</a></li>
+                    <li><a href="/how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/stagience-terms.html">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Stagience. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const btn = document.getElementById('submit-btn');
+
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    document.getElementById('contact-form-wrap').style.display = 'none';
+                    document.getElementById('success-message').style.display = 'block';
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                btn.textContent = 'Send Message';
+                btn.disabled = false;
+                alert('Something went wrong. Please email us directly at hello@stagience.com');
+            }
+        }
+    </script>
+
+</body>
+</html>

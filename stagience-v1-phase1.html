@@ -383,7 +383,7 @@
                             <div style="color: #6d28d9; font-size: 13px; font-weight: 500; margin-bottom: 6px;">Get started in minutes</div>
                             <div style="color: #374151; font-size: 13px; line-height: 1.6;">Bring your existing projects from Google Sheets, Excel, CSV, Google Drive, or Dropbox. We'll help you map your data and get everything organized.</div>
                         </div>
-                        <button onclick="showImportModal('projects')" style="flex-shrink: 0; padding: 12px 24px; border: 1.5px solid #7c3aed; border-radius: 10px; background: white; font-weight: 600; font-size: 14px; cursor: pointer; color: #4c1d95; display: flex; align-items: center; gap: 8px;">
+                        <button onclick="showImportModal('projects')" style="flex-shrink: 0; padding: 12px 24px; border: 1.5px solid #4c263a; border-radius: 10px; background: white; font-weight: 600; font-size: 14px; cursor: pointer; color: #4c1d95; display: flex; align-items: center; gap: 8px;">
                             Start Import →
                         </button>
                     </div>
@@ -3341,7 +3341,7 @@
                 'scheduled': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'consult-only': 'background: #fef3c7; color: #92400e;',
                 'pending': 'background: #fef3c7; color: #92400e;',
-                'completed': 'background: #e0e7ff; color: #3730a3;'
+                'completed': 'background: #f3eadf; color: #3730a3;'
             };
 
             const statusLabels = {
@@ -3604,7 +3604,7 @@
                 'scheduled': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'consult-only': 'background: #fef3c7; color: #92400e;',
                 'pending': 'background: #fef3c7; color: #92400e;',
-                'completed': 'background: #e0e7ff; color: #3730a3;'
+                'completed': 'background: #f3eadf; color: #3730a3;'
             };
             const statusLabels = {
                 'active': 'Active',
@@ -6269,7 +6269,7 @@
         function updateImportStepIndicators() {
             for (let i = 1; i <= 3; i++) {
                 const ind = document.getElementById('import-step-ind-' + i);
-                if (ind) ind.style.background = i <= importStep ? '#7c3aed' : '#e5e7eb';
+                if (ind) ind.style.background = i <= importStep ? '#4c263a' : '#e5e7eb';
             }
         }
 
@@ -6304,7 +6304,7 @@
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     ${sources.map(s => `
                         <div onclick="selectImportSource('${s.id}')" id="import-src-${s.id}"
-                            style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid ${s.id === importSelectedSource ? '#7c3aed' : '#e5e7eb'};border-radius:12px;cursor:pointer;background:${s.id === importSelectedSource ? '#faf5ff' : 'white'};transition:all 0.2s;">
+                            style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid ${s.id === importSelectedSource ? '#4c263a' : '#e5e7eb'};border-radius:12px;cursor:pointer;background:${s.id === importSelectedSource ? '#faf5ff' : 'white'};transition:all 0.2s;">
                             <div style="font-size:28px;flex-shrink:0;">${s.icon}</div>
                             <div>
                                 <div style="font-weight:700;font-size:15px;margin-bottom:2px;">${s.label}</div>
@@ -6351,7 +6351,7 @@
 
             nav.innerHTML = `
                 <button onclick="closeImportModal()" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Cancel</button>
-                <button onclick="importGoToStep2()" id="import-next-btn" class="gradient-accent" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#7c3aed;">Next</button>
+                <button onclick="importGoToStep2()" id="import-next-btn" class="gradient-accent" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#4c263a;">Next</button>
             `;
         }
 
@@ -6361,7 +6361,7 @@
             ['sheets','csv','drive','dropbox'].forEach(id => {
                 const el = document.getElementById('import-src-' + id);
                 if (el) {
-                    el.style.borderColor = id === sourceId ? '#7c3aed' : '#e5e7eb';
+                    el.style.borderColor = id === sourceId ? '#4c263a' : '#e5e7eb';
                     el.style.background = id === sourceId ? '#faf5ff' : 'white';
                 }
             });
@@ -6504,7 +6504,7 @@
 
             nav.innerHTML = `
                 <button onclick="importStep=1;renderImportStep();" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Back</button>
-                <button onclick="importGoToStep3()" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#7c3aed;">Next</button>
+                <button onclick="importGoToStep3()" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#4c263a;">Next</button>
             `;
         }
 
@@ -6746,7 +6746,7 @@
 
             <!-- Step progress bar -->
             <div style="display: flex; gap: 8px; margin-bottom: 28px;">
-                <div id="import-step-ind-1" style="flex:1; height:5px; border-radius:4px; background: #7c3aed; transition: background 0.3s;"></div>
+                <div id="import-step-ind-1" style="flex:1; height:5px; border-radius:4px; background: #4c263a; transition: background 0.3s;"></div>
                 <div id="import-step-ind-2" style="flex:1; height:5px; border-radius:4px; background: #e5e7eb; transition: background 0.3s;"></div>
                 <div id="import-step-ind-3" style="flex:1; height:5px; border-radius:4px; background: #e5e7eb; transition: background 0.3s;"></div>
             </div>

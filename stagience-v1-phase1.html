@@ -12,7 +12,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #fbf7ef; color: #241f22; }
-        .gradient-accent { background: linear-gradient(135deg, #4c263a, #6f7652); }
+        .gradient-accent { background: #6b3050; }
         .page { display: none; }
         .page.active { display: block; }
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
@@ -26,7 +26,7 @@
         <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 100%);">
             <div style="background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); padding: 48px; max-width: 440px; width: 100%; margin: 20px;">
                 <div style="text-align: center; margin-bottom: 32px;">
-                    <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, #4c263a, #6f7652); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">
+                    <div style="width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg, #6b3050, #6f7652); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white;">
                         S
                     </div>
                     <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Welcome to Stagience</h1>
@@ -48,7 +48,7 @@
                                 <button type="button" onclick="togglePassword('signin-password', this)" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 16px; padding: 4px;">👁</button>
                             </div>
                             <div style="text-align: right; margin-top: 6px;">
-                                <a href="#" onclick="showForgotPasswordForm(); return false;" style="color: #4c263a; font-size: 13px; font-weight: 600; text-decoration: none;">Forgot password?</a>
+                                <a href="#" onclick="showForgotPasswordForm(); return false;" style="color: #6b3050; font-size: 13px; font-weight: 600; text-decoration: none;">Forgot password?</a>
                             </div>
                         </div>
                         <button type="submit" class="gradient-accent" style="width: 100%; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 8px;">
@@ -57,7 +57,7 @@
                     </form>
                     <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
                         Don't have an account? 
-                        <a href="#" onclick="showSignUpForm(); return false;" style="color: #4c263a; font-weight: 600; text-decoration: none;">Sign Up</a>
+                        <a href="#" onclick="showSignUpForm(); return false;" style="color: #6b3050; font-weight: 600; text-decoration: none;">Sign Up</a>
                     </p>
                 </div>
 
@@ -76,7 +76,7 @@
                     </form>
                     <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
                         Remember your password?
-                        <a href="#" onclick="showSignInForm(); return false;" style="color: #4c263a; font-weight: 600; text-decoration: none;">Sign In</a>
+                        <a href="#" onclick="showSignInForm(); return false;" style="color: #6b3050; font-weight: 600; text-decoration: none;">Sign In</a>
                     </p>
                 </div>
 
@@ -118,7 +118,7 @@
                     </form>
                     <p style="text-align: center; margin-top: 20px; color: #6b7280; font-size: 14px;">
                         Already have an account? 
-                        <a href="#" onclick="showSignInForm(); return false;" style="color: #4c263a; font-weight: 600; text-decoration: none;">Sign In</a>
+                        <a href="#" onclick="showSignInForm(); return false;" style="color: #6b3050; font-weight: 600; text-decoration: none;">Sign In</a>
                     </p>
                 </div>
 
@@ -138,7 +138,7 @@
                 .app-mobile-menu.open { display: block; }
                 .app-mobile-menu-panel { position: absolute; top: 0; right: 0; width: 260px; height: 100%; background: white; padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: -4px 0 20px rgba(0,0,0,0.1); }
                 .app-mobile-nav-btn { width: 100%; padding: 14px 18px; border-radius: 12px; background: transparent; font-weight: 600; font-size: 15px; cursor: pointer; border: none; text-align: left; }
-                .app-mobile-nav-btn:hover { background: rgba(76,38,58,0.08); }
+                .app-mobile-nav-btn:hover { background: rgba(107,48,80,0.08); }
                 .app-mobile-signout { width: 100%; padding: 14px 18px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; font-size: 15px; cursor: pointer; text-align: left; margin-top: auto; }
                 @media (max-width: 768px) {
                     .app-nav-desktop { display: none; }
@@ -149,7 +149,7 @@
             <nav style="background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 50;">
                 <div style="max-width: 1120px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
                     <a href="/" style="display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; color: #241f22;">
-                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #4c263a, #6f7652); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">S</div>
+                        <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #6b3050, #6f7652); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">S</div>
                         <span>Stagience</span>
                     </a>
                     <!-- Desktop Nav -->
@@ -200,7 +200,7 @@
                         <div class="inv-toolbar-actions">
                             <div style="display: flex; border: 1px solid #e5e7eb; border-radius: 12px; background: white; overflow: hidden;">
                                 <button id="grid-view-btn" onclick="switchInventoryView('grid')" style="padding: 12px 18px; border: none; background: white; color: #6b7280; font-weight: 600; cursor: pointer;">📦 Grid</button>
-                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: rgba(76,38,58,0.06); color: #4c263a; font-weight: 600; cursor: pointer;">📋 List</button>
+                                <button id="list-view-btn" onclick="switchInventoryView('list')" style="padding: 12px 18px; border: none; background: rgba(107,48,80,0.06); color: #6b3050; font-weight: 600; cursor: pointer;">📋 List</button>
                             </div>
                             <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🔍 Filter</button>
                             <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🖨️ Print</button>
@@ -217,12 +217,12 @@
                     </div>
 
                     <!-- Bulk Actions Banner (hidden by default) -->
-                    <div id="bulk-actions-banner" style="display: none; background: rgba(76,38,58,0.06); border: 2px solid #4c263a; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+                    <div id="bulk-actions-banner" style="display: none; background: rgba(107,48,80,0.06); border: 2px solid #6b3050; border-radius: 16px; padding: 20px; margin-bottom: 24px;">
                         <div style="text-align: center; margin-bottom: 16px;">
-                            <h3 id="bulk-selected-count" style="font-size: 18px; font-weight: 700; color: #4c263a; margin-bottom: 4px;">0 items selected</h3>
+                            <h3 id="bulk-selected-count" style="font-size: 18px; font-weight: 700; color: #6b3050; margin-bottom: 4px;">0 items selected</h3>
                         </div>
                         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                            <button onclick="showBulkUpdateModal()" style="padding: 12px 24px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                            <button onclick="showBulkUpdateModal()" style="padding: 12px 24px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                                 🔄 Bulk Update
                             </button>
                             <button onclick="showUpdateLocationModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
@@ -240,7 +240,7 @@
                     <!-- Inventory Status Filter Cards -->
                     <div id="inventory-status-filters" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px;">
                         <!-- All Items Card -->
-                        <div id="inv-filter-all" onclick="filterInventoryByStatus('all')" style="background: white; border: 2px solid #4c263a; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                        <div id="inv-filter-all" onclick="filterInventoryByStatus('all')" style="background: white; border: 2px solid #6b3050; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
                                 <div style="font-size: 24px;">📦</div>
                                 <div style="font-weight: 600; font-size: 15px;">All Items</div>
@@ -321,7 +321,7 @@
                     <!-- Project Filter Cards -->
                     <div id="project-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px;">
                         <!-- All Projects Card -->
-                        <div id="filter-all" onclick="filterProjectsByStatus('all')" style="background: white; border: 2px solid #4c263a; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                        <div id="filter-all" onclick="filterProjectsByStatus('all')" style="background: white; border: 2px solid #6b3050; border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
                                 <div style="font-size: 24px;">📁</div>
                                 <div style="font-weight: 600; font-size: 15px;">All Projects</div>
@@ -410,7 +410,7 @@
                     <!-- Tabs -->
                     <div style="border-bottom: 2px solid #e5e7eb; margin-bottom: 24px;">
                         <div style="display: flex; gap: 32px;">
-                            <button onclick="switchProjectTab('schedule')" id="tab-schedule" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #4c263a; border-bottom: 2px solid #4c263a; margin-bottom: -2px; cursor: pointer;">
+                            <button onclick="switchProjectTab('schedule')" id="tab-schedule" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b3050; border-bottom: 2px solid #6b3050; margin-bottom: -2px; cursor: pointer;">
                                 📅 Schedule & Notes
                             </button>
                             <button onclick="switchProjectTab('documents')" id="tab-documents" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b7280; cursor: pointer;">
@@ -431,7 +431,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                             <h2 style="font-size: 20px; font-weight: 700;">Project Timeline</h2>
                             <div style="display: flex; gap: 12px;">
-                                <button onclick="showShareModal()" style="padding: 10px 20px; border: 2px solid #4c263a; border-radius: 10px; background: white; color: #4c263a; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                <button onclick="showShareModal()" style="padding: 10px 20px; border: 2px solid #6b3050; border-radius: 10px; background: white; color: #6b3050; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                     🔵 Share
                                 </button>
                                 <button onclick="showAddEventModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
@@ -483,7 +483,7 @@
                         <!-- Photos Header -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                             <h2 style="font-size: 20px; font-weight: 700;">Photo Folders</h2>
-                            <button onclick="showCreateFolderModal()" style="padding: 10px 20px; border: none; border-radius: 10px; background: #4c263a; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                            <button onclick="showCreateFolderModal()" style="padding: 10px 20px; border: none; border-radius: 10px; background: #6b3050; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                                 📁 Create New Folder
                             </button>
                         </div>
@@ -547,7 +547,7 @@
 
                     <!-- Event Type Filters -->
                     <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-                        <button onclick="toggleEventTypeFilter('all')" id="filter-event-all" style="padding: 8px 16px; border: 2px solid #4c263a; border-radius: 10px; background: rgba(76,38,58,0.06); color: #4c263a; font-weight: 600; cursor: pointer; font-size: 13px;">
+                        <button onclick="toggleEventTypeFilter('all')" id="filter-event-all" style="padding: 8px 16px; border: 2px solid #6b3050; border-radius: 10px; background: rgba(107,48,80,0.06); color: #6b3050; font-weight: 600; cursor: pointer; font-size: 13px;">
                             All Events
                         </button>
                         <button onclick="toggleEventTypeFilter('consultation')" id="filter-event-consultation" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
@@ -620,7 +620,7 @@
                     <!-- Settings Tabs -->
                     <div style="border-bottom: 2px solid #e5e7eb; margin-bottom: 32px;">
                         <div style="display: flex; gap: 32px;">
-                            <button onclick="switchSettingsTab('team')" id="settings-tab-team" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #4c263a; border-bottom: 2px solid #4c263a; margin-bottom: -2px; cursor: pointer;">
+                            <button onclick="switchSettingsTab('team')" id="settings-tab-team" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b3050; border-bottom: 2px solid #6b3050; margin-bottom: -2px; cursor: pointer;">
                                 👥 Team
                             </button>
                             <button onclick="switchSettingsTab('account')" id="settings-tab-account" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b7280; cursor: pointer;">
@@ -811,7 +811,7 @@
                 </div>
                 <!-- Progress bar -->
                 <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
-                    <div id="wizard-progress" style="background: linear-gradient(135deg, #4c263a, #6f7652); height: 100%; width: 9.09%; transition: width 0.3s;"></div>
+                    <div id="wizard-progress" style="background: #6b3050; height: 100%; width: 9.09%; transition: width 0.3s;"></div>
                 </div>
             </div>
 
@@ -831,9 +831,9 @@
                 <button onclick="closeBulkUpdateModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
             </div>
             
-            <div style="background: rgba(76,38,58,0.06); border-left: 4px solid #4c263a; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
-                <div style="font-weight: 700; color: #4c263a; margin-bottom: 4px;"><span id="bulk-update-count">0</span> items selected</div>
-                <div style="font-size: 13px; color: #4c263a;">Update multiple fields at once</div>
+            <div style="background: rgba(107,48,80,0.06); border-left: 4px solid #6b3050; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+                <div style="font-weight: 700; color: #6b3050; margin-bottom: 4px;"><span id="bulk-update-count">0</span> items selected</div>
+                <div style="font-size: 13px; color: #6b3050;">Update multiple fields at once</div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -878,7 +878,7 @@
                 <button onclick="closeBulkUpdateModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                     Cancel
                 </button>
-                <button onclick="executeBulkUpdate()" style="flex: 1; padding: 14px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                <button onclick="executeBulkUpdate()" style="flex: 1; padding: 14px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                     Update Items
                 </button>
             </div>
@@ -893,8 +893,8 @@
                 <button onclick="closeUpdateLocationModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
             </div>
             
-            <div style="background: rgba(76,38,58,0.06); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
-                <div style="font-weight: 700; color: #4c263a;"><span id="location-update-count">0</span> items selected</div>
+            <div style="background: rgba(107,48,80,0.06); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="font-weight: 700; color: #6b3050;"><span id="location-update-count">0</span> items selected</div>
             </div>
 
             <label style="display: block; font-weight: 600; margin-bottom: 8px;">New Location</label>
@@ -906,7 +906,7 @@
                 <button onclick="closeUpdateLocationModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                     Cancel
                 </button>
-                <button onclick="executeLocationUpdate()" style="flex: 1; padding: 14px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                <button onclick="executeLocationUpdate()" style="flex: 1; padding: 14px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                     Update Location
                 </button>
             </div>
@@ -921,8 +921,8 @@
                 <button onclick="closeUpdateStatusModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
             </div>
             
-            <div style="background: rgba(76,38,58,0.06); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
-                <div style="font-weight: 700; color: #4c263a;"><span id="status-update-count">0</span> items selected</div>
+            <div style="background: rgba(107,48,80,0.06); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="font-weight: 700; color: #6b3050;"><span id="status-update-count">0</span> items selected</div>
             </div>
 
             <label style="display: block; font-weight: 600; margin-bottom: 8px;">New Status</label>
@@ -937,7 +937,7 @@
                 <button onclick="closeUpdateStatusModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                     Cancel
                 </button>
-                <button onclick="executeStatusUpdate()" style="flex: 1; padding: 14px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                <button onclick="executeStatusUpdate()" style="flex: 1; padding: 14px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                     Update Status
                 </button>
             </div>
@@ -956,7 +956,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 16px;">
                 <!-- List View Option -->
-                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#4c263a'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
+                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#6b3050'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <input type="radio" name="print-format" value="list" checked style="width: 20px; height: 20px; cursor: pointer;">
                         <div style="flex: 1;">
@@ -970,7 +970,7 @@
                 </label>
 
                 <!-- Grid View Option -->
-                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#4c263a'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
+                <label style="border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#6b3050'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e5e7eb'">
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <input type="radio" name="print-format" value="grid" style="width: 20px; height: 20px; cursor: pointer;">
                         <div style="flex: 1;">
@@ -1198,7 +1198,7 @@
                     <button type="button" onclick="closeEventModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
                     </button>
-                    <button type="submit" style="flex: 1; padding: 14px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                    <button type="submit" style="flex: 1; padding: 14px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;">
                         Save Event
                     </button>
                 </div>
@@ -1671,7 +1671,7 @@
             
             // Highlight active nav button
             const navBtn = document.getElementById('nav-' + sectionName);
-            if (navBtn) navBtn.style.background = 'rgba(76,38,58,0.08)';
+            if (navBtn) navBtn.style.background = 'rgba(107,48,80,0.08)';
 
             // Load settings data when switching to settings
             if (sectionName === 'settings') {
@@ -1769,14 +1769,17 @@
             // Render based on view
             const container = document.getElementById('inventory-container');
             
-            if (filteredItems.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';
-                return;
-            }
-
             // Show/hide import banner based on whether inventory has items
             const invBanner = document.getElementById('inventory-import-banner');
             if (invBanner) invBanner.style.display = inventoryItems.length === 0 ? 'flex' : 'none';
+
+            if (filteredItems.length === 0 && inventoryItems.length > 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';
+                return;
+            } else if (filteredItems.length === 0 && inventoryItems.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
 
             if (currentView === 'grid') {
                 renderGridView(filteredItems, container);
@@ -1802,7 +1805,7 @@
                         const emoji = categoryEmojis[item.category] || '📦';
                         const statusColors = {
                             'IN': 'background: #dcfce7; color: #166534;',
-                            'OUT': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                            'OUT': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                             'HOLD': 'background: #fef3c7; color: #92400e;'
                         };
                         return `
@@ -1812,7 +1815,7 @@
                                     <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
                                         📋
                                     </button>
-                                    <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(76,38,58,0.06)'" onmouseout="this.style.background='white'">
+                                    <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(107,48,80,0.06)'" onmouseout="this.style.background='white'">
                                         ✏️
                                     </button>
                                     <button onclick="event.stopPropagation(); deleteItem(${item.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
@@ -1841,7 +1844,7 @@
         function renderListView(items, container) {
             const statusColors = {
                 'IN': 'background: #dcfce7; color: #166534;',
-                'OUT': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'OUT': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
             const isMobile = window.innerWidth <= 768;
@@ -1912,7 +1915,7 @@
                                         <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
                                             📋
                                         </button>
-                                        <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(76,38,58,0.06)'" onmouseout="this.style.background='white'">
+                                        <button onclick="event.stopPropagation(); editItem(${item.id})" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; margin-right: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(107,48,80,0.06)'" onmouseout="this.style.background='white'">
                                             ✏️
                                         </button>
                                         <button onclick="event.stopPropagation(); deleteItem(${item.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
@@ -1948,8 +1951,8 @@
             statuses.forEach(status => {
                 const card = document.getElementById(`inv-filter-${status}`);
                 if (status === currentInventoryStatusFilter) {
-                    card.style.borderColor = '#4c263a';
-                    card.style.background = 'rgba(76,38,58,0.06)';
+                    card.style.borderColor = '#6b3050';
+                    card.style.background = 'rgba(107,48,80,0.06)';
                 } else {
                     card.style.borderColor = '#e5e7eb';
                     card.style.background = 'white';
@@ -1995,10 +1998,10 @@
             currentView = view;
             
             // Update button styles
-            document.getElementById('grid-view-btn').style.background = view === 'grid' ? 'rgba(76,38,58,0.06)' : 'white';
-            document.getElementById('grid-view-btn').style.color = view === 'grid' ? '#4c263a' : '#6b7280';
-            document.getElementById('list-view-btn').style.background = view === 'list' ? 'rgba(76,38,58,0.06)' : 'white';
-            document.getElementById('list-view-btn').style.color = view === 'list' ? '#4c263a' : '#6b7280';
+            document.getElementById('grid-view-btn').style.background = view === 'grid' ? 'rgba(107,48,80,0.06)' : 'white';
+            document.getElementById('grid-view-btn').style.color = view === 'grid' ? '#6b3050' : '#6b7280';
+            document.getElementById('list-view-btn').style.background = view === 'list' ? 'rgba(107,48,80,0.06)' : 'white';
+            document.getElementById('list-view-btn').style.color = view === 'list' ? '#6b3050' : '#6b7280';
             
             renderInventory();
         }
@@ -2227,7 +2230,7 @@
         function renderStep7(container, nav) {
             const locationOptions = (userLocations || []).map(l => `<option value="${l.name}" ${wizardData.location === l.name ? 'selected' : ''}>${l.name}</option>`).join('');
             const noLocationsMsg = (!userLocations || userLocations.length === 0)
-                ? '<div style="background:#f3eadf;border:1.5px solid #b9774f;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#6b7280;">No locations set up yet. <button type="button" onclick="showLocationsFromWizard()" style="color:#4c263a;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;">Add locations first</button></div>'
+                ? '<div style="background:#f3eadf;border:1.5px solid #b9774f;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#6b7280;">No locations set up yet. <button type="button" onclick="showLocationsFromWizard()" style="color:#6b3050;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;">Add locations first</button></div>'
                 : '';
             container.innerHTML = `
                 <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 12px;">Where is this item located?</h3>
@@ -2741,7 +2744,7 @@
             
             const statusColors = {
                 'IN': 'background: #dcfce7; color: #166534;',
-                'OUT': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'OUT': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
             
@@ -2831,7 +2834,7 @@
             
             const statusColors = {
                 'IN': 'background: #dcfce7; color: #166534;',
-                'OUT': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'OUT': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
             
@@ -3296,7 +3299,11 @@
             
             const container = document.getElementById('projects-container');
             
-            if (filteredProjects.length === 0) {
+            // Show/hide import banner based on whether projects exist
+            const projBanner = document.getElementById('projects-import-banner');
+            if (projBanner) projBanner.style.display = projects.length === 0 ? 'flex' : 'none';
+
+            if (filteredProjects.length === 0 && projects.length > 0) {
                 const filterLabel = currentProjectFilter === 'all' ? '' : ` in "${currentProjectFilter}" status`;
                 container.innerHTML = `
                     <div style="text-align: center; padding: 60px 20px; color: #6b7280;">
@@ -3305,6 +3312,9 @@
                         <p style="font-size: 14px; margin-bottom: 20px;">${currentProjectFilter === 'all' ? 'Click "+ Add Project" to create your first project' : 'Try selecting a different status filter'}</p>
                     </div>
                 `;
+                return;
+            } else if (filteredProjects.length === 0 && projects.length === 0) {
+                container.innerHTML = '';
                 return;
             }
 
@@ -3328,7 +3338,7 @@
 
             const statusColors = {
                 'active': 'background: #dcfce7; color: #166534;',
-                'scheduled': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'scheduled': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'consult-only': 'background: #fef3c7; color: #92400e;',
                 'pending': 'background: #fef3c7; color: #92400e;',
                 'completed': 'background: #e0e7ff; color: #3730a3;'
@@ -3342,14 +3352,10 @@
                 'completed': 'Completed'
             };
 
-            // Show/hide import banner based on whether projects exist
-            const projBanner = document.getElementById('projects-import-banner');
-            if (projBanner) projBanner.style.display = projects.length === 0 ? 'flex' : 'none';
-
             container.innerHTML = sortedMonths.map(monthYear => `
                 <div style="margin-bottom: 32px;">
                     <!-- Month Header -->
-                    <div onclick="toggleMonthSection('${monthYear}')" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: white; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; margin-bottom: 16px; transition: all 0.2s;" onmouseover="this.style.borderColor='#4c263a'" onmouseout="this.style.borderColor='#e5e7eb'">
+                    <div onclick="toggleMonthSection('${monthYear}')" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: white; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; margin-bottom: 16px; transition: all 0.2s;" onmouseover="this.style.borderColor='#6b3050'" onmouseout="this.style.borderColor='#e5e7eb'">
                         <span id="toggle-${monthYear.replace(/\s/g, '-')}" style="font-size: 20px; transition: transform 0.2s;">▼</span>
                         <h3 style="font-size: 18px; font-weight: 700; flex: 1;">${monthYear}</h3>
                         <span style="color: #6b7280; font-size: 14px;">${grouped[monthYear].length} project${grouped[monthYear].length !== 1 ? 's' : ''}</span>
@@ -3378,7 +3384,7 @@
                                 <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
                                     <span style="padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; white-space: nowrap; ${statusColors[project.status] || statusColors['active']}">${statusLabels[project.status] || 'Active'}</span>
                                     
-                                    <button onclick="event.stopPropagation(); editProject(${project.id})" title="Edit" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(76,38,58,0.06)'" onmouseout="this.style.background='white'">
+                                    <button onclick="event.stopPropagation(); editProject(${project.id})" title="Edit" style="width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='rgba(107,48,80,0.06)'" onmouseout="this.style.background='white'">
                                         ✏️
                                     </button>
                                     
@@ -3437,8 +3443,8 @@
             filters.forEach(filter => {
                 const card = document.getElementById(`filter-${filter}`);
                 if (filter === currentProjectFilter) {
-                    card.style.borderColor = '#4c263a';
-                    card.style.background = 'rgba(76,38,58,0.06)';
+                    card.style.borderColor = '#6b3050';
+                    card.style.background = 'rgba(107,48,80,0.06)';
                 } else {
                     card.style.borderColor = '#e5e7eb';
                     card.style.background = 'white';
@@ -3595,7 +3601,7 @@
             // Update status badge
             const statusColors = {
                 'active': 'background: #dcfce7; color: #166534;',
-                'scheduled': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'scheduled': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'consult-only': 'background: #fef3c7; color: #92400e;',
                 'pending': 'background: #fef3c7; color: #92400e;',
                 'completed': 'background: #e0e7ff; color: #3730a3;'
@@ -3649,8 +3655,8 @@
             // Show selected tab
             document.getElementById(`${tabName}-tab-content`).style.display = 'block';
             const selectedBtn = document.getElementById(`tab-${tabName}`);
-            selectedBtn.style.color = '#4c263a';
-            selectedBtn.style.borderBottom = '2px solid #4c263a';
+            selectedBtn.style.color = '#6b3050';
+            selectedBtn.style.borderBottom = '2px solid #6b3050';
             selectedBtn.style.marginBottom = '-2px';
         }
 
@@ -3704,8 +3710,8 @@
                 'completed': 'background: #f3f4f6; color: #241f22;',
                 'photo-shoot': 'background: #fef3c7; color: #92400e;',
                 'pickup-destage': 'background: #f3e8ff; color: #6b21a8;',
-                'installation-stage': 'background: rgba(76,38,58,0.08); color: #4c263a;',
-                'consultation': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'installation-stage': 'background: rgba(107,48,80,0.08); color: #6b3050;',
+                'consultation': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'payment': 'background: #fef3c7; color: #92400e;',
                 'call-meeting': 'background: #f3f4f6; color: #241f22;'
             };
@@ -3739,14 +3745,14 @@
                     if (event.building_access_code) installationFields += `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>`;
                     if (event.contact) installationFields += `<div style="margin-bottom: 8px;"><strong>Contact:</strong> ${event.contact}</div>`;
                     if (event.notes) installationFields += `${installationFields ? '<br>' : ''}${event.notes}`;
-                    detailsHtml = `<div style="background: rgba(76,38,58,0.08); padding: 16px; border-radius: 10px; margin-top: 12px;">${installationFields}</div>`;
+                    detailsHtml = `<div style="background: rgba(107,48,80,0.08); padding: 16px; border-radius: 10px; margin-top: 12px;">${installationFields}</div>`;
                 } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
                     // Show consultation details AND notes (both if present)
                     let consultationContent = '';
                     if (event.consultation_details) consultationContent += event.consultation_details;
                     if (event.consultation_details && event.notes) consultationContent += '<br><br>';
                     if (event.notes) consultationContent += event.notes;
-                    detailsHtml = `<div style="background: rgba(76,38,58,0.08); padding: 16px; border-radius: 10px; margin-top: 12px;">${consultationContent}</div>`;
+                    detailsHtml = `<div style="background: rgba(107,48,80,0.08); padding: 16px; border-radius: 10px; margin-top: 12px;">${consultationContent}</div>`;
                 } else if (event.notes) {
                     detailsHtml = `<div style="background: #f9fafb; padding: 16px; border-radius: 10px; margin-top: 12px;">${event.notes}</div>`;
                 }
@@ -3817,7 +3823,7 @@
                 `;
             } else if (eventType === 'installation-stage') {
                 html = `
-                    <div style="background: rgba(76,38,58,0.08); padding: 20px; border-radius: 12px;">
+                    <div style="background: rgba(107,48,80,0.08); padding: 20px; border-radius: 12px;">
                         <h4 style="font-weight: 700; margin-bottom: 12px;">Installation Details</h4>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
                             <input type="text" id="event-team" placeholder="Team: e.g., Sarah, Mike" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
@@ -3829,7 +3835,7 @@
                 `;
             } else if (eventType === 'consultation') {
                 html = `
-                    <div style="background: rgba(76,38,58,0.08); padding: 20px; border-radius: 12px;">
+                    <div style="background: rgba(107,48,80,0.08); padding: 20px; border-radius: 12px;">
                         <h4 style="font-weight: 700; margin-bottom: 12px;">Consultation Details</h4>
                         <textarea id="event-consultation-details" placeholder="e.g., Client preferences, style discussed, budget approved..." rows="4" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;"></textarea>
                     </div>
@@ -4026,8 +4032,8 @@
                 'completed': 'background: #f3f4f6; color: #241f22;',
                 'photo-shoot': 'background: #fef3c7; color: #92400e;',
                 'pickup-destage': 'background: #f3e8ff; color: #6b21a8;',
-                'installation-stage': 'background: rgba(76,38,58,0.08); color: #4c263a;',
-                'consultation': 'background: rgba(76,38,58,0.08); color: #4c263a;',
+                'installation-stage': 'background: rgba(107,48,80,0.08); color: #6b3050;',
+                'consultation': 'background: rgba(107,48,80,0.08); color: #6b3050;',
                 'payment': 'background: #fef3c7; color: #92400e;',
                 'call-meeting': 'background: #f3f4f6; color: #241f22;'
             };
@@ -4055,7 +4061,7 @@
                     <div style="text-align: center; margin-bottom: 40px;">
                         <h1>${project.name}</h1>
                         <div class="address">${project.address || ''}</div>
-                        <button onclick="window.print()" style="padding: 12px 24px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 20px;">
+                        <button onclick="window.print()" style="padding: 12px 24px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 20px;">
                             🖨️ Print / Save as PDF
                         </button>
                     </div>
@@ -4088,13 +4094,13 @@
                             if (event.building_access_code) installationFields += `<div style="margin-bottom: 8px;"><strong>Building Access Code:</strong> ${event.building_access_code}</div>`;
                             if (event.contact) installationFields += `<div style="margin-bottom: 8px;"><strong>Contact:</strong> ${event.contact}</div>`;
                             if (event.notes) installationFields += `${installationFields ? '<br>' : ''}${event.notes}`;
-                            detailsHtml = `<div class="event-details" style="background: rgba(76,38,58,0.08);">${installationFields}</div>`;
+                            detailsHtml = `<div class="event-details" style="background: rgba(107,48,80,0.08);">${installationFields}</div>`;
                         } else if (event.event_type === 'consultation' && (event.consultation_details || event.notes)) {
                             let consultationContent = '';
                             if (event.consultation_details) consultationContent += event.consultation_details;
                             if (event.consultation_details && event.notes) consultationContent += '<br><br>';
                             if (event.notes) consultationContent += event.notes;
-                            detailsHtml = `<div class="event-details" style="background: rgba(76,38,58,0.08);">${consultationContent}</div>`;
+                            detailsHtml = `<div class="event-details" style="background: rgba(107,48,80,0.08);">${consultationContent}</div>`;
                         } else if (event.notes) {
                             detailsHtml = `<div class="event-details" style="background: #f9fafb;">${event.notes}</div>`;
                         }
@@ -4291,7 +4297,7 @@
                                 <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
                             </div>
                             
-                            <button onclick="downloadDocument('${doc.file_path}', '${doc.file_name}')" style="width: 100%; padding: 10px; background: #4c263a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            <button onclick="downloadDocument('${doc.file_path}', '${doc.file_name}')" style="width: 100%; padding: 10px; background: #6b3050; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
                                 Download
                             </button>
                         </div>
@@ -4495,7 +4501,7 @@
                                 <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
                             </div>
                             
-                            <button onclick="downloadFile('${file.file_path}', '${file.file_name}')" style="width: 100%; padding: 10px; background: #4c263a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                            <button onclick="downloadFile('${file.file_path}', '${file.file_name}')" style="width: 100%; padding: 10px; background: #6b3050; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
                                 Download
                             </button>
                         </div>
@@ -4732,7 +4738,7 @@
                     const cb = document.createElement('input');
                     cb.type = 'checkbox';
                     cb.id = 'photo-check-' + pid;
-                    cb.style.cssText = 'position:absolute;top:10px;left:10px;width:18px;height:18px;cursor:pointer;z-index:10;accent-color:#4c263a;';
+                    cb.style.cssText = 'position:absolute;top:10px;left:10px;width:18px;height:18px;cursor:pointer;z-index:10;accent-color:#6b3050;';
                     cb.setAttribute('data-folder-id', fid);
                     cb.setAttribute('data-photo-id', pid);
                     cb.setAttribute('onclick', 'event.stopPropagation();togglePhotoSelection(this.dataset.folderId, this.dataset.photoId, document.getElementById("photo-card-"+this.dataset.photoId))');
@@ -4809,7 +4815,7 @@
                 actions.appendChild(bulkDelBtn);
 
                 const uploadBtn = document.createElement('button');
-                uploadBtn.style.cssText = 'padding:8px 14px;border:2px solid #4c263a;border-radius:8px;background:white;color:#4c263a;font-weight:600;cursor:pointer;font-size:13px;';
+                uploadBtn.style.cssText = 'padding:8px 14px;border:2px solid #6b3050;border-radius:8px;background:white;color:#6b3050;font-weight:600;cursor:pointer;font-size:13px;';
                 uploadBtn.textContent = '📤 Upload';
                 uploadBtn.onclick = () => showUploadPhotosModal(folder.id);
                 actions.appendChild(uploadBtn);
@@ -5117,7 +5123,7 @@
 
             // Event colors by type
             const eventColors = {
-                'consultation': '#4c263a',
+                'consultation': '#6b3050',
                 'installation-stage': '#10b981',
                 'photo-shoot': '#f59e0b',
                 'pickup-destage': '#8b5cf6',
@@ -5155,8 +5161,8 @@
                 });
 
                 calendarHTML += `
-                    <div style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px; min-height: 100px; ${isToday ? 'background: rgba(76,38,58,0.06);' : ''}">
-                        <div style="font-weight: ${isToday ? '700' : '600'}; margin-bottom: 6px; color: ${isToday ? '#4c263a' : '#241f22'};">${day}</div>
+                    <div style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 8px; min-height: 100px; ${isToday ? 'background: rgba(107,48,80,0.06);' : ''}">
+                        <div style="font-weight: ${isToday ? '700' : '600'}; margin-bottom: 6px; color: ${isToday ? '#6b3050' : '#241f22'};">${day}</div>
                         ${dayEvents.map(event => {
                             const time = event.event_time ? new Date(`2000-01-01T${event.event_time}`).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
                             const projectName = event.projects?.name || '';
@@ -5182,7 +5188,7 @@
             document.getElementById('current-month-year').textContent = monthNames[currentCalendarMonth] + ' ' + currentCalendarYear;
 
             const eventColors = {
-                'consultation': '#4c263a', 'installation-stage': '#10b981',
+                'consultation': '#6b3050', 'installation-stage': '#10b981',
                 'photo-shoot': '#f59e0b', 'pickup-destage': '#8b5cf6',
                 'completed': '#6b7280', 'payment': '#f59e0b', 'call-meeting': '#6b7280'
             };
@@ -5219,7 +5225,7 @@
 
                 html += '<div style="margin-bottom:20px;">';
                 html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">';
-                html += '<div style="width:44px;height:44px;border-radius:12px;background:' + (isToday ? 'linear-gradient(135deg,#4c263a,#6f7652)' : '#f3f4f6') + ';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">';
+                html += '<div style="width:44px;height:44px;border-radius:12px;background:' + (isToday ? 'linear-gradient(135deg,#6b3050,#6f7652)' : '#f3f4f6') + ';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">';
                 html += '<div style="font-size:16px;font-weight:800;color:' + (isToday ? 'white' : '#241f22') + ';line-height:1;">' + dt.getDate() + '</div>';
                 html += '<div style="font-size:9px;font-weight:600;color:' + (isToday ? 'rgba(255,255,255,0.8)' : '#6b7280') + ';text-transform:uppercase;">' + dt.toLocaleDateString('en-US',{weekday:'short'}) + '</div></div>';
                 html += '<div><div style="font-weight:700;font-size:15px;">' + dateLabel + '</div>';
@@ -5299,9 +5305,9 @@
             ['all', 'consultation', 'installation-stage', 'photo-shoot', 'pickup-destage'].forEach(filterType => {
                 const btn = document.getElementById(`filter-event-${filterType}`);
                 if (calendarEventTypeFilter.includes(filterType) || (filterType === 'all' && calendarEventTypeFilter.includes('all'))) {
-                    btn.style.borderColor = '#4c263a';
-                    btn.style.background = 'rgba(76,38,58,0.06)';
-                    btn.style.color = '#4c263a';
+                    btn.style.borderColor = '#6b3050';
+                    btn.style.background = 'rgba(107,48,80,0.06)';
+                    btn.style.color = '#6b3050';
                 } else {
                     btn.style.borderColor = '#e5e7eb';
                     btn.style.background = 'white';
@@ -5382,7 +5388,7 @@
                             <h3 style="font-weight: 700; font-size: 18px; margin-bottom: ${template.description ? '8px' : '20px'};">${template.template_name}</h3>
                             ${template.description ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">${template.description}</p>` : ''}
                             <div style="display: flex; gap: 12px;">
-                                <button onclick="useTemplate('${template.file_path}', '${template.file_name}')" style="flex: 1; padding: 12px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                <button onclick="useTemplate('${template.file_path}', '${template.file_name}')" style="flex: 1; padding: 12px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">
                                     Use Template
                                 </button>
                                 <button onclick="deleteTemplate(${template.id})" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;">
@@ -5443,7 +5449,7 @@
                             <h3 style="font-weight: 700; font-size: 18px; margin-bottom: ${template.description ? '8px' : '20px'};">${template.template_name}</h3>
                             ${template.description ? `<p style="color: #6b7280; font-size: 14px; margin-bottom: 20px; line-height: 1.5;">${template.description}</p>` : ''}
                             <div style="display: flex; gap: 12px;">
-                                <button onclick="useTemplate('${template.file_path}', '${template.file_name}')" style="flex: 1; padding: 12px; background: #4c263a; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                                <button onclick="useTemplate('${template.file_path}', '${template.file_name}')" style="flex: 1; padding: 12px; background: #6b3050; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 14px;">
                                     Use Template
                                 </button>
                                 <button onclick="deleteTemplate(${template.id})" style="width: 44px; height: 44px; border-radius: 10px; border: 2px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;">
@@ -5702,7 +5708,7 @@
 
             if (isChecked) {
                 selected.add(photoId);
-                if (card) { card.style.borderColor = '#4c263a'; card.style.background = 'rgba(76,38,58,0.06)'; }
+                if (card) { card.style.borderColor = '#6b3050'; card.style.background = 'rgba(107,48,80,0.06)'; }
                 if (checkbox) checkbox.checked = true;
             } else {
                 selected.delete(photoId);
@@ -5736,7 +5742,7 @@
                     selected.add(id);
                     const card = document.getElementById('photo-card-' + id);
                     const cb = document.getElementById('photo-check-' + id);
-                    if (card) { card.style.borderColor = '#4c263a'; card.style.background = 'rgba(76,38,58,0.06)'; }
+                    if (card) { card.style.borderColor = '#6b3050'; card.style.background = 'rgba(107,48,80,0.06)'; }
                     if (cb) cb.checked = true;
                 });
             }
@@ -5803,7 +5809,7 @@
 
         const ROLE_COLORS = {
             'admin': 'background:#dcfce7;color:#166534;',
-            'inventory': 'background:rgba(76,38,58,0.08);color:#4c263a;',
+            'inventory': 'background:rgba(107,48,80,0.08);color:#6b3050;',
             'viewer': 'background:#f3f4f6;color:#374151;'
         };
 
@@ -5923,8 +5929,8 @@
             ['team', 'account'].forEach(t => {
                 document.getElementById('settings-' + t + '-tab').style.display = t === tab ? 'block' : 'none';
                 const btn = document.getElementById('settings-tab-' + t);
-                btn.style.color = t === tab ? '#4c263a' : '#6b7280';
-                btn.style.borderBottom = t === tab ? '2px solid #4c263a' : 'none';
+                btn.style.color = t === tab ? '#6b3050' : '#6b7280';
+                btn.style.borderBottom = t === tab ? '2px solid #6b3050' : 'none';
                 btn.style.marginBottom = t === tab ? '-2px' : '0';
             });
 
@@ -5963,7 +5969,7 @@
 
             // Owner row
             const ownerRow = '<div style="display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid #f3f4f6;">' +
-                '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4c263a,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;">' + (getDataOwnerId() === currentUser.id ? currentUser.email[0].toUpperCase() : 'O') + '</div>' +
+                '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#6b3050,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;">' + (getDataOwnerId() === currentUser.id ? currentUser.email[0].toUpperCase() : 'O') + '</div>' +
                 '<div style="flex:1;"><div style="font-weight:600;font-size:15px;">' + (getDataOwnerId() === currentUser.id ? currentUser.email : 'Account Owner') + '</div><div style="font-size:13px;color:#6b7280;">Account Owner</div></div>' +
                 '<span style="padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;background:#dcfce7;color:#166534;">🔑 Admin</span>' +
                 '</div>';

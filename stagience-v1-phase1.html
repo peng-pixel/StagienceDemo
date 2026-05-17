@@ -2355,21 +2355,11 @@
             // Upload photo if one was selected in step 12
             if (wizardData.photoFile && data && data[0]) {
                 const newItemId = data[0].id;
-                const fileExt = wizardData.photoFile.name.split('.').pop();
-                const fileName = `${currentUser.id}/${newItemId}-${Date.now()}.${fileExt}`;
-
-                const { error: uploadError } = await supabase.storage
-                    .from('inventory-photos')
-                    .upload(fileName, wizardData.photoFile, { cacheControl: '3600', upsert: false });
-
-                if (!uploadError) {
-                    const { data: { publicUrl } } = supabase.storage
-                        .from('inventory-photos')
-                        .getPublicUrl(fileName);
-
+                const photoUrl = await uploadPhoto(newItemId, wizardData.photoFile);
+                if (photoUrl) {
                     await supabase
                         .from('inventory')
-                        .update({ photo_url: publicUrl })
+                        .update({ photo_url: photoUrl })
                         .eq('id', newItemId);
                 }
             }
@@ -2870,29 +2860,29 @@
             document.getElementById('photo-preview').src = '';
         }
 
-        async function uploadPhoto(itemId) {
-            if (!selectedPhotoFile) return null;
-            
-            const fileExt = selectedPhotoFile.name.split('.').pop();
+        async function uploadPhoto(itemId, fileOverride) {
+            const fileToUpload = fileOverride || selectedPhotoFile;
+            if (!fileToUpload) return null;
+
+            const fileExt = fileToUpload.name.split('.').pop();
             const fileName = `${currentUser.id}/${itemId}-${Date.now()}.${fileExt}`;
-            
+
             const { data, error } = await supabase.storage
                 .from('inventory-photos')
-                .upload(fileName, selectedPhotoFile, {
+                .upload(fileName, fileToUpload, {
                     cacheControl: '3600',
                     upsert: false
                 });
-            
+
             if (error) {
                 console.error('Error uploading photo:', error);
                 return null;
             }
-            
-            // Get public URL
+
             const { data: { publicUrl } } = supabase.storage
                 .from('inventory-photos')
                 .getPublicUrl(fileName);
-            
+
             return publicUrl;
         }
 
@@ -2988,11 +2978,12 @@
                 
                 // Upload new photo if selected
                 if (selectedPhotoFile) {
+                    const photoFile = selectedPhotoFile; // capture before any async reset
                     // Delete old photo if exists
                     if (oldItem && oldItem.photo_url) {
                         await deletePhotoFromStorage(oldItem.photo_url);
                     }
-                    const photoUrl = await uploadPhoto(editingItemId);
+                    const photoUrl = await uploadPhoto(editingItemId, photoFile);
                     if (photoUrl) {
                         itemData.photo_url = photoUrl;
                     }
@@ -3022,10 +3013,9 @@
                 // Upload photo if selected
                 if (selectedPhotoFile && data && data[0]) {
                     const newItemId = data[0].id;
-                    const photoUrl = await uploadPhoto(newItemId);
-                    
+                    const photoFile = selectedPhotoFile; // capture before any reset
+                    const photoUrl = await uploadPhoto(newItemId, photoFile);
                     if (photoUrl) {
-                        // Update item with photo URL
                         await supabase
                             .from('inventory')
                             .update({ photo_url: photoUrl })

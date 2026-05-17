@@ -2733,8 +2733,12 @@
             document.getElementById('item-form').reset();
             document.getElementById('modal-title').textContent = 'Add Item';
             editingItemId = null;
-            shouldDeletePhoto = false; // Reset deletion flag
-            deletePhoto(); // Reset photo state
+            // Reset photo state without triggering shouldDeletePhoto
+            selectedPhotoFile = null;
+            shouldDeletePhoto = false;
+            document.getElementById('item-photo-input').value = '';
+            document.getElementById('photo-preview-container').style.display = 'none';
+            document.getElementById('photo-preview').src = '';
         }
 
         // ==============================================
@@ -2769,8 +2773,9 @@
         }
 
         function deletePhoto() {
+            // Only called when user explicitly clicks "Delete Photo"
             selectedPhotoFile = null;
-            shouldDeletePhoto = true; // Mark that we want to delete the photo
+            shouldDeletePhoto = true;
             document.getElementById('item-photo-input').value = '';
             document.getElementById('photo-preview-container').style.display = 'none';
             document.getElementById('photo-preview').src = '';

@@ -19,6 +19,10 @@
     {
       "source": "/contact",
       "destination": "/stagience-contact.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/stagience-terms.html"
     }
   ]
 }

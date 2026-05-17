@@ -13,14 +13,34 @@
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #241f22;
-            background: #fafaf9;
+            color: #fffdf8;
+            background-color: #161313;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-size: cover;
+                background-position: center top;
+            }
         }
 
         header {
-            background: white;
-            border-bottom: 1px solid #e7e5e4;
+            background: rgba(22,19,19,0.82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,253,248,0.12);
             padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
@@ -38,14 +58,14 @@
             gap: 10px;
             font-weight: 700;
             font-size: 18px;
-            color: #241f22;
+            color: #fffdf8;
             text-decoration: none;
         }
 
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: #6b3050;
+            background: linear-gradient(135deg, #4c263a, #6f7652);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -64,11 +84,11 @@
             padding: 10px 20px;
             border: 1px solid #d6d3d1;
             border-radius: 8px;
-            background: white;
+            background: rgba(255,253,248,0.07);
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            color: #241f22;
+            color: #fffdf8;
             font-size: 14px;
         }
 
@@ -101,7 +121,7 @@
         }
 
         .page-header p {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 15px;
         }
 
@@ -113,7 +133,7 @@
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 12px;
-            color: #241f22;
+            color: #fffdf8;
             padding-bottom: 8px;
             border-bottom: 2px solid #f3f4f6;
         }
@@ -137,13 +157,13 @@
         }
 
         .highlight-box {
-            background: #f3eadf;
+            background: rgba(255,253,248,0.05);
             border: 1.5px solid #b9774f;
             border-radius: 12px;
             padding: 20px 24px;
             margin-bottom: 40px;
             font-size: 14px;
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             line-height: 1.7;
         }
 
@@ -206,7 +226,7 @@
             padding: 24px 24px 0;
             border-top: 1px solid #292524;
             font-size: 13px;
-            color: #78716c;
+            color: rgba(255,253,248,0.6);
         }
 
         @media (max-width: 768px) {

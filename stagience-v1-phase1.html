@@ -1914,7 +1914,7 @@
         
         let wizardData = {};
         let currentWizardStep = 1;
-        const totalWizardSteps = 11;
+        const totalWizardSteps = 12;
 
         function showAddItemModal() {
             // Reset wizard
@@ -1948,6 +1948,7 @@
                 case 9: renderStep9(stepsContainer, navContainer); break;
                 case 10: renderStep10(stepsContainer, navContainer); break;
                 case 11: renderStep11(stepsContainer, navContainer); break;
+                case 12: renderStep12(stepsContainer, navContainer); break;
             }
         }
 
@@ -2223,7 +2224,68 @@
                     <button type="button" onclick="document.getElementById('wizard-room').value='Office'" style="padding: 8px 16px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; cursor: pointer; font-size: 14px;">Office</button>
                 </div>
             `;
-            renderWizardNav(nav, true, false, saveWizardItem, true);
+            renderWizardNav(nav, true, true, () => {
+                wizardData.name = document.getElementById('wizard-item-name')?.value?.trim() || (wizardData.category + ' Item');
+                wizardData.room = document.getElementById('wizard-room')?.value || '';
+                showWizardStep(12);
+            });
+        }
+
+        // Step 12: Photo (optional)
+        function renderStep12(container, nav) {
+            container.innerHTML = `
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Add a photo <span style="font-weight:400;color:#6b7280;font-size:15px;">(Optional)</span></h3>
+                <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">Add a photo now or skip — you can always add one later by editing the item.</p>
+
+                <label style="display:block;padding:28px;border:2px dashed #e5e7eb;border-radius:16px;text-align:center;cursor:pointer;background:#f9fafb;transition:border-color 0.2s;" id="wizard-photo-label" onmouseover="this.style.borderColor='#b0a586'" onmouseout="this.style.borderColor='#e5e7eb'">
+                    <div id="wizard-photo-preview-wrap" style="display:none;margin-bottom:12px;">
+                        <img id="wizard-photo-preview" style="max-width:200px;max-height:200px;border-radius:10px;border:2px solid #e5e7eb;object-fit:cover;">
+                    </div>
+                    <div id="wizard-photo-placeholder">
+                        <div style="font-size:40px;margin-bottom:8px;">📷</div>
+                        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">Click to choose a photo</div>
+                        <div style="color:#6b7280;font-size:13px;">JPG, PNG — max 5MB</div>
+                    </div>
+                    <input type="file" id="wizard-photo-input" accept="image/*" style="display:none;" onchange="handleWizardPhotoSelect(event)">
+                </label>
+
+                <div id="wizard-photo-actions" style="display:none;margin-top:12px;text-align:center;">
+                    <button type="button" onclick="clearWizardPhoto()" style="padding:8px 16px;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">🗑️ Remove Photo</button>
+                </div>
+            `;
+
+            nav.innerHTML = `
+                <button type="button" onclick="showWizardStep(11)" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">← Undo</button>
+                <button type="button" onclick="cancelWizard()" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Cancel</button>
+                <button type="button" onclick="saveWizardItem()" class="gradient-accent" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;" id="wizard-save-btn">Save Item</button>
+            `;
+        }
+
+        function handleWizardPhotoSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { alert('Please select an image file'); return; }
+            if (file.size > 5 * 1024 * 1024) { alert('Image must be less than 5MB'); return; }
+
+            wizardData.photoFile = file;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('wizard-photo-preview').src = e.target.result;
+                document.getElementById('wizard-photo-preview-wrap').style.display = 'block';
+                document.getElementById('wizard-photo-placeholder').style.display = 'none';
+                document.getElementById('wizard-photo-actions').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearWizardPhoto() {
+            wizardData.photoFile = null;
+            document.getElementById('wizard-photo-input').value = '';
+            document.getElementById('wizard-photo-preview').src = '';
+            document.getElementById('wizard-photo-preview-wrap').style.display = 'none';
+            document.getElementById('wizard-photo-placeholder').style.display = 'block';
+            document.getElementById('wizard-photo-actions').style.display = 'none';
         }
 
         function renderWizardNav(nav, showUndo, showNext, nextAction = null, isFinalStep = false) {
@@ -2244,21 +2306,23 @@
 
         let wizardSaving = false;
         async function saveWizardItem() {
-            if (wizardSaving) return; // Prevent duplicate saves
-            
-            wizardData.room = document.getElementById('wizard-room')?.value || '';
-            const itemName = document.getElementById('wizard-item-name')?.value?.trim() || `${wizardData.category} Item`;
-            
-            if (!itemName) {
-                alert('Please enter a name for this item.');
-                return;
+            if (wizardSaving) return;
+
+            // Capture name/room from step 11 if still on that step
+            if (document.getElementById('wizard-item-name')) {
+                wizardData.name = document.getElementById('wizard-item-name')?.value?.trim() || (wizardData.category + ' Item');
+            }
+            if (document.getElementById('wizard-room')) {
+                wizardData.room = document.getElementById('wizard-room')?.value || '';
             }
 
-            // Disable save button to prevent duplicates
+            const itemName = wizardData.name || (wizardData.category + ' Item');
+            if (!itemName) { alert('Please enter a name for this item.'); return; }
+
             wizardSaving = true;
-            const saveBtn = document.querySelector('#wizard-nav button.gradient-accent');
+            const saveBtn = document.getElementById('wizard-save-btn') || document.querySelector('#wizard-nav button.gradient-accent');
             if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = 'Saving...'; }
-            
+
             const itemData = {
                 name: itemName,
                 category: wizardData.category,
@@ -2276,13 +2340,38 @@
                 user_id: currentUser.id
             };
 
-            const { error } = await supabase
+            const { data, error } = await supabase
                 .from('inventory')
-                .insert([itemData]);
+                .insert([itemData])
+                .select();
 
             if (error) {
                 alert('Error creating item: ' + error.message);
+                wizardSaving = false;
+                if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save Item'; }
                 return;
+            }
+
+            // Upload photo if one was selected in step 12
+            if (wizardData.photoFile && data && data[0]) {
+                const newItemId = data[0].id;
+                const fileExt = wizardData.photoFile.name.split('.').pop();
+                const fileName = `${currentUser.id}/${newItemId}-${Date.now()}.${fileExt}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('inventory-photos')
+                    .upload(fileName, wizardData.photoFile, { cacheControl: '3600', upsert: false });
+
+                if (!uploadError) {
+                    const { data: { publicUrl } } = supabase.storage
+                        .from('inventory-photos')
+                        .getPublicUrl(fileName);
+
+                    await supabase
+                        .from('inventory')
+                        .update({ photo_url: publicUrl })
+                        .eq('id', newItemId);
+                }
             }
 
             closeWizard();

@@ -13,8 +13,24 @@
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #241f22;
-            background: #fafaf9;
+            color: #fffdf8;
+            background-color: #161313;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-size: cover;
+                background-position: center top;
+            }
         }
 
         h1, h2, h3, h4, h5, h6 { font-family: 'Inter', sans-serif; }
@@ -27,9 +43,13 @@
 
         /* Header */
         header {
-            background: white;
-            border-bottom: 1px solid #e7e5e4;
+            background: rgba(22,19,19,0.82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,253,248,0.12);
             padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
@@ -47,14 +67,14 @@
             gap: 10px;
             font-weight: 700;
             font-size: 18px;
-            color: #241f22;
+            color: #fffdf8;
             text-decoration: none;
         }
 
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: #6b3050;
+            background: linear-gradient(135deg, #4c263a, #6f7652);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -71,13 +91,13 @@
         }
 
         .header-nav a {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
         }
 
-        .header-nav a:hover { color: #241f22; }
+        .header-nav a:hover { color: #fffdf8; }
 
         .btn-primary {
             padding: 10px 20px;
@@ -93,9 +113,9 @@
 
         /* Hero */
         .page-hero {
-            background: white;
+            background: rgba(255,253,248,0.07);
             padding: 60px 0 40px;
-            border-bottom: 1px solid #e7e5e4;
+            border-bottom: 1px solid rgba(255,253,248,0.12);
             margin-bottom: 48px;
         }
 
@@ -106,7 +126,7 @@
         }
 
         .page-hero p {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 16px;
         }
 
@@ -127,8 +147,8 @@
         }
 
         .policy-section {
-            background: white;
-            border: 1px solid #e7e5e4;
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
             border-radius: 16px;
             padding: 32px;
             margin-bottom: 24px;
@@ -138,7 +158,7 @@
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 16px;
-            color: #241f22;
+            color: #fffdf8;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -149,7 +169,7 @@
         }
 
         .policy-section p {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 15px;
             line-height: 1.7;
             margin-bottom: 12px;
@@ -163,7 +183,7 @@
         }
 
         .policy-section ul li {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 15px;
             line-height: 1.7;
             padding: 6px 0;
@@ -180,13 +200,13 @@
         }
 
         .highlight-box {
-            background: #f3eadf;
+            background: rgba(255,253,248,0.05);
             border: 1.5px solid #b9774f;
             border-radius: 10px;
             padding: 16px 20px;
             margin: 16px 0;
             font-size: 14px;
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             line-height: 1.7;
         }
 
@@ -206,7 +226,7 @@
         }
 
         .contact-box p {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 15px;
             margin-bottom: 4px;
         }
@@ -219,8 +239,8 @@
 
         /* TOC */
         .toc {
-            background: white;
-            border: 1px solid #e7e5e4;
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
             border-radius: 16px;
             padding: 24px 32px;
             margin-bottom: 32px;
@@ -230,7 +250,7 @@
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 14px;
-            color: #241f22;
+            color: #fffdf8;
         }
 
         .toc ol {
@@ -469,7 +489,7 @@
                 <p>Ontario, Canada</p>
                 <p>📧 <a href="mailto:privacy@stagience.com">privacy@stagience.com</a></p>
                 <br>
-                <p style="font-size: 13px; color: #78716c;">We aim to respond to all privacy-related inquiries within <strong>5 business days</strong>.</p>
+                <p style="font-size: 13px; color: rgba(255,253,248,0.6);">We aim to respond to all privacy-related inquiries within <strong>5 business days</strong>.</p>
             </div>
 
         </div>

@@ -3294,8 +3294,9 @@
         async function saveProject(event) {
             event.preventDefault();
 
+            const newName = document.getElementById('project-name').value;
             const projectData = {
-                name: document.getElementById('project-name').value,
+                name: newName,
                 address: document.getElementById('project-address').value || null,
                 start_date: document.getElementById('project-start-date').value || null,
                 end_date: document.getElementById('project-end-date').value || null,
@@ -3305,29 +3306,56 @@
             };
 
             if (editingProjectId) {
-                // Update existing project
+                // Get old project name before updating
+                const oldProject = projects.find(p => p.id === editingProjectId);
+                const oldName = oldProject ? oldProject.name : null;
+
                 const { error } = await supabase
                     .from('projects')
                     .update(projectData)
                     .eq('id', editingProjectId);
 
-                if (error) {
-                    alert('Error updating project: ' + error.message);
-                    return;
+                if (error) { alert('Error updating project: ' + error.message); return; }
+
+                // If name changed, auto-update matching location and inventory items
+                if (oldName && oldName !== newName) {
+                    const existingLoc = userLocations.find(l => l.name === oldName);
+                    if (existingLoc) {
+                        await supabase.from('locations').update({ name: newName }).eq('id', existingLoc.id);
+                    }
+                    // Update all inventory items assigned to the old project name
+                    await supabase
+                        .from('inventory')
+                        .update({ location: newName })
+                        .eq('user_id', getDataOwnerId())
+                        .eq('location', oldName);
                 }
+
             } else {
                 // Create new project
                 const { error } = await supabase
                     .from('projects')
                     .insert([projectData]);
 
-                if (error) {
-                    alert('Error creating project: ' + error.message);
-                    return;
+                if (error) { alert('Error creating project: ' + error.message); return; }
+
+                // Auto-create a matching location in inventory
+                const locExists = userLocations.find(l => l.name === newName);
+                if (!locExists) {
+                    const { data: newLoc } = await supabase
+                        .from('locations')
+                        .insert([{ user_id: currentUser.id, name: newName }])
+                        .select();
+                    if (newLoc && newLoc[0]) {
+                        userLocations.push(newLoc[0]);
+                        userLocations.sort((a, b) => a.name.localeCompare(b.name));
+                    }
                 }
             }
 
             closeProjectModal();
+            await loadUserLocations();
+            populateLocationDropdowns();
             await loadProjects();
         }
 

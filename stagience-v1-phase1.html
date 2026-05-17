@@ -1555,9 +1555,10 @@
         // ==============================================
         
         function showSection(sectionName) {
-            // Role check - prevent unauthorized access
+            // Hard role check - prevents access even via direct URL or JS manipulation
             if (sectionName === 'settings' && currentUserRole !== 'admin') return;
-            if (currentUserRole === 'inventory' && !['inventory'].includes(sectionName)) return;
+            if (currentUserRole === 'inventory' && sectionName !== 'inventory') return;
+            if (currentUserRole === 'viewer' && sectionName === 'settings') return;
 
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
@@ -5681,22 +5682,27 @@
                     const el = document.getElementById(id);
                     if (el) el.style.display = 'none';
                 });
-                // Show inventory by default
+                // Also hide on mobile menu
+                document.querySelectorAll('.app-mobile-nav-btn').forEach(btn => {
+                    const t = btn.textContent.trim();
+                    if (t.includes('Calendar') || t.includes('Projects') || t.includes('Templates')) {
+                        btn.style.display = 'none';
+                    }
+                });
                 showSection('inventory');
             }
 
-            // Viewer - hide all edit/add/delete buttons
+            // Viewer - hide all action buttons immediately and after every render
             if (currentUserRole === 'viewer') {
-                // We'll hide action buttons after sections render
-                document.addEventListener('click', function() {
-                    hideViewerActionButtons();
-                }, { once: false });
+                hideViewerActionButtons();
+                const observer = new MutationObserver(() => hideViewerActionButtons());
+                const appPage = document.getElementById('app-page');
+                if (appPage) observer.observe(appPage, { childList: true, subtree: true });
             }
         }
 
         function hideViewerActionButtons() {
             if (currentUserRole !== 'viewer') return;
-            // Hide add/edit/delete buttons for viewers
             const selectors = [
                 'button[onclick*="showAddItemModal"]',
                 'button[onclick*="showAddProjectModal"]',
@@ -5705,7 +5711,17 @@
                 'button[onclick*="editProject"]',
                 'button[onclick*="deleteProject"]',
                 'button[onclick*="showBulkUpdate"]',
-                'button[onclick*="showImport"]',
+                'button[onclick*="showUpdateLocation"]',
+                'button[onclick*="showUpdateStatus"]',
+                'button[onclick*="showImportModal"]',
+                'button[onclick*="showAddEventModal"]',
+                'button[onclick*="showUploadTemplate"]',
+                'button[onclick*="showCreateFolder"]',
+                'button[onclick*="showUploadPhotos"]',
+                'button[onclick*="deletePhoto"]',
+                'button[onclick*="deleteFolder"]',
+                'button[onclick*="showManageLocations"]',
+                '.inv-mobile-add',
                 '#bulk-actions-banner'
             ];
             selectors.forEach(sel => {

@@ -755,7 +755,6 @@
                 <div class="header-buttons" style="display: flex; align-items: center; gap: 12px;">
                     <a href="stagience-how-it-works.html" class="header-nav-links" style="color: rgba(255,253,248,0.72); text-decoration: none; font-size: 14px; font-weight: 500; margin-right: 8px;">How It Works</a>
                     <a href="stagience-faq.html" class="header-nav-links" style="color: rgba(255,253,248,0.72); text-decoration: none; font-size: 14px; font-weight: 500;">FAQ</a>
-                    <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary header-only">Join Waitlist</a>
                     <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
                 </div>
             </div>
@@ -773,7 +772,6 @@
                     <p class="hero-description">Stagience brings your entire staging business together — inventory, projects, scheduling, photos, and documents — all in one place, so you can focus on what you do best.</p>
                     <div class="hero-buttons">
                         <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
-                        <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary">Join Waitlist</a>
                     </div>
                 </div>
 
@@ -943,7 +941,7 @@
                         <li>Print inventory reports</li>
                         <li>1 user</li>
                     </ul>
-                    <button onclick="openWaitlistModal()" class="pricing-button">Join Waitlist</button>
+                    <button onclick="openWaitlistModal('Starter')" class="pricing-button">Join Waitlist</button>
                 </div>
 
                 <!-- Professional -->
@@ -960,7 +958,7 @@
                         <li>Client Portal <span style="font-size:11px;padding:2px 7px;background:rgba(255,255,255,0.25);border-radius:10px;font-weight:700;margin-left:4px;">Coming Soon</span></li>
                         <li>Priority support</li>
                     </ul>
-                    <button onclick="openWaitlistModal()" class="pricing-button">Join Waitlist</button>
+                    <button onclick="openWaitlistModal('Professional')" class="pricing-button">Join Waitlist</button>
                 </div>
 
                 <!-- Studio -->
@@ -977,7 +975,7 @@
                         <li>Feature request priority</li>
                         <li>Early access to new features</li>
                     </ul>
-                    <button onclick="openWaitlistModal()" class="pricing-button">Join Waitlist</button>
+                    <button onclick="openWaitlistModal('Studio')" class="pricing-button">Join Waitlist</button>
                 </div>
 
             </div>
@@ -1075,6 +1073,7 @@
                 <p class="modal-description">Be the first to experience intelligent staging management.</p>
             </div>
             <form action="https://formspree.io/f/xjglqeba" method="POST">
+                <input type="hidden" id="waitlist-plan" name="plan" value="">
                 <div class="form-group">
                     <label for="waitlist-email">Email</label>
                     <input type="email" id="waitlist-email" name="email" placeholder="you@example.com" required>
@@ -1125,8 +1124,13 @@
 
     <script>
         // Modal functions
-        function openWaitlistModal() {
+        function openWaitlistModal(plan) {
             document.getElementById('waitlist-modal').classList.add('active');
+            const planField = document.getElementById('waitlist-plan');
+            if (planField) planField.value = plan || 'General';
+            // Update modal title if plan specified
+            const title = document.querySelector('#waitlist-modal .modal-title');
+            if (title) title.textContent = plan ? 'Join Waitlist — ' + plan + ' Plan' : 'Join Waitlist';
         }
 
         function closeWaitlistModal() {

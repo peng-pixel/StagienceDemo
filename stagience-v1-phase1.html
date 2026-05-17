@@ -1457,7 +1457,7 @@
                 showAuthMessage(error.message, 'error');
                 // Don't clear the form on error
             } else {
-                showAuthMessage('Account created! Please check your email to verify your account.', 'success');
+                showAuthMessage('Account created! You can now sign in with your email and password.', 'success');
                 setTimeout(() => {
                     showSignInForm();
                     document.getElementById('signup-form').reset();

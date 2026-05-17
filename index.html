@@ -18,8 +18,25 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: #fffdf8;
-            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover fixed;
+            background-color: #161313;
             min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                position: fixed;
+                background-attachment: scroll;
+                background-size: cover;
+                background-position: center top;
+            }
         }
 
         h1, h2, h3, h4, h5, h6 {

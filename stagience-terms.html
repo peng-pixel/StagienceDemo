@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service — Stagience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #fafaf9;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e7e5e4;
+            padding: 16px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #1f2937;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(176,138,90,1), rgba(47,111,107,1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            border: 1px solid #d6d3d1;
+            border-radius: 8px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #b0a586 0%, #8b7d5f 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 60px 24px 100px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .page-header p {
+            color: #57534e;
+            font-size: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1f2937;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .section p {
+            color: #374151;
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .section ul {
+            margin: 12px 0 12px 20px;
+            color: #374151;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .section ul li {
+            margin-bottom: 6px;
+        }
+
+        .highlight-box {
+            background: #fef9f0;
+            border: 1.5px solid #b0a586;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: #57534e;
+            line-height: 1.7;
+        }
+
+        footer {
+            background: #1c1917;
+            color: #d6d3d1;
+            padding: 60px 0 32px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #a8a29e;
+        }
+
+        .footer-links h4 {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: #a8a29e;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover { color: white; }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 0;
+            border-top: 1px solid #292524;
+            font-size: 13px;
+            color: #78716c;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 30px; }
+            .footer-content { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .header-buttons .btn-secondary { display: none; }
+        }
+
+        @media (max-width: 500px) {
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">S</div>
+                Stagience
+            </a>
+            <div class="header-buttons">
+                <a href="/" class="btn-secondary">← Back to Home</a>
+                <a href="/app" class="btn-primary">Sign In</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Terms of Service</h1>
+            <p>Last updated: May 2026</p>
+        </div>
+
+        <div class="highlight-box">
+            These Terms of Service govern your use of Stagience. By creating an account or using the platform, you agree to these terms. If you have any questions, please reach out to us at <a href="mailto:hello@stagience.com" style="color:#2f6f6b;font-weight:600;">hello@stagience.com</a>.
+        </div>
+
+        <div class="section">
+            <h2>1. About Stagience</h2>
+            <p>Stagience is a business management platform built specifically for home stagers. It helps you manage projects, inventory, scheduling, documents, photos, and your team — all in one place.</p>
+            <p>Stagience is operated as a small, independent business. We're committed to building a product that genuinely serves the staging community.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Your Account</h2>
+            <p>To use Stagience, you must create an account with a valid email address and password. You are responsible for:</p>
+            <ul>
+                <li>Keeping your login credentials secure and confidential</li>
+                <li>All activity that occurs under your account</li>
+                <li>Notifying us promptly if you suspect unauthorized access</li>
+            </ul>
+            <p>You must be at least 18 years old to create an account. By signing up, you confirm that the information you provide is accurate.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Beta Access</h2>
+            <p>Stagience is currently in beta. During this period, the platform is provided free of charge. As a beta user you understand that:</p>
+            <ul>
+                <li>Features may change, be added, or be removed</li>
+                <li>Occasional bugs or downtime may occur</li>
+                <li>We may contact you for feedback to help improve the product</li>
+                <li>Paid plans will be introduced at a future date, with advance notice given to all beta users</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>4. Your Data</h2>
+            <p>You retain full ownership of all data, content, photos, and files you upload to Stagience. We do not claim any ownership over your content.</p>
+            <p>By uploading content, you grant Stagience a limited licence to store and display it solely for the purpose of providing the service to you.</p>
+            <p>You are responsible for ensuring that any content you upload does not infringe on the rights of others.</p>
+        </div>
+
+        <div class="section">
+            <h2>5. Acceptable Use</h2>
+            <p>You agree to use Stagience only for lawful purposes related to your staging business. You must not:</p>
+            <ul>
+                <li>Use the platform for any illegal or unauthorized purpose</li>
+                <li>Upload content that is offensive, harmful, or infringes on third-party rights</li>
+                <li>Attempt to access, disrupt, or interfere with other users' accounts or data</li>
+                <li>Reverse engineer, copy, or redistribute any part of the platform</li>
+                <li>Share your account credentials with others outside of the team member invitation system</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>6. Team Members</h2>
+            <p>If you invite team members to your Stagience account, you are responsible for their use of the platform under your account. Ensure that anyone you invite agrees to these Terms of Service before accessing your account.</p>
+        </div>
+
+        <div class="section">
+            <h2>7. Pricing & Billing</h2>
+            <p>Stagience is currently free during the beta period. When paid plans are introduced, we will provide clear advance notice to all users, including details of plan pricing and features.</p>
+            <p>We reserve the right to change our pricing at any time, with reasonable notice given to existing users.</p>
+        </div>
+
+        <div class="section">
+            <h2>8. Availability & Uptime</h2>
+            <p>We aim to keep Stagience available and running smoothly, but we cannot guarantee uninterrupted access. We may occasionally perform maintenance, updates, or experience unexpected downtime. We are not liable for any loss resulting from service interruptions.</p>
+        </div>
+
+        <div class="section">
+            <h2>9. Termination</h2>
+            <p>You may delete your account at any time by contacting us at <a href="mailto:hello@stagience.com" style="color:#2f6f6b;font-weight:600;">hello@stagience.com</a>.</p>
+            <p>We reserve the right to suspend or terminate accounts that violate these terms, with or without notice depending on the severity of the violation.</p>
+            <p>Upon termination, your data will be retained for 30 days before being permanently deleted, giving you time to export anything you need.</p>
+        </div>
+
+        <div class="section">
+            <h2>10. Limitation of Liability</h2>
+            <p>Stagience is provided "as is." To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your use of the platform, including loss of data or business interruption.</p>
+            <p>Our total liability to you for any claim arising from use of Stagience will not exceed the amount you have paid us in the 12 months prior to the claim.</p>
+        </div>
+
+        <div class="section">
+            <h2>11. Privacy</h2>
+            <p>Your privacy matters to us. Please review our <a href="/privacy" style="color:#2f6f6b;font-weight:600;">Privacy Policy</a> to understand how we collect, use, and protect your personal information.</p>
+        </div>
+
+        <div class="section">
+            <h2>12. Changes to These Terms</h2>
+            <p>We may update these Terms of Service from time to time. When we do, we'll update the "Last updated" date at the top of this page. For significant changes, we'll notify you by email. Continued use of Stagience after changes are made constitutes your acceptance of the updated terms.</p>
+        </div>
+
+        <div class="section">
+            <h2>13. Contact Us</h2>
+            <p>If you have any questions about these Terms of Service, please contact us at:</p>
+            <p><a href="mailto:hello@stagience.com" style="color:#2f6f6b;font-weight:600;">hello@stagience.com</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Stagience</h3>
+                <p>The business behind the beautiful.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="/#features">Features</a></li>
+                    <li><a href="/#pricing">Pricing</a></li>
+                    <li><a href="/how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Stagience. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -185,7 +185,6 @@
                             </div>
                             <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🔍 Filter</button>
                             <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🖨️ Print</button>
-                            <button onclick="showImportModal('inventory')" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">📥 Import</button>
                             <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add Item</button>
                         </div>
                     </div>
@@ -196,7 +195,6 @@
                         <button onclick="switchInventoryView('list')">📋 List</button>
                         <button onclick="showFilterModal()">🔍 Filter</button>
                         <button onclick="showPrintModal()">🖨️ Print</button>
-                        <button onclick="showImportModal('inventory')">📥 Import</button>
                     </div>
 
                     <!-- Bulk Actions Banner (hidden by default) -->
@@ -291,12 +289,9 @@
                 <div id="projects-section" class="section" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                         <h1 style="font-size: 32px; font-weight: 800;">Projects</h1>
-                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <button onclick="showImportModal('projects')" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">📥 Import</button>
-                            <button onclick="showAddProjectModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
-                                + Add Project
-                            </button>
-                        </div>
+                        <button onclick="showAddProjectModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                            + Add Project
+                        </button>
                     </div>
 
                     <!-- Search Bar -->

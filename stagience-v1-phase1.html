@@ -1409,8 +1409,8 @@
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 currentUser = session.user;
-                showApp();
-                await loadUserRoleAndTeam();
+                await loadUserRoleAndTeam(); // Load role FIRST before showing app
+                showApp(); // Now showApp knows the correct role
                 loadAllData();
             } else {
                 showAuthPage();
@@ -1434,7 +1434,8 @@
             } else {
                 currentUser = data.user;
                 showAuthMessage('Sign in successful!', 'success');
-                setTimeout(() => {
+                setTimeout(async () => {
+                    await loadUserRoleAndTeam();
                     showApp();
                     loadAllData();
                 }, 1000);
@@ -1542,9 +1543,11 @@
         function showApp() {
             document.getElementById('auth-page').classList.remove('active');
             document.getElementById('app-page').classList.add('active');
-            // Default section based on role
+            // Role-based default section
             if (currentUserRole === 'inventory') {
                 showSection('inventory');
+            } else if (currentUserRole === 'viewer') {
+                showSection('calendar');
             } else {
                 showSection('calendar');
             }

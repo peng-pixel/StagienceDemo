@@ -18,7 +18,8 @@
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             color: #fffdf8;
-            background: #161313;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover fixed;
+            min-height: 100vh;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -109,21 +110,20 @@
         /* Hero Section */
         .hero {
             padding: 80px 0;
-            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover fixed;
             min-height: 90vh;
             display: flex;
             align-items: center;
         }
 
         .hero-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 760px;
         }
 
         .hero-text {
-            padding-right: 40px;
+            padding-right: 0;
         }
 
         .hero-badge {
@@ -175,7 +175,7 @@
         /* Features Section */
         .features {
             padding: 100px 0;
-            background: rgba(20,18,19,0.75);
+            background: transparent;
         }
 
         .section-header {
@@ -235,7 +235,7 @@
         /* How It Works */
         .how-it-works {
             padding: 100px 0;
-            background: rgba(20,18,19,0.82);
+            background: transparent;
         }
 
         .steps-grid {
@@ -278,14 +278,12 @@
         /* Benefits Section */
         .benefits {
             padding: 100px 0;
-            background: rgba(20,18,19,0.75);
+            background: transparent;
         }
 
         .benefits-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
         }
 
         .benefits-image {
@@ -340,7 +338,7 @@
         /* Pricing Section */
         .pricing {
             padding: 100px 0;
-            background: rgba(20,18,19,0.82);
+            background: transparent;
         }
 
         .pricing-grid {
@@ -359,7 +357,7 @@
         }
 
         .pricing-card.featured {
-            background: rgba(255,253,248,0.04);
+            background: transparent;
             border-color: #b9774f;
             transform: scale(1.05);
         }
@@ -454,7 +452,7 @@
         /* CTA Section */
         .cta {
             padding: 100px 0;
-            background: rgba(20,18,19,0.75);
+            background: transparent;
         }
 
         .cta-box {
@@ -481,7 +479,7 @@
 
         .btn-white {
             padding: 14px 32px;
-            background: rgba(255,253,248,0.04);
+            background: transparent;
             color: #fffdf8;
             border: none;
             border-radius: 8px;
@@ -494,7 +492,7 @@
 
         /* Footer */
         footer {
-            background: rgba(10,8,8,0.9);
+            background: rgba(10,8,8,0.6);
             color: #d6d3d1;
             padding: 60px 0 30px;
         }
@@ -569,7 +567,7 @@
         }
 
         .modal-content {
-            background: rgba(255,253,248,0.04);
+            background: transparent;
             border-radius: 24px;
             padding: 40px;
             max-width: 500px;
@@ -664,10 +662,7 @@
 
         /* Responsive */
         @media (max-width: 968px) {
-            .hero-content,
-            .benefits-content {
-                grid-template-columns: 1fr;
-            }
+            /* hero-content and benefits-content are already single column */
 
             .features-grid,
             .pricing-grid {
@@ -764,9 +759,7 @@
                         <a href="javascript:void(0)" onclick="openWaitlistModal()" class="btn-secondary">Join Waitlist</a>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&h=600&fit=crop&q=80" alt="Elegantly Staged Living Room">
-                </div>
+
             </div>
         </div>
     </section>
@@ -834,9 +827,7 @@
                 <p class="section-subtitle">Your design eye is your advantage. Stagience handles the operational details so projects move forward with clarity.</p>
             </div>
             <div class="benefits-content">
-                <div class="benefits-image">
-                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop" alt="Staged Office Space">
-                </div>
+
                 <div class="benefits-list">
                     <div class="benefit">
                         <div class="benefit-icon">✓</div>
@@ -872,35 +863,35 @@
     </section>
 
     <!-- Inside Every Project Section -->
-    <section id="about" style="padding: 100px 0; background: rgba(20,18,19,0.75);">
+    <section id="about" style="padding: 100px 0; background: transparent;">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Everything a project needs, in one place</h2>
                 <p class="section-subtitle">Every project in Stagience has four dedicated tabs — so nothing gets lost in emails or folders.</p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px;" class="responsive-2col">
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
                     <div style="font-size: 36px; flex-shrink: 0;">📅</div>
                     <div>
                         <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Schedule & Notes</h3>
                         <p style="color: rgba(255,253,248,0.72); font-size: 15px; line-height: 1.6;">Build a visual project timeline with consultations, staging days, photo shoots, and pickups. Add notes, team details, and access codes per event. Share a printable timeline with your client.</p>
                     </div>
                 </div>
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
                     <div style="font-size: 36px; flex-shrink: 0;">📄</div>
                     <div>
                         <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Documents</h3>
                         <p style="color: rgba(255,253,248,0.72); font-size: 15px; line-height: 1.6;">Upload and store contracts, invoices, consultation reports, and any other project documents. Access them instantly from anywhere, no more hunting through email attachments.</p>
                     </div>
                 </div>
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
                     <div style="font-size: 36px; flex-shrink: 0;">🖼️</div>
                     <div>
                         <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Photos</h3>
                         <p style="color: rgba(255,253,248,0.72); font-size: 15px; line-height: 1.6;">Organize photos into custom folders — Before, After, Pro Shots, and more. Browse in a beautiful fullscreen lightbox, select multiple photos to delete, and photos are compressed automatically on upload.</p>
                     </div>
                 </div>
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 36px; display: flex; gap: 20px; align-items: flex-start;">
                     <div style="font-size: 36px; flex-shrink: 0;">📁</div>
                     <div>
                         <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Files</h3>
@@ -980,24 +971,24 @@
 
 
     <!-- Founding Stagers Section -->
-    <section style="padding: 80px 0; background: rgba(20,18,19,0.75);">
+    <section style="padding: 80px 0; background: transparent;">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Be a founding stager</h2>
                 <p class="section-subtitle">Stagience is brand new and we're looking for a small group of stagers to help shape it. Your feedback will directly influence what gets built next.</p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;" class="responsive-3col">
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
                     <div style="font-size: 40px; margin-bottom: 16px;">🆓</div>
                     <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 10px;">Free During Beta</h3>
                     <p style="color: rgba(255,253,248,0.72); font-size: 14px; line-height: 1.6;">Full access to every feature at no cost during the beta period. No credit card required.</p>
                 </div>
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
                     <div style="font-size: 40px; margin-bottom: 16px;">💾</div>
                     <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 10px;">Your Data Stays</h3>
                     <p style="color: rgba(255,253,248,0.72); font-size: 14px; line-height: 1.6;">Everything you set up during beta carries over automatically. Nothing gets reset when we launch.</p>
                 </div>
-                <div style="background: rgba(255,253,248,0.04); border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
+                <div style="background: transparent; border-radius: 16px; border: 1px solid rgba(255,253,248,0.12); padding: 32px; text-align: center;">
                     <div style="font-size: 40px; margin-bottom: 16px;">🎯</div>
                     <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 10px;">Shape the Product</h3>
                     <p style="color: rgba(255,253,248,0.72); font-size: 14px; line-height: 1.6;">Your feedback matters. Features requested by founding stagers go to the top of our roadmap.</p>
@@ -1011,26 +1002,26 @@
     </section>
 
     <!-- Coming Soon Section -->
-    <section style="padding: 80px 0; background: rgba(255,253,248,0.04);">
+    <section style="padding: 80px 0; background: transparent;">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">More on the way</h2>
                 <p class="section-subtitle">Stagience is actively growing. Here's what's coming next.</p>
             </div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;" class="responsive-3col">
-                <div style="background: rgba(20,18,19,0.75); border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                <div style="background: transparent; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
                     <div style="font-size: 32px; margin-bottom: 12px;">💰</div>
                     <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Invoicing & Payments</h3>
                     <p style="color: rgba(255,253,248,0.6); font-size: 14px;">Create and send invoices directly from a project. Track payments and deposits without leaving Stagience.</p>
                     <div style="display: inline-block; margin-top: 16px; padding: 4px 12px; background: #f0fdf4; color: #16a34a; border-radius: 20px; font-size: 12px; font-weight: 600;">Coming Soon</div>
                 </div>
-                <div style="background: rgba(20,18,19,0.75); border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                <div style="background: transparent; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
                     <div style="font-size: 32px; margin-bottom: 12px;">👥</div>
                     <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Client Portal</h3>
                     <p style="color: rgba(255,253,248,0.6); font-size: 14px;">Give clients their own view of the project timeline, photos, and documents — no login required on their end.</p>
                     <div style="display: inline-block; margin-top: 16px; padding: 4px 12px; background: #f0fdf4; color: #16a34a; border-radius: 20px; font-size: 12px; font-weight: 600;">Coming Soon</div>
                 </div>
-                <div style="background: rgba(20,18,19,0.75); border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
+                <div style="background: transparent; border: 1.5px dashed #d6d3d1; border-radius: 16px; padding: 32px; text-align: center;">
                     <div style="font-size: 32px; margin-bottom: 12px;">📊</div>
                     <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Reporting & Analytics</h3>
                     <p style="color: rgba(255,253,248,0.6); font-size: 14px;">See your busiest months, most-used inventory items, revenue trends, and project turnaround times at a glance.</p>

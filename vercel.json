@@ -1,8 +1,24 @@
 {
   "rewrites": [
-    { "source": "/app", "destination": "/stagience-v1-phase1.html" },
-    { "source": "/faq", "destination": "/stagience-faq.html" },
-    { "source": "/how-it-works", "destination": "/stagience-how-it-works.html" },
-    { "source": "/privacy", "destination": "/stagience-privacy-policy.html" }
+    {
+      "source": "/app",
+      "destination": "/stagience-v1-phase1.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/stagience-faq.html"
+    },
+    {
+      "source": "/how-it-works",
+      "destination": "/stagience-how-it-works.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/stagience-privacy-policy.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/stagience-contact.html"
+    }
   ]
 }

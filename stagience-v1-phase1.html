@@ -5828,6 +5828,7 @@
             const email = document.getElementById('invite-email').value.trim();
             const role = document.getElementById('invite-role').value;
             const msgEl = document.getElementById('invite-message');
+            const sendBtn = document.querySelector('#invite-modal button.gradient-accent');
 
             if (!email || !role) {
                 msgEl.style.display = 'block';
@@ -5851,8 +5852,11 @@
                 return;
             }
 
-            // Add to team_members with pending status
-            const { error } = await supabase
+            // Show sending state
+            if (sendBtn) { sendBtn.textContent = 'Sending...'; sendBtn.disabled = true; }
+
+            // Add to team_members with pending status first
+            const { error: dbError } = await supabase
                 .from('team_members')
                 .insert([{
                     team_id: currentTeamId,
@@ -5862,29 +5866,68 @@
                     invited_by: currentUser.id
                 }]);
 
-            if (error) {
+            if (dbError) {
                 msgEl.style.display = 'block';
                 msgEl.style.background = '#fee2e2';
                 msgEl.style.color = '#991b1b';
                 msgEl.style.padding = '12px';
                 msgEl.style.borderRadius = '8px';
-                msgEl.textContent = 'Error sending invitation: ' + error.message;
+                msgEl.textContent = 'Error sending invitation: ' + dbError.message;
+                if (sendBtn) { sendBtn.textContent = 'Send Invitation'; sendBtn.disabled = false; }
                 return;
             }
 
-            // Send invite email via Supabase Auth
-            const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email);
-            // Note: admin.inviteUserByEmail requires service role key
-            // For now we record the invitation and show success
-            // The invited user can sign up themselves and will be matched by email
+            // Call Edge Function to send the real invitation email
+            try {
+                const { data: sessionData } = await supabase.auth.getSession();
+                const token = sessionData?.session?.access_token;
 
-            msgEl.style.display = 'block';
-            msgEl.style.background = '#dcfce7';
-            msgEl.style.color = '#166534';
-            msgEl.style.padding = '12px';
-            msgEl.style.borderRadius = '8px';
-            msgEl.textContent = '✓ Invitation recorded! Ask ' + email + ' to sign up at ' + window.location.origin + '/stagience-v1-phase1.html — their role will be assigned automatically.';
+                const response = await fetch(
+                    'https://sdvgzqaoexuanxrjtytp.supabase.co/functions/v1/invite-team-member',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            role: role,
+                            teamId: currentTeamId
+                        })
+                    }
+                );
 
+                const result = await response.json();
+
+                if (!response.ok || result.error) {
+                    // Edge function failed but DB record exists - still show partial success
+                    msgEl.style.display = 'block';
+                    msgEl.style.background = '#fef3c7';
+                    msgEl.style.color = '#92400e';
+                    msgEl.style.padding = '12px';
+                    msgEl.style.borderRadius = '8px';
+                    msgEl.textContent = '⚠️ Invitation recorded but email could not be sent automatically. Please ask ' + email + ' to sign up at stagience.com/app — their role will be assigned automatically.';
+                } else {
+                    msgEl.style.display = 'block';
+                    msgEl.style.background = '#dcfce7';
+                    msgEl.style.color = '#166534';
+                    msgEl.style.padding = '12px';
+                    msgEl.style.borderRadius = '8px';
+                    msgEl.textContent = '✓ Invitation sent! ' + email + ' will receive an email with a link to join your team.';
+                }
+
+            } catch (err) {
+                // Network error - still show partial success
+                msgEl.style.display = 'block';
+                msgEl.style.background = '#fef3c7';
+                msgEl.style.color = '#92400e';
+                msgEl.style.padding = '12px';
+                msgEl.style.borderRadius = '8px';
+                msgEl.textContent = '⚠️ Invitation recorded but email could not be sent. Please ask ' + email + ' to sign up at stagience.com/app.';
+            }
+
+            if (sendBtn) { sendBtn.textContent = 'Send Invitation'; sendBtn.disabled = false; }
             await loadTeamMembers();
         }
 

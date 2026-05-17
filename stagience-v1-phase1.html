@@ -2974,7 +2974,12 @@
             if (editingItemId) {
                 // Update existing item
                 const oldItem = inventoryItems.find(i => i.id === editingItemId);
-                
+
+                // Preserve existing photo URL by default
+                if (oldItem && oldItem.photo_url && !shouldDeletePhoto) {
+                    itemData.photo_url = oldItem.photo_url;
+                }
+
                 // Handle photo deletion
                 if (shouldDeletePhoto && oldItem && oldItem.photo_url) {
                     await deletePhotoFromStorage(oldItem.photo_url);
@@ -2987,7 +2992,6 @@
                     if (oldItem && oldItem.photo_url) {
                         await deletePhotoFromStorage(oldItem.photo_url);
                     }
-                    
                     const photoUrl = await uploadPhoto(editingItemId);
                     if (photoUrl) {
                         itemData.photo_url = photoUrl;

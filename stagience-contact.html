@@ -181,17 +181,25 @@
         .form-group input,
         .form-group select,
         .form-group textarea {
-            color: #fffdf8 !important;
-            background: rgba(255,253,248,0.08) !important;
             width: 100%;
             padding: 13px 16px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid rgba(255,253,248,0.2);
             border-radius: 10px;
             font-size: 15px;
             font-family: 'Inter', sans-serif;
             color: #fffdf8;
-            background: rgba(255,253,248,0.07);
+            background: rgba(255,253,248,0.08);
             transition: border-color 0.2s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,253,248,0.4);
+        }
+
+        .form-group select option {
+            background: #2a1e24;
+            color: #fffdf8;
         }
 
         .form-group input:focus,

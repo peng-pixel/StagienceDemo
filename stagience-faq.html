@@ -17,8 +17,24 @@
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            color: #241f22;
-            background: #fafaf9;
+            color: #fffdf8;
+            background-color: #161313;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-size: cover;
+                background-position: center top;
+            }
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -33,9 +49,13 @@
 
         /* Header */
         header {
-            background: white;
-            border-bottom: 1px solid #e7e5e4;
+            background: rgba(22,19,19,0.82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,253,248,0.12);
             padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
@@ -53,7 +73,7 @@
             gap: 10px;
             font-weight: 700;
             font-size: 18px;
-            color: #241f22;
+            color: #fffdf8;
             text-decoration: none;
             cursor: pointer;
         }
@@ -61,7 +81,7 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: #6b3050;
+            background: linear-gradient(135deg, #4c263a, #6f7652);
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -80,11 +100,11 @@
             padding: 10px 20px;
             border: 1px solid #d6d3d1;
             border-radius: 8px;
-            background: white;
+            background: rgba(255,253,248,0.07);
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            color: #241f22;
+            color: #fffdf8;
             font-size: 14px;
         }
 
@@ -118,7 +138,7 @@
 
         .page-subtitle {
             font-size: 18px;
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
         }
 
         /* FAQ Accordion */
@@ -129,8 +149,8 @@
         }
 
         .faq-item {
-            background: white;
-            border: 1px solid #e7e5e4;
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
             border-radius: 16px;
             overflow: hidden;
         }
@@ -138,7 +158,7 @@
         .faq-question {
             width: 100%;
             padding: 24px;
-            background: white;
+            background: rgba(255,253,248,0.07);
             border: none;
             text-align: left;
             font-size: 18px;
@@ -151,7 +171,7 @@
         }
 
         .faq-question:hover {
-            background: #fafaf9;
+            background: transparent;
         }
 
         .faq-icon {
@@ -172,7 +192,7 @@
 
         .faq-answer-content {
             padding: 0 24px 24px;
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 15px;
             line-height: 1.6;
         }
@@ -183,12 +203,12 @@
 
         /* CTA Section */
         .cta-section {
-            background: white;
+            background: rgba(255,253,248,0.07);
             border-radius: 20px;
             padding: 60px;
             text-align: center;
             margin-top: 80px;
-            border: 1px solid #e7e5e4;
+            border: 1px solid rgba(255,253,248,0.14);
         }
 
         .cta-title {
@@ -198,7 +218,7 @@
         }
 
         .cta-description {
-            color: #44393d;
+            color: rgba(255,253,248,0.72);
             font-size: 16px;
             margin-bottom: 24px;
         }

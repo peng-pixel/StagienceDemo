@@ -185,6 +185,7 @@
                             </div>
                             <button onclick="showFilterModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🔍 Filter</button>
                             <button onclick="showPrintModal()" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">🖨️ Print</button>
+                            <button onclick="showImportModal('inventory')" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">📥 Import</button>
                             <button onclick="showAddItemModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">+ Add Item</button>
                         </div>
                     </div>
@@ -195,6 +196,7 @@
                         <button onclick="switchInventoryView('list')">📋 List</button>
                         <button onclick="showFilterModal()">🔍 Filter</button>
                         <button onclick="showPrintModal()">🖨️ Print</button>
+                        <button onclick="showImportModal('inventory')">📥 Import</button>
                     </div>
 
                     <!-- Bulk Actions Banner (hidden by default) -->
@@ -268,6 +270,19 @@
                         </select>
                     </div>
 
+                    <!-- Import Banner (shown when inventory is empty) -->
+                    <div id="inventory-import-banner" style="display:none; background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 1.5px solid #6ee7b7; border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="font-size: 40px; flex-shrink: 0;">📦</div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <div style="font-weight: 700; font-size: 17px; margin-bottom: 4px; color: #065f46;">Import Your Inventory</div>
+                            <div style="color: #047857; font-size: 13px; font-weight: 500; margin-bottom: 6px;">Migrate your catalog easily</div>
+                            <div style="color: #374151; font-size: 13px; line-height: 1.6;">Upload your inventory from Google Sheets, Excel, CSV, or import photos and files from Google Drive or Dropbox. Keep all your items organized in one place.</div>
+                        </div>
+                        <button onclick="showImportModal('inventory')" style="flex-shrink: 0; padding: 12px 24px; border: 1.5px solid #059669; border-radius: 10px; background: white; font-weight: 600; font-size: 14px; cursor: pointer; color: #065f46; display: flex; align-items: center; gap: 8px;">
+                            Start Import →
+                        </button>
+                    </div>
+
                     <!-- Inventory Container -->
                     <div id="inventory-container"></div>
                 </div>
@@ -276,9 +291,12 @@
                 <div id="projects-section" class="section" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
                         <h1 style="font-size: 32px; font-weight: 800;">Projects</h1>
-                        <button onclick="showAddProjectModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
-                            + Add Project
-                        </button>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <button onclick="showImportModal('projects')" style="padding: 12px 20px; border: 1px solid #e5e7eb; border-radius: 12px; background: white; font-weight: 600; cursor: pointer;">📥 Import</button>
+                            <button onclick="showAddProjectModal()" class="gradient-accent" style="padding: 12px 20px; border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer;">
+                                + Add Project
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Search Bar -->
@@ -341,6 +359,19 @@
                             </div>
                             <div id="count-completed" style="font-size: 32px; font-weight: 800; color: #1f2937;">0</div>
                         </div>
+                    </div>
+
+                    <!-- Import Banner (shown when projects is empty) -->
+                    <div id="projects-import-banner" style="display:none; background: linear-gradient(135deg, #faf5ff, #f3e8ff); border: 1.5px solid #c4b5fd; border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="font-size: 40px; flex-shrink: 0;">📋</div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <div style="font-weight: 700; font-size: 17px; margin-bottom: 4px; color: #4c1d95;">Import Your Projects</div>
+                            <div style="color: #6d28d9; font-size: 13px; font-weight: 500; margin-bottom: 6px;">Get started in minutes</div>
+                            <div style="color: #374151; font-size: 13px; line-height: 1.6;">Bring your existing projects from Google Sheets, Excel, CSV, Google Drive, or Dropbox. We'll help you map your data and get everything organized.</div>
+                        </div>
+                        <button onclick="showImportModal('projects')" style="flex-shrink: 0; padding: 12px 24px; border: 1.5px solid #7c3aed; border-radius: 10px; background: white; font-weight: 600; font-size: 14px; cursor: pointer; color: #4c1d95; display: flex; align-items: center; gap: 8px;">
+                            Start Import →
+                        </button>
                     </div>
 
                     <div id="projects-container"></div>
@@ -1650,6 +1681,10 @@
                 container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';
                 return;
             }
+
+            // Show/hide import banner based on whether inventory has items
+            const invBanner = document.getElementById('inventory-import-banner');
+            if (invBanner) invBanner.style.display = inventoryItems.length === 0 ? 'flex' : 'none';
 
             if (currentView === 'grid') {
                 renderGridView(filteredItems, container);
@@ -3121,6 +3156,10 @@
                 'pending': 'Pending',
                 'completed': 'Completed'
             };
+
+            // Show/hide import banner based on whether projects exist
+            const projBanner = document.getElementById('projects-import-banner');
+            if (projBanner) projBanner.style.display = projects.length === 0 ? 'flex' : 'none';
 
             container.innerHTML = sortedMonths.map(monthYear => `
                 <div style="margin-bottom: 32px;">
@@ -5895,6 +5934,416 @@
             setTimeout(() => closeChangePasswordModal(), 2000);
         }
 
+        
+        // ==============================================
+        // CSV IMPORT WIZARD
+        // ==============================================
+        let importType = 'inventory';
+        let importStep = 1;
+        let importCSVHeaders = [];
+        let importCSVRows = [];
+        let importColumnMap = {};
+        let importSelectedSource = 'csv'; // 'csv', 'sheets', 'drive', 'dropbox'
+
+        const INVENTORY_FIELDS = [
+            { key: 'name', label: 'Item Name', required: true },
+            { key: 'category', label: 'Category', required: true },
+            { key: 'color', label: 'Color', required: false },
+            { key: 'description', label: 'Description / Fabric', required: false },
+            { key: 'id_code', label: 'ID / Code', required: false },
+            { key: 'status', label: 'Status (IN/OUT/HOLD)', required: false },
+            { key: 'location', label: 'Location', required: false },
+            { key: 'condition', label: 'Condition', required: false },
+            { key: 'room', label: 'Room / Notes', required: false },
+            { key: 'purchase_date', label: 'Purchase Date', required: false },
+            { key: 'purchase_cost', label: 'Purchase Cost', required: false },
+            { key: 'purchased_from', label: 'Purchased From', required: false },
+        ];
+
+        const PROJECT_FIELDS = [
+            { key: 'name', label: 'Project Name', required: true },
+            { key: 'address', label: 'Address', required: false },
+            { key: 'status', label: 'Status', required: false },
+            { key: 'start_date', label: 'Stage Date', required: false },
+            { key: 'end_date', label: 'Destage Date', required: false },
+            { key: 'notes', label: 'Notes', required: false },
+        ];
+
+        function showImportModal(type) {
+            importType = type;
+            importStep = 1;
+            importCSVHeaders = [];
+            importCSVRows = [];
+            importColumnMap = {};
+            importSelectedSource = 'csv';
+
+            // Update title
+            document.getElementById('import-modal-title').textContent =
+                type === 'inventory' ? 'Import Inventory' : 'Import Projects';
+
+            document.getElementById('import-modal').classList.add('active');
+            renderImportStep();
+        }
+
+        function closeImportModal() {
+            document.getElementById('import-modal').classList.remove('active');
+        }
+
+        function updateImportStepIndicators() {
+            for (let i = 1; i <= 3; i++) {
+                const ind = document.getElementById('import-step-ind-' + i);
+                if (ind) ind.style.background = i <= importStep ? '#7c3aed' : '#e5e7eb';
+            }
+        }
+
+        function renderImportStep() {
+            updateImportStepIndicators();
+            const content = document.getElementById('import-step-content');
+            const nav = document.getElementById('import-nav');
+            if (importStep === 1) renderImportStep1(content, nav);
+            else if (importStep === 2) renderImportStep2(content, nav);
+            else if (importStep === 3) renderImportStep3(content, nav);
+        }
+
+        // ── Step 1: Choose data source ──────────────────────────────
+        function renderImportStep1(content, nav) {
+            const isInv = importType === 'inventory';
+            const stepLabel = `Step 1 of 3`;
+            const sources = isInv ? [
+                { id: 'sheets', icon: '📊', label: 'Google Sheets', desc: 'Import from your Google Sheets inventory' },
+                { id: 'csv',    icon: '📁', label: 'Excel / CSV File', desc: 'Upload an Excel or CSV file from your computer' },
+                { id: 'dropbox',icon: '📦', label: 'Dropbox', desc: 'Import inventory photos and data from Dropbox' },
+                { id: 'drive',  icon: '☁️', label: 'Google Drive', desc: 'Import inventory photos from Google Drive' },
+            ] : [
+                { id: 'sheets', icon: '📊', label: 'Google Sheets', desc: 'Import from your Google Sheets spreadsheet' },
+                { id: 'csv',    icon: '📁', label: 'Excel / CSV File', desc: 'Upload an Excel or CSV file from your computer' },
+                { id: 'drive',  icon: '☁️', label: 'Google Drive', desc: 'Import project files from Google Drive' },
+                { id: 'dropbox',icon: '📦', label: 'Dropbox', desc: 'Import project files and data from Dropbox' },
+            ];
+
+            content.innerHTML = `
+                <div style="margin-bottom: 4px; font-size: 12px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">${stepLabel}</div>
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Choose Your Data Source</h3>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    ${sources.map(s => `
+                        <div onclick="selectImportSource('${s.id}')" id="import-src-${s.id}"
+                            style="display:flex;align-items:center;gap:16px;padding:16px 20px;border:2px solid ${s.id === importSelectedSource ? '#7c3aed' : '#e5e7eb'};border-radius:12px;cursor:pointer;background:${s.id === importSelectedSource ? '#faf5ff' : 'white'};transition:all 0.2s;">
+                            <div style="font-size:28px;flex-shrink:0;">${s.icon}</div>
+                            <div>
+                                <div style="font-weight:700;font-size:15px;margin-bottom:2px;">${s.label}</div>
+                                <div style="font-size:13px;color:#6b7280;">${s.desc}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="import-file-upload-area" style="margin-top:16px;display:${importSelectedSource === 'csv' ? 'block' : 'none'};">
+                    <label style="display:block;padding:24px;border:2px dashed #b0a586;border-radius:12px;text-align:center;cursor:pointer;background:#fef9f0;">
+                        <div style="font-size:32px;margin-bottom:8px;">📂</div>
+                        <div style="font-weight:700;font-size:15px;margin-bottom:4px;">Click to upload your CSV or Excel file</div>
+                        <div style="color:#6b7280;font-size:13px;">or drag and drop here</div>
+                        <input type="file" id="import-csv-file" accept=".csv,.xlsx,.xls" style="display:none;" onchange="handleImportFileUpload(event)">
+                    </label>
+                    <div id="import-file-status" style="margin-top:10px;display:none;"></div>
+                </div>
+                <div id="import-other-source-msg" style="margin-top:16px;display:${importSelectedSource !== 'csv' ? 'block' : 'none'};background:#fef9f0;border:1.5px solid #b0a586;border-radius:10px;padding:14px;font-size:13px;color:#57534e;">
+                    💡 <strong>Coming Soon!</strong> Direct ${importSelectedSource === 'sheets' ? 'Google Sheets' : importSelectedSource === 'drive' ? 'Google Drive' : 'Dropbox'} integration is on our roadmap.
+                    For now, please export your data as a CSV file and upload it using the <strong>Excel / CSV File</strong> option above.
+                </div>
+            `;
+
+            nav.innerHTML = `
+                <button onclick="closeImportModal()" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Cancel</button>
+                <button onclick="importGoToStep2()" id="import-next-btn" class="gradient-accent" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#7c3aed;">Next</button>
+            `;
+        }
+
+        function selectImportSource(sourceId) {
+            importSelectedSource = sourceId;
+            // Update visual selection
+            ['sheets','csv','drive','dropbox'].forEach(id => {
+                const el = document.getElementById('import-src-' + id);
+                if (el) {
+                    el.style.borderColor = id === sourceId ? '#7c3aed' : '#e5e7eb';
+                    el.style.background = id === sourceId ? '#faf5ff' : 'white';
+                }
+            });
+            // Show/hide file upload area
+            const uploadArea = document.getElementById('import-file-upload-area');
+            const otherMsg = document.getElementById('import-other-source-msg');
+            if (uploadArea) uploadArea.style.display = sourceId === 'csv' ? 'block' : 'none';
+            if (otherMsg) {
+                otherMsg.style.display = sourceId !== 'csv' ? 'block' : 'none';
+                if (sourceId !== 'csv') {
+                    const label = sourceId === 'sheets' ? 'Google Sheets' : sourceId === 'drive' ? 'Google Drive' : 'Dropbox';
+                    otherMsg.innerHTML = `💡 <strong>Coming Soon!</strong> Direct ${label} integration is on our roadmap. For now, please export your data as a CSV file and upload it using the <strong>Excel / CSV File</strong> option above.`;
+                }
+            }
+        }
+
+        function handleImportFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!file.name.match(/\.csv$/i) && !file.name.match(/\.xlsx?$/i)) {
+                alert('Please upload a .csv or .xlsx file');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) { parseCSV(e.target.result); };
+            reader.readAsText(file);
+        }
+
+        function parseCSV(text) {
+            const lines = text.split(/\r?\n/).filter(l => l.trim());
+            if (lines.length < 2) {
+                const el = document.getElementById('import-file-status');
+                if (el) { el.style.display = 'block'; el.innerHTML = '<div style="color:#991b1b;font-weight:600;">❌ File appears to be empty or has no data rows.</div>'; }
+                return;
+            }
+            importCSVHeaders = parseCSVLine(lines[0]);
+            importCSVRows = lines.slice(1).map(l => parseCSVLine(l)).filter(r => r.some(c => c.trim()));
+            const el = document.getElementById('import-file-status');
+            if (el) {
+                el.style.display = 'block';
+                el.innerHTML = `<div style="background:#dcfce7;color:#166534;padding:10px 14px;border-radius:8px;font-weight:600;">✅ File loaded: <strong>${importCSVRows.length} rows</strong> and <strong>${importCSVHeaders.length} columns</strong> detected.</div>`;
+            }
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') { inQuotes = !inQuotes; }
+                else if (char === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+                else { current += char; }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        function importGoToStep2() {
+            if (importSelectedSource === 'csv' && importCSVRows.length === 0) {
+                alert('Please upload a CSV or Excel file first.');
+                return;
+            }
+            if (importSelectedSource !== 'csv') {
+                // Switch to CSV mode and show message
+                selectImportSource('csv');
+                alert('Please export your data as a CSV file and upload it using the file picker above.');
+                return;
+            }
+            importStep = 2;
+            autoMapColumns();
+            renderImportStep();
+        }
+
+        // Auto-map columns
+        function autoMapColumns() {
+            const fields = importType === 'inventory' ? INVENTORY_FIELDS : PROJECT_FIELDS;
+            importColumnMap = {};
+            const synonyms = {
+                name: ['name','item name','item','product','title','project name','project'],
+                category: ['category','type','item type','cat'],
+                color: ['color','colour'],
+                description: ['description','desc','fabric','material','details'],
+                id_code: ['id','code','sku','id code','id/code','item id','barcode'],
+                status: ['status','state'],
+                location: ['location','loc','where','storage','warehouse'],
+                condition: ['condition','cond','quality'],
+                room: ['room','notes','room/notes','note'],
+                purchase_date: ['purchase date','date','bought','date purchased'],
+                purchase_cost: ['cost','price','purchase cost','amount','value'],
+                purchased_from: ['purchased from','vendor','store','supplier','from','source'],
+                address: ['address','addr','property'],
+                start_date: ['start date','stage date','staging date','start'],
+                end_date: ['end date','destage date','destaging date','end'],
+                notes: ['notes','note','comments','remarks'],
+            };
+            fields.forEach(field => {
+                const fieldSynonyms = synonyms[field.key] || [field.key];
+                for (let i = 0; i < importCSVHeaders.length; i++) {
+                    const header = importCSVHeaders[i].toLowerCase().trim();
+                    if (fieldSynonyms.some(syn => header === syn || header.includes(syn))) {
+                        if (!Object.values(importColumnMap).includes(i)) {
+                            importColumnMap[field.key] = i;
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        // ── Step 2: Map fields ───────────────────────────────────────
+        function renderImportStep2(content, nav) {
+            const fields = importType === 'inventory' ? INVENTORY_FIELDS : PROJECT_FIELDS;
+            const isInv = importType === 'inventory';
+
+            content.innerHTML = `
+                <div style="font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Step 2 of 3</div>
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Map Your Fields</h3>
+                <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">Match your spreadsheet columns to Stagience fields</p>
+
+                <div style="border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;padding:10px 16px;background:#f9fafb;border-bottom:1px solid #e5e7eb;">
+                        <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">YOUR COLUMN</div>
+                        <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">STAGIENCE FIELD</div>
+                    </div>
+                    ${fields.map(field => `
+                        <div style="display:grid;grid-template-columns:1fr 1fr;padding:14px 16px;border-bottom:1px solid #f3f4f6;align-items:center;">
+                            <div style="font-weight:600;font-size:14px;color:#1f2937;">${field.label}${field.required ? '<span style="color:#dc2626;margin-left:4px;">*</span>' : ''}</div>
+                            <select id="map-${field.key}" style="padding:8px 10px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;width:100%;" onchange="importColumnMap['${field.key}'] = this.value === '' ? undefined : parseInt(this.value)">
+                                <option value="">— Skip —</option>
+                                ${importCSVHeaders.map((h, i) => `<option value="${i}" ${importColumnMap[field.key] === i ? 'selected' : ''}>${h}</option>`).join('')}
+                            </select>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="background:#fef9f0;border:1.5px solid #b0a586;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px;color:#57534e;">
+                    💡 Fields marked <span style="color:#dc2626;font-weight:700;">*</span> are required. Others can be skipped.
+                </div>
+            `;
+
+            nav.innerHTML = `
+                <button onclick="importStep=1;renderImportStep();" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Back</button>
+                <button onclick="importGoToStep3()" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:600;cursor:pointer;background:#7c3aed;">Next</button>
+            `;
+        }
+
+        function importGoToStep3() {
+            const fields = importType === 'inventory' ? INVENTORY_FIELDS : PROJECT_FIELDS;
+            const missingRequired = fields.filter(f => f.required && importColumnMap[f.key] === undefined);
+            if (missingRequired.length > 0) {
+                alert('Please map the required fields: ' + missingRequired.map(f => f.label).join(', '));
+                return;
+            }
+            importStep = 3;
+            renderImportStep();
+        }
+
+        // ── Step 3: Preview & Confirm ────────────────────────────────
+        function renderImportStep3(content, nav) {
+            const fields = importType === 'inventory' ? INVENTORY_FIELDS : PROJECT_FIELDS;
+            const mappedFields = fields.filter(f => importColumnMap[f.key] !== undefined);
+            const previewRows = importCSVRows.slice(0, 3);
+            const isInv = importType === 'inventory';
+            const importBtnLabel = isInv ? 'Import Inventory' : 'Import Projects';
+
+            content.innerHTML = `
+                <div style="font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Step 3 of 3</div>
+                <h3 style="font-size:18px;font-weight:700;margin-bottom:6px;">Preview & Confirm</h3>
+                <p style="font-size:13px;color:#6b7280;margin-bottom:20px;">Review your ${isInv ? 'inventory' : 'data'} before importing</p>
+
+                <div style="overflow-x:auto;border:1.5px solid #e5e7eb;border-radius:12px;margin-bottom:16px;">
+                    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                        <thead>
+                            <tr style="background:#f9fafb;">
+                                ${mappedFields.map(f => `<th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid #e5e7eb;white-space:nowrap;">${f.label}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${previewRows.map(row => `
+                                <tr style="border-bottom:1px solid #f3f4f6;">
+                                    ${mappedFields.map(f => `<td style="padding:10px 14px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${row[importColumnMap[f.key]] || '—'}</td>`).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:14px 16px;">
+                    <div style="font-weight:700;color:#166534;margin-bottom:2px;">✓ Ready to import</div>
+                    <div style="font-size:13px;color:#166534;">${importCSVRows.length} ${isInv ? 'inventory items' : 'projects'} will be imported into Stagience</div>
+                </div>
+            `;
+
+            nav.innerHTML = `
+                <button onclick="importStep=2;renderImportStep();" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Back</button>
+                <button onclick="cancelImport()" style="flex:1;padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:white;font-weight:600;cursor:pointer;">Cancel</button>
+                <button onclick="executeImport()" style="flex:2;padding:14px;border:none;border-radius:10px;color:white;font-weight:700;cursor:pointer;background:#059669;">${importBtnLabel}</button>
+            `;
+        }
+
+        function cancelImport() {
+            closeImportModal();
+        }
+
+        // ── Execute Import ───────────────────────────────────────────
+        async function executeImport() {
+            const fields = importType === 'inventory' ? INVENTORY_FIELDS : PROJECT_FIELDS;
+            const nav = document.getElementById('import-nav');
+            const content = document.getElementById('import-step-content');
+            nav.innerHTML = '<div style="width:100%;text-align:center;padding:14px;color:#6b7280;font-weight:600;">⏳ Importing your data...</div>';
+
+            let successCount = 0;
+            let errorCount = 0;
+            const errors = [];
+
+            for (let i = 0; i < importCSVRows.length; i++) {
+                const row = importCSVRows[i];
+                const record = { user_id: currentUser.id };
+
+                fields.forEach(field => {
+                    if (importColumnMap[field.key] !== undefined) {
+                        let val = row[importColumnMap[field.key]]?.trim() || null;
+                        if (field.key === 'status' && importType === 'inventory') {
+                            val = val ? val.toUpperCase() : 'IN';
+                            if (!['IN','OUT','HOLD'].includes(val)) val = 'IN';
+                        }
+                        if (field.key === 'status' && importType === 'projects') {
+                            const valid = ['active','scheduled','consult-only','pending','completed'];
+                            val = val ? val.toLowerCase() : 'active';
+                            if (!valid.includes(val)) val = 'active';
+                        }
+                        record[field.key] = val;
+                    }
+                });
+
+                if (importType === 'inventory') {
+                    if (!record.status) record.status = 'IN';
+                    if (!record.location) record.location = 'Unassigned';
+                    if (!record.category) record.category = 'Decor';
+                    record.item_type = record.category;
+                }
+                if (importType === 'projects') {
+                    if (!record.status) record.status = 'active';
+                }
+
+                if (!record.name || !record.name.trim()) {
+                    errorCount++;
+                    errors.push('Row ' + (i + 2) + ': Missing name, skipped.');
+                    continue;
+                }
+
+                const table = importType === 'inventory' ? 'inventory' : 'projects';
+                const { error } = await supabase.from(table).insert([record]);
+                if (error) { errorCount++; errors.push('Row ' + (i + 2) + ': ' + error.message); }
+                else successCount++;
+            }
+
+            // Show results
+            content.innerHTML = `
+                <div style="text-align:center;padding:20px 0;">
+                    <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+                    <div style="font-size:22px;font-weight:800;color:#166534;margin-bottom:4px;">${successCount} items imported!</div>
+                    <div style="font-size:14px;color:#6b7280;">successfully added to your ${importType === 'inventory' ? 'Inventory' : 'Projects'}</div>
+                </div>
+                ${errorCount > 0 ? `
+                    <div style="background:#fee2e2;border-radius:10px;padding:14px;margin-top:16px;">
+                        <div style="font-weight:700;color:#991b1b;margin-bottom:6px;">⚠️ ${errorCount} rows had issues and were skipped</div>
+                        <div style="font-size:12px;color:#991b1b;max-height:100px;overflow-y:auto;">${errors.map(e => '<div>' + e + '</div>').join('')}</div>
+                    </div>
+                ` : ''}
+            `;
+
+            nav.innerHTML = `
+                <button onclick="closeImportModal();" style="flex:1;padding:14px;border:none;border-radius:10px;color:white;font-weight:700;cursor:pointer;background:#059669;">✓ Done</button>
+            `;
+
+            if (importType === 'inventory') await loadInventory();
+            else await loadProjects();
+        }
+
                 // ==============================================
         // INITIALIZE APP
         // ==============================================
@@ -5985,6 +6434,30 @@
                 <button onclick="closeChangePasswordModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">Cancel</button>
                 <button onclick="changePassword()" class="gradient-accent" style="flex: 1; padding: 14px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">Update Password</button>
             </div>
+        </div>
+    </div>
+
+
+    <!-- CSV Import Modal -->
+    <div id="import-modal" class="modal">
+        <div style="background: white; border-radius: 24px; padding: 32px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="import-modal-title" style="font-size: 22px; font-weight: 800;">Import Inventory</h2>
+                <button onclick="closeImportModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">×</button>
+            </div>
+
+            <!-- Step progress bar -->
+            <div style="display: flex; gap: 8px; margin-bottom: 28px;">
+                <div id="import-step-ind-1" style="flex:1; height:5px; border-radius:4px; background: #7c3aed; transition: background 0.3s;"></div>
+                <div id="import-step-ind-2" style="flex:1; height:5px; border-radius:4px; background: #e5e7eb; transition: background 0.3s;"></div>
+                <div id="import-step-ind-3" style="flex:1; height:5px; border-radius:4px; background: #e5e7eb; transition: background 0.3s;"></div>
+            </div>
+
+            <!-- Step content -->
+            <div id="import-step-content"></div>
+
+            <!-- Navigation -->
+            <div id="import-nav" style="display: flex; gap: 12px; margin-top: 24px;"></div>
         </div>
     </div>
 

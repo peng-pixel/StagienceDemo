@@ -3886,6 +3886,7 @@
 
             closeEventModal();
             await loadTimelineEvents();
+            await loadCalendar(); // Refresh calendar so new events appear immediately
         }
 
         async function editEvent(eventId) {
@@ -3941,6 +3942,7 @@
             }
 
             await loadTimelineEvents();
+            await loadCalendar(); // Refresh calendar after deleting event
         }
 
         // Share/Print Functions

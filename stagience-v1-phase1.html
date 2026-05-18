@@ -4757,7 +4757,6 @@
                 .from('project_photos')
                 .select('*')
                 .eq('project_id', currentProjectId)
-                .order('sort_order', { ascending: true })
                 .order('uploaded_at', { ascending: false });
 
             if (photosError) {
@@ -4860,14 +4859,7 @@
                     imgDiv.setAttribute('data-lightbox-folder', fid);
                     imgDiv.setAttribute('data-lightbox-photo', pid);
                     imgDiv.setAttribute('onclick', 'openLightbox(this.dataset.lightboxFolder, this.dataset.lightboxPhoto)');
-                    cardDiv.setAttribute('draggable', 'true');
-                    cardDiv.setAttribute('data-photo-id-drag', pid);
-                    cardDiv.setAttribute('data-folder-id-drag', fid);
-                    cardDiv.setAttribute('ondragstart', 'handlePhotoDragStart(event, "' + fid + '", "' + pid + '")');
-                    cardDiv.setAttribute('ondragover', 'handlePhotoDragOver(event)');
-                    cardDiv.setAttribute('ondrop', 'handlePhotoDrop(event, "' + fid + '", "' + pid + '")');
-                    cardDiv.setAttribute('ondragend', 'handlePhotoDragEnd(event)');
-                    cardDiv.style.cursor = 'grab';
+
                     const img = document.createElement('img');
                     img.dataset.src = imageUrl;
                     img.alt = photo.file_name;
@@ -5689,79 +5681,6 @@
             await loadTemplates();
         }
 
-
-        // ==============================================
-        // PHOTO DRAG & DROP
-        // ==============================================
-        let photoDragSrcId = null;
-        let photoDragFolderId = null;
-
-        function handlePhotoDragStart(event, folderId, photoId) {
-            photoDragSrcId = String(photoId);
-            photoDragFolderId = String(folderId);
-            event.dataTransfer.setData('text/plain', photoId);
-            event.dataTransfer.effectAllowed = 'move';
-            setTimeout(() => { event.currentTarget.style.opacity = '0.4'; }, 0);
-            // Disable pointer events on children so they don't interfere
-            event.currentTarget.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
-        }
-
-        function handlePhotoDragOver(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            event.dataTransfer.dropEffect = 'move';
-            // Find closest card
-            const card = event.target.closest('[data-photo-id-drag]');
-            if (card) {
-                card.style.outline = '2px solid #7b3a5a';
-                card.style.borderRadius = '12px';
-            }
-        }
-
-        function handlePhotoDragEnd(event) {
-            event.currentTarget.style.opacity = '1';
-            event.currentTarget.style.outline = '';
-            // Re-enable pointer events on children
-            event.currentTarget.querySelectorAll('*').forEach(el => el.style.pointerEvents = '');
-            // Clean up all outlines
-            document.querySelectorAll('[data-photo-id-drag]').forEach(el => {
-                el.style.outline = '';
-            });
-        }
-
-        async function handlePhotoDrop(event, folderId, targetPhotoId) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            // Find the actual card even if drop hit a child element
-            const card = event.target.closest('[data-photo-id-drag]');
-            if (card) card.style.outline = '';
-
-            const srcId = String(photoDragSrcId);
-            const tgtId = String(targetPhotoId);
-            const srcFolder = String(photoDragFolderId);
-            const tgtFolder = String(folderId);
-
-            if (srcId === tgtId || srcFolder !== tgtFolder) return;
-
-            const folder = photoFolders.find(f => String(f.id) === tgtFolder);
-            if (!folder || !folder.photos) return;
-
-            const srcIndex = folder.photos.findIndex(p => String(p.id) === srcId);
-            const tgtIndex = folder.photos.findIndex(p => String(p.id) === tgtId);
-            if (srcIndex < 0 || tgtIndex < 0) return;
-
-            // Reorder photos array
-            const [moved] = folder.photos.splice(srcIndex, 1);
-            folder.photos.splice(tgtIndex, 0, moved);
-
-            // Save new sort_order to Supabase
-            for (let i = 0; i < folder.photos.length; i++) {
-                await supabase.from('project_photos').update({ sort_order: i }).eq('id', folder.photos[i].id);
-            }
-
-            await loadPhotoFolders();
-        }
 
         // ==============================================
         // PHOTO LIGHTBOX + PAGINATION

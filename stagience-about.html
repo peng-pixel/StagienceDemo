@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Stagience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #fffdf8;
+            background-color: #161313;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-size: cover;
+                background-position: center top;
+            }
+        }
+
+        header {
+            background: rgba(22,19,19,0.82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,253,248,0.12);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #fffdf8;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #7b3a5a, #6f7652);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-nav-links {
+            background: transparent !important;
+            border: none !important;
+            color: rgba(255,253,248,0.75) !important;
+            font-weight: 600;
+            padding: 8px 14px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .header-nav-links:hover { color: #fffdf8 !important; }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #7b3a5a;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .page-header {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .page-header .kicker {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #b9774f;
+            margin-bottom: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: #fffdf8;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            color: rgba(255,253,248,0.72);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .content {
+            padding: 0 0 100px;
+        }
+
+        .story-card {
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .story-card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #fffdf8;
+        }
+
+        .story-card p {
+            font-size: 16px;
+            color: rgba(255,253,248,0.82);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .story-card p:last-child { margin-bottom: 0; }
+
+        .highlight {
+            color: #b9774f;
+            font-weight: 600;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .value-card {
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .value-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+        }
+
+        .value-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fffdf8;
+        }
+
+        .value-card p {
+            font-size: 14px;
+            color: rgba(255,253,248,0.65);
+            line-height: 1.6;
+        }
+
+        .founder-card {
+            background: rgba(123,58,90,0.2);
+            border: 1px solid rgba(123,58,90,0.4);
+            border-radius: 16px;
+            padding: 48px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .founder-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7b3a5a, #6f7652);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .founder-info h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: #fffdf8;
+        }
+
+        .founder-info .founder-title {
+            font-size: 14px;
+            color: #b9774f;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .founder-info p {
+            font-size: 15px;
+            color: rgba(255,253,248,0.78);
+            line-height: 1.7;
+        }
+
+        .cta-card {
+            background: rgba(255,253,248,0.07);
+            border: 1px solid rgba(255,253,248,0.14);
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-card h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            color: #fffdf8;
+        }
+
+        .cta-card p {
+            font-size: 16px;
+            color: rgba(255,253,248,0.72);
+            margin-bottom: 28px;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary-outline {
+            padding: 14px 28px;
+            border: 1.5px solid rgba(255,253,248,0.3);
+            border-radius: 10px;
+            background: transparent;
+            color: #fffdf8;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-cta {
+            padding: 14px 28px;
+            background: #7b3a5a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        footer {
+            background: rgba(10,8,8,0.6);
+            border-top: 1px solid rgba(255,253,248,0.1);
+            padding: 40px 0;
+            color: rgba(255,253,248,0.5);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255,253,248,0.5);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover { color: #fffdf8; }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .story-card { padding: 28px; }
+            .values-grid { grid-template-columns: 1fr; }
+            .founder-card { flex-direction: column; text-align: center; padding: 28px; }
+            .cta-card { padding: 28px; }
+            .header-nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">S</div>
+                Stagience
+            </a>
+            <div class="header-buttons">
+                <a href="stagience-how-it-works.html" class="header-nav-links">How It Works</a>
+                <a href="stagience-faq.html" class="header-nav-links">FAQ</a>
+                <a href="/app" class="btn-primary">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <div class="container">
+                <span class="kicker">Our Story</span>
+                <h1>Built by a stager,<br>for stagers.</h1>
+                <p>Stagience was born out of a real problem — one that nearly every home stager faces every single day.</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="container">
+
+                <!-- The Problem -->
+                <div class="story-card">
+                    <h2>The problem we set out to solve</h2>
+                    <p>If you're a home stager, you already know the juggling act. Inventory tracked in a spreadsheet. Photos scattered across Dropbox or Google Drive. Project details in one app, scheduling in another.</p>
+                    <p>It works — until it doesn't. A staging business has a lot of moving parts, and no single tool was ever built to handle all of them. So stagers cobble together a patchwork of apps and hope nothing falls through the cracks.</p>
+                    <p><span class="highlight">We knew there had to be a better way.</span></p>
+                </div>
+
+                <!-- The Story -->
+                <div class="story-card">
+                    <h2>Why we built Stagience</h2>
+                    <p>After nearly a decade of staging homes in Toronto, our founder Jen Punsalan was still juggling multiple apps to run her business. Inventory in one place, photos in another, projects tracked separately. It wasn't just inefficient — it was holding her business back.</p>
+                    <p>She looked for a solution built specifically for home stagers. She couldn't find one. So she built it herself.</p>
+                    <p>Stagience is the platform Jen wished she'd had from day one — one place for everything your staging business needs. Inventory tracking, project management, photo folders, team management, scheduling, and documents. All connected. All organized. All in one place.</p>
+                    <p><span class="highlight">No more app-switching. No more lost information. Just a calmer, more organized staging business.</span></p>
+                </div>
+
+                <!-- Values -->
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">🏡</div>
+                        <h3>Built by stagers</h3>
+                        <p>Every feature is designed with real staging workflows in mind — not generic project management.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🎯</div>
+                        <h3>Focused on what matters</h3>
+                        <p>We build tools that solve real problems, not features for the sake of features.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h3>Built with our users</h3>
+                        <p>Our beta testers shape every decision. Your feedback directly influences what gets built next.</p>
+                    </div>
+                </div>
+
+                <!-- Founder -->
+                <div class="founder-card">
+                    <div class="founder-avatar">J</div>
+                    <div class="founder-info">
+                        <h2>Jen Punsalan</h2>
+                        <div class="founder-title">Founder & Home Stager — Toronto, ON</div>
+                        <p>Jen has been staging homes in the Greater Toronto Area for nearly 10 years. She built Stagience to solve the exact problem she faced every day in her own business — too many apps, too much time lost, not enough organization. She's still staging, still using Stagience, and still listening to every piece of feedback from the stagers who use it.</p>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="cta-card">
+                    <h2>Ready to simplify your staging business?</h2>
+                    <p>Join our founding stagers during the beta period and get free access to the full platform. Your feedback will shape the future of Stagience.</p>
+                    <div class="cta-buttons">
+                        <a href="/app" class="btn-cta">Get Started Free</a>
+                        <a href="/contact" class="btn-secondary-outline">Get in Touch</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div style="font-size: 14px;">© 2026 Stagience. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="/how-it-works">How It Works</a>
+                <a href="/faq">FAQ</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

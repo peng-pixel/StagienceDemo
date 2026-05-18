@@ -1067,24 +1067,31 @@
     <div id="waitlist-modal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeWaitlistModal()">×</button>
-            <div class="modal-header">
-                <div class="modal-logo">Stagience</div>
-                <h2 class="modal-title">Join Waitlist</h2>
-                <p class="modal-description">Be the first to experience intelligent staging management.</p>
+            <div id="waitlist-form-wrap">
+                <div class="modal-header">
+                    <div class="modal-logo">Stagience</div>
+                    <h2 class="modal-title">Join Waitlist</h2>
+                    <p class="modal-description">Be the first to experience intelligent staging management.</p>
+                </div>
+                <form id="waitlist-form" onsubmit="handleWaitlistSubmit(event)">
+                    <input type="hidden" id="waitlist-plan" name="plan" value="">
+                    <div class="form-group">
+                        <label for="waitlist-email">Email</label>
+                        <input type="email" id="waitlist-email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="waitlist-name">Name</label>
+                        <input type="text" id="waitlist-name" name="name" placeholder="Your name" required>
+                    </div>
+                    <button type="submit" class="btn-submit" id="waitlist-submit-btn">Join Waitlist</button>
+                </form>
             </div>
-            <form action="https://formspree.io/f/xjglqeba" method="POST">
-                <input type="hidden" name="_next" value="https://stagience.com/thankyou">
-                <input type="hidden" id="waitlist-plan" name="plan" value="">
-                <div class="form-group">
-                    <label for="waitlist-email">Email</label>
-                    <input type="email" id="waitlist-email" name="email" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="waitlist-name">Name</label>
-                    <input type="text" id="waitlist-name" name="name" placeholder="Your name" required>
-                </div>
-                <button type="submit" class="btn-submit">Join Waitlist</button>
-            </form>
+            <div id="waitlist-success" style="display:none; text-align:center; padding: 24px 0;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+                <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 12px;">You're on the list!</h3>
+                <p style="color: #44393d; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">Thanks for joining! We'll be in touch soon with updates and early access details.</p>
+                <button onclick="closeWaitlistModal()" class="btn-submit">Close</button>
+            </div>
         </div>
     </div>
 
@@ -1092,34 +1099,41 @@
     <div id="demo-modal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeDemoModal()">×</button>
-            <div class="modal-header">
-                <h2 class="modal-title">Request a Demo</h2>
-                <p class="modal-description">See how Stagience can transform your staging business.</p>
+            <div id="demo-form-wrap">
+                <div class="modal-header">
+                    <h2 class="modal-title">Request a Demo</h2>
+                    <p class="modal-description">See how Stagience can transform your staging business.</p>
+                </div>
+                <form id="demo-form" onsubmit="handleDemoSubmit(event)">
+                    <div class="form-group">
+                        <label for="demo-name">Name *</label>
+                        <input type="text" id="demo-name" name="name" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-email">Email *</label>
+                        <input type="email" id="demo-email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-company">Company Name *</label>
+                        <input type="text" id="demo-company" name="company" placeholder="Your staging company" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-phone">Phone Number</label>
+                        <input type="tel" id="demo-phone" name="phone" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="demo-message">What would you like to discuss?</label>
+                        <input type="text" id="demo-message" name="message" placeholder="e.g. team size, current tools, questions...">
+                    </div>
+                    <button type="submit" class="btn-submit" id="demo-submit-btn">Request Demo</button>
+                </form>
             </div>
-            <form action="https://formspree.io/f/xqenvdzn" method="POST">
-                <input type="hidden" name="_next" value="https://stagience.com/thankyou">
-                <div class="form-group">
-                    <label for="demo-name">Name *</label>
-                    <input type="text" id="demo-name" name="name" placeholder="Your name" required>
-                </div>
-                <div class="form-group">
-                    <label for="demo-email">Email *</label>
-                    <input type="email" id="demo-email" name="email" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="demo-company">Company Name *</label>
-                    <input type="text" id="demo-company" name="company" placeholder="Your staging company" required>
-                </div>
-                <div class="form-group">
-                    <label for="demo-phone">Phone Number</label>
-                    <input type="tel" id="demo-phone" name="phone" placeholder="(555) 123-4567">
-                </div>
-                <div class="form-group">
-                    <label for="demo-message">What would you like to discuss?</label>
-                    <input type="text" id="demo-message" name="message" placeholder="e.g. team size, current tools, questions...">
-                </div>
-                <button type="submit" class="btn-submit">Request Demo</button>
-            </form>
+            <div id="demo-success" style="display:none; text-align:center; padding: 24px 0;">
+                <div style="font-size: 48px; margin-bottom: 16px;">🎉</div>
+                <h3 style="font-size: 22px; font-weight: 800; margin-bottom: 12px;">Request received!</h3>
+                <p style="color: #44393d; font-size: 15px; line-height: 1.6; margin-bottom: 24px;">Thanks for reaching out! We'll be in touch shortly to schedule your demo.</p>
+                <button onclick="closeDemoModal()" class="btn-submit">Close</button>
+            </div>
         </div>
     </div>
 
@@ -1127,23 +1141,78 @@
         // Modal functions
         function openWaitlistModal(plan) {
             document.getElementById('waitlist-modal').classList.add('active');
+            document.getElementById('waitlist-form-wrap').style.display = 'block';
+            document.getElementById('waitlist-success').style.display = 'none';
             const planField = document.getElementById('waitlist-plan');
             if (planField) planField.value = plan || 'General';
-            // Update modal title if plan specified
             const title = document.querySelector('#waitlist-modal .modal-title');
             if (title) title.textContent = plan ? 'Join Waitlist — ' + plan + ' Plan' : 'Join Waitlist';
         }
 
         function closeWaitlistModal() {
             document.getElementById('waitlist-modal').classList.remove('active');
+            document.getElementById('waitlist-form').reset();
+        }
+
+        async function handleWaitlistSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('waitlist-submit-btn');
+            btn.textContent = 'Submitting...';
+            btn.disabled = true;
+            const formData = new FormData(event.target);
+            formData.append('plan', document.getElementById('waitlist-plan').value);
+            try {
+                const response = await fetch('https://formspree.io/f/xjglqeba', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    document.getElementById('waitlist-form-wrap').style.display = 'none';
+                    document.getElementById('waitlist-success').style.display = 'block';
+                } else {
+                    throw new Error('Failed');
+                }
+            } catch (error) {
+                btn.textContent = 'Join Waitlist';
+                btn.disabled = false;
+                alert('Something went wrong. Please email us at hello@stagience.com');
+            }
         }
 
         function openDemoModal() {
             document.getElementById('demo-modal').classList.add('active');
+            document.getElementById('demo-form-wrap').style.display = 'block';
+            document.getElementById('demo-success').style.display = 'none';
         }
 
         function closeDemoModal() {
             document.getElementById('demo-modal').classList.remove('active');
+            document.getElementById('demo-form').reset();
+        }
+
+        async function handleDemoSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('demo-submit-btn');
+            btn.textContent = 'Submitting...';
+            btn.disabled = true;
+            try {
+                const response = await fetch('https://formspree.io/f/xqenvdzn', {
+                    method: 'POST',
+                    body: new FormData(event.target),
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (response.ok) {
+                    document.getElementById('demo-form-wrap').style.display = 'none';
+                    document.getElementById('demo-success').style.display = 'block';
+                } else {
+                    throw new Error('Failed');
+                }
+            } catch (error) {
+                btn.textContent = 'Request Demo';
+                btn.disabled = false;
+                alert('Something went wrong. Please email us at hello@stagience.com');
+            }
         }
 
         // Close modals when clicking outside

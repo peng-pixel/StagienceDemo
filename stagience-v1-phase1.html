@@ -1546,11 +1546,14 @@
 
         // Sign Out
         async function handleSignOut() {
-            const { error } = await supabase.auth.signOut();
-            if (!error) {
-                currentUser = null;
-                showAuthPage();
+            try {
+                await supabase.auth.signOut();
+            } catch (err) {
+                console.log('Sign out error (ignored):', err);
             }
+            // Always clear local session and redirect regardless of Supabase response
+            currentUser = null;
+            showAuthPage();
         }
 
         // Show/Hide auth forms

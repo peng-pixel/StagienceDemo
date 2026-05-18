@@ -1180,13 +1180,6 @@
                 <!-- Conditional Fields Container -->
                 <div id="conditional-fields-container"></div>
 
-                <div>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" id="event-completed" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 600;">Mark as completed</span>
-                    </label>
-                </div>
-
                 <div style="display: flex; gap: 12px;">
                     <button type="button" onclick="closeEventModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
@@ -3850,7 +3843,7 @@
                 event_time: document.getElementById('event-time').value || null,
                 event_type: document.getElementById('event-type').value,
                 notes: document.getElementById('event-notes').value || null,
-                completed: document.getElementById('event-completed').checked,
+
                 // Conditional fields
                 photographer: document.getElementById('event-photographer')?.value || null,
                 details: document.getElementById('event-details')?.value || null,
@@ -3901,7 +3894,7 @@
             document.getElementById('event-time').value = event.event_time || '';
             document.getElementById('event-type').value = event.event_type;
             document.getElementById('event-notes').value = event.notes || '';
-            document.getElementById('event-completed').checked = event.completed;
+
 
             // Load conditional fields
             updateConditionalFields();

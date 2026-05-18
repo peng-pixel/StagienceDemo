@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You — Stagience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #fffdf8;
+            background-color: #161313;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(180deg, rgba(20,18,19,0.82) 0%, rgba(20,18,19,0.72) 40%, rgba(20,18,19,0.88) 100%), url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat;
+        }
+
+        @media (max-width: 768px) {
+            body::before {
+                background-size: cover;
+                background-position: center top;
+            }
+        }
+
+        header {
+            background: rgba(22,19,19,0.82);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,253,248,0.12);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #fffdf8;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #7b3a5a, #6f7652);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #7b3a5a;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .main {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+            padding: 56px 48px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            color: #241f22;
+        }
+
+        .icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #7b3a5a, #6f7652);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .card h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #241f22;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #44393d;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-card-primary {
+            padding: 14px 24px;
+            background: #7b3a5a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .btn-card-secondary {
+            padding: 14px 24px;
+            background: white;
+            color: #241f22;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .divider {
+            width: 48px;
+            height: 3px;
+            background: linear-gradient(135deg, #7b3a5a, #6f7652);
+            border-radius: 99px;
+            margin: 0 auto 24px;
+        }
+
+        @media (max-width: 600px) {
+            .card { padding: 36px 24px; }
+            .card h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-icon">S</div>
+                Stagience
+            </a>
+            <a href="/app" class="btn-primary">Get Started</a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="card">
+            <div class="icon">✓</div>
+            <h1>Thank you!</h1>
+            <div class="divider"></div>
+            <p>We've received your message and will be in touch shortly. In the meantime, feel free to explore Stagience or sign in to your account.</p>
+            <div class="card-actions">
+                <a href="/app" class="btn-card-primary">Go to Stagience →</a>
+                <a href="/" class="btn-card-secondary">Back to Home</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

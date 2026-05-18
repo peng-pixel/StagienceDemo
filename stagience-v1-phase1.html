@@ -5697,34 +5697,58 @@
         let photoDragFolderId = null;
 
         function handlePhotoDragStart(event, folderId, photoId) {
-            photoDragSrcId = photoId;
-            photoDragFolderId = folderId;
+            photoDragSrcId = String(photoId);
+            photoDragFolderId = String(folderId);
+            event.dataTransfer.setData('text/plain', photoId);
             event.dataTransfer.effectAllowed = 'move';
-            event.currentTarget.style.opacity = '0.4';
+            setTimeout(() => { event.currentTarget.style.opacity = '0.4'; }, 0);
+            // Disable pointer events on children so they don't interfere
+            event.currentTarget.querySelectorAll('*').forEach(el => el.style.pointerEvents = 'none');
         }
 
         function handlePhotoDragOver(event) {
             event.preventDefault();
+            event.stopPropagation();
             event.dataTransfer.dropEffect = 'move';
-            event.currentTarget.style.outline = '2px solid #7b3a5a';
-            event.currentTarget.style.borderRadius = '12px';
+            // Find closest card
+            const card = event.target.closest('[data-photo-id-drag]');
+            if (card) {
+                card.style.outline = '2px solid #7b3a5a';
+                card.style.borderRadius = '12px';
+            }
         }
 
         function handlePhotoDragEnd(event) {
             event.currentTarget.style.opacity = '1';
             event.currentTarget.style.outline = '';
+            // Re-enable pointer events on children
+            event.currentTarget.querySelectorAll('*').forEach(el => el.style.pointerEvents = '');
+            // Clean up all outlines
+            document.querySelectorAll('[data-photo-id-drag]').forEach(el => {
+                el.style.outline = '';
+            });
         }
 
         async function handlePhotoDrop(event, folderId, targetPhotoId) {
             event.preventDefault();
-            event.currentTarget.style.outline = '';
-            if (photoDragSrcId === targetPhotoId || photoDragFolderId !== folderId) return;
+            event.stopPropagation();
 
-            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            // Find the actual card even if drop hit a child element
+            const card = event.target.closest('[data-photo-id-drag]');
+            if (card) card.style.outline = '';
+
+            const srcId = String(photoDragSrcId);
+            const tgtId = String(targetPhotoId);
+            const srcFolder = String(photoDragFolderId);
+            const tgtFolder = String(folderId);
+
+            if (srcId === tgtId || srcFolder !== tgtFolder) return;
+
+            const folder = photoFolders.find(f => String(f.id) === tgtFolder);
             if (!folder || !folder.photos) return;
 
-            const srcIndex = folder.photos.findIndex(p => String(p.id) === String(photoDragSrcId));
-            const tgtIndex = folder.photos.findIndex(p => String(p.id) === String(targetPhotoId));
+            const srcIndex = folder.photos.findIndex(p => String(p.id) === srcId);
+            const tgtIndex = folder.photos.findIndex(p => String(p.id) === tgtId);
             if (srcIndex < 0 || tgtIndex < 0) return;
 
             // Reorder photos array

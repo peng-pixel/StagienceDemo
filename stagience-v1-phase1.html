@@ -4156,18 +4156,63 @@
                     const timeStr = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
                     
                     return `
-                        <div style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
+                        <div id="note-card-${note.id}" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
                                 <div style="color: #6b7280; font-size: 13px;">${dateStr} at ${timeStr}</div>
-                                <button onclick="deleteProjectNote(${note.id})" style="padding: 6px 12px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                                    Delete
-                                </button>
+                                <div style="display: flex; gap: 8px;">
+                                    <button onclick="editProjectNote(${note.id})" id="edit-btn-${note.id}" title="Edit" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;" onmouseover="this.style.background='rgba(123,58,90,0.06)'" onmouseout="this.style.background='white'">
+                                        ✏️
+                                    </button>
+                                    <button onclick="deleteProjectNote(${note.id})" title="Delete" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px;" onmouseover="this.style.background='#fee2e2'" onmouseout="this.style.background='white'">
+                                        ✕
+                                    </button>
+                                </div>
                             </div>
-                            <div style="white-space: pre-wrap; line-height: 1.6;">${note.note_text}</div>
+                            <!-- View mode -->
+                            <div id="note-text-${note.id}" style="white-space: pre-wrap; line-height: 1.6;">${note.note_text}</div>
+                            <!-- Edit mode (hidden by default) -->
+                            <div id="note-edit-${note.id}" style="display: none;">
+                                <textarea id="note-textarea-${note.id}" rows="4" style="width: 100%; padding: 12px; border: 2px solid #7b3a5a; border-radius: 10px; font-size: 15px; font-family: inherit; margin-bottom: 10px;">${note.note_text}</textarea>
+                                <div style="display: flex; gap: 8px;">
+                                    <button onclick="saveProjectNote(${note.id})" style="padding: 8px 16px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Save</button>
+                                    <button onclick="cancelEditNote(${note.id})" style="padding: 8px 16px; background: white; color: #241f22; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">Cancel</button>
+                                </div>
+                            </div>
                         </div>
                     `;
                 }).join('');
             }
+        }
+
+        function editProjectNote(noteId) {
+            document.getElementById('note-text-' + noteId).style.display = 'none';
+            document.getElementById('note-edit-' + noteId).style.display = 'block';
+            document.getElementById('edit-btn-' + noteId).style.display = 'none';
+        }
+
+        function cancelEditNote(noteId) {
+            const note = projectNotes.find(n => n.id === noteId);
+            document.getElementById('note-textarea-' + noteId).value = note.note_text;
+            document.getElementById('note-text-' + noteId).style.display = 'block';
+            document.getElementById('note-edit-' + noteId).style.display = 'none';
+            document.getElementById('edit-btn-' + noteId).style.display = 'inline-block';
+        }
+
+        async function saveProjectNote(noteId) {
+            const newText = document.getElementById('note-textarea-' + noteId).value.trim();
+            if (!newText) return;
+
+            const { error } = await supabase
+                .from('project_notes')
+                .update({ note_text: newText })
+                .eq('id', noteId);
+
+            if (error) {
+                alert('Error updating note: ' + error.message);
+                return;
+            }
+
+            await loadProjectNotes();
         }
 
         async function addProjectNote() {

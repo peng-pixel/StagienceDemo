@@ -285,6 +285,19 @@
             .btn-secondary { padding: 8px 14px; font-size: 13px; }
             .btn-primary { padding: 8px 14px; font-size: 13px; }
         }
+    
+        /* Hamburger Menu */
+        .landing-hamburger { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: #fffdf8; padding: 4px 8px; line-height: 1; }
+        .landing-mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; }
+        .landing-mobile-menu.open { display: block; }
+        .landing-mobile-panel { position: absolute; top: 0; right: 0; width: 260px; height: 100%; background: #1c1917; border-left: 1px solid rgba(255,253,248,0.1); padding: 24px; display: flex; flex-direction: column; gap: 8px; box-shadow: -4px 0 24px rgba(0,0,0,0.4); }
+        .landing-mobile-nav-link { display: block; padding: 14px 18px; border-radius: 12px; color: rgba(255,253,248,0.85); font-weight: 600; font-size: 15px; text-decoration: none; }
+        .landing-mobile-nav-link:hover { background: rgba(255,253,248,0.08); color: #fffdf8; }
+        .landing-mobile-cta { display: block; margin-top: 8px; padding: 14px 18px; background: #7b3a5a; color: white; border-radius: 12px; font-weight: 600; font-size: 15px; text-decoration: none; text-align: center; }
+        @media (max-width: 768px) {
+            .landing-hamburger { display: block !important; }
+            .header-buttons { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -301,6 +314,7 @@
                     <a href="stagience-faq.html" class="btn-secondary header-nav-links">FAQ</a>
                     <a href="/app" class="btn-primary">Get Started</a>
                 </div>
+                <button class="landing-hamburger" onclick="toggleLandingMenu()" aria-label="Open menu">&#9776;</button>
             </div>
         </div>
     </header>
@@ -390,5 +404,27 @@
             </div>
         </div>
     </main>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="landing-mobile-menu" class="landing-mobile-menu" onclick="closeLandingMenuOutside(event)">
+        <div class="landing-mobile-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="font-weight: 700; font-size: 18px; color: #fffdf8;">Menu</div>
+                <button onclick="toggleLandingMenu()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: rgba(255,253,248,0.7);">&times;</button>
+            </div>
+            <a href="/how-it-works" class="landing-mobile-nav-link">How It Works</a>
+            <a href="/faq" class="landing-mobile-nav-link">FAQ</a>
+            <a href="/app" class="landing-mobile-cta">Get Started</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleLandingMenu() {
+            document.getElementById('landing-mobile-menu').classList.toggle('open');
+        }
+        function closeLandingMenuOutside(e) {
+            if (e.target === document.getElementById('landing-mobile-menu')) toggleLandingMenu();
+        }
+    </script>
 </body>
 </html>

@@ -4976,13 +4976,7 @@
                     cb.setAttribute('onclick', 'event.stopPropagation();togglePhotoSelection(this.dataset.folderId, this.dataset.photoId, document.getElementById("photo-card-"+this.dataset.photoId))');
                     cardDiv.appendChild(cb);
 
-                    const delBtn = document.createElement('button');
-                    delBtn.style.cssText = 'position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;border:none;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:16px;z-index:10;';
-                    delBtn.textContent = '×';
-                    delBtn.setAttribute('data-folder-id', fid);
-                    delBtn.setAttribute('data-photo-id', pid);
-                    delBtn.setAttribute('onclick', 'event.stopPropagation();deletePhoto(this.dataset.photoId, this.dataset.folderId)');
-                    cardDiv.appendChild(delBtn);
+
 
                     const imgDiv = document.createElement('div');
                     imgDiv.style.cssText = 'width:100%;height:180px;border-radius:8px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin-bottom:8px;cursor:pointer;';

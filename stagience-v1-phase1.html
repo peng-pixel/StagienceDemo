@@ -212,8 +212,8 @@
                     <!-- Mobile Actions -->
                     <button onclick="showAddItemModal()" class="gradient-accent inv-mobile-add" style="display:none;">+ Add Item</button>
                     <div class="inv-mobile-toolbar" style="display:none;">
-                        <button onclick="switchInventoryView('grid')">📦 Grid</button>
-                        <button onclick="switchInventoryView('list')">📋 List</button>
+                        <button id="mobile-grid-view-btn" onclick="switchInventoryView('grid')">📦 Grid</button>
+                        <button id="mobile-list-view-btn" onclick="switchInventoryView('list')" style="background:rgba(123,58,90,0.1);color:#7b3a5a;">📋 List</button>
                         <button onclick="showFilterModal()">🔍 Filter</button>
                         <button onclick="showPrintModal()">🖨️ Print</button>
                     </div>
@@ -1805,8 +1805,6 @@
                                     ondrop="handleInvDrop(event, ${item.id})"
                                     ondragend="handleInvDragEnd(event)"
                                     style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 20px; transition: border 0.2s, box-shadow 0.2s; position: relative;">
-                                <!-- Drag handle -->
-                                <div data-drag-handle="${item.id}" ontouchstart="handleInvTouchStart(event, ${item.id})" ontouchmove="handleInvTouchMove(event)" ontouchend="handleInvTouchEnd(event)" style="position: absolute; top: 10px; left: 12px; font-size: 18px; color: #d1d5db; cursor: grab; touch-action: none; user-select: none; z-index: 5;">⠿</div>
                                 <!-- Action Buttons -->
                                 <div style="position: absolute; top: 12px; right: 12px; display: flex; gap: 6px;">
                                     <button onclick="event.stopPropagation(); duplicateItem(${item.id})" title="Duplicate" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e5e7eb; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='white'">
@@ -1830,6 +1828,7 @@
                                 <p style="color: #6b7280; font-size: 13px; margin-bottom: 8px;">📍 ${item.location}</p>
                                 ${item.room ? `<p style="color: #9ca3af; font-size: 12px; font-style: italic; margin-bottom: 8px;">${item.room}</p>` : ''}
                                 <span style="display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; ${statusColors[item.status]}">${item.status}</span>
+                                <div data-drag-handle="${item.id}" ontouchstart="handleInvTouchStart(event, ${item.id})" ontouchmove="handleInvTouchMove(event)" ontouchend="handleInvTouchEnd(event)" style="margin-top:12px; padding: 8px; text-align:center; font-size:20px; color:#d1d5db; cursor:grab; touch-action:none; user-select:none; border-top: 1px solid #f3f4f6; letter-spacing:4px;">⠿⠿</div>
                             </div>
                         `;
                     }).join('')}
@@ -2158,11 +2157,29 @@
         function switchInventoryView(view) {
             currentView = view;
             
-            // Update button styles
-            document.getElementById('grid-view-btn').style.background = view === 'grid' ? 'rgba(123,58,90,0.06)' : 'white';
-            document.getElementById('grid-view-btn').style.color = view === 'grid' ? '#7b3a5a' : '#6b7280';
-            document.getElementById('list-view-btn').style.background = view === 'list' ? 'rgba(123,58,90,0.06)' : 'white';
-            document.getElementById('list-view-btn').style.color = view === 'list' ? '#7b3a5a' : '#6b7280';
+            // Update desktop button styles (may be hidden on mobile but update anyway)
+            const gridBtn = document.getElementById('grid-view-btn');
+            const listBtn = document.getElementById('list-view-btn');
+            if (gridBtn) {
+                gridBtn.style.background = view === 'grid' ? 'rgba(123,58,90,0.06)' : 'white';
+                gridBtn.style.color = view === 'grid' ? '#7b3a5a' : '#6b7280';
+            }
+            if (listBtn) {
+                listBtn.style.background = view === 'list' ? 'rgba(123,58,90,0.06)' : 'white';
+                listBtn.style.color = view === 'list' ? '#7b3a5a' : '#6b7280';
+            }
+
+            // Update mobile toolbar button styles
+            const mobileGridBtn = document.getElementById('mobile-grid-view-btn');
+            const mobileListBtn = document.getElementById('mobile-list-view-btn');
+            if (mobileGridBtn) {
+                mobileGridBtn.style.background = view === 'grid' ? 'rgba(123,58,90,0.1)' : 'white';
+                mobileGridBtn.style.color = view === 'grid' ? '#7b3a5a' : '#374151';
+            }
+            if (mobileListBtn) {
+                mobileListBtn.style.background = view === 'list' ? 'rgba(123,58,90,0.1)' : 'white';
+                mobileListBtn.style.color = view === 'list' ? '#7b3a5a' : '#374151';
+            }
             
             renderInventory();
         }

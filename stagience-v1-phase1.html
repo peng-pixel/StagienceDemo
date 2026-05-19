@@ -1896,6 +1896,9 @@
                                     ondragover="handleInvDragOver(event)"
                                     ondrop="handleInvDrop(event, ${item.id})"
                                     ondragend="handleInvDragEnd(event)"
+                                    ontouchstart="handleInvTouchStart(event, ${item.id})"
+                                    ontouchmove="handleInvTouchMove(event)"
+                                    ontouchend="handleInvTouchEnd(event)"
                                     style="border-top: 1px solid #e5e7eb; cursor: grab;">
                                     <td style="padding: 16px; color: #9ca3af; font-size: 18px; cursor: grab;">⠿</td>
                                     <td style="padding: 16px;"><input type="checkbox" class="item-checkbox" data-item-id="${item.id}" onchange="updateBulkActions()" style="width: 18px; height: 18px; cursor: pointer;"></td>
@@ -1928,10 +1931,11 @@
         }
 
         // ==============================================
-        // INVENTORY DRAG & DROP
+        // INVENTORY DRAG & DROP (mouse + touch)
         // ==============================================
         let invDragSrcId = null;
 
+        // --- Mouse drag handlers (desktop) ---
         function handleInvDragStart(event, itemId) {
             invDragSrcId = itemId;
             event.dataTransfer.effectAllowed = 'move';
@@ -1947,7 +1951,6 @@
 
         function handleInvDragEnd(event) {
             event.currentTarget.style.opacity = '1';
-            // Reset all row styles
             document.querySelectorAll('tr[data-item-id]').forEach(row => {
                 row.style.background = '';
                 row.style.borderTop = '1px solid #e5e7eb';
@@ -1957,28 +1960,117 @@
         async function handleInvDrop(event, targetItemId) {
             event.preventDefault();
             if (invDragSrcId === targetItemId) return;
+            await reorderInvItems(invDragSrcId, targetItemId);
+        }
 
-            // Reorder inventoryItems array
-            const srcIndex = inventoryItems.findIndex(i => i.id === invDragSrcId);
-            const tgtIndex = inventoryItems.findIndex(i => i.id === targetItemId);
+        // --- Shared reorder logic ---
+        async function reorderInvItems(srcId, tgtId) {
+            if (srcId === tgtId) return;
+            const srcIndex = inventoryItems.findIndex(i => i.id === srcId);
+            const tgtIndex = inventoryItems.findIndex(i => i.id === tgtId);
             if (srcIndex < 0 || tgtIndex < 0) return;
 
-            // Move item in array
             const [moved] = inventoryItems.splice(srcIndex, 1);
             inventoryItems.splice(tgtIndex, 0, moved);
 
-            // Assign new sort_order values
             const updates = inventoryItems.map((item, index) => ({
                 id: item.id,
                 sort_order: index
             }));
-
-            // Save to Supabase
             for (const update of updates) {
                 await supabase.from('inventory').update({ sort_order: update.sort_order }).eq('id', update.id);
             }
-
             renderInventory();
+        }
+
+        // --- Touch drag handlers (mobile) ---
+        let invTouchSrcId = null;
+        let invTouchGhost = null;
+        let invTouchLastTarget = null;
+
+        function handleInvTouchStart(event, itemId) {
+            invTouchSrcId = itemId;
+            const row = event.currentTarget;
+            const rect = row.getBoundingClientRect();
+            const touch = event.touches[0];
+
+            // Create ghost clone that follows the finger
+            invTouchGhost = row.cloneNode(true);
+            invTouchGhost.style.cssText = `
+                position: fixed;
+                left: ${rect.left}px;
+                top: ${rect.top}px;
+                width: ${rect.width}px;
+                opacity: 0.85;
+                background: white;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+                border-radius: 8px;
+                z-index: 9999;
+                pointer-events: none;
+                transition: none;
+            `;
+            document.body.appendChild(invTouchGhost);
+            row.style.opacity = '0.3';
+        }
+
+        function handleInvTouchMove(event) {
+            event.preventDefault();
+            const touch = event.touches[0];
+
+            // Move ghost with finger
+            if (invTouchGhost) {
+                invTouchGhost.style.top = (touch.clientY - 30) + 'px';
+                invTouchGhost.style.left = invTouchGhost.style.left;
+            }
+
+            // Find which row the finger is over
+            invTouchGhost.style.display = 'none';
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            invTouchGhost.style.display = '';
+
+            const targetRow = el ? el.closest('tr[data-item-id]') : null;
+
+            // Clear previous highlight
+            document.querySelectorAll('tr[data-item-id]').forEach(row => {
+                const rid = parseInt(row.dataset.itemId);
+                if (rid !== invTouchSrcId) {
+                    row.style.background = '';
+                    row.style.borderTop = '1px solid #e5e7eb';
+                }
+            });
+
+            if (targetRow) {
+                const tid = parseInt(targetRow.dataset.itemId);
+                if (tid !== invTouchSrcId) {
+                    invTouchLastTarget = tid;
+                    targetRow.style.background = 'rgba(123,58,90,0.04)';
+                    targetRow.style.borderTop = '2px solid #7b3a5a';
+                }
+            } else {
+                invTouchLastTarget = null;
+            }
+        }
+
+        async function handleInvTouchEnd(event) {
+            // Remove ghost
+            if (invTouchGhost) {
+                invTouchGhost.remove();
+                invTouchGhost = null;
+            }
+
+            // Reset source row
+            document.querySelectorAll('tr[data-item-id]').forEach(row => {
+                row.style.opacity = '1';
+                row.style.background = '';
+                row.style.borderTop = '1px solid #e5e7eb';
+            });
+
+            if (invTouchSrcId && invTouchLastTarget) {
+                await reorderInvItems(invTouchSrcId, invTouchLastTarget);
+            }
+
+            invTouchSrcId = null;
+            invTouchLastTarget = null;
         }
 
         // Update inventory stats
@@ -4846,7 +4938,13 @@
                     cb.setAttribute('onclick', 'event.stopPropagation();togglePhotoSelection(this.dataset.folderId, this.dataset.photoId, document.getElementById("photo-card-"+this.dataset.photoId))');
                     cardDiv.appendChild(cb);
 
-
+                    const delBtn = document.createElement('button');
+                    delBtn.style.cssText = 'position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;border:none;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:16px;z-index:10;';
+                    delBtn.textContent = '×';
+                    delBtn.setAttribute('data-folder-id', fid);
+                    delBtn.setAttribute('data-photo-id', pid);
+                    delBtn.setAttribute('onclick', 'event.stopPropagation();deletePhoto(this.dataset.photoId, this.dataset.folderId)');
+                    cardDiv.appendChild(delBtn);
 
                     const imgDiv = document.createElement('div');
                     imgDiv.style.cssText = 'width:100%;height:180px;border-radius:8px;overflow:hidden;background:#f3f4f6;display:flex;align-items:center;justify-content:center;margin-bottom:8px;cursor:pointer;';

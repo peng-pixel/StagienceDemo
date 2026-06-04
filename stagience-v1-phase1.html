@@ -1236,6 +1236,7 @@
                     <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos</p>
                 </div>
 
+                <div id="upload-progress" style="display:none; margin-bottom: 12px;"></div>
                 <div style="display: flex; gap: 12px;">
                     <button type="button" onclick="closeUploadPhotosModal()" style="flex: 1; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 600; cursor: pointer;">
                         Cancel
@@ -5157,38 +5158,56 @@
             }
 
             // Copy files into an array immediately — iOS Safari clears the FileList after the first await
-            const fileArray = Array.from(files);
+            const fileArray = Array.from(files).filter(f => f.type.startsWith('image/'));
 
-            // Show uploading indicator
+            if (fileArray.length === 0) {
+                alert('Please select image files only');
+                return;
+            }
+
+            const total = fileArray.length;
+            let completed = 0;
+            let errors = 0;
+            const BATCH_SIZE = 5; // upload 5 at a time
+
+            // Progress indicator
             const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
-            if (submitBtn) { submitBtn.textContent = 'Uploading...'; submitBtn.disabled = true; }
+            const progressDiv = document.getElementById('upload-progress');
 
-            // Upload each file
-            for (let i = 0; i < fileArray.length; i++) {
-                const file = fileArray[i];
-
-                // Check if it's an image
-                if (!file.type.startsWith('image/')) {
-                    alert(`${file.name} is not an image file`);
-                    continue;
+            const updateProgress = () => {
+                if (submitBtn) submitBtn.textContent = `Uploading ${completed} of ${total}...`;
+                if (progressDiv) {
+                    const pct = Math.round((completed / total) * 100);
+                    progressDiv.style.display = 'block';
+                    progressDiv.innerHTML = `
+                        <div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;">
+                            <div style="background:#7b3a5a;height:100%;width:${pct}%;transition:width 0.3s;border-radius:99px;"></div>
+                        </div>
+                        <div style="font-size:13px;color:#6b7280;text-align:center;">${completed} of ${total} uploaded</div>
+                    `;
                 }
+            };
 
-                // Compress before uploading
+            if (submitBtn) { submitBtn.disabled = true; }
+            updateProgress();
+
+            // Upload a single file and return result
+            const uploadOne = async (file, index) => {
                 const compressedFile = await compressImage(file);
+                const fileName = `${currentUser.id}/${currentProjectId}/${currentUploadFolderId}/${Date.now()}_${index}_${Math.random().toString(36).slice(2)}.jpg`;
 
-                // Upload file to Supabase Storage
-                const fileName = `${currentUser.id}/${currentProjectId}/${currentUploadFolderId}/${Date.now()}_${i}.jpg`;
-                
                 const { error: uploadError } = await supabase.storage
                     .from('project-photos')
                     .upload(fileName, compressedFile);
 
                 if (uploadError) {
                     console.error('Error uploading file:', uploadError);
-                    continue;
+                    errors++;
+                    completed++;
+                    updateProgress();
+                    return;
                 }
 
-                // Save photo record to database
                 const { error: dbError } = await supabase
                     .from('project_photos')
                     .insert([{
@@ -5200,12 +5219,24 @@
                         file_size: compressedFile.size
                     }]);
 
-                if (dbError) {
-                    console.error('Error saving photo record:', dbError);
-                }
+                if (dbError) console.error('Error saving photo record:', dbError);
+                completed++;
+                updateProgress();
+            };
+
+            // Process in batches of BATCH_SIZE
+            for (let i = 0; i < fileArray.length; i += BATCH_SIZE) {
+                const batch = fileArray.slice(i, i + BATCH_SIZE);
+                await Promise.all(batch.map((file, j) => uploadOne(file, i + j)));
             }
 
             if (submitBtn) { submitBtn.textContent = 'Upload Photos'; submitBtn.disabled = false; }
+            if (progressDiv) progressDiv.style.display = 'none';
+
+            if (errors > 0) {
+                alert(`${completed - errors} of ${total} photos uploaded successfully. ${errors} failed.`);
+            }
+
             closeUploadPhotosModal();
             await loadPhotoFolders();
         }

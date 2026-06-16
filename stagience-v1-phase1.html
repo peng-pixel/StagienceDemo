@@ -3768,6 +3768,8 @@
             document.getElementById('project-detail-section').style.display = 'none';
             document.getElementById('projects-section').style.display = 'block';
             currentProjectId = null;
+            const floatingBar = document.getElementById('floating-delete-bar');
+            if (floatingBar) floatingBar.style.display = 'none';
         }
 
         function switchProjectTab(tabName) {
@@ -4455,7 +4457,7 @@
                     if (isImage) {
                         const { data } = await supabase.storage
                             .from('project-documents')
-                            .createSignedUrl(doc.file_path, 3600); // 1 hour expiry
+                            .createSignedUrl(doc.file_path, 86400); // 24 hour expiry
                         imagePreview = data?.signedUrl || '';
                     }
 
@@ -4659,7 +4661,7 @@
                     if (isImage) {
                         const { data } = await supabase.storage
                             .from('project-files')
-                            .createSignedUrl(file.file_path, 3600);
+                            .createSignedUrl(file.file_path, 86400);
                         imagePreview = data?.signedUrl || '';
                     }
 
@@ -4891,7 +4893,7 @@
                 await Promise.all(photosNeedingUrls.map(async photo => {
                     const { data } = await supabase.storage
                         .from('project-photos')
-                        .createSignedUrl(photo.file_path, 3600);
+                        .createSignedUrl(photo.file_path, 86400);
                     if (data?.signedUrl) folderPhotosCache[photo.id] = data.signedUrl;
                 }));
             }
@@ -6114,6 +6116,7 @@
 
             const bulkBtn = document.getElementById('bulk-delete-btn-' + folderId);
             if (bulkBtn) bulkBtn.style.display = selected.size > 0 ? 'inline-block' : 'none';
+            updateFloatingDeleteBar(folderId);
         }
 
         function selectAllFolderPhotos(folderId) {
@@ -6145,6 +6148,55 @@
 
             const bulkBtn = document.getElementById('bulk-delete-btn-' + folderId);
             if (bulkBtn) bulkBtn.style.display = selected.size > 0 ? 'inline-block' : 'none';
+            updateFloatingDeleteBar(folderId);
+        }
+
+        // Floating "Delete Selected" bar that stays visible while scrolling
+        function updateFloatingDeleteBar(folderId) {
+            const selected = selectedPhotoIds[folderId];
+            const count = selected ? selected.size : 0;
+            let bar = document.getElementById('floating-delete-bar');
+
+            if (count === 0) {
+                if (bar) bar.style.display = 'none';
+                return;
+            }
+
+            if (!bar) {
+                bar = document.createElement('div');
+                bar.id = 'floating-delete-bar';
+                bar.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#241f22;color:white;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:500;';
+                document.body.appendChild(bar);
+            }
+
+            bar.innerHTML =
+                '<span id="floating-delete-count" style="font-weight:600;font-size:14px;">' + count + ' selected</span>' +
+                '<button id="floating-delete-btn" style="padding:8px 16px;border:none;border-radius:8px;background:#dc2626;color:white;font-weight:600;cursor:pointer;font-size:13px;">🗑 Delete Selected</button>' +
+                '<button id="floating-clear-btn" style="padding:8px 12px;border:1px solid rgba(255,255,255,0.25);border-radius:8px;background:transparent;color:rgba(255,255,255,0.85);font-weight:600;cursor:pointer;font-size:13px;">Cancel</button>';
+
+            document.getElementById('floating-delete-btn').onclick = () => bulkDeletePhotos(folderId);
+            document.getElementById('floating-clear-btn').onclick = () => clearFolderSelection(folderId);
+
+            bar.style.display = 'flex';
+        }
+
+        function clearFolderSelection(folderId) {
+            const folder = photoFolders.find(f => String(f.id) === String(folderId));
+            if (!folder || !folder.photos) return;
+            const selected = selectedPhotoIds[folderId];
+            if (!selected) return;
+
+            folder.photos.forEach(p => {
+                const card = document.getElementById('photo-card-' + p.id);
+                const cb = document.getElementById('photo-check-' + p.id);
+                if (card) { card.style.borderColor = '#e5e7eb'; card.style.background = 'white'; }
+                if (cb) cb.checked = false;
+            });
+
+            delete selectedPhotoIds[folderId];
+            const bulkBtn = document.getElementById('bulk-delete-btn-' + folderId);
+            if (bulkBtn) bulkBtn.style.display = 'none';
+            updateFloatingDeleteBar(folderId);
         }
 
         async function bulkDeletePhotos(folderId) {
@@ -6172,6 +6224,8 @@
             if (error) { alert('Error deleting photos: ' + error.message); return; }
 
             delete selectedPhotoIds[folderId];
+            const floatingBar = document.getElementById('floating-delete-bar');
+            if (floatingBar) floatingBar.style.display = 'none';
             await loadPhotoFolders();
         }
 

@@ -697,6 +697,7 @@
                         <option value="Decor">🎨 Decor</option>
                         <option value="Art">🖼️ Art</option>
                         <option value="Rugs">🔲 Rugs</option>
+                        <option value="Beds">🛏️ Beds</option>
                     </select>
                 </div>
 
@@ -1045,6 +1046,10 @@
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
                             <input type="checkbox" id="filter-rugs" checked>
                             <span>🔲 Rugs</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
+                            <input type="checkbox" id="filter-beds" checked>
+                            <span>🛏️ Beds</span>
                         </label>
                     </div>
                 </div>
@@ -1693,7 +1698,7 @@
         let currentInventoryLocationFilter = 'all'; // 'all' or specific location
         let inventoryFilters = {
             statuses: ['IN', 'OUT', 'HOLD'],
-            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
+            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs', 'Beds'],
             search: '',
             room: ''
         };
@@ -1787,7 +1792,8 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲'
+                'Rugs': '🔲',
+                'Beds': '🛏️'
             };
 
             container.innerHTML = `
@@ -2214,6 +2220,11 @@
                         <div style="font-size: 32px; margin-bottom: 8px;">🔲</div>
                         <div style="font-weight: 700; margin-bottom: 4px;">Rugs</div>
                         <div style="font-size: 13px; color: #6b7280;">Area rugs, runners</div>
+                    </div>
+                    <div onclick="selectItemType('Beds')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🛏️</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Beds</div>
+                        <div style="font-size: 13px; color: #6b7280;">Frames, headboards, mattresses</div>
                     </div>
                 </div>
             `;
@@ -2958,7 +2969,8 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲'
+                'Rugs': '🔲',
+                'Beds': '🛏️'
             };
             
             const statusColors = {
@@ -3338,6 +3350,7 @@
             if (document.getElementById('filter-decor').checked) categories.push('Decor');
             if (document.getElementById('filter-art').checked) categories.push('Art');
             if (document.getElementById('filter-rugs').checked) categories.push('Rugs');
+            if (document.getElementById('filter-beds').checked) categories.push('Beds');
 
             // Get search filters
             const search = document.getElementById('filter-search').value;
@@ -3366,6 +3379,7 @@
             document.getElementById('filter-decor').checked = true;
             document.getElementById('filter-art').checked = true;
             document.getElementById('filter-rugs').checked = true;
+            document.getElementById('filter-beds').checked = true;
 
             // Clear search fields
             document.getElementById('filter-search').value = '';

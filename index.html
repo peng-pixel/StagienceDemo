@@ -949,14 +949,24 @@
                 <h2 class="section-title">Simple, transparent pricing</h2>
                 <p class="section-subtitle">Built for stagers, priced fairly. Save 15% when you pay annually.</p>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;" class="responsive-3col">
+
+            <!-- Billing Toggle -->
+            <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 32px; margin-bottom: 48px;">
+                <span id="toggle-label-monthly" style="font-size: 15px; font-weight: 600; color: #fffdf8;">Monthly</span>
+                <div onclick="toggleBilling()" id="billing-toggle" style="width: 52px; height: 28px; background: #7b3a5a; border-radius: 20px; cursor: pointer; position: relative; transition: background 0.2s;">
+                    <div id="billing-toggle-knob" style="width: 22px; height: 22px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: left 0.2s;"></div>
+                </div>
+                <span id="toggle-label-annual" style="font-size: 15px; font-weight: 600; color: rgba(255,253,248,0.5);">Annual <span style="background: #b9774f; color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 4px;">Save 15%</span></span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;" class="responsive-3col">
 
                 <!-- Starter -->
                 <div class="pricing-card">
                     <div class="pricing-name">Starter</div>
                     <div class="pricing-description">Perfect for solo stagers getting organized</div>
-                    <div class="pricing-price">US$29<span>/mo</span></div>
-                    <div class="pricing-period">US$24/month billed annually</div>
+                    <div class="pricing-price" id="price-starter">US$29<span>/mo</span></div>
+                    <div class="pricing-period" id="period-starter">Billed monthly</div>
                     <ul class="pricing-features">
                         <li>Projects & Calendar</li>
                         <li>Inventory management</li>
@@ -967,7 +977,7 @@
                         <li>1 user</li>
                         <li>5GB storage</li>
                     </ul>
-                    <a href="stagience-v1-phase1.html" class="pricing-button">Get Started</a>
+                    <a id="btn-starter" href="https://buy.stripe.com/3cI14n8yK45w5mh9rnes000" class="pricing-button">Get Started</a>
                 </div>
 
                 <!-- Professional -->
@@ -975,8 +985,8 @@
                     <div class="pricing-badge">Most Popular</div>
                     <div class="pricing-name">Professional</div>
                     <div class="pricing-description">For growing staging businesses</div>
-                    <div class="pricing-price">US$59<span>/mo</span></div>
-                    <div class="pricing-period">US$49/month billed annually</div>
+                    <div class="pricing-price" id="price-professional">US$59<span>/mo</span></div>
+                    <div class="pricing-period" id="period-professional">Billed monthly</div>
                     <ul class="pricing-features">
                         <li>Everything in Starter</li>
                         <li>Up to 3 team members</li>
@@ -985,15 +995,15 @@
                         <li>Priority support</li>
                         <li>20GB storage</li>
                     </ul>
-                    <a href="stagience-v1-phase1.html" class="pricing-button">Get Started</a>
+                    <a id="btn-professional" href="https://buy.stripe.com/9B6fZh7uGdG61619rnes002" class="pricing-button">Get Started</a>
                 </div>
 
                 <!-- Studio -->
                 <div class="pricing-card">
                     <div class="pricing-name">Studio</div>
                     <div class="pricing-description">For established staging companies</div>
-                    <div class="pricing-price">US$99<span>/mo</span></div>
-                    <div class="pricing-period">US$84/month billed annually</div>
+                    <div class="pricing-price" id="price-studio">US$99<span>/mo</span></div>
+                    <div class="pricing-period" id="period-studio">Billed monthly</div>
                     <ul class="pricing-features">
                         <li>Everything in Professional</li>
                         <li>Unlimited team members</li>
@@ -1003,12 +1013,43 @@
                         <li>Early access to new features</li>
                         <li>50GB storage</li>
                     </ul>
-                    <a href="stagience-v1-phase1.html" class="pricing-button">Get Started</a>
+                    <a id="btn-studio" href="https://buy.stripe.com/6oUdR95mybxY8yteLHes004" class="pricing-button">Get Started</a>
                 </div>
 
             </div>
         </div>
     </section>
+
+    <script>
+        let isAnnual = false;
+
+        const plans = {
+            starter:      { monthly: { price: 'US$29<span>/mo</span>', period: 'Billed monthly',                    url: 'https://buy.stripe.com/3cI14n8yK45w5mh9rnes000' },
+                            annual:  { price: 'US$24<span>/mo</span>', period: 'US$288 billed annually',             url: 'https://buy.stripe.com/9B6fZh7uG9pQ1617jfes001' } },
+            professional: { monthly: { price: 'US$59<span>/mo</span>', period: 'Billed monthly',                    url: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002' },
+                            annual:  { price: 'US$49<span>/mo</span>', period: 'US$588 billed annually',             url: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003' } },
+            studio:       { monthly: { price: 'US$99<span>/mo</span>', period: 'Billed monthly',                    url: 'https://buy.stripe.com/6oUdR95mybxY8yteLHes004' },
+                            annual:  { price: 'US$84<span>/mo</span>', period: 'US$1,008 billed annually',           url: 'https://buy.stripe.com/cNidR97uG31sbKFavres005' } }
+        };
+
+        function toggleBilling() {
+            isAnnual = !isAnnual;
+            const knob = document.getElementById('billing-toggle-knob');
+            const labelMonthly = document.getElementById('toggle-label-monthly');
+            const labelAnnual = document.getElementById('toggle-label-annual');
+            knob.style.left = isAnnual ? '27px' : '3px';
+            labelMonthly.style.color = isAnnual ? 'rgba(255,253,248,0.5)' : '#fffdf8';
+            labelAnnual.style.color = isAnnual ? '#fffdf8' : 'rgba(255,253,248,0.5)';
+
+            const billing = isAnnual ? 'annual' : 'monthly';
+            ['starter', 'professional', 'studio'].forEach(plan => {
+                const data = plans[plan][billing];
+                document.getElementById('price-' + plan).innerHTML = data.price;
+                document.getElementById('period-' + plan).textContent = data.period;
+                document.getElementById('btn-' + plan).href = data.url;
+            });
+        }
+    </script>
 
     <!-- Coming Soon Section -->
     <section style="padding: 80px 0; background: transparent;">

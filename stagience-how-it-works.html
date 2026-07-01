@@ -8,11 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -31,23 +27,13 @@
         }
 
         @media (max-width: 768px) {
-            body::before {
-                background-size: cover;
-                background-position: center top;
-            }
+            body::before { background-size: cover; background-position: center top; }
         }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Inter', sans-serif;
-        }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Inter', sans-serif; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
-        /* Header */
         header {
             background: rgba(22,19,19,0.82);
             backdrop-filter: blur(20px);
@@ -58,11 +44,7 @@
             z-index: 100;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
 
         .logo {
             display: flex;
@@ -88,10 +70,7 @@
             font-weight: 700;
         }
 
-        .header-buttons {
-            display: flex;
-            gap: 12px;
-        }
+        .header-buttons { display: flex; gap: 12px; }
 
         .header-nav-links {
             background: transparent !important;
@@ -100,9 +79,7 @@
             font-weight: 600;
             padding: 8px 14px;
         }
-        .header-nav-links:hover {
-            color: #fffdf8 !important;
-        }
+
         .btn-secondary {
             padding: 10px 20px;
             border: 1px solid #d6d3d1;
@@ -127,39 +104,15 @@
             font-size: 14px;
         }
 
-        /* Main Content */
-        main {
-            padding: 60px 0 100px;
-        }
+        main { padding: 60px 0 100px; }
 
-        .page-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+        .page-header { text-align: center; margin-bottom: 60px; }
+        .page-title { font-size: 40px; font-weight: 700; margin-bottom: 12px; }
+        .page-subtitle { font-size: 18px; color: rgba(255,253,248,0.72); }
 
-        .page-title {
-            font-size: 40px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
+        .steps { display: flex; flex-direction: column; gap: 48px; }
 
-        .page-subtitle {
-            font-size: 18px;
-            color: rgba(255,253,248,0.72);
-        }
-
-        /* Steps */
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-        }
-
-        .step {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 32px;
-        }
+        .step { display: grid; grid-template-columns: 80px 1fr; gap: 32px; }
 
         .step-number {
             width: 80px;
@@ -175,32 +128,13 @@
             flex-shrink: 0;
         }
 
-        .step-content {
-            padding-top: 8px;
-        }
+        .step-content { padding-top: 8px; }
 
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+        .step-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .step-icon { font-size: 18px; }
+        .step-title { font-size: 24px; font-weight: 700; }
 
-        .step-icon {
-            font-size: 18px;
-        }
-
-        .step-title {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .step-description {
-            color: #fffdf8;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
+        .step-description { color: #fffdf8; font-size: 15px; line-height: 1.6; margin-bottom: 16px; }
 
         .pro-tip {
             background: #fef3c7;
@@ -210,20 +144,9 @@
             margin-top: 16px;
         }
 
-        .pro-tip-label {
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 4px;
-            font-size: 14px;
-        }
+        .pro-tip-label { font-weight: 700; color: #92400e; margin-bottom: 4px; font-size: 14px; }
+        .pro-tip-text { color: #78350f; font-size: 14px; line-height: 1.5; }
 
-        .pro-tip-text {
-            color: #78350f;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* CTA Section */
         .cta-section {
             background: rgba(255,253,248,0.07);
             border-radius: 20px;
@@ -233,17 +156,8 @@
             border: 1px solid rgba(255,253,248,0.14);
         }
 
-        .cta-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .cta-description {
-            color: rgba(255,253,248,0.72);
-            font-size: 16px;
-            margin-bottom: 24px;
-        }
+        .cta-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+        .cta-description { color: rgba(255,253,248,0.72); font-size: 16px; margin-bottom: 24px; }
 
         .btn-large {
             padding: 14px 32px;
@@ -258,34 +172,13 @@
             display: inline-block;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .step {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .step-number {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
-            }
-
-            .page-title {
-                font-size: 32px;
-            }
-
-            .cta-section {
-                padding: 40px 24px;
-            }
+            .step { grid-template-columns: 1fr; gap: 20px; }
+            .step-number { width: 60px; height: 60px; font-size: 24px; }
+            .page-title { font-size: 32px; }
+            .cta-section { padding: 40px 24px; }
         }
 
-        @media (max-width: 768px) {
-            .header-nav-text { display: none; }
-            .btn-secondary { padding: 8px 14px; font-size: 13px; }
-            .btn-primary { padding: 8px 14px; font-size: 13px; }
-        }
-    
         /* Hamburger Menu */
         .landing-hamburger { display: none; background: none; border: none; font-size: 26px; cursor: pointer; color: #fffdf8; padding: 4px 8px; line-height: 1; }
         .landing-mobile-menu { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; }
@@ -301,7 +194,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
@@ -312,14 +204,13 @@
                 <div class="header-buttons">
                     <a href="stagience-how-it-works.html" class="btn-secondary header-nav-links">How It Works</a>
                     <a href="stagience-faq.html" class="btn-secondary header-nav-links">FAQ</a>
-                    <a href="/app" class="btn-primary">Get Started</a>
+                    <a href="stagience-v1-phase1.html" class="btn-primary">Get Started</a>
                 </div>
                 <button class="landing-hamburger" onclick="toggleLandingMenu()" aria-label="Open menu">&#9776;</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
         <div class="container">
             <div class="page-header">
@@ -399,8 +290,8 @@
             <!-- CTA Section -->
             <div class="cta-section">
                 <h2 class="cta-title">Ready to transform your staging business?</h2>
-                <p class="cta-description">Join the waitlist and be among the first to experience Stagience.</p>
-                <a href="stagience-landing-page.html#waitlist" class="btn-large">Join Waitlist</a>
+                <p class="cta-description">Get started today and bring calm, clarity, and consistency to every stage.</p>
+                <a href="stagience-v1-phase1.html" class="btn-large">Get Started</a>
             </div>
         </div>
     </main>
@@ -414,7 +305,7 @@
             </div>
             <a href="/how-it-works" class="landing-mobile-nav-link">How It Works</a>
             <a href="/faq" class="landing-mobile-nav-link">FAQ</a>
-            <a href="/app" class="landing-mobile-cta">Get Started</a>
+            <a href="stagience-v1-phase1.html" class="landing-mobile-cta">Get Started</a>
         </div>
     </div>
 

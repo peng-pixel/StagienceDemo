@@ -1428,6 +1428,139 @@
         }
         
         // Check if user is authenticated on page load
+        // ==============================================
+        // SUBSCRIPTION GATE
+        // ==============================================
+        const BYPASS_EMAILS = ['playhousestaging@gmail.com', 'jenn.punsalan@gmail.com'];
+
+        const STRIPE_PLANS = [
+            {
+                name: 'Starter',
+                description: 'Perfect for solo stagers getting organized',
+                monthlyPrice: 'US$29/mo',
+                annualPrice: 'US$24/mo',
+                annualTotal: 'US$288/year',
+                features: ['Projects & Calendar', 'Inventory management', 'Photo folders & file storage', 'Document templates', 'CSV import', 'Print inventory reports', '1 user', '5GB storage'],
+                monthlyUrl: 'https://buy.stripe.com/3cI14n8yK45w5mh9rnes000',
+                annualUrl: 'https://buy.stripe.com/9B6fZh7uG9pQ1617jfes001',
+                featured: false
+            },
+            {
+                name: 'Professional',
+                description: 'For growing staging businesses',
+                monthlyPrice: 'US$59/mo',
+                annualPrice: 'US$49/mo',
+                annualTotal: 'US$588/year',
+                features: ['Everything in Starter', 'Up to 3 team members', 'Role-based permissions', 'Client Portal (Coming Soon)', 'Priority support', '20GB storage'],
+                monthlyUrl: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002',
+                annualUrl: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003',
+                featured: true
+            },
+            {
+                name: 'Studio',
+                description: 'For established staging companies',
+                monthlyPrice: 'US$99/mo',
+                annualPrice: 'US$84/mo',
+                annualTotal: 'US$1,008/year',
+                features: ['Everything in Professional', 'Unlimited team members', 'Invoicing & Payments (Coming Soon)', 'Reporting & Analytics (Coming Soon)', 'Feature request priority', 'Early access to new features', '50GB storage'],
+                monthlyUrl: 'https://buy.stripe.com/6oUdR95mybxY8yteLHes004',
+                annualUrl: 'https://buy.stripe.com/cNidR97uG31sbKFavres005',
+                featured: false
+            }
+        ];
+
+        let gateIsAnnual = false;
+
+        async function checkSubscription() {
+            if (!currentUser) return false;
+            // Bypass for admin emails
+            if (BYPASS_EMAILS.includes(currentUser.email)) return true;
+            // Check payment=success in URL (new subscriber redirect from Stripe)
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('payment') === 'success') {
+                // Record subscription in Supabase
+                const { data: existing } = await supabase
+                    .from('subscriptions')
+                    .select('id')
+                    .eq('user_id', currentUser.id)
+                    .maybeSingle();
+                if (!existing) {
+                    await supabase.from('subscriptions').insert([{
+                        user_id: currentUser.id,
+                        email: currentUser.email,
+                        status: 'active',
+                        created_at: new Date().toISOString()
+                    }]);
+                } else {
+                    await supabase.from('subscriptions').update({ status: 'active' }).eq('user_id', currentUser.id);
+                }
+                // Clean URL
+                window.history.replaceState({}, '', window.location.pathname);
+                return true;
+            }
+            // Check Supabase subscriptions table
+            const { data } = await supabase
+                .from('subscriptions')
+                .select('status')
+                .eq('user_id', currentUser.id)
+                .maybeSingle();
+            return data && data.status === 'active';
+        }
+
+        function showSubscriptionGate() {
+            document.getElementById('auth-page').classList.remove('active');
+            document.getElementById('app-page').classList.remove('active');
+            let gateEl = document.getElementById('subscription-gate');
+            if (!gateEl) {
+                gateEl = document.createElement('div');
+                gateEl.id = 'subscription-gate';
+                gateEl.style.cssText = 'min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(20,18,19,0.92) 0%,rgba(20,18,19,0.88) 100%),url(\'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88\') center/cover no-repeat fixed;padding:40px 20px;flex-direction:column;gap:0;';
+                document.body.appendChild(gateEl);
+            }
+            gateEl.style.display = 'flex';
+            renderGate(gateEl);
+        }
+
+        function renderGate(gateEl) {
+            const billing = gateIsAnnual ? 'annual' : 'monthly';
+            gateEl.innerHTML = `
+                <div style="text-align:center;margin-bottom:40px;">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;">
+                        <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#7b3a5a,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-size:20px;font-weight:700;">S</div>
+                        <span style="color:#fffdf8;font-size:22px;font-weight:700;">Stagience</span>
+                    </div>
+                    <h1 style="color:#fffdf8;font-size:32px;font-weight:800;margin-bottom:12px;">Choose your plan</h1>
+                    <p style="color:rgba(255,253,248,0.7);font-size:16px;margin-bottom:28px;">The business behind the beautiful.</p>
+                    <!-- Billing toggle -->
+                    <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;">
+                        <span style="font-size:14px;font-weight:600;color:${!gateIsAnnual ? '#fffdf8' : 'rgba(255,253,248,0.45)'};">Monthly</span>
+                        <div onclick="gateIsAnnual=!gateIsAnnual;renderGate(document.getElementById('subscription-gate'));" style="width:48px;height:26px;background:#7b3a5a;border-radius:20px;cursor:pointer;position:relative;">
+                            <div style="width:20px;height:20px;background:white;border-radius:50%;position:absolute;top:3px;left:${gateIsAnnual ? '25px' : '3px'};transition:left 0.2s;"></div>
+                        </div>
+                        <span style="font-size:14px;font-weight:600;color:${gateIsAnnual ? '#fffdf8' : 'rgba(255,253,248,0.45)'};">Annual <span style="background:#b9774f;color:white;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:4px;">Save 15%</span></span>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px;width:100%;">
+                    ${STRIPE_PLANS.map(plan => `
+                        <div style="background:${plan.featured ? 'rgba(123,58,90,0.3)' : 'rgba(255,253,248,0.07)'};border:2px solid ${plan.featured ? '#b9774f' : 'rgba(255,253,248,0.14)'};border-radius:16px;padding:32px;position:relative;${plan.featured ? 'transform:scale(1.03);' : ''}">
+                            ${plan.featured ? '<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#7b3a5a;color:white;padding:4px 16px;border-radius:20px;font-size:12px;font-weight:600;">Most Popular</div>' : ''}
+                            <div style="font-size:18px;font-weight:700;color:#fffdf8;margin-bottom:4px;">${plan.name}</div>
+                            <div style="font-size:13px;color:rgba(255,253,248,0.6);margin-bottom:16px;">${plan.description}</div>
+                            <div style="font-size:36px;font-weight:800;color:#fffdf8;margin-bottom:4px;">${gateIsAnnual ? plan.annualPrice : plan.monthlyPrice}</div>
+                            <div style="font-size:13px;color:rgba(255,253,248,0.5);margin-bottom:20px;">${gateIsAnnual ? plan.annualTotal + ' billed annually' : 'Billed monthly'}</div>
+                            <ul style="list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:8px;">
+                                ${plan.features.map(f => `<li style="font-size:13px;color:rgba(255,253,248,0.75);display:flex;gap:8px;align-items:flex-start;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">✓</span>${f}</li>`).join('')}
+                            </ul>
+                            <a href="${gateIsAnnual ? plan.annualUrl : plan.monthlyUrl}" style="display:block;text-align:center;padding:13px;background:${plan.featured ? '#7b3a5a' : 'rgba(255,253,248,0.1)'};border:2px solid ${plan.featured ? 'transparent' : '#b9774f'};border-radius:8px;color:white;font-weight:600;font-size:15px;text-decoration:none;">Get Started</a>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top:24px;text-align:center;">
+                    <p style="color:rgba(255,253,248,0.5);font-size:13px;">Have a promo code? Enter it at checkout. &nbsp;|&nbsp; <a href="javascript:void(0)" onclick="handleSignOut()" style="color:#b9774f;font-weight:600;text-decoration:none;">Sign out</a></p>
+                </div>
+            `;
+        }
+
         async function checkAuth() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
@@ -1441,6 +1574,14 @@
                 }
 
                 await loadUserRoleAndTeam();
+
+                // Check subscription
+                const isSubscribed = await checkSubscription();
+                if (!isSubscribed) {
+                    showSubscriptionGate();
+                    return;
+                }
+
                 showApp();
                 loadAllData();
             } else {
@@ -1522,6 +1663,11 @@
                 showAuthMessage('Sign in successful!', 'success');
                 setTimeout(async () => {
                     await loadUserRoleAndTeam();
+                    const isSubscribed = await checkSubscription();
+                    if (!isSubscribed) {
+                        showSubscriptionGate();
+                        return;
+                    }
                     showApp();
                     loadAllData();
                 }, 1000);

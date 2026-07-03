@@ -2743,7 +2743,7 @@
 
             try {
                 const { error } = await supabase
-                    .from('inventory_items')
+                    .from('inventory')
                     .delete()
                     .in('id', selectedIds);
 
@@ -2863,7 +2863,7 @@
             }
 
             const { error } = await supabase
-                .from('inventory_items')
+                .from('inventory')
                 .update(updateData)
                 .in('id', selectedIds);
 

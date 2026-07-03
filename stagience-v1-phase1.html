@@ -879,15 +879,6 @@
                     <input type="text" id="bulk-color" disabled placeholder="e.g. Charcoal Grey, Ivory..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
                 </div>
 
-                <!-- Update Fabric -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-fabric-check" onchange="document.getElementById('bulk-fabric').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Fabric/Material</span>
-                    </label>
-                    <input type="text" id="bulk-fabric" disabled placeholder="e.g. Velvet, Linen, Wood..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
-                </div>
-
                 <!-- Update Location -->
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
@@ -926,9 +917,9 @@
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
                         <input type="checkbox" id="bulk-update-notes-check" onchange="document.getElementById('bulk-notes').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Notes</span>
+                        <span style="font-weight: 700;">Update Description</span>
                     </label>
-                    <textarea id="bulk-notes" disabled placeholder="Notes for all selected items..." rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box; resize: vertical;"></textarea>
+                    <textarea id="bulk-notes" disabled placeholder="Description for all selected items..." rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box; resize: vertical;"></textarea>
                 </div>
 
                 <!-- Clear Room/Notes -->
@@ -2791,7 +2782,6 @@
                 { check: 'bulk-update-name-check',     field: 'bulk-name',     type: 'input' },
                 { check: 'bulk-update-category-check', field: 'bulk-category', type: 'select' },
                 { check: 'bulk-update-color-check',    field: 'bulk-color',    type: 'input' },
-                { check: 'bulk-update-fabric-check',   field: 'bulk-fabric',   type: 'input' },
                 { check: 'bulk-update-location-check', field: 'bulk-location', type: 'select' },
                 { check: 'bulk-update-status-check',   field: 'bulk-status',   type: 'select' },
                 { check: 'bulk-update-room-check',     field: 'bulk-room',     type: 'input' },
@@ -2835,13 +2825,6 @@
                 updateData.color = val;
             }
 
-            // Fabric
-            if (document.getElementById('bulk-update-fabric-check').checked) {
-                const val = document.getElementById('bulk-fabric').value.trim();
-                if (!val) { alert('Please enter a fabric/material'); return; }
-                updateData.fabric = val;
-            }
-
             // Location
             if (document.getElementById('bulk-update-location-check').checked) {
                 const val = document.getElementById('bulk-location').value;
@@ -2865,13 +2848,13 @@
 
             // Notes
             if (document.getElementById('bulk-update-notes-check').checked) {
-                updateData.notes = document.getElementById('bulk-notes').value.trim();
+                updateData.description = document.getElementById('bulk-notes').value.trim();
             }
 
             // Clear Room/Notes
             if (document.getElementById('bulk-clear-room-check').checked) {
                 updateData.room = null;
-                updateData.notes = null;
+                updateData.description = null;
             }
 
             if (Object.keys(updateData).length === 0) {

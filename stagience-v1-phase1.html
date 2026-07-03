@@ -835,7 +835,59 @@
                 <div style="font-size: 13px; color: #7b3a5a;">Update multiple fields at once</div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+
+                <!-- Update Name -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-name-check" onchange="document.getElementById('bulk-name').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Name</span>
+                    </label>
+                    <input type="text" id="bulk-name" disabled placeholder="New name for all selected items..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
+                </div>
+
+                <!-- Update Category -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-category-check" onchange="document.getElementById('bulk-category').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Category</span>
+                    </label>
+                    <select id="bulk-category" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                        <option value="">Select category...</option>
+                        <option value="Sofas">🛋️ Sofas</option>
+                        <option value="Chairs">🪑 Chairs</option>
+                        <option value="Tables">🪵 Tables</option>
+                        <option value="Beds">🛏️ Beds</option>
+                        <option value="Storage">🗄️ Storage</option>
+                        <option value="Lighting">💡 Lighting</option>
+                        <option value="Rugs">🔲 Rugs</option>
+                        <option value="Art">🖼️ Art</option>
+                        <option value="Accessories">🏺 Accessories</option>
+                        <option value="Mirrors">🪞 Mirrors</option>
+                        <option value="Plants">🌿 Plants</option>
+                        <option value="Outdoor">🌳 Outdoor</option>
+                        <option value="Other">📦 Other</option>
+                    </select>
+                </div>
+
+                <!-- Update Color -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-color-check" onchange="document.getElementById('bulk-color').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Color</span>
+                    </label>
+                    <input type="text" id="bulk-color" disabled placeholder="e.g. Charcoal Grey, Ivory..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
+                </div>
+
+                <!-- Update Fabric -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-fabric-check" onchange="document.getElementById('bulk-fabric').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Fabric/Material</span>
+                    </label>
+                    <input type="text" id="bulk-fabric" disabled placeholder="e.g. Velvet, Linen, Wood..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
+                </div>
+
                 <!-- Update Location -->
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
@@ -861,6 +913,24 @@
                     </select>
                 </div>
 
+                <!-- Update Room -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-room-check" onchange="document.getElementById('bulk-room').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Room</span>
+                    </label>
+                    <input type="text" id="bulk-room" disabled placeholder="e.g. Living Room, Bedroom..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
+                </div>
+
+                <!-- Update Notes -->
+                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
+                        <input type="checkbox" id="bulk-update-notes-check" onchange="document.getElementById('bulk-notes').disabled=!this.checked;" style="width: 18px; height: 18px;">
+                        <span style="font-weight: 700;">Update Notes</span>
+                    </label>
+                    <textarea id="bulk-notes" disabled placeholder="Notes for all selected items..." rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box; resize: vertical;"></textarea>
+                </div>
+
                 <!-- Clear Room/Notes -->
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -871,6 +941,7 @@
                         ⚠️ This will clear the Room/Notes field for all selected items
                     </div>
                 </div>
+
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 24px;">
@@ -2715,14 +2786,26 @@
 
         function closeBulkUpdateModal() {
             document.getElementById('bulk-update-modal').classList.remove('active');
-            // Reset form
-            document.getElementById('bulk-update-location-check').checked = false;
-            document.getElementById('bulk-update-status-check').checked = false;
-            document.getElementById('bulk-clear-room-check').checked = false;
-            document.getElementById('bulk-location').disabled = true;
-            document.getElementById('bulk-status').disabled = true;
-            document.getElementById('bulk-location').value = '';
-            document.getElementById('bulk-status').value = '';
+            // Reset all checkboxes and fields
+            const fields = [
+                { check: 'bulk-update-name-check',     field: 'bulk-name',     type: 'input' },
+                { check: 'bulk-update-category-check', field: 'bulk-category', type: 'select' },
+                { check: 'bulk-update-color-check',    field: 'bulk-color',    type: 'input' },
+                { check: 'bulk-update-fabric-check',   field: 'bulk-fabric',   type: 'input' },
+                { check: 'bulk-update-location-check', field: 'bulk-location', type: 'select' },
+                { check: 'bulk-update-status-check',   field: 'bulk-status',   type: 'select' },
+                { check: 'bulk-update-room-check',     field: 'bulk-room',     type: 'input' },
+                { check: 'bulk-update-notes-check',    field: 'bulk-notes',    type: 'textarea' },
+                { check: 'bulk-clear-room-check',      field: null,            type: null },
+            ];
+            fields.forEach(({ check, field }) => {
+                const cb = document.getElementById(check);
+                if (cb) cb.checked = false;
+                if (field) {
+                    const el = document.getElementById(field);
+                    if (el) { el.disabled = true; el.value = ''; }
+                }
+            });
         }
 
         async function executeBulkUpdate() {
@@ -2730,28 +2813,65 @@
             if (selectedIds.length === 0) return;
 
             const updateData = {};
-            
-            // Check which fields to update
+
+            // Name
+            if (document.getElementById('bulk-update-name-check').checked) {
+                const val = document.getElementById('bulk-name').value.trim();
+                if (!val) { alert('Please enter a name'); return; }
+                updateData.name = val;
+            }
+
+            // Category
+            if (document.getElementById('bulk-update-category-check').checked) {
+                const val = document.getElementById('bulk-category').value;
+                if (!val) { alert('Please select a category'); return; }
+                updateData.category = val;
+            }
+
+            // Color
+            if (document.getElementById('bulk-update-color-check').checked) {
+                const val = document.getElementById('bulk-color').value.trim();
+                if (!val) { alert('Please enter a color'); return; }
+                updateData.color = val;
+            }
+
+            // Fabric
+            if (document.getElementById('bulk-update-fabric-check').checked) {
+                const val = document.getElementById('bulk-fabric').value.trim();
+                if (!val) { alert('Please enter a fabric/material'); return; }
+                updateData.fabric = val;
+            }
+
+            // Location
             if (document.getElementById('bulk-update-location-check').checked) {
-                const location = document.getElementById('bulk-location').value;
-                if (!location) {
-                    alert('Please select a location');
-                    return;
-                }
-                updateData.location = location;
+                const val = document.getElementById('bulk-location').value;
+                if (!val) { alert('Please select a location'); return; }
+                updateData.location = val;
             }
-            
+
+            // Status
             if (document.getElementById('bulk-update-status-check').checked) {
-                const status = document.getElementById('bulk-status').value;
-                if (!status) {
-                    alert('Please select a status');
-                    return;
-                }
-                updateData.status = status;
+                const val = document.getElementById('bulk-status').value;
+                if (!val) { alert('Please select a status'); return; }
+                updateData.status = val;
             }
-            
+
+            // Room
+            if (document.getElementById('bulk-update-room-check').checked) {
+                const val = document.getElementById('bulk-room').value.trim();
+                if (!val) { alert('Please enter a room'); return; }
+                updateData.room = val;
+            }
+
+            // Notes
+            if (document.getElementById('bulk-update-notes-check').checked) {
+                updateData.notes = document.getElementById('bulk-notes').value.trim();
+            }
+
+            // Clear Room/Notes
             if (document.getElementById('bulk-clear-room-check').checked) {
                 updateData.room = null;
+                updateData.notes = null;
             }
 
             if (Object.keys(updateData).length === 0) {
@@ -2759,9 +2879,8 @@
                 return;
             }
 
-            // Update all selected items
             const { error } = await supabase
-                .from('inventory')
+                .from('inventory_items')
                 .update(updateData)
                 .in('id', selectedIds);
 
@@ -2773,6 +2892,7 @@
             closeBulkUpdateModal();
             clearSelection();
             await loadInventory();
+            showToast(`${selectedIds.length} item${selectedIds.length > 1 ? 's' : ''} updated successfully.`);
         }
 
         // Update Location Modal

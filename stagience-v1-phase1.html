@@ -233,9 +233,6 @@
                             <button onclick="showUpdateStatusModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
                                 📋 Update Status
                             </button>
-                            <button onclick="bulkDeleteItems()" style="padding: 12px 24px; background: #fee2e2; color: #991b1b; border: 2px solid #fecaca; border-radius: 10px; font-weight: 600; cursor: pointer;">
-                                🗑️ Delete Selected
-                            </button>
                             <button onclick="clearSelection()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; font-weight: 600; cursor: pointer;">
                                 Clear Selection
                             </button>
@@ -700,7 +697,6 @@
                         <option value="Decor">🎨 Decor</option>
                         <option value="Art">🖼️ Art</option>
                         <option value="Rugs">🔲 Rugs</option>
-                        <option value="Beds">🛏️ Beds</option>
                     </select>
                 </div>
 
@@ -781,7 +777,7 @@
                     </button>
                     <div id="photo-preview-container" style="display: none; margin-top: 12px; text-align: center;">
                         <img id="photo-preview" style="max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #e5e7eb;">
-                        <button type="button" onclick="deleteItemPhoto()" style="display: block; margin: 12px auto 0; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <button type="button" onclick="deletePhoto()" style="display: block; margin: 12px auto 0; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-weight: 600; cursor: pointer;">
                             🗑️ Delete Photo
                         </button>
                     </div>
@@ -835,50 +831,7 @@
                 <div style="font-size: 13px; color: #7b3a5a;">Update multiple fields at once</div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-
-                <!-- Update Name -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-name-check" onchange="document.getElementById('bulk-name').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Name</span>
-                    </label>
-                    <input type="text" id="bulk-name" disabled placeholder="New name for all selected items..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
-                </div>
-
-                <!-- Update Category -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-category-check" onchange="document.getElementById('bulk-category').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Category</span>
-                    </label>
-                    <select id="bulk-category" disabled style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                        <option value="">Select category...</option>
-                        <option value="Sofas">🛋️ Sofas</option>
-                        <option value="Chairs">🪑 Chairs</option>
-                        <option value="Tables">🪵 Tables</option>
-                        <option value="Beds">🛏️ Beds</option>
-                        <option value="Storage">🗄️ Storage</option>
-                        <option value="Lighting">💡 Lighting</option>
-                        <option value="Rugs">🔲 Rugs</option>
-                        <option value="Art">🖼️ Art</option>
-                        <option value="Accessories">🏺 Accessories</option>
-                        <option value="Mirrors">🪞 Mirrors</option>
-                        <option value="Plants">🌿 Plants</option>
-                        <option value="Outdoor">🌳 Outdoor</option>
-                        <option value="Other">📦 Other</option>
-                    </select>
-                </div>
-
-                <!-- Update Color -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-color-check" onchange="document.getElementById('bulk-color').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Color</span>
-                    </label>
-                    <input type="text" id="bulk-color" disabled placeholder="e.g. Charcoal Grey, Ivory..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
-                </div>
-
+            <div style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Update Location -->
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
@@ -904,24 +857,6 @@
                     </select>
                 </div>
 
-                <!-- Update Room -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-room-check" onchange="document.getElementById('bulk-room').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Room</span>
-                    </label>
-                    <input type="text" id="bulk-room" disabled placeholder="e.g. Living Room, Bedroom..." style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
-                </div>
-
-                <!-- Update Notes -->
-                <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
-                    <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; cursor: pointer;">
-                        <input type="checkbox" id="bulk-update-notes-check" onchange="document.getElementById('bulk-notes').disabled=!this.checked;" style="width: 18px; height: 18px;">
-                        <span style="font-weight: 700;">Update Description</span>
-                    </label>
-                    <textarea id="bulk-notes" disabled placeholder="Description for all selected items..." rows="3" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box; resize: vertical;"></textarea>
-                </div>
-
                 <!-- Clear Room/Notes -->
                 <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px;">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -932,7 +867,6 @@
                         ⚠️ This will clear the Room/Notes field for all selected items
                     </div>
                 </div>
-
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 24px;">
@@ -1111,10 +1045,6 @@
                         <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
                             <input type="checkbox" id="filter-rugs" checked>
                             <span>🔲 Rugs</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer;">
-                            <input type="checkbox" id="filter-beds" checked>
-                            <span>🛏️ Beds</span>
                         </label>
                     </div>
                 </div>
@@ -1302,8 +1232,9 @@
                 
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Select Photos *</label>
-                    <input type="file" id="photos-files" required accept="image/*" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <input type="file" id="photos-files" required accept="image/*" multiple onchange="handlePhotoSelection(this)" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos</p>
+                    <div id="photos-selected-feedback" style="display:none; margin-top:10px; padding: 10px 14px; background:#f3f0ff; border-radius:10px; font-size:14px; color:#7b3a5a; font-weight:600;">📸 <span id="photos-selected-count"></span> — tap Upload Photos to continue</div>
                 </div>
 
                 <div id="upload-progress" style="display:none; margin-bottom: 12px;"></div>
@@ -1763,7 +1694,7 @@
         let currentInventoryLocationFilter = 'all'; // 'all' or specific location
         let inventoryFilters = {
             statuses: ['IN', 'OUT', 'HOLD'],
-            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs', 'Beds'],
+            categories: ['Seating', 'Tables', 'Lighting', 'Decor', 'Art', 'Rugs'],
             search: '',
             room: ''
         };
@@ -1857,8 +1788,7 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲',
-                'Beds': '🛏️'
+                'Rugs': '🔲'
             };
 
             container.innerHTML = `
@@ -1909,7 +1839,7 @@
                 'OUT': 'background: rgba(123,58,90,0.08); color: #7b3a5a;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
-            const isMobile = window.innerWidth <= 1024;
+            const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
                 container.innerHTML = `
@@ -2285,11 +2215,6 @@
                         <div style="font-size: 32px; margin-bottom: 8px;">🔲</div>
                         <div style="font-weight: 700; margin-bottom: 4px;">Rugs</div>
                         <div style="font-size: 13px; color: #6b7280;">Area rugs, runners</div>
-                    </div>
-                    <div onclick="selectItemType('Beds')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#B08A5A'" onmouseout="this.style.borderColor='#e5e7eb'">
-                        <div style="font-size: 32px; margin-bottom: 8px;">🛏️</div>
-                        <div style="font-weight: 700; margin-bottom: 4px;">Beds</div>
-                        <div style="font-size: 13px; color: #6b7280;">Frames, headboards, mattresses</div>
                     </div>
                 </div>
             `;
@@ -2733,31 +2658,6 @@
             updateBulkActions();
         }
 
-        // Bulk Delete
-        async function bulkDeleteItems() {
-            const selectedIds = getSelectedItems();
-            if (selectedIds.length === 0) return;
-
-            const confirmed = confirm(`Are you sure you want to delete ${selectedIds.length} item${selectedIds.length > 1 ? 's' : ''}? This cannot be undone.`);
-            if (!confirmed) return;
-
-            try {
-                const { error } = await supabase
-                    .from('inventory')
-                    .delete()
-                    .in('id', selectedIds);
-
-                if (error) throw error;
-
-                clearSelection();
-                await loadInventory();
-                showToast(`${selectedIds.length} item${selectedIds.length > 1 ? 's' : ''} deleted successfully.`);
-            } catch (err) {
-                console.error('Bulk delete error:', err);
-                alert('Error deleting items. Please try again.');
-            }
-        }
-
         // Bulk Update Modal
         function showBulkUpdateModal() {
             const count = getSelectedItems().length;
@@ -2777,25 +2677,14 @@
 
         function closeBulkUpdateModal() {
             document.getElementById('bulk-update-modal').classList.remove('active');
-            // Reset all checkboxes and fields
-            const fields = [
-                { check: 'bulk-update-name-check',     field: 'bulk-name',     type: 'input' },
-                { check: 'bulk-update-category-check', field: 'bulk-category', type: 'select' },
-                { check: 'bulk-update-color-check',    field: 'bulk-color',    type: 'input' },
-                { check: 'bulk-update-location-check', field: 'bulk-location', type: 'select' },
-                { check: 'bulk-update-status-check',   field: 'bulk-status',   type: 'select' },
-                { check: 'bulk-update-room-check',     field: 'bulk-room',     type: 'input' },
-                { check: 'bulk-update-notes-check',    field: 'bulk-notes',    type: 'textarea' },
-                { check: 'bulk-clear-room-check',      field: null,            type: null },
-            ];
-            fields.forEach(({ check, field }) => {
-                const cb = document.getElementById(check);
-                if (cb) cb.checked = false;
-                if (field) {
-                    const el = document.getElementById(field);
-                    if (el) { el.disabled = true; el.value = ''; }
-                }
-            });
+            // Reset form
+            document.getElementById('bulk-update-location-check').checked = false;
+            document.getElementById('bulk-update-status-check').checked = false;
+            document.getElementById('bulk-clear-room-check').checked = false;
+            document.getElementById('bulk-location').disabled = true;
+            document.getElementById('bulk-status').disabled = true;
+            document.getElementById('bulk-location').value = '';
+            document.getElementById('bulk-status').value = '';
         }
 
         async function executeBulkUpdate() {
@@ -2803,58 +2692,28 @@
             if (selectedIds.length === 0) return;
 
             const updateData = {};
-
-            // Name
-            if (document.getElementById('bulk-update-name-check').checked) {
-                const val = document.getElementById('bulk-name').value.trim();
-                if (!val) { alert('Please enter a name'); return; }
-                updateData.name = val;
-            }
-
-            // Category
-            if (document.getElementById('bulk-update-category-check').checked) {
-                const val = document.getElementById('bulk-category').value;
-                if (!val) { alert('Please select a category'); return; }
-                updateData.category = val;
-            }
-
-            // Color
-            if (document.getElementById('bulk-update-color-check').checked) {
-                const val = document.getElementById('bulk-color').value.trim();
-                if (!val) { alert('Please enter a color'); return; }
-                updateData.color = val;
-            }
-
-            // Location
+            
+            // Check which fields to update
             if (document.getElementById('bulk-update-location-check').checked) {
-                const val = document.getElementById('bulk-location').value;
-                if (!val) { alert('Please select a location'); return; }
-                updateData.location = val;
+                const location = document.getElementById('bulk-location').value;
+                if (!location) {
+                    alert('Please select a location');
+                    return;
+                }
+                updateData.location = location;
             }
-
-            // Status
+            
             if (document.getElementById('bulk-update-status-check').checked) {
-                const val = document.getElementById('bulk-status').value;
-                if (!val) { alert('Please select a status'); return; }
-                updateData.status = val;
+                const status = document.getElementById('bulk-status').value;
+                if (!status) {
+                    alert('Please select a status');
+                    return;
+                }
+                updateData.status = status;
             }
-
-            // Room
-            if (document.getElementById('bulk-update-room-check').checked) {
-                const val = document.getElementById('bulk-room').value.trim();
-                if (!val) { alert('Please enter a room'); return; }
-                updateData.room = val;
-            }
-
-            // Notes
-            if (document.getElementById('bulk-update-notes-check').checked) {
-                updateData.description = document.getElementById('bulk-notes').value.trim();
-            }
-
-            // Clear Room/Notes
+            
             if (document.getElementById('bulk-clear-room-check').checked) {
                 updateData.room = null;
-                updateData.description = null;
             }
 
             if (Object.keys(updateData).length === 0) {
@@ -2862,6 +2721,7 @@
                 return;
             }
 
+            // Update all selected items
             const { error } = await supabase
                 .from('inventory')
                 .update(updateData)
@@ -2875,7 +2735,6 @@
             closeBulkUpdateModal();
             clearSelection();
             await loadInventory();
-            showToast(`${selectedIds.length} item${selectedIds.length > 1 ? 's' : ''} updated successfully.`);
         }
 
         // Update Location Modal
@@ -3100,8 +2959,7 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲',
-                'Beds': '🛏️'
+                'Rugs': '🔲'
             };
             
             const statusColors = {
@@ -3223,7 +3081,7 @@
             reader.readAsDataURL(file);
         }
 
-        function deleteItemPhoto() {
+        function deletePhoto() {
             // Only called when user explicitly clicks "Delete Photo"
             selectedPhotoFile = null;
             shouldDeletePhoto = true;
@@ -3481,7 +3339,6 @@
             if (document.getElementById('filter-decor').checked) categories.push('Decor');
             if (document.getElementById('filter-art').checked) categories.push('Art');
             if (document.getElementById('filter-rugs').checked) categories.push('Rugs');
-            if (document.getElementById('filter-beds').checked) categories.push('Beds');
 
             // Get search filters
             const search = document.getElementById('filter-search').value;
@@ -3510,7 +3367,6 @@
             document.getElementById('filter-decor').checked = true;
             document.getElementById('filter-art').checked = true;
             document.getElementById('filter-rugs').checked = true;
-            document.getElementById('filter-beds').checked = true;
 
             // Clear search fields
             document.getElementById('filter-search').value = '';
@@ -5257,6 +5113,8 @@
             currentUploadFolderId = folderId;
             document.getElementById('upload-folder-id').value = folderId;
             document.getElementById('upload-photos-form').reset();
+            const fb = document.getElementById('photos-selected-feedback');
+            if (fb) fb.style.display = 'none';
             document.getElementById('upload-photos-modal').classList.add('active');
         }
 
@@ -5293,8 +5151,36 @@
             });
         }
 
+        function handlePhotoSelection(input) {
+            const count = input.files.length;
+            const feedback = document.getElementById('photos-selected-feedback');
+            const countEl = document.getElementById('photos-selected-count');
+            if (count > 0) {
+                countEl.textContent = count === 1 ? '1 photo selected' : `${count} photos selected`;
+                feedback.style.display = 'block';
+            } else {
+                feedback.style.display = 'none';
+            }
+        }
+
         async function uploadPhotos(e) {
             e.preventDefault();
+
+            // Hide selection feedback, show compressing message immediately
+            const feedback = document.getElementById('photos-selected-feedback');
+            if (feedback) { feedback.style.display = 'none'; }
+            const progressDiv = document.getElementById('upload-progress');
+            if (progressDiv) {
+                progressDiv.style.display = 'block';
+                progressDiv.innerHTML = `
+                    <div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;">
+                        <div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div>
+                    </div>
+                    <div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos...</div>
+                `;
+            }
+            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading...'; }
 
             const filesInput = document.getElementById('photos-files');
             const files = filesInput.files;
@@ -5318,9 +5204,6 @@
             const BATCH_SIZE = 5; // upload 5 at a time
 
             // Progress indicator
-            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
-            const progressDiv = document.getElementById('upload-progress');
-
             const updateProgress = () => {
                 if (submitBtn) submitBtn.textContent = `Uploading ${completed} of ${total}...`;
                 if (progressDiv) {
@@ -5335,7 +5218,6 @@
                 }
             };
 
-            if (submitBtn) { submitBtn.disabled = true; }
             updateProgress();
 
             // Upload a single file and return result

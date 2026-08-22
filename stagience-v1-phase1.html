@@ -1480,7 +1480,7 @@
             document.getElementById('auth-page').classList.remove('active');
             document.getElementById('app-page').classList.remove('active');
             let gateEl = document.getElementById('subscription-gate');
-            if (!gateEl) { gateEl = document.createElement('div'); gateEl.id = 'subscription-gate'; gateEl.style.cssText = 'min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(20,18,19,0.92) 0%,rgba(20,18,19,0.88) 100%),url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat fixed;padding:40px 20px;flex-direction:column;'; document.body.appendChild(gateEl); }
+            if (!gateEl) { gateEl = document.createElement('div'); gateEl.id = 'subscription-gate'; gateEl.style.cssText = "min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(20,18,19,0.92) 0%,rgba(20,18,19,0.88) 100%),url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat fixed;padding:40px 20px;flex-direction:column;"; document.body.appendChild(gateEl); }
             gateEl.style.display = 'flex';
             renderGate(gateEl);
         }

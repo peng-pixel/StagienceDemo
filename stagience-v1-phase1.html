@@ -5278,8 +5278,6 @@
             const BATCH_SIZE = 5; // upload 5 at a time
 
             // Progress indicator
-            const progressDiv = document.getElementById('upload-progress');
-
             const updateProgress = () => {
                 if (submitBtn) submitBtn.textContent = `Uploading ${completed} of ${total}...`;
                 if (progressDiv) {
@@ -5294,7 +5292,6 @@
                 }
             };
 
-            if (submitBtn) { submitBtn.disabled = true; }
             updateProgress();
 
             // Upload a single file and return result

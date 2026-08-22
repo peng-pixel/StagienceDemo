@@ -544,7 +544,7 @@
                     </div>
 
                     <!-- Event Type Filters -->
-                    <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px;">
                         <button onclick="toggleEventTypeFilter('all')" id="filter-event-all" style="padding: 8px 16px; border: 2px solid #7b3a5a; border-radius: 10px; background: rgba(123,58,90,0.06); color: #7b3a5a; font-weight: 600; cursor: pointer; font-size: 13px;">
                             All Events
                         </button>
@@ -569,9 +569,12 @@
                     </div>
 
                     <!-- Calendar Grid (month view) -->
-                    <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden; display: none;">
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <div id="calendar-grid" style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden; display: none; min-width: 560px;">
                         <!-- Calendar will be rendered here -->
                     </div>
+
+                    </div><!-- end calendar scroll wrapper -->
 
                     <!-- Agenda View -->
                     <div id="calendar-agenda" style="display: block;">
@@ -1350,7 +1353,7 @@
                     <button onclick="closeFileViewer()" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,253,248,0.1); color: #fffdf8; font-size: 20px; cursor: pointer; line-height: 1;">×</button>
                 </div>
             </div>
-            <div id="file-viewer-content" style="flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; min-height: 300px;">
+            <div id="file-viewer-content" style="flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 12px; min-height: 300px;">
                 <div style="color: rgba(255,253,248,0.5); text-align: center;">Loading...</div>
             </div>
         </div>
@@ -1448,6 +1451,45 @@
         }
         
         // Check if user is authenticated on page load
+        const BYPASS_EMAILS = ['playhousestaging@gmail.com', 'jenn.punsalan@gmail.com'];
+
+        const STRIPE_PLANS = [
+            { name: 'Starter', description: 'Perfect for solo stagers getting organized', monthlyPrice: 'US$29<span>/mo</span>', annualPrice: 'US$24<span>/mo</span>', annualTotal: 'US$288 billed annually', features: ['Projects & Calendar','Inventory management','Photo folders & file storage','Document templates','CSV import','Print inventory reports','1 user','5GB storage'], monthlyUrl: 'https://buy.stripe.com/3cI14n8yK45w5mh9rnes000', annualUrl: 'https://buy.stripe.com/9B6fZh7uG9pQ1617jfes001', featured: false },
+            { name: 'Professional', description: 'For growing staging businesses', monthlyPrice: 'US$59<span>/mo</span>', annualPrice: 'US$49<span>/mo</span>', annualTotal: 'US$588 billed annually', features: ['Everything in Starter','Up to 3 team members','Role-based permissions','Client Portal (Coming Soon)','Priority support','20GB storage'], monthlyUrl: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002', annualUrl: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003', featured: true },
+            { name: 'Studio', description: 'For established staging companies', monthlyPrice: 'US$99<span>/mo</span>', annualPrice: 'US$84<span>/mo</span>', annualTotal: 'US$1,008 billed annually', features: ['Everything in Professional','Unlimited team members','Invoicing & Payments (Coming Soon)','Reporting & Analytics (Coming Soon)','Feature request priority','Early access to new features','50GB storage'], monthlyUrl: 'https://buy.stripe.com/6oUdR95mybxY8yteLHes004', annualUrl: 'https://buy.stripe.com/cNidR97uG31sbKFavres005', featured: false }
+        ];
+
+        let gateIsAnnual = false;
+
+        async function checkSubscription() {
+            if (!currentUser) return false;
+            if (BYPASS_EMAILS.includes(currentUser.email)) return true;
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('payment') === 'success') {
+                const { data: existing } = await supabase.from('subscriptions').select('id').eq('user_id', currentUser.id).maybeSingle();
+                if (!existing) { await supabase.from('subscriptions').insert([{ user_id: currentUser.id, email: currentUser.email, status: 'active', created_at: new Date().toISOString() }]); }
+                else { await supabase.from('subscriptions').update({ status: 'active' }).eq('user_id', currentUser.id); }
+                window.history.replaceState({}, '', window.location.pathname);
+                return true;
+            }
+            const { data } = await supabase.from('subscriptions').select('status').eq('user_id', currentUser.id).maybeSingle();
+            return data && data.status === 'active';
+        }
+
+        function showSubscriptionGate() {
+            document.getElementById('auth-page').classList.remove('active');
+            document.getElementById('app-page').classList.remove('active');
+            let gateEl = document.getElementById('subscription-gate');
+            if (!gateEl) { gateEl = document.createElement('div'); gateEl.id = 'subscription-gate'; gateEl.style.cssText = 'min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(20,18,19,0.92) 0%,rgba(20,18,19,0.88) 100%),url('https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=2200&q=88') center/cover no-repeat fixed;padding:40px 20px;flex-direction:column;'; document.body.appendChild(gateEl); }
+            gateEl.style.display = 'flex';
+            renderGate(gateEl);
+        }
+
+        function renderGate(gateEl) {
+            const billing = gateIsAnnual ? 'annual' : 'monthly';
+            gateEl.innerHTML = `<div style="text-align:center;margin-bottom:32px;"><div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;"><div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#7b3a5a,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-size:19px;font-weight:700;">S</div><span style="color:#fffdf8;font-size:20px;font-weight:700;">Stagience</span></div><h1 style="color:#fffdf8;font-size:28px;font-weight:800;margin:0 0 8px;">Choose your plan</h1><p style="color:rgba(255,253,248,0.6);font-size:15px;margin:0 0 20px;">The business behind the beautiful.</p><div style="display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:14px;font-weight:600;color:${!gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Monthly</span><div onclick="gateIsAnnual=!gateIsAnnual;renderGate(document.getElementById('subscription-gate'));" style="width:46px;height:25px;background:#7b3a5a;border-radius:20px;cursor:pointer;position:relative;"><div style="width:19px;height:19px;background:white;border-radius:50%;position:absolute;top:3px;left:${gateIsAnnual?'24px':'3px'};transition:left 0.2s;"></div></div><span style="font-size:14px;font-weight:600;color:${gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Annual <span style="background:#b9774f;color:white;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:4px;">Save 15%</span></span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:860px;width:100%;">${STRIPE_PLANS.map(plan=>`<div style="background:${plan.featured?'rgba(123,58,90,0.3)':'rgba(255,253,248,0.07)'};border:2px solid ${plan.featured?'#b9774f':'rgba(255,253,248,0.14)'};border-radius:14px;padding:24px;position:relative;${plan.featured?'transform:scale(1.03);':''}">${plan.featured?'<div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#7b3a5a;color:white;padding:3px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;">Most Popular</div>':''}<div style="font-size:16px;font-weight:700;color:#fffdf8;margin-bottom:4px;">${plan.name}</div><div style="font-size:12px;color:rgba(255,253,248,0.55);margin-bottom:14px;">${plan.description}</div><div style="font-size:28px;font-weight:800;color:#fffdf8;margin-bottom:2px;">${gateIsAnnual?plan.annualPrice:plan.monthlyPrice}</div><div style="font-size:12px;color:rgba(255,253,248,0.4);margin-bottom:16px;">${gateIsAnnual?plan.annualTotal:'Billed monthly'}</div><ul style="list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:6px;">${plan.features.map(f=>`<li style="font-size:12px;color:rgba(255,253,248,0.75);display:flex;gap:7px;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">✓</span>${f}</li>`).join('')}</ul><a href="${gateIsAnnual?plan.annualUrl:plan.monthlyUrl}" style="display:block;text-align:center;padding:11px;background:${plan.featured?'#7b3a5a':'rgba(255,253,248,0.1)'};border:1.5px solid ${plan.featured?'transparent':'#b9774f'};border-radius:8px;color:white;font-weight:600;font-size:14px;text-decoration:none;">Get Started</a></div>`).join('')}</div><div style="margin-top:20px;text-align:center;"><p style="color:rgba(255,253,248,0.4);font-size:12px;">Have a promo code? Enter it at checkout. &nbsp;|&nbsp; <a href="javascript:void(0)" onclick="handleSignOut()" style="color:#b9774f;font-weight:600;text-decoration:none;">Sign out</a></p></div>`;
+        }
+
         async function checkAuth() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
@@ -1461,6 +1503,8 @@
                 }
 
                 await loadUserRoleAndTeam();
+                const isSubscribed = await checkSubscription();
+                if (!isSubscribed) { showSubscriptionGate(); return; }
                 showApp();
                 loadAllData();
             } else {
@@ -1542,6 +1586,8 @@
                 showAuthMessage('Sign in successful!', 'success');
                 setTimeout(async () => {
                     await loadUserRoleAndTeam();
+                    const isSubscribed = await checkSubscription();
+                    if (!isSubscribed) { showSubscriptionGate(); return; }
                     showApp();
                     loadAllData();
                 }, 1000);
@@ -3348,9 +3394,7 @@
                 if (!confirmed) return;
                 const { error } = await supabase.from('inventory').delete().in('id', selectedIds);
                 if (error) { alert('Error deleting items: ' + error.message); return; }
-                clearSelection();
-                await loadInventory();
-                return;
+                clearSelection(); await loadInventory(); return;
             }
             if (!confirm('Are you sure you want to delete this item?')) return;
 
@@ -4618,13 +4662,12 @@
             const isImage = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
             document.getElementById('file-viewer-title').textContent = displayName || fileName;
             const dlLink = document.getElementById('file-viewer-download');
-            dlLink.href = url;
-            dlLink.download = fileName;
+            dlLink.href = url; dlLink.download = fileName;
             const content = document.getElementById('file-viewer-content');
             if (isPdf) {
-                content.innerHTML = `<iframe src="${url}" style="width:100%;height:70vh;border:none;border-radius:8px;"></iframe>`;
+                content.innerHTML = `<iframe src="${url}" style="width:100%;height:70vh;min-height:300px;border:none;border-radius:8px;display:block;" title="${displayName}"></iframe>`;
             } else if (isImage) {
-                content.innerHTML = `<img src="${url}" alt="${displayName}" style="max-width:100%;max-height:70vh;border-radius:8px;object-fit:contain;">`;
+                content.innerHTML = `<img src="${url}" alt="${displayName}" style="max-width:100%;max-height:75vh;border-radius:8px;object-fit:contain;">`;
             } else {
                 content.innerHTML = `<div style="text-align:center;color:rgba(255,253,248,0.7);"><div style="font-size:64px;margin-bottom:16px;">📄</div><p style="font-size:16px;margin-bottom:8px;">${displayName}</p><p style="font-size:14px;color:rgba(255,253,248,0.5);margin-bottom:24px;">This file type can't be previewed directly.</p><a href="${url}" target="_blank" rel="noopener" style="padding:12px 28px;background:#7b3a5a;color:white;border-radius:10px;font-weight:600;text-decoration:none;font-size:15px;">Open File ↗</a></div>`;
             }
@@ -5239,9 +5282,7 @@
             if (count > 0) {
                 countEl.textContent = count === 1 ? '1 photo selected' : `${count} photos selected`;
                 feedback.style.display = 'block';
-            } else {
-                feedback.style.display = 'none';
-            }
+            } else { feedback.style.display = 'none'; }
         }
 
         async function uploadPhotos(e) {
@@ -5278,6 +5319,7 @@
             const BATCH_SIZE = 5; // upload 5 at a time
 
             // Progress indicator
+
             const updateProgress = () => {
                 if (submitBtn) submitBtn.textContent = `Uploading ${completed} of ${total}...`;
                 if (progressDiv) {

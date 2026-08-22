@@ -700,6 +700,7 @@
                         <option value="Decor">🎨 Decor</option>
                         <option value="Art">🖼️ Art</option>
                         <option value="Rugs">🔲 Rugs</option>
+                        <option value="Beds">🛏️ Beds</option>
                     </select>
                 </div>
 
@@ -780,7 +781,7 @@
                     </button>
                     <div id="photo-preview-container" style="display: none; margin-top: 12px; text-align: center;">
                         <img id="photo-preview" style="max-width: 200px; max-height: 200px; border-radius: 10px; border: 2px solid #e5e7eb;">
-                        <button type="button" onclick="deletePhoto()" style="display: block; margin: 12px auto 0; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <button type="button" onclick="deleteItemPhoto()" style="display: block; margin: 12px auto 0; padding: 8px 16px; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; border-radius: 8px; font-weight: 600; cursor: pointer;">
                             🗑️ Delete Photo
                         </button>
                     </div>
@@ -1049,6 +1050,10 @@
                             <input type="checkbox" id="filter-rugs" checked>
                             <span>🔲 Rugs</span>
                         </label>
+                        <label>
+                            <input type="checkbox" id="filter-beds" checked>
+                            <span>🛏️ Beds</span>
+                        </label>
                     </div>
                 </div>
 
@@ -1235,8 +1240,9 @@
                 
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Select Photos *</label>
-                    <input type="file" id="photos-files" required accept="image/*" multiple style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                    <input type="file" id="photos-files" required accept="image/*" multiple onchange="handlePhotoSelection(this)" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                     <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos</p>
+                    <div id="photos-selected-feedback" style="display:none; margin-top:10px; padding: 10px 14px; background:#f3f0ff; border-radius:10px; font-size:14px; color:#7b3a5a; font-weight:600;">📸 <span id="photos-selected-count"></span> — tap Upload Photos to continue</div>
                 </div>
 
                 <div id="upload-progress" style="display:none; margin-bottom: 12px;"></div>
@@ -1331,6 +1337,22 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- File Viewer Modal -->
+    <div id="file-viewer-modal" class="modal" style="z-index: 2000;">
+        <div style="background: #1a1515; border-radius: 16px; width: 95%; max-width: 900px; max-height: 92vh; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid rgba(255,253,248,0.12); flex-shrink: 0;">
+                <h3 id="file-viewer-title" style="font-size: 16px; font-weight: 700; color: #fffdf8; margin: 0; word-break: break-word; max-width: 75%;"></h3>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <a id="file-viewer-download" href="#" download style="padding: 8px 16px; background: #7b3a5a; color: white; border-radius: 8px; font-weight: 600; font-size: 13px; text-decoration: none;">⬇ Download</a>
+                    <button onclick="closeFileViewer()" style="width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,253,248,0.1); color: #fffdf8; font-size: 20px; cursor: pointer; line-height: 1;">×</button>
+                </div>
+            </div>
+            <div id="file-viewer-content" style="flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; min-height: 300px;">
+                <div style="color: rgba(255,253,248,0.5); text-align: center;">Loading...</div>
+            </div>
         </div>
     </div>
 
@@ -1790,7 +1812,8 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲'
+                'Rugs': '🔲',
+                'Beds': '🛏️'
             };
 
             container.innerHTML = `
@@ -1841,7 +1864,7 @@
                 'OUT': 'background: rgba(123,58,90,0.08); color: #7b3a5a;',
                 'HOLD': 'background: #fef3c7; color: #92400e;'
             };
-            const isMobile = window.innerWidth <= 768;
+            const isMobile = window.innerWidth <= 1024;
 
             if (isMobile) {
                 container.innerHTML = `
@@ -2217,6 +2240,11 @@
                         <div style="font-size: 32px; margin-bottom: 8px;">🔲</div>
                         <div style="font-weight: 700; margin-bottom: 4px;">Rugs</div>
                         <div style="font-size: 13px; color: #6b7280;">Area rugs, runners</div>
+                    </div>
+                    <div onclick="selectItemType('Beds')" style="padding: 24px; border: 2px solid #e5e7eb; border-radius: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#7b3a5a'" onmouseout="this.style.borderColor='#e5e7eb'">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🛏️</div>
+                        <div style="font-weight: 700; margin-bottom: 4px;">Beds</div>
+                        <div style="font-size: 13px; color: #6b7280;">Frames, headboards, mattresses</div>
                     </div>
                 </div>
             `;
@@ -2961,7 +2989,8 @@
                 'Lighting': '💡',
                 'Decor': '🎨',
                 'Art': '🖼️',
-                'Rugs': '🔲'
+                'Rugs': '🔲',
+                'Beds': '🛏️'
             };
             
             const statusColors = {
@@ -3083,7 +3112,7 @@
             reader.readAsDataURL(file);
         }
 
-        function deletePhoto() {
+        function deleteItemPhoto() {
             // Only called when user explicitly clicks "Delete Photo"
             selectedPhotoFile = null;
             shouldDeletePhoto = true;
@@ -3306,37 +3335,35 @@
             if (selectedIds.length === 0) return;
             const confirmed = confirm(`Delete ${selectedIds.length} item${selectedIds.length > 1 ? 's' : ''}? This cannot be undone.`);
             if (!confirmed) return;
-            const { error } = await supabase
-                .from('inventory')
-                .delete()
-                .in('id', selectedIds);
+            const { error } = await supabase.from('inventory').delete().in('id', selectedIds);
             if (error) { alert('Error deleting items: ' + error.message); return; }
             clearSelection();
             await loadInventory();
         }
 
         async function deleteItem(itemId) {
-            // If multiple items are selected and this item is among them, bulk delete all
             const selectedIds = getSelectedItems();
             if (selectedIds.length > 1 && selectedIds.includes(itemId)) {
                 const confirmed = confirm(`Delete ${selectedIds.length} selected items? This cannot be undone.`);
                 if (!confirmed) return;
-                const { error } = await supabase
-                    .from('inventory')
-                    .delete()
-                    .in('id', selectedIds);
+                const { error } = await supabase.from('inventory').delete().in('id', selectedIds);
                 if (error) { alert('Error deleting items: ' + error.message); return; }
                 clearSelection();
                 await loadInventory();
                 return;
             }
-            // Single item delete
             if (!confirm('Are you sure you want to delete this item?')) return;
+
             const { error } = await supabase
                 .from('inventory')
                 .delete()
                 .eq('id', itemId);
-            if (error) { alert('Error deleting item: ' + error.message); return; }
+
+            if (error) {
+                alert('Error deleting item: ' + error.message);
+                return;
+            }
+
             await loadInventory();
         }
 
@@ -3364,6 +3391,7 @@
             if (document.getElementById('filter-decor').checked) categories.push('Decor');
             if (document.getElementById('filter-art').checked) categories.push('Art');
             if (document.getElementById('filter-rugs').checked) categories.push('Rugs');
+            if (document.getElementById('filter-beds').checked) categories.push('Beds');
 
             // Get search filters
             const search = document.getElementById('filter-search').value;
@@ -3392,6 +3420,7 @@
             document.getElementById('filter-decor').checked = true;
             document.getElementById('filter-art').checked = true;
             document.getElementById('filter-rugs').checked = true;
+            document.getElementById('filter-beds').checked = true;
 
             // Clear search fields
             document.getElementById('filter-search').value = '';
@@ -4505,9 +4534,10 @@
                                 <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
                             </div>
                             
-                            <button onclick="downloadDocument('${doc.file_path}', '${doc.file_name}')" style="width: 100%; padding: 10px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
-                                Download
-                            </button>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="viewFile('project-documents', '${doc.file_path}', '${doc.file_name}', '${doc.document_name}')" style="flex: 1; padding: 10px; background: #f3f4f6; color: #374151; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">👁 View</button>
+                                <button onclick="downloadDocument('${doc.file_path}', '${doc.file_name}')" style="flex: 1; padding: 10px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">⬇ Download</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -4577,6 +4607,33 @@
 
             closeUploadDocumentModal();
             await loadProjectDocuments();
+        }
+
+        async function viewFile(bucket, filePath, fileName, displayName) {
+            const { data, error } = await supabase.storage.from(bucket).createSignedUrl(filePath, 3600);
+            if (error || !data?.signedUrl) { alert('Could not open file. Please try downloading instead.'); return; }
+            const url = data.signedUrl;
+            const ext = fileName.split('.').pop().toLowerCase();
+            const isPdf = ext === 'pdf';
+            const isImage = ['jpg','jpeg','png','gif','webp','svg'].includes(ext);
+            document.getElementById('file-viewer-title').textContent = displayName || fileName;
+            const dlLink = document.getElementById('file-viewer-download');
+            dlLink.href = url;
+            dlLink.download = fileName;
+            const content = document.getElementById('file-viewer-content');
+            if (isPdf) {
+                content.innerHTML = `<iframe src="${url}" style="width:100%;height:70vh;border:none;border-radius:8px;"></iframe>`;
+            } else if (isImage) {
+                content.innerHTML = `<img src="${url}" alt="${displayName}" style="max-width:100%;max-height:70vh;border-radius:8px;object-fit:contain;">`;
+            } else {
+                content.innerHTML = `<div style="text-align:center;color:rgba(255,253,248,0.7);"><div style="font-size:64px;margin-bottom:16px;">📄</div><p style="font-size:16px;margin-bottom:8px;">${displayName}</p><p style="font-size:14px;color:rgba(255,253,248,0.5);margin-bottom:24px;">This file type can't be previewed directly.</p><a href="${url}" target="_blank" rel="noopener" style="padding:12px 28px;background:#7b3a5a;color:white;border-radius:10px;font-weight:600;text-decoration:none;font-size:15px;">Open File ↗</a></div>`;
+            }
+            document.getElementById('file-viewer-modal').classList.add('active');
+        }
+
+        function closeFileViewer() {
+            document.getElementById('file-viewer-modal').classList.remove('active');
+            document.getElementById('file-viewer-content').innerHTML = '<div style="color:rgba(255,253,248,0.5);text-align:center;">Loading...</div>';
         }
 
         async function downloadDocument(filePath, fileName) {
@@ -4709,9 +4766,10 @@
                                 <p style="color: #6b7280; font-size: 12px;">${dateStr}</p>
                             </div>
                             
-                            <button onclick="downloadFile('${file.file_path}', '${file.file_name}')" style="width: 100%; padding: 10px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">
-                                Download
-                            </button>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="viewFile('project-files', '${file.file_path}', '${file.file_name}', '${file.file_name_display}')" style="flex: 1; padding: 10px; background: #f3f4f6; color: #374151; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">👁 View</button>
+                                <button onclick="downloadFile('${file.file_path}', '${file.file_name}')" style="flex: 1; padding: 10px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">⬇ Download</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -5174,8 +5232,29 @@
             });
         }
 
+        function handlePhotoSelection(input) {
+            const count = input.files.length;
+            const feedback = document.getElementById('photos-selected-feedback');
+            const countEl = document.getElementById('photos-selected-count');
+            if (count > 0) {
+                countEl.textContent = count === 1 ? '1 photo selected' : `${count} photos selected`;
+                feedback.style.display = 'block';
+            } else {
+                feedback.style.display = 'none';
+            }
+        }
+
         async function uploadPhotos(e) {
             e.preventDefault();
+            const feedback = document.getElementById('photos-selected-feedback');
+            if (feedback) feedback.style.display = 'none';
+            const progressDiv = document.getElementById('upload-progress');
+            if (progressDiv) {
+                progressDiv.style.display = 'block';
+                progressDiv.innerHTML = `<div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;"><div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div></div><div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos...</div>`;
+            }
+            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading...'; }
 
             const filesInput = document.getElementById('photos-files');
             const files = filesInput.files;

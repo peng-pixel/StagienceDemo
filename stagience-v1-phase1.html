@@ -4665,7 +4665,7 @@
             dlLink.href = url; dlLink.download = fileName;
             const content = document.getElementById('file-viewer-content');
             if (isPdf) {
-                const isMobileDevice = window.innerWidth < 768;
+                const isMobileDevice = window.innerWidth < 1024;
                 if (isMobileDevice) {
                     // Open in new tab on mobile — iframes can't scroll on iOS/Android
                     window.open(url, '_blank');
@@ -5495,11 +5495,11 @@
             // Build calendar grid
             let calendarHTML = `
                 <div style="display: grid; grid-template-columns: repeat(7, 1fr); border-bottom: 2px solid #e5e7eb;">
-                    ${(window.innerWidth < 768 ? ['S','M','T','W','T','F','S'] : ['SUN','MON','TUE','WED','THU','FRI','SAT']).map(day => 
-                        `<div style="padding: ${window.innerWidth < 768 ? '6px 2px' : '12px'}; text-align: center; font-weight: 700; font-size: ${window.innerWidth < 768 ? '10px' : '12px'}; color: #6b7280;">${day}</div>`
+                    ${(window.innerWidth < 1024 ? ['S','M','T','W','T','F','S'] : ['SUN','MON','TUE','WED','THU','FRI','SAT']).map(day => 
+                        `<div style="padding: ${window.innerWidth < 1024 ? '6px 2px' : '12px'}; text-align: center; font-weight: 700; font-size: ${window.innerWidth < 1024 ? '10px' : '12px'}; color: #6b7280;">${day}</div>`
                     ).join('')}
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); min-height: ${window.innerWidth < 768 ? '300px' : '600px'};">
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); min-height: ${window.innerWidth < 1024 ? '300px' : '600px'};">
             `;
 
             // Empty cells before first day
@@ -5520,7 +5520,7 @@
                     return eventDate.getDate() === day;
                 });
 
-                const isMobile = window.innerWidth < 768;
+                const isMobile = window.innerWidth < 1024;
                 calendarHTML += `
                     <div style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: ${isMobile ? '4px' : '8px'}; min-height: ${isMobile ? '60px' : '100px'}; ${isToday ? 'background: rgba(123,58,90,0.06);' : ''}">
                         <div style="font-weight: ${isToday ? '700' : '600'}; margin-bottom: ${isMobile ? '2px' : '6px'}; font-size: ${isMobile ? '11px' : '14px'}; color: ${isToday ? '#7b3a5a' : '#241f22'};">${day}</div>

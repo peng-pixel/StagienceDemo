@@ -5432,7 +5432,7 @@
         let currentCalendarMonth = new Date().getMonth();
         let currentCalendarYear = new Date().getFullYear();
         let calendarEventTypeFilter = ['all'];
-        let calendarView = window.innerWidth >= 768 ? 'month' : 'agenda';
+        let calendarView = window.innerWidth >= 1024 ? 'month' : 'agenda';
         let allCalendarEvents = [];
 
         async function loadCalendar() {

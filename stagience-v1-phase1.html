@@ -3905,18 +3905,22 @@
             document.getElementById('documents-tab-content').style.display = 'none';
             document.getElementById('photos-tab-content').style.display = 'none';
             document.getElementById('files-tab-content').style.display = 'none';
-            document.getElementById('videos-tab-content').style.display = 'none';
+            const vTab = document.getElementById('videos-tab-content');
+            if (vTab) vTab.style.display = 'none';
 
             // Reset tab styles
             ['schedule', 'documents', 'photos', 'files', 'videos'].forEach(tab => {
                 const btn = document.getElementById(`tab-${tab}`);
-                btn.style.color = '#6b7280';
-                btn.style.borderBottom = 'none';
-                btn.style.marginBottom = '0';
+                if (btn) {
+                    btn.style.color = '#6b7280';
+                    btn.style.borderBottom = 'none';
+                    btn.style.marginBottom = '0';
+                }
             });
 
             // Show selected tab
-            document.getElementById(`${tabName}-tab-content`).style.display = 'block';
+            const activeContent = document.getElementById(`${tabName}-tab-content`);
+            if (activeContent) activeContent.style.display = 'block';
             if (tabName === 'videos') loadVideos();
             const selectedBtn = document.getElementById(`tab-${tabName}`);
             selectedBtn.style.color = '#7b3a5a';

@@ -420,6 +420,9 @@
                             <button onclick="switchProjectTab('files')" id="tab-files" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b7280; cursor: pointer;">
                                 📁 Files
                             </button>
+                            <button onclick="switchProjectTab('videos')" id="tab-videos" style="padding: 12px 0; border: none; background: none; font-weight: 600; font-size: 15px; color: #6b7280; cursor: pointer;">
+                                🎬 Videos
+                            </button>
                         </div>
                     </div>
 
@@ -517,6 +520,22 @@
                             <div style="font-size: 48px; margin-bottom: 16px;">📁</div>
                             <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No files yet</h3>
                             <p>Click "Upload File" to add your first file</p>
+                        </div>
+                    </div>
+
+                    <!-- Videos Tab Content -->
+                    <div id="videos-tab-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                            <h2 style="font-size: 20px; font-weight: 700;">Project Videos</h2>
+                            <button onclick="showUploadVideoModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
+                                🎬 Upload Video
+                            </button>
+                        </div>
+                        <div id="videos-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
+                        <div id="videos-empty" style="text-align: center; padding: 60px; color: #9ca3af; display: none;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">🎬</div>
+                            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No videos yet</h3>
+                            <p>Click "Upload Video" to add property walkthrough videos</p>
                         </div>
                     </div>
                 </div>

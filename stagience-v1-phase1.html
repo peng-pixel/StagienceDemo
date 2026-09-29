@@ -1385,7 +1385,7 @@
             <div style="text-align: center; margin-bottom: 24px;">
                 <div style="font-size: 40px; margin-bottom: 8px;">🎬</div>
                 <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 4px;">Upload Video</h2>
-                <p style="color: #6b7280; font-size: 14px;">MP4 or MOV files, up to 100MB</p>
+                <p style="color: #6b7280; font-size: 14px;">MP4 or MOV files, up to 50MB</p>
             </div>
             <form id="upload-video-form" onsubmit="uploadVideo(event)">
                 <div style="margin-bottom: 16px;">
@@ -1395,7 +1395,7 @@
                 <div style="margin-bottom: 16px;">
                     <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Select Video</label>
                     <input type="file" id="video-file" required accept="video/mp4,video/quicktime,.mp4,.mov" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; box-sizing: border-box;">
-                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">Accepted: MP4, MOV — Max 100MB</p>
+                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">Accepted: MP4, MOV — Max 50MB</p>
                 </div>
                 <div id="video-upload-progress" style="display: none; margin-bottom: 16px;">
                     <div style="background: #f3f4f6; border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 6px;">
@@ -4757,8 +4757,8 @@
             const file = fileInput.files[0];
             if (!file) return;
 
-            if (file.size > 100 * 1024 * 1024) {
-                alert('Video must be under 100MB. Please compress the video and try again.');
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Video must be under 50MB. Please compress the video and try again.');
                 return;
             }
 

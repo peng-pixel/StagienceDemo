@@ -527,9 +527,7 @@
                     <div id="videos-tab-content" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                             <h2 style="font-size: 20px; font-weight: 700;">Project Videos</h2>
-                            <button onclick="showUploadVideoModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">
-                                🎬 Upload Video
-                            </button>
+                            <button onclick="showUploadVideoModal()" class="gradient-accent" style="padding: 10px 20px; border: none; border-radius: 10px; color: white; font-weight: 600; cursor: pointer;">🎬 Upload Video</button>
                         </div>
                         <div id="videos-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;"></div>
                         <div id="videos-empty" style="text-align: center; padding: 60px; color: #9ca3af; display: none;">
@@ -1501,13 +1499,11 @@
         
         // Check if user is authenticated on page load
         const BYPASS_EMAILS = ['playhousestaging@gmail.com', 'jenn.punsalan@gmail.com'];
-
         const STRIPE_PLANS = [
             { name: 'Starter', description: 'Perfect for solo stagers getting organized', monthlyPrice: 'US$29<span>/mo</span>', annualPrice: 'US$24<span>/mo</span>', annualTotal: 'US$288 billed annually', features: ['Projects & Calendar','Inventory management','Photo folders & file storage','Document templates','CSV import','Print inventory reports','1 user','5GB storage'], monthlyUrl: 'https://buy.stripe.com/3cI14n8yK45w5mh9rnes000', annualUrl: 'https://buy.stripe.com/9B6fZh7uG9pQ1617jfes001', featured: false },
             { name: 'Professional', description: 'For growing staging businesses', monthlyPrice: 'US$59<span>/mo</span>', annualPrice: 'US$49<span>/mo</span>', annualTotal: 'US$588 billed annually', features: ['Everything in Starter','Up to 3 team members','Role-based permissions','Client Portal (Coming Soon)','Priority support','20GB storage'], monthlyUrl: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002', annualUrl: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003', featured: true },
             { name: 'Studio', description: 'For established staging companies', monthlyPrice: 'US$99<span>/mo</span>', annualPrice: 'US$84<span>/mo</span>', annualTotal: 'US$1,008 billed annually', features: ['Everything in Professional','Unlimited team members','Invoicing & Payments (Coming Soon)','Reporting & Analytics (Coming Soon)','Feature request priority','Early access to new features','50GB storage'], monthlyUrl: 'https://buy.stripe.com/6oUdR95mybxY8yteLHes004', annualUrl: 'https://buy.stripe.com/cNidR97uG31sbKFavres005', featured: false }
         ];
-
         let gateIsAnnual = false;
 
         async function checkSubscription() {
@@ -1542,14 +1538,9 @@
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
                 currentUser = session.user;
-
-                // Check if this is a password recovery session
                 if (session.user.recovery_sent_at || window.location.hash.includes('type=recovery')) {
-                    showAuthPage();
-                    showResetPasswordForm();
-                    return;
+                    showAuthPage(); showResetPasswordForm(); return;
                 }
-
                 await loadUserRoleAndTeam();
                 const isSubscribed = await checkSubscription();
                 if (!isSubscribed) { showSubscriptionGate(); return; }
@@ -3930,11 +3921,9 @@
             // Reset tab styles
             ['schedule', 'documents', 'photos', 'files', 'videos'].forEach(tab => {
                 const btn = document.getElementById(`tab-${tab}`);
-                if (btn) {
-                    btn.style.color = '#6b7280';
-                    btn.style.borderBottom = 'none';
-                    btn.style.marginBottom = '0';
-                }
+                btn.style.color = '#6b7280';
+                btn.style.borderBottom = 'none';
+                btn.style.marginBottom = '0';
             });
 
             // Show selected tab
@@ -4734,10 +4723,6 @@
             document.getElementById('file-viewer-content').innerHTML = '<div style="color:rgba(255,253,248,0.5);text-align:center;">Loading...</div>';
         }
 
-        // ============================================================
-        // VIDEO FUNCTIONS
-        // ============================================================
-
         function showUploadVideoModal() {
             document.getElementById('upload-video-modal').classList.add('active');
             document.getElementById('upload-video-form').reset();
@@ -4756,60 +4741,28 @@
             const fileInput = document.getElementById('video-file');
             const file = fileInput.files[0];
             if (!file) return;
-
-            if (file.size > 50 * 1024 * 1024) {
-                alert('Video must be under 50MB. Please compress the video and try again.');
-                return;
-            }
-
+            if (file.size > 50 * 1024 * 1024) { alert('Video must be under 50MB. Please compress the video and try again.'); return; }
             const submitBtn = document.getElementById('video-submit-btn');
             const progressDiv = document.getElementById('video-upload-progress');
             const progressBar = document.getElementById('video-progress-bar');
             const progressText = document.getElementById('video-progress-text');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Uploading...';
-            progressDiv.style.display = 'block';
-            progressBar.style.width = '10%';
-            progressText.textContent = 'Uploading video...';
-
+            submitBtn.disabled = true; submitBtn.textContent = 'Uploading...';
+            progressDiv.style.display = 'block'; progressBar.style.width = '10%'; progressText.textContent = 'Uploading video...';
             try {
                 const ext = file.name.split('.').pop().toLowerCase();
                 const fileName = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${ext}`;
                 const filePath = `${currentUser.id}/${currentProjectId}/${fileName}`;
-
-                const { error: uploadError } = await supabase.storage
-                    .from('project-videos')
-                    .upload(filePath, file, { contentType: file.type });
-
+                const { error: uploadError } = await supabase.storage.from('project-videos').upload(filePath, file, { contentType: file.type });
                 if (uploadError) throw uploadError;
-
-                progressBar.style.width = '80%';
-                progressText.textContent = 'Saving...';
-
-                const { error: dbError } = await supabase
-                    .from('project_videos')
-                    .insert([{
-                        project_id: currentProjectId,
-                        user_id: currentUser.id,
-                        title: title,
-                        file_name: file.name,
-                        file_path: filePath,
-                        file_size: file.size,
-                        created_at: new Date().toISOString()
-                    }]);
-
+                progressBar.style.width = '80%'; progressText.textContent = 'Saving...';
+                const { error: dbError } = await supabase.from('project_videos').insert([{ project_id: currentProjectId, user_id: currentUser.id, title, file_name: file.name, file_path: filePath, file_size: file.size, created_at: new Date().toISOString() }]);
                 if (dbError) throw dbError;
-
-                progressBar.style.width = '100%';
-                progressText.textContent = 'Done!';
+                progressBar.style.width = '100%'; progressText.textContent = 'Done!';
                 setTimeout(() => { closeUploadVideoModal(); loadVideos(); }, 500);
-
             } catch (err) {
                 console.error('Video upload error:', err);
                 alert('Error uploading video: ' + err.message);
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Upload Video';
-                progressDiv.style.display = 'none';
+                submitBtn.disabled = false; submitBtn.textContent = 'Upload Video'; progressDiv.style.display = 'none';
             }
         }
 
@@ -4817,74 +4770,47 @@
             const grid = document.getElementById('videos-grid');
             const empty = document.getElementById('videos-empty');
             if (!grid) return;
-
-            grid.innerHTML = '<div style="color: #9ca3af; text-align: center; padding: 40px; grid-column: 1/-1;">Loading videos...</div>';
-
-            const { data: videos, error } = await supabase
-                .from('project_videos')
-                .select('*')
-                .eq('project_id', currentProjectId)
-                .order('created_at', { ascending: false });
-
-            if (error) { grid.innerHTML = '<div style="color: red; padding: 20px;">Error loading videos</div>'; return; }
-
-            if (!videos || videos.length === 0) {
-                grid.innerHTML = '';
-                if (empty) empty.style.display = 'block';
-                return;
-            }
-
+            grid.innerHTML = '<div style="color:#9ca3af;text-align:center;padding:40px;grid-column:1/-1;">Loading videos...</div>';
+            const { data: videos, error } = await supabase.from('project_videos').select('*').eq('project_id', currentProjectId).order('created_at', { ascending: false });
+            if (error) { grid.innerHTML = '<div style="color:red;padding:20px;">Error loading videos</div>'; return; }
+            if (!videos || videos.length === 0) { grid.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
             if (empty) empty.style.display = 'none';
             grid.innerHTML = videos.map(video => {
                 const sizeMB = (video.file_size / (1024 * 1024)).toFixed(1);
                 const date = new Date(video.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                return `
-                    <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
-                        <div style="background: #1a1515; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 120px; cursor: pointer;" onclick="playVideo('${video.file_path}', '${video.title}')">
-                            <div style="width: 56px; height: 56px; background: rgba(123,58,90,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white;">▶</div>
-                        </div>
-                        <div style="padding: 16px;">
-                            <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px; color: #1f1b1e;">${video.title}</div>
-                            <div style="font-size: 12px; color: #9ca3af; margin-bottom: 12px;">${video.file_name} · ${sizeMB}MB · ${date}</div>
-                            <div style="display: flex; gap: 8px;">
-                                <button onclick="playVideo('${video.file_path}', '${video.title}')" style="flex: 1; padding: 8px; background: #7b3a5a; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">▶ Play</button>
-                                <button onclick="downloadVideo('${video.file_path}', '${video.file_name}')" style="flex: 1; padding: 8px; background: #f3f4f6; color: #374151; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">⬇ Download</button>
-                                <button onclick="deleteVideo(${video.id}, '${video.file_path}')" style="padding: 8px 12px; background: #fee2e2; color: #991b1b; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">🗑</button>
-                            </div>
+                return `<div style="background:white;border:2px solid #e5e7eb;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                    <div style="background:#1a1515;padding:20px;display:flex;align-items:center;justify-content:center;min-height:120px;cursor:pointer;" onclick="playVideo('${video.file_path}','${video.title}')">
+                        <div style="width:56px;height:56px;background:rgba(123,58,90,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:white;">▶</div>
+                    </div>
+                    <div style="padding:16px;">
+                        <div style="font-weight:700;font-size:15px;margin-bottom:4px;color:#1f1b1e;">${video.title}</div>
+                        <div style="font-size:12px;color:#9ca3af;margin-bottom:12px;">${video.file_name} · ${sizeMB}MB · ${date}</div>
+                        <div style="display:flex;gap:8px;">
+                            <button onclick="playVideo('${video.file_path}','${video.title}')" style="flex:1;padding:8px;background:#7b3a5a;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">▶ Play</button>
+                            <button onclick="downloadVideo('${video.file_path}','${video.file_name}')" style="flex:1;padding:8px;background:#f3f4f6;color:#374151;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">⬇ Download</button>
+                            <button onclick="deleteVideo(${video.id},'${video.file_path}')" style="padding:8px 12px;background:#fee2e2;color:#991b1b;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;">🗑</button>
                         </div>
                     </div>
-                `;
+                </div>`;
             }).join('');
         }
 
         async function playVideo(filePath, title) {
-            const { data, error } = await supabase.storage
-                .from('project-videos')
-                .createSignedUrl(filePath, 3600);
+            const { data, error } = await supabase.storage.from('project-videos').createSignedUrl(filePath, 3600);
             if (error || !data?.signedUrl) { alert('Could not play video.'); return; }
-
-            if (window.innerWidth < 1024) {
-                window.open(data.signedUrl, '_blank');
-                return;
-            }
-
+            if (window.innerWidth < 1024) { window.open(data.signedUrl, '_blank'); return; }
             document.getElementById('file-viewer-title').textContent = title;
             document.getElementById('file-viewer-download').href = data.signedUrl;
             document.getElementById('file-viewer-download').download = title;
             const content = document.getElementById('file-viewer-content');
-            content.innerHTML = `<video controls style="max-width:100%;max-height:72vh;border-radius:8px;" autoplay>
-                <source src="${data.signedUrl}" type="video/mp4">
-                <source src="${data.signedUrl}" type="video/quicktime">
-                Your browser does not support video playback.
-            </video>`;
+            content.innerHTML = `<video controls style="max-width:100%;max-height:72vh;border-radius:8px;" autoplay><source src="${data.signedUrl}" type="video/mp4"><source src="${data.signedUrl}" type="video/quicktime">Your browser does not support video playback.</video>`;
             document.getElementById('file-viewer-modal').classList.add('active');
         }
 
         async function downloadVideo(filePath, fileName) {
             const { data, error } = await supabase.storage.from('project-videos').createSignedUrl(filePath, 3600);
             if (error || !data?.signedUrl) { alert('Could not download video.'); return; }
-            const a = document.createElement('a');
-            a.href = data.signedUrl; a.download = fileName; a.click();
+            const a = document.createElement('a'); a.href = data.signedUrl; a.download = fileName; a.click();
         }
 
         async function deleteVideo(videoId, filePath) {
@@ -4892,6 +4818,27 @@
             await supabase.storage.from('project-videos').remove([filePath]);
             await supabase.from('project_videos').delete().eq('id', videoId);
             loadVideos();
+        }
+
+        async function downloadPhotoBlob(el) {
+            const url = el.getAttribute('data-url');
+            const name = el.getAttribute('data-name') || 'photo.jpg';
+            if (!url) return;
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+            } catch (err) {
+                // Fallback: open in new tab
+                window.open(url, '_blank');
+            }
         }
 
         async function downloadDocument(filePath, fileName) {
@@ -7467,7 +7414,7 @@
     <!-- Photo Lightbox Modal -->
     <div id="lightbox-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:2000;align-items:center;justify-content:center;flex-direction:column;">
         <div style="position:absolute;top:16px;right:16px;display:flex;gap:12px;z-index:2010;">
-            <a id="lightbox-download" href="#" download style="padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">⬇ Download</a>
+            <a id="lightbox-download" href="#" onclick="downloadPhotoBlob(this); return false;" style="padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;">⬇ Download</a>
             <button onclick="closeLightbox()" style="padding:8px 16px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">✕ Close</button>
         </div>
         <div style="position:absolute;top:50%;left:16px;transform:translateY(-50%);z-index:2010;">

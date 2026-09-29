@@ -6153,8 +6153,8 @@
             document.getElementById('lightbox-img').src = photo.url;
             document.getElementById('lightbox-caption').textContent = photo.name;
             document.getElementById('lightbox-counter').textContent = (lightboxIndex + 1) + ' of ' + lightboxPhotos.length;
-            document.getElementById('lightbox-download').href = photo.url;
-            document.getElementById('lightbox-download').download = photo.name;
+            document.getElementById('lightbox-download').setAttribute('data-url', photo.url);
+            document.getElementById('lightbox-download').setAttribute('data-name', photo.name);
             resetLightboxZoom();
         }
 

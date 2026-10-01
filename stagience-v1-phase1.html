@@ -5445,8 +5445,6 @@
                 alert('Please select at least one photo');
                 return;
             }
-
-            // Show full-screen overlay immediately — works reliably on iOS
             let overlay = document.getElementById('upload-overlay');
             if (!overlay) {
                 overlay = document.createElement('div');
@@ -5465,31 +5463,20 @@
                 </div>
             `;
             overlay.style.display = 'flex';
-
-            // Small delay to let iOS paint the overlay, then start uploading
             setTimeout(() => uploadPhotos(null, filesInput.files), 80);
         }
 
         async function uploadPhotos(e, passedFiles) {
             if (e) e.preventDefault();
-
-            // STEP 1: Update UI synchronously before touching files
             const feedback = document.getElementById('photos-selected-feedback');
             if (feedback) feedback.style.display = 'none';
-
-            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Preparing...'; }
-
             const progressDiv = document.getElementById('upload-progress');
             if (progressDiv) {
                 progressDiv.style.display = 'block';
-                progressDiv.innerHTML = `<div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;"><div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div></div><div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos — this may take a moment...</div>`;
+                progressDiv.innerHTML = `<div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;"><div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div></div><div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos...</div>`;
             }
-
-            // STEP 2: Multiple yields to guarantee iOS paints the UI before we touch files
-            await new Promise(r => setTimeout(r, 0));
-            await new Promise(r => setTimeout(r, 0));
-            await new Promise(r => setTimeout(r, 200));
+            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading...'; }
 
             const filesInput = document.getElementById('photos-files');
             const files = passedFiles || filesInput.files;
@@ -5516,8 +5503,12 @@
 
             const updateProgress = () => {
                 if (submitBtn) submitBtn.textContent = `Uploading ${completed} of ${total}...`;
+                const pct = Math.max(2, Math.round((completed / total) * 100));
+                const bar = document.getElementById('overlay-bar');
+                const txt = document.getElementById('overlay-txt');
+                if (bar) bar.style.width = pct + '%';
+                if (txt) txt.textContent = `${completed} of ${total} uploaded`;
                 if (progressDiv) {
-                    const pct = Math.round((completed / total) * 100);
                     progressDiv.style.display = 'block';
                     progressDiv.innerHTML = `
                         <div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;">

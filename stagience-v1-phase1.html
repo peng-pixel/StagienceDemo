@@ -1261,7 +1261,7 @@
                 <div>
                     <label style="display: block; font-weight: 600; margin-bottom: 8px;">Select Photos *</label>
                     <input type="file" id="photos-files" required accept="image/*" multiple onchange="handlePhotoSelection(this)" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
-                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos</p>
+                    <p style="color: #6b7280; font-size: 13px; margin-top: 6px;">You can select multiple photos at once</p>
                     <div id="photos-selected-feedback" style="display:none; margin-top:10px; padding: 10px 14px; background:#f3f0ff; border-radius:10px; font-size:14px; color:#7b3a5a; font-weight:600;">📸 <span id="photos-selected-count"></span> — tap Upload Photos to continue</div>
                 </div>
 
@@ -4730,10 +4730,7 @@
             document.getElementById('video-submit-btn').disabled = false;
             document.getElementById('video-submit-btn').textContent = 'Upload Video';
         }
-
-        function closeUploadVideoModal() {
-            document.getElementById('upload-video-modal').classList.remove('active');
-        }
+        function closeUploadVideoModal() { document.getElementById('upload-video-modal').classList.remove('active'); }
 
         async function uploadVideo(e) {
             e.preventDefault();
@@ -4741,7 +4738,7 @@
             const fileInput = document.getElementById('video-file');
             const file = fileInput.files[0];
             if (!file) return;
-            if (file.size > 50 * 1024 * 1024) { alert('Video must be under 50MB. Please compress the video and try again.'); return; }
+            if (file.size > 50 * 1024 * 1024) { alert('Video must be under 50MB.'); return; }
             const submitBtn = document.getElementById('video-submit-btn');
             const progressDiv = document.getElementById('video-upload-progress');
             const progressBar = document.getElementById('video-progress-bar');
@@ -4760,7 +4757,6 @@
                 progressBar.style.width = '100%'; progressText.textContent = 'Done!';
                 setTimeout(() => { closeUploadVideoModal(); loadVideos(); }, 500);
             } catch (err) {
-                console.error('Video upload error:', err);
                 alert('Error uploading video: ' + err.message);
                 submitBtn.disabled = false; submitBtn.textContent = 'Upload Video'; progressDiv.style.display = 'none';
             }
@@ -4829,14 +4825,10 @@
                 const blob = await response.blob();
                 const blobUrl = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = name;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                a.href = blobUrl; a.download = name;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
             } catch (err) {
-                // Fallback: open in new tab
                 window.open(url, '_blank');
             }
         }
@@ -5478,7 +5470,7 @@
             const total = fileArray.length;
             let completed = 0;
             let errors = 0;
-            const BATCH_SIZE = 5; // upload 5 at a time
+            const BATCH_SIZE = 20; // upload 20 at a time for better throughput
 
             // Progress indicator
 
@@ -5587,7 +5579,7 @@
         let currentCalendarMonth = new Date().getMonth();
         let currentCalendarYear = new Date().getFullYear();
         let calendarEventTypeFilter = ['all'];
-        let calendarView = window.innerWidth >= 1024 ? 'month' : 'agenda';
+        let calendarView = window.innerWidth >= 768 ? 'month' : 'agenda';
         let allCalendarEvents = [];
 
         async function loadCalendar() {

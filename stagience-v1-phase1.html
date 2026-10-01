@@ -5443,13 +5443,16 @@
             e.preventDefault();
             const feedback = document.getElementById('photos-selected-feedback');
             if (feedback) feedback.style.display = 'none';
+
+            // Show immediate feedback — important on iPhone where onchange may not fire
+            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Preparing...'; }
+
             const progressDiv = document.getElementById('upload-progress');
             if (progressDiv) {
                 progressDiv.style.display = 'block';
-                progressDiv.innerHTML = `<div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;"><div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div></div><div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos...</div>`;
+                progressDiv.innerHTML = `<div style="background:#f3f4f6;border-radius:99px;height:8px;overflow:hidden;margin-bottom:6px;"><div style="background:#7b3a5a;height:100%;width:5%;border-radius:99px;"></div></div><div style="font-size:13px;color:#6b7280;text-align:center;">⏳ Preparing photos — this may take a moment...</div>`;
             }
-            const submitBtn = document.querySelector('#upload-photos-form button[type="submit"]');
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Uploading...'; }
 
             const filesInput = document.getElementById('photos-files');
             const files = filesInput.files;

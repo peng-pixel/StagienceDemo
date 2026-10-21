@@ -1872,7 +1872,8 @@
             
             // Show/hide import banner based on whether inventory has items
             const invBanner = document.getElementById('inventory-import-banner');
-            if (invBanner) invBanner.style.display = inventoryItems.length === 0 ? 'flex' : 'none';
+            const isDemoAccount = (currentUser && currentUser.email === 'jenn.punsalan@gmail.com');
+            if (invBanner) invBanner.style.display = (inventoryItems.length === 0 || isDemoAccount) ? 'flex' : 'none';
 
             if (filteredItems.length === 0 && inventoryItems.length > 0) {
                 container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';
@@ -3567,7 +3568,8 @@
             
             // Show/hide import banner based on whether projects exist
             const projBanner = document.getElementById('projects-import-banner');
-            if (projBanner) projBanner.style.display = projects.length === 0 ? 'flex' : 'none';
+            const isDemoProjAccount = (currentUser && currentUser.email === 'jenn.punsalan@gmail.com');
+            if (projBanner) projBanner.style.display = (projects.length === 0 || isDemoProjAccount) ? 'flex' : 'none';
 
             if (filteredProjects.length === 0 && projects.length > 0) {
                 const filterLabel = currentProjectFilter === 'all' ? '' : ` in "${currentProjectFilter}" status`;
@@ -5290,6 +5292,11 @@
                                 // Collapsible body
                 const folderBody = document.createElement('div');
                 folderBody.id = 'folder-body-' + folder.id;
+                if (collapsedFolders.has(String(folder.id))) {
+                    folderBody.style.display = 'none';
+                    const arrow = document.getElementById('folder-arrow-' + folder.id);
+                    if (arrow) arrow.style.transform = 'rotate(-90deg)';
+                }
 
                 if (photoCount === 0) {
                     folderBody.innerHTML = '<div style="text-align:center;padding:60px;border:2px dashed #e5e7eb;border-radius:12px;color:#9ca3af;"><div style="font-size:36px;margin-bottom:12px;">📷</div><h4 style="font-size:16px;font-weight:600;margin-bottom:4px;color:#6b7280;">No photos yet</h4><p style="font-size:13px;">Click Upload to add photos</p></div>';
@@ -6562,6 +6569,8 @@
             await loadPhotoFolders();
         }
 
+        const collapsedFolders = new Set();
+
                 function toggleFolderCollapse(bodyId, headerEl) {
             const body = document.getElementById(bodyId);
             if (!body) return;
@@ -6570,9 +6579,11 @@
             if (body.style.display === 'none') {
                 body.style.display = 'block';
                 if (arrow) arrow.style.transform = 'rotate(0deg)';
+                collapsedFolders.delete(folderId);
             } else {
                 body.style.display = 'none';
                 if (arrow) arrow.style.transform = 'rotate(-90deg)';
+                collapsedFolders.add(folderId);
             }
         }
 

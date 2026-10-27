@@ -3885,12 +3885,14 @@
             document.getElementById('project-detail-status-badge').style = statusColors[project.status] || statusColors['active'];
             document.getElementById('project-detail-status-badge').textContent = statusLabels[project.status] || 'Active';
 
-            // Load timeline events, project notes, and documents
-            await loadTimelineEvents();
-            await loadProjectNotes();
-            await loadProjectDocuments();
-            await loadProjectFiles();
-            await loadPhotoFolders();
+            // Load all project data in parallel for faster opening
+            await Promise.all([
+                loadTimelineEvents(),
+                loadProjectNotes(),
+                loadProjectDocuments(),
+                loadProjectFiles(),
+                loadPhotoFolders()
+            ]);
 
             // Switch views
             document.getElementById('projects-section').style.display = 'none';
@@ -5294,8 +5296,8 @@
                 folderBody.id = 'folder-body-' + folder.id;
                 if (collapsedFolders.has(String(folder.id))) {
                     folderBody.style.display = 'none';
-                    const arrow = document.getElementById('folder-arrow-' + folder.id);
-                    if (arrow) arrow.style.transform = 'rotate(-90deg)';
+                    const arrowEl = document.getElementById('folder-arrow-' + folder.id);
+                    if (arrowEl) arrowEl.style.transform = 'rotate(-90deg)';
                 }
 
                 if (photoCount === 0) {

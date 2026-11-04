@@ -5411,7 +5411,7 @@
         }
 
         // Compress image before upload (max 1200px, 0.82 quality)
-        async function compressImage(file, maxWidth = 1200, quality = 0.82) {
+        async function compressImage(file, maxWidth = 1920, quality = 0.82) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -5506,7 +5506,9 @@
             const total = fileArray.length;
             let completed = 0;
             let errors = 0;
-            const BATCH_SIZE = 20; // upload 20 at a time for better throughput
+            // Use smaller batches on mobile to avoid overwhelming the connection
+            const isMobileUpload = window.innerWidth < 1024 || /iPhone|iPad|Android/i.test(navigator.userAgent);
+            const BATCH_SIZE = isMobileUpload ? 5 : 20;
 
             // Progress indicator
 

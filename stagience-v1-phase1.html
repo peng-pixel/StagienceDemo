@@ -3432,6 +3432,7 @@
             if (!confirmed) return;
             const { error } = await supabase.from('inventory').delete().in('id', selectedIds);
             if (error) { alert('Error deleting items: ' + error.message); return; }
+            currentInventoryStatusFilter = 'all';
             clearSelection(); await loadInventory();
         }
 
@@ -3442,6 +3443,7 @@
                 if (!confirmed) return;
                 const { error } = await supabase.from('inventory').delete().in('id', selectedIds);
                 if (error) { alert('Error deleting items: ' + error.message); return; }
+                currentInventoryStatusFilter = 'all';
                 clearSelection(); await loadInventory(); return;
             }
             if (!confirm('Are you sure you want to delete this item?')) return;

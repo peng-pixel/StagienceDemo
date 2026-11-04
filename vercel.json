@@ -5,6 +5,10 @@
       "destination": "/stagience-v1-phase1.html"
     },
     {
+      "source": "/signup",
+      "destination": "/stagience-v1-phase1.html"
+    },
+    {
       "source": "/faq",
       "destination": "/stagience-faq.html"
     },

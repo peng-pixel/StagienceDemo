@@ -102,7 +102,8 @@
 
                 <!-- Sign Up Form -->
                 <div id="signup-form" style="display: none;">
-                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Create Account</h2>
+                    <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Create Account</h2>
+                    <p style="font-size: 13px; color: #7b3a5a; font-weight: 600; margin-bottom: 20px;">✨ Includes a free 14-day trial.</p>
                     <form onsubmit="handleSignUp(event)" style="display: flex; flex-direction: column; gap: 16px;">
                         <div>
                             <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px;">Email</label>
@@ -1509,6 +1510,11 @@
         async function checkSubscription() {
             if (!currentUser) return false;
             if (BYPASS_EMAILS.includes(currentUser.email)) return true;
+            // 14-day free trial for all new users
+            const createdAt = new Date(currentUser.created_at);
+            const trialDays = 14;
+            const trialEnd = new Date(createdAt.getTime() + trialDays * 24 * 60 * 60 * 1000);
+            if (new Date() < trialEnd) return true;
             const params = new URLSearchParams(window.location.search);
             if (params.get('payment') === 'success') {
                 const { data: existing } = await supabase.from('subscriptions').select('id').eq('user_id', currentUser.id).maybeSingle();

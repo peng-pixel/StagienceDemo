@@ -5169,18 +5169,21 @@
                 }
             });
 
-            // Show loading skeletons immediately
+            // Show loading skeletons immediately, respecting collapsed state
             container.innerHTML = photoFolders.map(folder => {
                 const count = folder.photos?.length || 0;
+                const isCollapsed = collapsedFolders.has(String(folder.id));
+                const arrowStyle = isCollapsed ? 'transform:rotate(-90deg);' : '';
                 const skeletons = Array(Math.min(count, 6)).fill(0).map(() =>
                     '<div style="border-radius:12px;background:#f3f4f6;height:220px;animation:shimmer 1.5s infinite;"></div>'
                 ).join('');
                 return '<div style="background:white;border:2px solid #e5e7eb;border-radius:16px;padding:24px;margin-bottom:24px;">' +
                     '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">' +
+                    '<div style="font-size:18px;color:#9ca3af;transition:transform 0.2s;margin-right:4px;' + arrowStyle + '">▼</div>' +
                     '<div style="font-size:32px;">📁</div>' +
                     '<div><div style="font-weight:700;font-size:18px;">' + folder.folder_name + '</div>' +
                     '<div style="color:#6b7280;font-size:13px;">' + count + ' photo' + (count !== 1 ? 's' : '') + ' — loading...</div></div></div>' +
-                    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">' + skeletons + '</div></div>';
+                    '<div style="' + (isCollapsed ? 'display:none;' : 'display:grid;') + 'grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;">' + skeletons + '</div></div>';
             }).join('');
 
             // Add shimmer CSS if not already added

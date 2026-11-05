@@ -3865,23 +3865,18 @@
 
         async function openProjectDetail(projectId) {
             currentProjectId = projectId;
-            
-            // Load project data
-            const { data: project, error } = await supabase
-                .from('projects')
-                .select('*')
-                .eq('id', projectId)
-                .single();
 
-            if (error || !project) {
+            // Use already-loaded project data — no extra network call needed
+            const project = projects.find(p => p.id === projectId);
+            if (!project) {
                 alert('Error loading project');
                 return;
             }
 
-            // Update header
+            // Update header immediately
             document.getElementById('project-detail-title').textContent = project.name;
             document.getElementById('project-detail-address').textContent = project.address || '';
-            
+
             // Update status badge
             const statusColors = {
                 'active': 'background: #dcfce7; color: #166534;',
@@ -3898,7 +3893,13 @@
             document.getElementById('project-detail-status-badge').style = statusColors[project.status] || statusColors['active'];
             document.getElementById('project-detail-status-badge').textContent = statusLabels[project.status] || 'Active';
 
-            // Load all project data in parallel for faster opening
+            // Switch views immediately so the user sees something right away
+            document.getElementById('projects-section').style.display = 'none';
+            document.getElementById('project-detail-section').style.display = 'block';
+            switchProjectTab('schedule');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Load tab content in parallel after the view is already visible
             await Promise.all([
                 loadTimelineEvents(),
                 loadProjectNotes(),
@@ -3906,16 +3907,6 @@
                 loadProjectFiles(),
                 loadPhotoFolders()
             ]);
-
-            // Switch views
-            document.getElementById('projects-section').style.display = 'none';
-            document.getElementById('project-detail-section').style.display = 'block';
-            
-            // Switch to Schedule tab
-            switchProjectTab('schedule');
-
-            // Scroll to top on mobile
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function closeProjectDetail() {

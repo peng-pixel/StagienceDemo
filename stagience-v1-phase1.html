@@ -3915,6 +3915,9 @@
             currentProjectId = null;
             const floatingBar = document.getElementById('floating-delete-bar');
             if (floatingBar) floatingBar.style.display = 'none';
+            // Reset folder collapse state so next project opens with folders collapsed
+            collapsedFolders.clear();
+            expandedFolders.clear();
         }
 
         function switchProjectTab(tabName) {
@@ -5151,6 +5154,20 @@
             }
 
             emptyState.style.display = 'none';
+
+            // Default folders to collapsed unless the user has already manually expanded them
+            photoFolders.forEach(folder => {
+                const key = String(folder.id);
+                // Only add to collapsed set if user hasn't toggled this folder open already
+                // (toggleFolderCollapse deletes from collapsedFolders when expanded)
+                if (!collapsedFolders.has(key)) {
+                    // Check if it was explicitly expanded by seeing if it's missing from the set
+                    // We use a separate expandedFolders set to track user intent
+                    if (!expandedFolders.has(key)) {
+                        collapsedFolders.add(key);
+                    }
+                }
+            });
 
             // Show loading skeletons immediately
             container.innerHTML = photoFolders.map(folder => {
@@ -6578,8 +6595,9 @@
         }
 
         const collapsedFolders = new Set();
+        const expandedFolders = new Set(); // tracks folders the user has explicitly opened
 
-                function toggleFolderCollapse(bodyId, headerEl) {
+        function toggleFolderCollapse(bodyId, headerEl) {
             const body = document.getElementById(bodyId);
             if (!body) return;
             const folderId = bodyId.replace('folder-body-', '');
@@ -6588,10 +6606,12 @@
                 body.style.display = 'block';
                 if (arrow) arrow.style.transform = 'rotate(0deg)';
                 collapsedFolders.delete(folderId);
+                expandedFolders.add(folderId); // remember user opened this
             } else {
                 body.style.display = 'none';
                 if (arrow) arrow.style.transform = 'rotate(-90deg)';
                 collapsedFolders.add(folderId);
+                expandedFolders.delete(folderId); // user closed it again
             }
         }
 

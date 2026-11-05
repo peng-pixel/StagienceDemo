@@ -3628,13 +3628,13 @@
                 <div style="margin-bottom: 32px;">
                     <!-- Month Header -->
                     <div onclick="toggleMonthSection('${monthYear}')" style="display: flex; align-items: center; gap: 12px; padding: 16px; background: white; border: 2px solid #e5e7eb; border-radius: 12px; cursor: pointer; margin-bottom: 16px; transition: all 0.2s;" onmouseover="this.style.borderColor='#7b3a5a'" onmouseout="this.style.borderColor='#e5e7eb'">
-                        <span id="toggle-${monthYear.replace(/\s/g, '-')}" style="font-size: 20px; transition: transform 0.2s;">▼</span>
+                        <span id="toggle-${monthYear.replace(/\s/g, '-')}" style="font-size: 20px; transition: transform 0.2s; transform: rotate(-90deg);">▼</span>
                         <h3 style="font-size: 18px; font-weight: 700; flex: 1;">${monthYear}</h3>
                         <span style="color: #6b7280; font-size: 14px;">${grouped[monthYear].length} project${grouped[monthYear].length !== 1 ? 's' : ''}</span>
                     </div>
 
                     <!-- Projects List -->
-                    <div id="month-${monthYear.replace(/\s/g, '-')}" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div id="month-${monthYear.replace(/\s/g, '-')}" style="display: none; flex-direction: column; gap: 12px;">
                         ${grouped[monthYear].map(project => `
                             <div onclick="openProjectDetail(${project.id})" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; transition: all 0.2s; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px;" onmouseover="this.style.borderColor='#d1d5db'" onmouseout="this.style.borderColor='#e5e7eb'">
                                 <!-- Left: Project Info -->
@@ -3682,7 +3682,7 @@
             const toggle = document.getElementById(`toggle-${monthId}`);
             
             if (section.style.display === 'none') {
-                section.style.display = 'grid';
+                section.style.display = 'flex';
                 toggle.style.transform = 'rotate(0deg)';
                 toggle.textContent = '▼';
             } else {

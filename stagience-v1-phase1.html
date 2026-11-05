@@ -4750,8 +4750,9 @@
             } else if (isImage) {
                 content.innerHTML = `<img src="${url}" alt="${displayName}" style="max-width:100%;max-height:75vh;border-radius:8px;object-fit:contain;">`;
             } else {
-                // For non-previewable files (docx, xlsx, etc.) open directly in a new tab
-                window.open(url, '_blank');
+                // For non-previewable files (docx, xlsx, etc.) open via Google Docs viewer in a new tab
+                const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=false`;
+                window.open(viewerUrl, '_blank');
                 return;
             }
             document.getElementById('file-viewer-modal').classList.add('active');

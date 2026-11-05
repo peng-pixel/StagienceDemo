@@ -559,9 +559,6 @@
                         <button onclick="toggleEventTypeFilter('installation-stage')" id="filter-event-installation-stage" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
                             🔧 Installation/Stage
                         </button>
-                        <button onclick="toggleEventTypeFilter('photo-shoot')" id="filter-event-photo-shoot" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
-                            📸 Photo Shoot
-                        </button>
                         <button onclick="toggleEventTypeFilter('pickup-destage')" id="filter-event-pickup-destage" style="padding: 8px 16px; border: 2px solid #e5e7eb; border-radius: 10px; background: white; color: #6b7280; font-weight: 600; cursor: pointer; font-size: 13px;">
                             📦 Pickup/Destage
                         </button>
@@ -1180,7 +1177,6 @@
                     <select id="event-type" onchange="updateConditionalFields()" required style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         <option value="">Select event type...</option>
                         <option value="completed">✓ Completed</option>
-                        <option value="photo-shoot">📸 Photo Shoot</option>
                         <option value="pickup-destage">📦 Pickup/Destage</option>
                         <option value="installation-stage">🔧 Installation/Stage</option>
                         <option value="consultation">📋 Consultation</option>
@@ -1489,7 +1485,7 @@
         const BYPASS_EMAILS = ['playhousestaging@gmail.com', 'jenn.punsalan@gmail.com'];
         const STRIPE_PLANS = [
             { name: 'Starter', description: 'Perfect for solo stagers getting organized', monthlyPrice: 'US$29<span>/mo</span>', annualPrice: 'US$24<span>/mo</span>', annualTotal: 'US$288 billed annually', features: ['Projects & Calendar','Inventory management','Photo folders & file storage','Document templates','CSV import','Print inventory reports','1 user','5GB storage'], monthlyUrl: 'https://buy.stripe.com/3cI14n8yK45w5mh9rnes000', annualUrl: 'https://buy.stripe.com/9B6fZh7uG9pQ1617jfes001', featured: false },
-            { name: 'Professional', description: 'For growing staging businesses', monthlyPrice: 'US$59<span>/mo</span>', annualPrice: 'US$49<span>/mo</span>', annualTotal: 'US$588 billed annually', features: ['Everything in Starter','Up to 3 team members','Role-based permissions','Client Portal (Coming Soon)','Priority support','20GB storage'], monthlyUrl: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002', annualUrl: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003', featured: true },
+            { name: 'Professional', description: 'For growing staging businesses', monthlyPrice: 'US$59<span>/mo</span>', annualPrice: 'US$49<span>/mo</span>', annualTotal: 'US$588 billed annually', features: ['Everything in Starter','Up to 3 team members','Role-based permissions','Priority support','20GB storage'], monthlyUrl: 'https://buy.stripe.com/9B6fZh7uGdG61619rnes002', annualUrl: 'https://buy.stripe.com/fZu8wP5my45wbKFgTPes003', featured: true },
             { name: 'Studio', description: 'For established staging companies', monthlyPrice: 'US$99<span>/mo</span>', annualPrice: 'US$84<span>/mo</span>', annualTotal: 'US$1,008 billed annually', features: ['Everything in Professional','Unlimited team members','Invoicing & Payments (Coming Soon)','Reporting & Analytics (Coming Soon)','Feature request priority','Early access to new features','50GB storage'], monthlyUrl: 'https://buy.stripe.com/6oUdR95mybxY8yteLHes004', annualUrl: 'https://buy.stripe.com/cNidR97uG31sbKFavres005', featured: false }
         ];
         let gateIsAnnual = false;
@@ -4116,6 +4112,21 @@
                             <input type="text" id="event-contact" placeholder="Contact: e.g., Building Manager - (555) 789-0123" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
                         </div>
                     </div>
+                    <div style="background: #fef3c7; border: 1.5px solid #fcd34d; padding: 20px; border-radius: 12px; margin-top: 12px;">
+                        <h4 style="font-weight: 700; margin-bottom: 4px; color: #92400e;">📸 Photo Shoot</h4>
+                        <div style="color: #92400e; font-size: 13px; margin-bottom: 12px;">Optional — if a photo shoot is scheduled for this installation</div>
+                        <div style="display: flex; gap: 12px;">
+                            <div style="flex: 1;">
+                                <label style="font-size: 13px; font-weight: 600; color: #374151; display: block; margin-bottom: 4px;">Date</label>
+                                <input type="date" id="event-photo-date" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size: 13px; font-weight: 600; color: #374151; display: block; margin-bottom: 4px;">Time (optional)</label>
+                                <input type="time" id="event-photo-time" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px;">
+                            </div>
+                        </div>
+                        <input type="text" id="event-photographer" placeholder="Photographer name or contact (optional)" style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; margin-top: 12px;">
+                    </div>
                 `;
             } else if (eventType === 'consultation') {
                 html = `
@@ -4143,7 +4154,12 @@
 
                 // Conditional fields
                 photographer: document.getElementById('event-photographer')?.value || null,
-                details: document.getElementById('event-details')?.value || null,
+                details: (() => {
+                    const photoDate = document.getElementById('event-photo-date')?.value;
+                    const photoTime = document.getElementById('event-photo-time')?.value;
+                    if (photoDate) return JSON.stringify({ photo_date: photoDate, photo_time: photoTime || null });
+                    return document.getElementById('event-details')?.value || null;
+                })(),
                 team: document.getElementById('event-team')?.value || null,
                 items_reserved: document.getElementById('event-items-reserved')?.value || null,
                 building_access_code: document.getElementById('event-building-access')?.value || null,
@@ -4209,6 +4225,19 @@
                     document.getElementById('event-items-reserved').value = event.items_reserved || '';
                     document.getElementById('event-building-access').value = event.building_access_code || '';
                     document.getElementById('event-contact').value = event.contact || '';
+                    // Restore photo shoot fields
+                    if (event.details) {
+                        try {
+                            const parsed = JSON.parse(event.details);
+                            if (parsed.photo_date && document.getElementById('event-photo-date')) {
+                                document.getElementById('event-photo-date').value = parsed.photo_date;
+                                if (parsed.photo_time) document.getElementById('event-photo-time').value = parsed.photo_time;
+                            }
+                        } catch(e) {}
+                    }
+                    if (document.getElementById('event-photographer')) {
+                        document.getElementById('event-photographer').value = event.photographer || '';
+                    }
                 }
                 if (document.getElementById('event-consultation-details')) {
                     document.getElementById('event-consultation-details').value = event.consultation_details || '';
@@ -5877,7 +5906,7 @@
             }
 
             // Update filter button styles
-            ['all', 'consultation', 'installation-stage', 'photo-shoot', 'pickup-destage'].forEach(filterType => {
+            ['all', 'consultation', 'installation-stage', 'pickup-destage'].forEach(filterType => {
                 const btn = document.getElementById(`filter-event-${filterType}`);
                 if (calendarEventTypeFilter.includes(filterType) || (filterType === 'all' && calendarEventTypeFilter.includes('all'))) {
                     btn.style.borderColor = '#7b3a5a';

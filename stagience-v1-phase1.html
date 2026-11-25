@@ -1899,7 +1899,8 @@
             
             // Show/hide import banner based on whether inventory has items
             const invBanner = document.getElementById('inventory-import-banner');
-            if (invBanner) invBanner.style.display = inventoryItems.length === 0 ? 'flex' : 'none';
+            const isDemoAccount = (currentUser && currentUser.email === 'jenn.punsalan@gmail.com');
+            if (invBanner) invBanner.style.display = (inventoryItems.length === 0 || isDemoAccount) ? 'flex' : 'none';
 
             if (filteredItems.length === 0 && inventoryItems.length > 0) {
                 container.innerHTML = '<div style="text-align: center; padding: 60px 20px; color: #6b7280;"><div style="font-size: 48px; margin-bottom: 16px;">📦</div><h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">No items match your filters</h3><p style="font-size: 14px;">Try adjusting your filter settings</p></div>';

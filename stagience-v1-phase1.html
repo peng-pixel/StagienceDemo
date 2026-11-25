@@ -5306,7 +5306,8 @@
                 const folderInfo = document.createElement('div');
                 folderInfo.style.cssText = 'display:flex;align-items:center;gap:12px;cursor:pointer;';
                 folderInfo.setAttribute('onclick', 'toggleFolderCollapse("folder-body-' + folder.id + '", this)');
-                folderInfo.innerHTML = '<div style="font-size:18px;color:#9ca3af;transition:transform 0.2s;margin-right:4px;" id="folder-arrow-' + folder.id + '">▼</div><div style="font-size:28px;">📁</div><div><h3 style="font-weight:700;font-size:18px;margin-bottom:2px;">' + folder.folder_name + '</h3><p style="color:#6b7280;font-size:13px;">' + photoCount + ' photo' + (photoCount !== 1 ? 's' : '') + '</p></div>';
+                const isCollapsedNow = collapsedFolders.has(String(folder.id));
+                folderInfo.innerHTML = '<div style="font-size:18px;color:#9ca3af;transition:transform 0.2s;margin-right:4px;' + (isCollapsedNow ? 'transform:rotate(-90deg);' : '') + '" id="folder-arrow-' + folder.id + '">▼</div><div style="font-size:28px;">📁</div><div><h3 style="font-weight:700;font-size:18px;margin-bottom:2px;">' + folder.folder_name + '</h3><p style="color:#6b7280;font-size:13px;">' + photoCount + ' photo' + (photoCount !== 1 ? 's' : '') + '</p></div>';
                 header.appendChild(folderInfo);
 
                 const actions = document.createElement('div');
@@ -5344,10 +5345,8 @@
                                 // Collapsible body
                 const folderBody = document.createElement('div');
                 folderBody.id = 'folder-body-' + folder.id;
-                if (collapsedFolders.has(String(folder.id))) {
+                if (isCollapsedNow) {
                     folderBody.style.display = 'none';
-                    const arrowEl = folderInfo.firstElementChild;
-                    if (arrowEl) arrowEl.style.transform = 'rotate(-90deg)';
                 }
 
                 if (photoCount === 0) {

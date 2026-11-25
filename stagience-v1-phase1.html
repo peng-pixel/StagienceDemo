@@ -5181,17 +5181,11 @@
 
             emptyState.style.display = 'none';
 
-            // Default folders to collapsed unless the user has already manually expanded them
+            // Default all folders to collapsed; only keep open ones the user explicitly expanded
             photoFolders.forEach(folder => {
                 const key = String(folder.id);
-                // Only add to collapsed set if user hasn't toggled this folder open already
-                // (toggleFolderCollapse deletes from collapsedFolders when expanded)
-                if (!collapsedFolders.has(key)) {
-                    // Check if it was explicitly expanded by seeing if it's missing from the set
-                    // We use a separate expandedFolders set to track user intent
-                    if (!expandedFolders.has(key)) {
-                        collapsedFolders.add(key);
-                    }
+                if (!expandedFolders.has(key)) {
+                    collapsedFolders.add(key);
                 }
             });
 

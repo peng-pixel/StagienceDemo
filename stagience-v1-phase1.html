@@ -5339,7 +5339,7 @@
                 folderBody.id = 'folder-body-' + folder.id;
                 if (collapsedFolders.has(String(folder.id))) {
                     folderBody.style.display = 'none';
-                    const arrowEl = folderInfo.querySelector('#folder-arrow-' + folder.id);
+                    const arrowEl = folderInfo.querySelector('[id="folder-arrow-' + folder.id + '"]');
                     if (arrowEl) arrowEl.style.transform = 'rotate(-90deg)';
                 }
 

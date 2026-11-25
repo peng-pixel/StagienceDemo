@@ -1678,6 +1678,13 @@
                 showAuthMessage(error.message, 'error');
                 // Don't clear the form on error
             } else {
+                // Fire welcome email (non-blocking — won't affect signup flow if it fails)
+                fetch('https://sdvgzqaoexuanxrjtytp.supabase.co/functions/v1/welcome-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'user.created', record: { email: email } }),
+                }).catch(() => {}); // silently ignore errors
+
                 showAuthMessage('Account created! You can now sign in with your email and password.', 'success');
                 setTimeout(() => {
                     showSignInForm();

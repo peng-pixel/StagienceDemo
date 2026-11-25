@@ -3707,21 +3707,37 @@
                     </div>
                 </div>
             `).join('');
+
+            // Restore expanded state after re-render
+            expandedMonths.forEach(monthYear => {
+                const monthId = monthYear.replace(/\s/g, '-');
+                const section = document.getElementById(`month-${monthId}`);
+                const toggle = document.getElementById(`toggle-${monthId}`);
+                if (section && toggle) {
+                    section.style.display = 'grid';
+                    toggle.style.transform = 'rotate(0deg)';
+                    toggle.textContent = '▼';
+                }
+            });
         }
+
+        const expandedMonths = new Set();
 
         function toggleMonthSection(monthYear) {
             const monthId = monthYear.replace(/\s/g, '-');
             const section = document.getElementById(`month-${monthId}`);
             const toggle = document.getElementById(`toggle-${monthId}`);
-            
+
             if (section.style.display === 'none') {
                 section.style.display = 'grid';
                 toggle.style.transform = 'rotate(0deg)';
                 toggle.textContent = '▼';
+                expandedMonths.add(monthYear);
             } else {
                 section.style.display = 'none';
                 toggle.style.transform = 'rotate(-90deg)';
                 toggle.textContent = '▶';
+                expandedMonths.delete(monthYear);
             }
         }
 

@@ -1507,6 +1507,7 @@
         ];
         let gateIsAnnual = false;
         let subscriptionCheckInterval = null;
+        let gateShowExpiredMessage = false;
 
         async function checkSubscription() {
             if (!currentUser) return false;
@@ -1537,7 +1538,7 @@
                 if (!isSubscribed) {
                     clearInterval(subscriptionCheckInterval);
                     subscriptionCheckInterval = null;
-                    showSubscriptionGate();
+                    showSubscriptionGate(true);
                 }
             }, 60 * 60 * 1000);
         }
@@ -1549,7 +1550,8 @@
             }
         }
 
-        function showSubscriptionGate() {
+        function showSubscriptionGate(expired = false) {
+            gateShowExpiredMessage = expired;
             document.getElementById('auth-page').classList.remove('active');
             document.getElementById('app-page').classList.remove('active');
             let gateEl = document.getElementById('subscription-gate');
@@ -1559,7 +1561,7 @@
         }
 
         function renderGate(gateEl) {
-            gateEl.innerHTML = `<div style="text-align:center;margin-bottom:32px;"><div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;"><div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#7b3a5a,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-size:19px;font-weight:700;">S</div><span style="color:#fffdf8;font-size:20px;font-weight:700;">Stagience</span></div><h1 style="color:#fffdf8;font-size:28px;font-weight:800;margin:0 0 8px;">Choose your plan</h1><p style="color:rgba(255,253,248,0.6);font-size:15px;margin:0 0 20px;">The business behind the beautiful.</p><div style="display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:14px;font-weight:600;color:${!gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Monthly</span><div onclick="gateIsAnnual=!gateIsAnnual;renderGate(document.getElementById('subscription-gate'));" style="width:46px;height:25px;background:#7b3a5a;border-radius:20px;cursor:pointer;position:relative;"><div style="width:19px;height:19px;background:white;border-radius:50%;position:absolute;top:3px;left:${gateIsAnnual?'24px':'3px'};transition:left 0.2s;"></div></div><span style="font-size:14px;font-weight:600;color:${gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Annual <span style="background:#b9774f;color:white;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:4px;">Save 15%</span></span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:860px;width:100%;">${STRIPE_PLANS.map(plan=>`<div style="background:${plan.featured?'rgba(123,58,90,0.3)':'rgba(255,253,248,0.07)'};border:2px solid ${plan.featured?'#b9774f':'rgba(255,253,248,0.14)'};border-radius:14px;padding:24px;position:relative;${plan.featured?'transform:scale(1.03);':''}">${plan.featured?'<div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#7b3a5a;color:white;padding:3px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;">Most Popular</div>':''}<div style="font-size:16px;font-weight:700;color:#fffdf8;margin-bottom:4px;">${plan.name}</div><div style="font-size:12px;color:rgba(255,253,248,0.55);margin-bottom:14px;">${plan.description}</div><div style="font-size:28px;font-weight:800;color:#fffdf8;margin-bottom:2px;">${gateIsAnnual?plan.annualPrice:plan.monthlyPrice}</div><div style="font-size:12px;color:rgba(255,253,248,0.4);margin-bottom:16px;">${gateIsAnnual?plan.annualTotal:'Billed monthly'}</div><ul style="list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:6px;">${plan.features.map(f=>`<li style="font-size:12px;color:rgba(255,253,248,0.75);display:flex;gap:7px;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">✓</span>${f}</li>`).join('')}</ul><a href="${gateIsAnnual?plan.annualUrl:plan.monthlyUrl}" style="display:block;text-align:center;padding:11px;background:${plan.featured?'#7b3a5a':'rgba(255,253,248,0.1)'};border:1.5px solid ${plan.featured?'transparent':'#b9774f'};border-radius:8px;color:white;font-weight:600;font-size:14px;text-decoration:none;">Get Started</a></div>`).join('')}</div><div style="margin-top:20px;text-align:center;"><p style="color:rgba(255,253,248,0.4);font-size:12px;">Have a promo code? Enter it at checkout. &nbsp;|&nbsp; <a href="javascript:void(0)" onclick="handleSignOut()" style="color:#b9774f;font-weight:600;text-decoration:none;">Sign out</a></p></div>`;
+            gateEl.innerHTML = `<div style="text-align:center;margin-bottom:32px;"><div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;"><div style="width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#7b3a5a,#6f7652);display:flex;align-items:center;justify-content:center;color:white;font-size:19px;font-weight:700;">S</div><span style="color:#fffdf8;font-size:20px;font-weight:700;">Stagience</span></div><h1 style="color:#fffdf8;font-size:28px;font-weight:800;margin:0 0 8px;">Choose your plan</h1>${gateShowExpiredMessage ? '<p style="color:#f9d49a;font-size:15px;margin:0 0 20px;max-width:460px;">Your access period has ended. Choose a plan below to pick up right where you left off — your data is safe and waiting.</p>' : '<p style="color:rgba(255,253,248,0.6);font-size:15px;margin:0 0 20px;">The business behind the beautiful.</p>'}<div style="display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:14px;font-weight:600;color:${!gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Monthly</span><div onclick="gateIsAnnual=!gateIsAnnual;renderGate(document.getElementById('subscription-gate'));" style="width:46px;height:25px;background:#7b3a5a;border-radius:20px;cursor:pointer;position:relative;"><div style="width:19px;height:19px;background:white;border-radius:50%;position:absolute;top:3px;left:${gateIsAnnual?'24px':'3px'};transition:left 0.2s;"></div></div><span style="font-size:14px;font-weight:600;color:${gateIsAnnual?'#fffdf8':'rgba(255,253,248,0.4)'};">Annual <span style="background:#b9774f;color:white;font-size:10px;padding:2px 6px;border-radius:8px;margin-left:4px;">Save 15%</span></span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;max-width:860px;width:100%;">${STRIPE_PLANS.map(plan=>`<div style="background:${plan.featured?'rgba(123,58,90,0.3)':'rgba(255,253,248,0.07)'};border:2px solid ${plan.featured?'#b9774f':'rgba(255,253,248,0.14)'};border-radius:14px;padding:24px;position:relative;${plan.featured?'transform:scale(1.03);':''}">${plan.featured?'<div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#7b3a5a;color:white;padding:3px 14px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;">Most Popular</div>':''}<div style="font-size:16px;font-weight:700;color:#fffdf8;margin-bottom:4px;">${plan.name}</div><div style="font-size:12px;color:rgba(255,253,248,0.55);margin-bottom:14px;">${plan.description}</div><div style="font-size:28px;font-weight:800;color:#fffdf8;margin-bottom:2px;">${gateIsAnnual?plan.annualPrice:plan.monthlyPrice}</div><div style="font-size:12px;color:rgba(255,253,248,0.4);margin-bottom:16px;">${gateIsAnnual?plan.annualTotal:'Billed monthly'}</div><ul style="list-style:none;margin-bottom:20px;display:flex;flex-direction:column;gap:6px;">${plan.features.map(f=>`<li style="font-size:12px;color:rgba(255,253,248,0.75);display:flex;gap:7px;"><span style="color:#16a34a;font-weight:700;flex-shrink:0;">✓</span>${f}</li>`).join('')}</ul><a href="${gateIsAnnual?plan.annualUrl:plan.monthlyUrl}" style="display:block;text-align:center;padding:11px;background:${plan.featured?'#7b3a5a':'rgba(255,253,248,0.1)'};border:1.5px solid ${plan.featured?'transparent':'#b9774f'};border-radius:8px;color:white;font-weight:600;font-size:14px;text-decoration:none;">Get Started</a></div>`).join('')}</div><div style="margin-top:20px;text-align:center;"><p style="color:rgba(255,253,248,0.4);font-size:12px;">Have a promo code? Enter it at checkout. &nbsp;|&nbsp; <a href="javascript:void(0)" onclick="handleSignOut()" style="color:#b9774f;font-weight:600;text-decoration:none;">Sign out</a></p></div>`;
         }
 
         async function checkAuth() {
@@ -1571,7 +1573,7 @@
                 }
                 await loadUserRoleAndTeam();
                 const isSubscribed = await checkSubscription();
-                if (!isSubscribed) { showSubscriptionGate(); return; }
+                if (!isSubscribed) { showSubscriptionGate(true); return; }
                 showApp();
                 loadAllData();
             } else {
@@ -1654,7 +1656,7 @@
                 setTimeout(async () => {
                     await loadUserRoleAndTeam();
                     const isSubscribed = await checkSubscription();
-                    if (!isSubscribed) { showSubscriptionGate(); return; }
+                    if (!isSubscribed) { showSubscriptionGate(true); return; }
                     showApp();
                     loadAllData();
                 }, 1000);
